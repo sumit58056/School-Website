@@ -7,22 +7,38 @@
 }
 
 body {
-    background-color: #f4f7f6;
+    background-color: #ffffff; /* Clean White */
     color: #333;
     line-height: 1.6;
 }
 
 /* Header and Navigation */
 header {
-    background-color: #003366; /* Classic Navy Blue */
+    background-color: #FF671F; /* Vibrant Saffron */
     color: white;
-    padding: 1.2rem 5%;
+    padding: 0.8rem 5%; /* Tightened padding for the logo */
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Logo styling in the header */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 70px; /* Scale the detailed logo to be clear but not massive */
+    width: auto;
+    /* Optional: A small white border to make it pop against the saffron background */
+    border: 2px solid white;
+    border-radius: 50%;
+    padding: 2px;
 }
 
 nav ul {
@@ -35,46 +51,74 @@ nav a {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s;
+    transition: opacity 0.3s;
 }
 
 nav a:hover {
-    color: #ffcc00; /* Gold accent on hover */
+    opacity: 0.8; 
 }
 
 /* Hero / Welcome Section */
 .hero {
-    background: linear-gradient(rgba(0, 51, 102, 0.7), rgba(0, 51, 102, 0.8)), 
+    /* Main overall photo with saffron overlay, same as before */
+    background: linear-gradient(rgba(255, 103, 31, 0.85), rgba(255, 103, 31, 0.85)), 
                 url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
     color: white;
-    padding: 120px 20px;
+    padding: 100px 20px; /* Adjusted padding */
     text-align: center;
+    position: relative; /* For seal positioning */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Prominent ornate logo centered in the hero section */
+.hero-seal {
+    margin-bottom: 25px;
+    z-index: 10;
+    /* Center the seal horizontally */
+    position: relative;
+}
+
+.hero-seal img {
+    max-width: 320px; /* Make the full ornate seal prominent and large */
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); /* Add depth */
+}
+
+/* Content over the background */
+.hero-content {
+    z-index: 10;
 }
 
 .hero h2 {
     font-size: 2.8rem;
     margin-bottom: 10px;
+    color: white; /* Ensure text is white over the saffron overlay */
 }
 
 .hero p {
     font-size: 1.2rem;
     margin-bottom: 25px;
+    color: #f0f0f0; /* Slightly faded white for subtext */
 }
 
 .cta-button {
     padding: 12px 25px;
     font-size: 1.1rem;
-    background-color: #ffcc00;
+    background-color: white;
     border: none;
-    color: #003366;
+    color: #FF671F; /* Saffron Text */
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, color 0.3s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .cta-button:hover {
-    background-color: #e6b800;
+    background-color: #f0f0f0;
 }
 
 /* Notice Board Section */
@@ -87,7 +131,7 @@ nav a:hover {
 .notices h2 {
     text-align: center;
     margin-bottom: 40px;
-    color: #003366;
+    color: #FF671F; /* Saffron */
     font-size: 2rem;
 }
 
@@ -100,8 +144,8 @@ nav a:hover {
 .notice-card {
     background: white;
     padding: 25px;
-    border-top: 5px solid #003366;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    border-top: 5px solid #FF671F; /* Saffron Accent */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
     border-radius: 6px;
     transition: transform 0.3s ease;
 }
@@ -111,7 +155,7 @@ nav a:hover {
 }
 
 .notice-card h3 {
-    color: #003366;
+    color: #FF671F; /* Saffron */
     margin-bottom: 10px;
 }
 
@@ -123,22 +167,36 @@ nav a:hover {
 .date {
     display: inline-block;
     font-size: 0.85rem;
-    color: #666;
-    background: #eee;
-    padding: 3px 8px;
+    color: white;
+    background: #FF671F; /* Saffron Background */
+    padding: 4px 10px;
     border-radius: 4px;
 }
 
-/* Footer */
+/* Footer with logo */
 footer {
-    background-color: #222;
+    background-color: #FF671F; /* Saffron */
     color: white;
     text-align: center;
     padding: 30px;
     margin-top: 40px;
 }
 
-footer p {
-    margin-bottom: 10px;
+.footer-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* Small logo in the footer */
+.footer-logo {
+    height: 60px; /* Small scale for the footer */
+    width: auto;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+}
+
+.footer-text p {
+    margin-bottom: 5px;
     font-size: 0.9rem;
 }
