@@ -23,44 +23,165 @@
         <!-- Admin Sidebar -->
         <aside class="admin-sidebar">
             <ul class="admin-nav">
-                <li><a href="#" class="active">📁 Upload Student Data</a></li>
-                <li><a href="#">📝 Manage Notices</a></li>
-                <li><a href="#">📅 Update Routines</a></li>
-                <li><a href="#">📊 Exam Results</a></li>
-                <li><a href="#">⚙️ Portal Settings</a></li>
+                <li><a href="#" class="nav-link active" data-target="section-upload">📁 Upload Student Data</a></li>
+                <li><a href="#" class="nav-link" data-target="section-notices">📝 Manage Notices</a></li>
+                <li><a href="#" class="nav-link" data-target="section-routines">📅 Update Routines</a></li>
+                <li><a href="#" class="nav-link" data-target="section-results">📊 Exam Results</a></li>
+                <li><a href="#" class="nav-link" data-target="section-settings">⚙️ Portal Settings</a></li>
             </ul>
         </aside>
 
         <!-- Admin Main Content -->
         <main class="admin-content">
-            <div class="dashboard-card">
-                <h3>Bulk Upload Student Details</h3>
-                <p>Upload your formatted Excel (.xlsx) or CSV files to automatically populate the student database.</p>
-                
-                <form class="upload-form" action="#" method="POST" enctype="multipart/form-data">
-                    <div class="file-drop-zone">
-                        <div class="upload-icon">📄</div>
-                        <p>Drag and drop your Excel or CSV file here</p>
-                        <p class="or-text">or</p>
-                        <label for="student-file" class="browse-btn">Browse Files</label>
-                        <input type="file" id="student-file" name="student-file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" hidden>
-                    </div>
+            
+            <!-- SECTION 1: Upload Student Data -->
+            <div id="section-upload" class="admin-section active">
+                <div class="dashboard-card">
+                    <h3>Bulk Upload Student Details</h3>
+                    <p>Upload your formatted Excel (.xlsx) or CSV files to automatically populate the student database.</p>
+                    
+                    <form class="upload-form" action="#" method="POST">
+                        <div class="file-drop-zone">
+                            <div class="upload-icon">📄</div>
+                            <p>Drag and drop your Excel or CSV file here</p>
+                            <p class="or-text">or</p>
+                            <label for="student-file" class="browse-btn">Browse Files</label>
+                            <input type="file" id="student-file" hidden>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="admin-submit-btn">Upload to Database</button>
+                        </div>
+                    </form>
 
-                    <div class="form-actions">
-                        <button type="submit" class="upload-submit-btn">Upload to Database</button>
+                    <div class="data-guidelines">
+                        <h4>Data Formatting Guidelines</h4>
+                        <ul>
+                            <li>Ensure your columns are ordered exactly as: <strong>Roll No, Full Name, Class, Section, Guardian Name, Contact</strong>.</li>
+                            <li>Do not leave blank rows between student records.</li>
+                        </ul>
                     </div>
-                </form>
-
-                <div class="data-guidelines">
-                    <h4>Data Formatting Guidelines</h4>
-                    <ul>
-                        <li>Ensure your columns are ordered exactly as: <strong>Roll No, Full Name, Class, Section, Guardian Name, Contact</strong>.</li>
-                        <li>Do not leave blank rows between student records.</li>
-                        <li>Maximum file size is 10MB.</li>
-                    </ul>
                 </div>
             </div>
+
+            <!-- SECTION 2: Manage Notices -->
+            <div id="section-notices" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>Publish a New Notice</h3>
+                    <p>Notices published here will immediately appear on the public homepage.</p>
+                    
+                    <form class="admin-form">
+                        <div class="input-group">
+                            <label>Notice Title</label>
+                            <input type="text" placeholder="e.g., Holiday Announcement" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Notice Content</label>
+                            <textarea rows="4" placeholder="Type the full notice details here..." required></textarea>
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Publish Notice</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Update Routines -->
+            <div id="section-routines" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>Update Class Routines</h3>
+                    <p>Replace existing timetable PDFs for the Academics and Downloads pages.</p>
+                    
+                    <form class="admin-form">
+                        <div class="input-group">
+                            <label>Select Class</label>
+                            <select required>
+                                <option value="" disabled selected>-- Choose Class --</option>
+                                <option>LKG</option>
+                                <option>U.K.G</option>
+                                <option>Class 1</option>
+                                <option>Class 2</option>
+                                <option>Class 3</option>
+                                <option>Class 4</option>
+                                <option>Class 5</option>
+                                <option>Class 6</option>
+                                <option>Class 7</option>
+                                <option>Class 8</option>
+                            </select>
+                        </div>
+                        <div class="file-drop-zone" style="padding: 20px;">
+                            <label for="routine-file" class="browse-btn">Select New PDF</label>
+                            <input type="file" id="routine-file" accept=".pdf" hidden>
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Update Routine</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION 4: Exam Results -->
+            <div id="section-results" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>Upload Examination Results</h3>
+                    <p>Upload the master CSV file containing student marks to publish them to the Student Portal.</p>
+                    
+                    <form class="admin-form">
+                        <div class="input-group">
+                            <label>Examination Term</label>
+                            <select required>
+                                <option>Half-Yearly Examination</option>
+                                <option>Annual Examination</option>
+                            </select>
+                        </div>
+                        <div class="file-drop-zone" style="padding: 20px;">
+                            <label for="results-file" class="browse-btn">Select Results CSV</label>
+                            <input type="file" id="results-file" accept=".csv" hidden>
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Publish Results</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION 5: Portal Settings -->
+            <div id="section-settings" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>Administrator Settings</h3>
+                    <p>Update your login credentials and portal preferences.</p>
+                    
+                    <form class="admin-form">
+                        <div class="input-group">
+                            <label>New Password</label>
+                            <input type="password" placeholder="Enter new password">
+                        </div>
+                        <div class="input-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" placeholder="Confirm new password">
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+
         </main>
     </div>
+
+    <!-- JavaScript to handle tab switching -->
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.admin-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links and sections
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Show the corresponding section
+                const targetId = this.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
