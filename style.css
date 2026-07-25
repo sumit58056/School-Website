@@ -964,3 +964,139 @@ footer {
 .admin-submit-btn:hover {
     background-color: #FF671F;
 }
+/* --- CONTACT PAGE STYLES --- */
+.contact-section {
+    padding: 60px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+
+@media (max-width: 850px) {
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.contact-info-card, .contact-form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.contact-info-card h3, .contact-form-card h3 {
+    color: #003366;
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+    border-bottom: 2px solid #FF671F;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.contact-info-card > p {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.info-icon {
+    font-size: 1.8rem;
+    background: #f4f7f6;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.info-item h4 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.info-item p {
+    color: #555;
+    line-height: 1.5;
+}
+
+/* WhatsApp Button */
+.whatsapp-btn {
+    display: inline-block;
+    background-color: #25D366;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.05rem;
+    margin-top: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe57;
+    transform: translateY(-2px);
+}
+
+/* Contact Form */
+.inquiry-form .input-group {
+    margin-bottom: 20px;
+}
+
+.inquiry-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    resize: vertical;
+}
+
+.inquiry-form textarea:focus {
+    outline: none;
+    border-color: #FF671F;
+}
+
+.contact-submit-btn {
+    background-color: #FF671F;
+    color: white;
+    padding: 14px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.contact-submit-btn:hover {
+    background-color: #e65c17;
+}
+
+/* Map Container */
+.map-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-top: 5px solid #003366;
+}
+
+.map-container h3 {
+    color: #003366;
+    margin-bottom: 15px;
+}
