@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Login | Vivekananda Mission Institute</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page-bg">
+    <header>
+        <div class="logo">
+            <a href="index.html"><img src="logo.jpg" alt="Vivekananda Mission Institute Logo"></a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li class="dropdown"><a href="#">About VMI ▾</a></li>
+                <li class="dropdown"><a href="academics.html">Academics & Life ▾</a></li>
+                <li class="dropdown"><a href="#">Student & Parent Hub ▾</a></li>
+                <li><a href="index.html#contact">Contact Us</a></li>
+                <li class="nav-login"><a href="login.html">🔒 Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="login-section">
+        <div class="login-container">
+            <img src="logo.jpg" alt="VMI Seal" class="login-seal">
+            <h2>Portal Access</h2>
+            <p>Please select your role to continue</p>
+            
+            <form class="login-form" action="#" method="POST">
+                <div class="input-group">
+                    <label for="role">Select Role</label>
+                    <select id="role" name="role" required>
+                        <option value="" disabled selected>-- Choose Role --</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher / Faculty</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="userid">User ID / Roll Number</label>
+                    <input type="text" id="userid" name="userid" placeholder="Enter your ID" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="login-actions">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-submit-btn">Secure Login</button>
+            </form>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-container">
+            <img src="logo.jpg" class="footer-logo" alt="Small Seal">
+            <div class="footer-text">
+                <p>&copy; 2026 Vivekananda Mission Institute. All rights reserved.</p>
+                <p>Muluk, Bolpur, Birbhum | Contact: info@vivekanandamission.edu</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
