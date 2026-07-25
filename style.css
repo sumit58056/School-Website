@@ -769,3 +769,147 @@ footer {
     color: #555;
     line-height: 1.8;
 }
+/* --- DOWNLOADS PAGE STYLES --- */
+.downloads-section {
+    padding: 60px 5%;
+    background-color: #f9f9f9;
+}
+
+.downloads-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.download-category {
+    margin-bottom: 50px;
+}
+
+.download-category h3 {
+    color: #003366;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    border-bottom: 3px solid #FF671F;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* General Downloads Grid */
+.download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.download-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 5px solid #FF671F;
+}
+
+.download-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.doc-icon {
+    font-size: 3rem;
+}
+
+.doc-info {
+    flex: 1;
+}
+
+.doc-info h4 {
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 1.1rem;
+}
+
+.doc-info p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.doc-download-btn {
+    background-color: #003366;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+    white-space: nowrap;
+}
+
+.doc-download-btn:hover {
+    background-color: #FF671F;
+}
+
+/* Syllabus Downloads Grid */
+.syllabus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.syllabus-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.syllabus-card h4 {
+    color: white;
+    background-color: #003366;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.syllabus-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.syllabus-links li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.syllabus-links li:last-child {
+    border-bottom: none;
+}
+
+.syllabus-links li span {
+    font-weight: 500;
+    color: #444;
+}
+
+.syllabus-links li a {
+    color: #FF671F;
+    text-decoration: none;
+    font-weight: bold;
+    background: #fff3e6;
+    padding: 5px 12px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.syllabus-links li a:hover {
+    background-color: #FF671F;
+    color: white;
+}
