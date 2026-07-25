@@ -7,16 +7,26 @@
 }
 
 body {
-    background-color: #ffffff; /* Clean White */
+    background-color: #ffffff;
     color: #333;
     line-height: 1.6;
 }
 
+/* Scrolling Alert Bar */
+.top-alert {
+    background-color: #003366; 
+    color: white;
+    padding: 8px 0;
+    font-size: 0.95rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
 /* Header and Navigation */
 header {
-    background-color: #FF671F; /* Vibrant Saffron */
+    background-color: #FF671F; 
     color: white;
-    padding: 0.8rem 5%; /* Tightened padding for the logo */
+    padding: 0.8rem 5%; 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -26,25 +36,39 @@ header {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Logo styling in the header */
 .logo {
     display: flex;
     align-items: center;
 }
 
+/* Header Logo Fix */
 .logo img {
-    height: 70px; /* Scale the detailed logo to be clear but not massive */
+    height: 75px; 
     width: auto;
-    /* Optional: A small white border to make it pop against the saffron background */
-    border: 2px solid white;
     border-radius: 50%;
-    padding: 2px;
+    background-color: white;
+    border: 3px solid #E5C100; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.logo img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.35);
+}
+
+/* Navigation and Dropdowns */
 nav ul {
     list-style: none;
     display: flex;
     gap: 1.5rem;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+nav > ul > li {
+    position: relative; /* Required to anchor the dropdown menu */
 }
 
 nav a {
@@ -52,56 +76,127 @@ nav a {
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.3s;
+    display: block;
+    padding: 5px 0;
 }
 
-nav a:hover {
+nav > ul > li > a:hover {
     opacity: 0.8; 
 }
 
-/* Hero / Welcome Section */
+/* The Dropdown Container */
+.dropdown-menu {
+    display: none; /* Hides the menu by default */
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #ffffff; /* Clean white background */
+    min-width: 240px; /* Wide enough for long titles */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    z-index: 1000;
+    border-top: 4px solid #003366; /* Navy blue accent line */
+    padding: 5px 0;
+    flex-direction: column;
+}
+
+/* Show the menu when hovering over the parent list item */
+.dropdown:hover .dropdown-menu {
+    display: flex; 
+}
+
+/* Individual Links inside the Dropdown */
+.dropdown-menu li {
+    width: 100%;
+}
+
+.dropdown-menu li a {
+    color: #333; /* Dark text for readability on white */
+    padding: 12px 20px;
+    font-weight: 400;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-menu li:last-child a {
+    border-bottom: none;
+}
+
+/* Hover effect for Dropdown Links */
+.dropdown-menu li a:hover {
+    background-color: #fff3e6; /* Soft saffron highlight */
+    color: #FF671F; /* Saffron text */
+    opacity: 1; 
+}
+
+/* Hero / Welcome Section - UPDATED TO SPLIT LAYOUT */
 .hero {
-    /* Main overall photo with saffron overlay, same as before */
     background: linear-gradient(rgba(255, 103, 31, 0.85), rgba(255, 103, 31, 0.85)), 
                 url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
     color: white;
-    padding: 100px 20px; /* Adjusted padding */
-    text-align: center;
-    position: relative; /* For seal positioning */
+    padding: 80px 5%; 
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Forces side-by-side layout */
     align-items: center;
     justify-content: center;
+    gap: 60px; /* Space between logo and text */
+    position: relative; 
 }
 
-/* Prominent ornate logo centered in the hero section */
 .hero-seal {
-    margin-bottom: 25px;
     z-index: 10;
-    /* Center the seal horizontally */
-    position: relative;
+    flex-shrink: 0; /* Prevents the logo from squishing */
 }
 
+/* Hero Banner Logo */
 .hero-seal img {
-    max-width: 320px; /* Make the full ornate seal prominent and large */
+    max-width: 300px; 
     height: auto;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); /* Add depth */
+    border-radius: 50%;
+    background-color: white;
+    border: 4px solid #E5C100;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
 }
 
-/* Content over the background */
 .hero-content {
     z-index: 10;
+    max-width: 700px;
+    text-align: left; /* Aligns all text to the left */
 }
 
 .hero h2 {
     font-size: 2.8rem;
-    margin-bottom: 10px;
-    color: white; /* Ensure text is white over the saffron overlay */
+    margin-bottom: 15px;
+    color: white; 
+    line-height: 1.2;
 }
 
-.hero p {
-    font-size: 1.2rem;
+/* New NEP & IKS Badge Styling */
+.nep-iks-badge {
+    display: inline-block;
+    background-color: #003366;
+    color: #E5C100;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.hero-tagline {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: #ffefd5; 
+    font-weight: 500;
+}
+
+.hero-description {
+    font-size: 1.1rem;
     margin-bottom: 25px;
-    color: #f0f0f0; /* Slightly faded white for subtext */
+    color: #f9f9f9; 
+    line-height: 1.6;
 }
 
 .cta-button {
@@ -109,73 +204,251 @@ nav a:hover {
     font-size: 1.1rem;
     background-color: white;
     border: none;
-    color: #FF671F; /* Saffron Text */
+    color: #FF671F; 
     font-weight: bold;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .cta-button:hover {
     background-color: #f0f0f0;
+    transform: translateY(-2px);
 }
 
-/* Notice Board Section */
-.notices {
-    padding: 60px 5%;
+/* Mobile Responsiveness for the Hero Section */
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column; /* Stacks vertically on phones */
+        text-align: center;
+        gap: 30px;
+    }
+    .hero-content {
+        text-align: center;
+    }
+    .hero h2 {
+        font-size: 2.2rem;
+    }
+}
+
+/* Quick Links Section */
+.quick-links {
+    padding: -30px 5% 40px; 
+    max-width: 1200px;
+    margin: -40px auto 40px auto;
+    position: relative;
+    z-index: 20;
+}
+
+.link-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.link-card {
+    background: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    text-decoration: none;
+    color: #333;
+    border-bottom: 5px solid #FF671F;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.link-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+}
+
+.link-card .icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+.link-card h3 {
+    color: #FF671F;
+    margin-bottom: 10px;
+}
+
+/* Split Content Section (Principal & Notices) */
+.content-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    padding: 40px 5%;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-.notices h2 {
-    text-align: center;
-    margin-bottom: 40px;
-    color: #FF671F; /* Saffron */
-    font-size: 2rem;
+@media (max-width: 850px) {
+    .content-split {
+        grid-template-columns: 1fr;
+    }
 }
 
-.notice-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+.principal-message h2, .notices-side h2 {
+    color: #FF671F;
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
 }
 
-.notice-card {
+.message-box {
+    background: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    border-left: 5px solid #003366;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #555;
+    position: relative;
+}
+
+.message-box h4 {
+    margin-top: 20px;
+    font-style: normal;
+    color: #003366;
+    text-align: right;
+}
+
+.notices-side .notice-card {
     background: white;
-    padding: 25px;
-    border-top: 5px solid #FF671F; /* Saffron Accent */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    border-radius: 6px;
+    padding: 20px;
+    border-left: 4px solid #FF671F;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    border-radius: 4px;
+    margin-bottom: 20px;
     transition: transform 0.3s ease;
 }
 
-.notice-card:hover {
-    transform: translateY(-5px);
+.notices-side .notice-card:hover {
+    transform: translateX(5px);
 }
 
 .notice-card h3 {
-    color: #FF671F; /* Saffron */
-    margin-bottom: 10px;
+    color: #FF671F;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
 }
 
 .notice-card p {
-    margin-bottom: 15px;
-    font-size: 0.95rem;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
 }
 
 .date {
     display: inline-block;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: white;
-    background: #FF671F; /* Saffron Background */
-    padding: 4px 10px;
+    background: #FF671F;
+    padding: 3px 8px;
+    border-radius: 3px;
+}
+
+/* Academics Page Specific Styles */
+.page-banner {
+    background-color: #FF671F;
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+    box-shadow: inset 0 -5px 15px rgba(0,0,0,0.1);
+}
+
+.routines-section {
+    padding: 50px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.routine-info {
+    background: #f9f9f9;
+    border-left: 5px solid #FF671F;
+    padding: 20px;
+    margin-bottom: 40px;
     border-radius: 4px;
 }
 
-/* Footer with logo */
+.table-container {
+    margin-bottom: 50px;
+    overflow-x: auto; 
+}
+
+.class-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.class-header h3 {
+    color: #FF671F;
+    margin-bottom: 0;
+    font-size: 1.5rem;
+}
+
+.download-btn {
+    background-color: #003366;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.download-btn:hover {
+    background-color: #FF671F;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.routine-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.routine-table th, 
+.routine-table td {
+    padding: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.routine-table th {
+    background-color: #003366; 
+    color: white;
+    font-weight: bold;
+}
+
+.routine-table tr:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+.routine-table tr:hover {
+    background-color: #fff3e6; 
+}
+
+.games-period {
+    background-color: #FF671F !important;
+    color: white;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Footer */
 footer {
-    background-color: #FF671F; /* Saffron */
+    background-color: #FF671F; 
     color: white;
     text-align: center;
     padding: 30px;
@@ -189,14 +462,12 @@ footer {
     gap: 20px;
 }
 
-/* Small logo in the footer */
+/* Footer Logo Fix */
 .footer-logo {
-    height: 60px; /* Small scale for the footer */
+    height: 60px; 
     width: auto;
-    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
-}
-
-.footer-text p {
-    margin-bottom: 5px;
-    font-size: 0.9rem;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #E5C100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
