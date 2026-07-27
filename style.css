@@ -1208,3 +1208,67 @@ footer {
     color: #555;
     line-height: 1.7;
 }
+/* --- FACULTY PAGE STYLES --- */
+.faculty-section {
+    padding: 60px 5%;
+    background-color: #f4f7f6;
+}
+
+.faculty-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.faculty-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.faculty-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border-bottom: 5px solid #FF671F;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.faculty-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.faculty-avatar {
+    width: 80px;
+    height: 80px;
+    background-color: #003366;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin: 0 auto 20px auto;
+    border: 3px solid #E5C100;
+}
+
+.faculty-card h3 {
+    color: #003366;
+    margin-bottom: 5px;
+    font-size: 1.3rem;
+}
+
+.faculty-role {
+    color: #FF671F;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.faculty-subjects {
+    color: #666;
+    font-size: 0.9rem;
+}
