@@ -183,5 +183,97 @@
             });
         });
     </script>
+    <!-- SheetJS Library (Parses Excel files in the browser for FREE) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <!-- Firebase Firestore Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Your exact Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
+            authDomain: "vmi-portal.firebaseapp.com",
+            projectId: "vmi-portal",
+            storageBucket: "vmi-portal.firebasestorage.app",
+            messagingSenderId: "215224119153",
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const uploadForm = document.querySelector('.upload-form');
+        const fileInput = document.getElementById('student-file');
+        const submitBtn = uploadForm.querySelector('.admin-submit-btn');
+
+        fileInput.addEventListener('change', function() {
+            if(this.files[0]) {
+                const dropZoneText = document.querySelector('.file-drop-zone p');
+                dropZoneText.innerText = "Selected File: " + this.files[0].name;
+            }
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert("Please browse and select an Excel or CSV file first.");
+                return;
+            }
+
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = "Reading Excel file...";
+            submitBtn.style.backgroundColor = "#555";
+
+            const reader = new FileReader();
+
+            reader.onload = async function(event) {
+                try {
+                    // Read Excel / CSV data in browser memory
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // Convert sheet rows into JSON array
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                    if (jsonData.length === 0) {
+                        alert("The uploaded file is empty.");
+                        return;
+                    }
+
+                    submitBtn.innerText = `Saving ${jsonData.length} records to database...`;
+
+                    // Batch save records to Cloud Firestore
+                    const batch = writeBatch(db);
+                    jsonData.forEach((row, index) => {
+                        // Use Roll Number or index as document ID
+                        const docId = row["Roll No"] ? String(row["Roll No"]) : `student_${Date.now()}_${index}`;
+                        const studentRef = doc(db, "students", docId);
+                        batch.set(studentRef, row, { merge: true });
+                    });
+
+                    await batch.commit();
+
+                    alert(`Success! Successfully processed and saved ${jsonData.length} student records into the database for free!`);
+                    
+                    uploadForm.reset();
+                    document.querySelector('.file-drop-zone p').innerText = "Drag and drop your Excel or CSV file here";
+
+                } catch (error) {
+                    alert("Error processing file: " + error.message);
+                } finally {
+                    submitBtn.innerText = originalText;
+                    submitBtn.style.backgroundColor = "#003366";
+                }
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
+    </script>
 </body>
 </html>

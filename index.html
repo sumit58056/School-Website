@@ -138,5 +138,59 @@
             </div>
         </div>
     </footer>
+    <!-- Firebase SDK Integration -->
+    <script type="module">
+        // 1. Import Firebase functions via CDN for static HTML
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // 2. Your specific Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
+            authDomain: "vmi-portal.firebaseapp.com",
+            projectId: "vmi-portal",
+            storageBucket: "vmi-portal.firebasestorage.app",
+            messagingSenderId: "215224119153",
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
+        };
+
+        // 3. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 4. Handle the Login Form Submission
+        const loginForm = document.querySelector('.login-form');
+        const submitBtn = document.querySelector('.login-submit-btn');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Authenticating...";
+            submitBtn.style.backgroundColor = "#555";
+
+            const role = document.getElementById('role').value;
+            const email = document.getElementById('userid').value; 
+            const password = document.getElementById('password').value;
+
+            if (role !== 'admin') {
+                alert("Currently, only Administrator logins are active.");
+                submitBtn.innerText = originalBtnText;
+                submitBtn.style.backgroundColor = "#003366";
+                return;
+            }
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Login Successful! Redirecting to dashboard...");
+                    window.location.href = "admin-dashboard.html";
+                })
+                .catch((error) => {
+                    alert("Login Failed: " + error.message);
+                    submitBtn.innerText = originalBtnText;
+                    submitBtn.style.backgroundColor = "#003366";
+                });
+        });
+    </script>
 </body>
 </html>
