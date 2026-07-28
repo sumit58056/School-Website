@@ -1272,3 +1272,122 @@ footer {
     color: #666;
     font-size: 0.9rem;
 }
+/* --- LOGIN PAGE STYLES --- */
+.login-bg {
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.login-container {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 420px;
+    box-sizing: border-box;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-header img {
+    max-width: 120px; /* This shrinks your massive logo! */
+    margin-bottom: 15px;
+}
+
+.login-header h2 {
+    color: #003366;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.login-form .input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.login-form label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: bold;
+    font-size: 0.95rem;
+}
+
+.login-form input, 
+.login-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.login-form input:focus, 
+.login-form select:focus {
+    outline: none;
+    border-color: #FF671F;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.9rem;
+}
+
+.form-actions a {
+    color: #FF671F;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-submit-btn:hover {
+    background-color: #FF671F;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.login-footer a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-footer a:hover {
+    color: #FF671F;
+}
