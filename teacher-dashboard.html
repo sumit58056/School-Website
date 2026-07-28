@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard | VMI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
+    </style>
+</head>
+<body class="admin-bg">
+    <!-- Teacher Top Navbar -->
+    <header class="admin-header">
+        <div class="logo">
+            <img src="logo.jpg" alt="VMI Logo">
+            <h2>VMI Faculty Portal</h2>
+        </div>
+        <div class="admin-profile">
+            <span>Welcome, Faculty Member</span>
+            <a href="index.html" class="logout-btn">Log Out</a>
+        </div>
+    </header>
+
+    <div class="admin-layout">
+        <!-- Teacher Sidebar -->
+        <aside class="admin-sidebar">
+            <ul class="admin-nav">
+                <li><a href="#" class="nav-link active" data-target="section-materials">📚 Study Materials & Syllabus</a></li>
+                <li><a href="#" class="nav-link" data-target="section-results">📊 Manage Exam Results</a></li>
+            </ul>
+        </aside>
+
+        <!-- Teacher Main Content -->
+        <main class="admin-content">
+            
+            <!-- SECTION 1: Study Materials & Syllabus -->
+            <div id="section-materials" class="admin-section active">
+                <div class="dashboard-card">
+                    <h3>Publish Study Materials & Syllabus</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Upload your documents to Google Drive, make sure the sharing settings are set to "Anyone with the link", and paste the link below.</p>
+                    
+                    <form class="admin-form" id="material-form">
+                        <div class="input-group">
+                            <label>Document Title</label>
+                            <input type="text" id="mat-title" placeholder="e.g., Chapter 1 Math Notes" required>
+                        </div>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Target Class</label>
+                                <select id="mat-class" required>
+                                    <option value="All">All Classes</option>
+                                    <option>LKG</option><option>U.K.G</option>
+                                    <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                                    <option>Class 7</option><option>Class 8</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Category</label>
+                                <select id="mat-category" required>
+                                    <option value="Study Material">Study Material</option>
+                                    <option value="Syllabus">Syllabus</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Document Link (Google Drive / OneDrive)</label>
+                            <input type="url" id="mat-link" placeholder="Paste the shareable link here..." required>
+                        </div>
+                        <button type="submit" class="admin-submit-btn" id="mat-submit-btn">Publish Document</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Exam Results Upload -->
+            <div id="section-results" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>Upload Examination Results</h3>
+                    
+                    <!-- Feature A: Manual Entry -->
+                    <h4 class="section-divider">1. Add Result Manually</h4>
+                    <form class="admin-form" id="manual-result-form">
+                        <div class="input-group">
+                            <label>Student ID (Roll No)</label>
+                            <input type="text" id="res-student-id" placeholder="e.g., VMI2026001" required>
+                        </div>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Exam Term</label>
+                                <select id="res-exam-name" required>
+                                    <option value="Term 1">Term 1 (Half Yearly)</option>
+                                    <option value="Term 2">Term 2 (Final)</option>
+                                    <option value="Unit Test">Unit Test</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Subject</label>
+                                <input type="text" id="res-subject" placeholder="e.g., Mathematics" required>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Marks Obtained</label>
+                                <input type="number" id="res-marks" required>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Total Max Marks</label>
+                                <input type="number" id="res-total" value="100" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Student Result</button>
+                    </form>
+
+                    <!-- Feature B: Bulk Entry -->
+                    <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
+                    <form class="admin-form" id="bulk-result-form">
+                        <div class="file-drop-zone" style="padding: 20px;">
+                            <label for="results-file" class="browse-btn">Select Results CSV/Excel</label>
+                            <input type="file" id="results-file" accept=".csv, .xlsx" hidden>
+                            <p id="result-file-name" style="margin-top: 10px; font-size: 0.9rem;"></p>
+                        </div>
+                        <button type="submit" class="admin-submit-btn" id="bulk-res-submit-btn">Upload Bulk Results</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- UI Tab Switching Script -->
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.admin-section');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.getAttribute('data-target')).classList.add('active');
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, writeBatch, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
+            authDomain: "vmi-portal.firebaseapp.com",
+            projectId: "vmi-portal",
+            storageBucket: "vmi-portal.firebasestorage.app",
+            messagingSenderId: "215224119153",
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- 1. PUBLISH STUDY MATERIALS & SYLLABUS ---
+        const matForm = document.getElementById('material-form');
+        const matSubmitBtn = document.getElementById('mat-submit-btn');
+
+        matForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalText = matSubmitBtn.innerText;
+            matSubmitBtn.innerText = "Publishing...";
+
+            const title = document.getElementById('mat-title').value;
+            const targetClass = document.getElementById('mat-class').value;
+            const category = document.getElementById('mat-category').value;
+            const link = document.getElementById('mat-link').value;
+            
+            const docId = `doc_${Date.now()}`;
+
+            try {
+                await setDoc(doc(db, "materials", docId), {
+                    title: title,
+                    class: targetClass,
+                    category: category,
+                    link: link,
+                    publishedBy: "Faculty",
+                    date: new Date().toLocaleDateString(),
+                    timestamp: Date.now()
+                });
+                alert(`Success! ${category} published for ${targetClass}.`);
+                matForm.reset();
+            } catch (error) {
+                alert("Error publishing: " + error.message);
+            } finally {
+                matSubmitBtn.innerText = originalText;
+            }
+        });
+
+        // --- 2. EXAM RESULTS (MANUAL UPLOAD) ---
+        const manualResultForm = document.getElementById('manual-result-form');
+        const resSubmitBtn = document.getElementById('res-submit-btn');
+
+        manualResultForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalText = resSubmitBtn.innerText;
+            resSubmitBtn.innerText = "Saving to Database...";
+
+            const studentId = document.getElementById('res-student-id').value.trim();
+            const examName = document.getElementById('res-exam-name').value;
+            const subject = document.getElementById('res-subject').value.trim();
+            const marks = document.getElementById('res-marks').value;
+            const total = document.getElementById('res-total').value;
+
+            const resultId = `${studentId}_${examName}_${subject}`.replace(/\s+/g, '_');
+
+            try {
+                await setDoc(doc(db, "results", resultId), {
+                    "Student ID": studentId, "Exam Term": examName, "Subject": subject,
+                    "Marks Obtained": Number(marks), "Total Marks": Number(total),
+                    "Uploaded By": "Faculty", "Publish Date": new Date().toLocaleDateString()
+                }, { merge: true });
+
+                alert(`Success! ${subject} marks saved for Student ID: ${studentId}.`);
+                manualResultForm.reset();
+            } catch (error) { alert("Error saving marks: " + error.message); } 
+            finally { resSubmitBtn.innerText = originalText; }
+        });
+
+        // --- 3. EXAM RESULTS (BULK UPLOAD) ---
+        const bulkResultForm = document.getElementById('bulk-result-form');
+        const resultsFileInput = document.getElementById('results-file');
+        const bulkResSubmitBtn = document.getElementById('bulk-res-submit-btn');
+        const resultFileName = document.getElementById('result-file-name');
+
+        resultsFileInput.addEventListener('change', function() {
+            if(this.files[0]) resultFileName.innerText = "Selected File: " + this.files[0].name;
+        });
+
+        bulkResultForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const file = resultsFileInput.files[0];
+            if (!file) return alert("Select an Excel/CSV file.");
+
+            const originalText = bulkResSubmitBtn.innerText;
+            bulkResSubmitBtn.innerText = "Processing...";
+            
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                    
+                    if (jsonData.length === 0) return alert("File is empty.");
+                    bulkResSubmitBtn.innerText = `Saving ${jsonData.length} marks...`;
+
+                    const batch = writeBatch(db);
+                    jsonData.forEach((row) => {
+                        const studentId = row["Student ID"]; const examTerm = row["Exam Term"]; const subject = row["Subject"];
+                        if(studentId && examTerm && subject) {
+                            const resultId = `${studentId}_${examTerm}_${subject}`.replace(/\s+/g, '_');
+                            batch.set(doc(db, "results", resultId), { 
+                                ...row, "Uploaded By": "Faculty", "Publish Date": new Date().toLocaleDateString() 
+                            }, { merge: true });
+                        }
+                    });
+                    
+                    await batch.commit();
+                    alert(`Successfully uploaded ${jsonData.length} records.`);
+                    bulkResultForm.reset(); resultFileName.innerText = "";
+                } catch (error) { alert("Error processing file."); } 
+                finally { bulkResSubmitBtn.innerText = originalText; }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+    </script>
+</body>
+</html>

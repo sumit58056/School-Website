@@ -13,12 +13,10 @@
         .db-table tr:hover { background-color: #e9ecef; }
         .db-thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
         .delete-btn { background-color: #E63946; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .delete-btn:hover { background-color: #c92a37; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
     </style>
 </head>
 <body class="admin-bg">
-    <!-- Admin Top Navbar -->
     <header class="admin-header">
         <div class="logo">
             <img src="logo.jpg" alt="VMI Logo">
@@ -38,6 +36,7 @@
                 <li><a href="#" class="nav-link" data-target="section-add-student">👤 Add / Transfer In</a></li>
                 <li><a href="#" class="nav-link" data-target="section-transfer-out">🔄 Transfer Out (TC)</a></li>
                 <li><a href="#" class="nav-link" data-target="section-view-db">👁️ View Database</a></li>
+                <li><a href="#" class="nav-link" data-target="section-materials">📚 Study Materials</a></li>
                 <li><a href="#" class="nav-link" data-target="section-export">📥 Export Database</a></li>
                 <li><a href="#" class="nav-link" data-target="section-notices">📝 Manage Notices</a></li>
                 <li><a href="#" class="nav-link" data-target="section-routines">📅 Update Routines</a></li>
@@ -52,7 +51,6 @@
             <div id="section-upload" class="admin-section active">
                 <div class="dashboard-card">
                     <h3>Bulk Upload Student Details</h3>
-                    <p>Upload your formatted Excel (.xlsx) or CSV files to automatically populate the student database.</p>
                     <form class="upload-form" action="#" method="POST">
                         <div class="file-drop-zone">
                             <div class="upload-icon">📄</div>
@@ -60,9 +58,7 @@
                             <label for="student-file" class="browse-btn">Browse Files</label>
                             <input type="file" id="student-file" accept=".xlsx, .csv" hidden>
                         </div>
-                        <div class="form-actions">
-                            <button type="submit" class="admin-submit-btn">Upload to Database</button>
-                        </div>
+                        <div class="form-actions"><button type="submit" class="admin-submit-btn">Upload to Database</button></div>
                     </form>
                 </div>
             </div>
@@ -103,10 +99,7 @@
                 <div class="dashboard-card">
                     <h3>Transfer Out & Print Certificate</h3>
                     <form class="admin-form" id="tc-form">
-                        <div class="input-group">
-                            <label>Student ID to Transfer Out</label>
-                            <input type="text" id="tc-student-id" required>
-                        </div>
+                        <div class="input-group"><label>Student ID to Transfer Out</label><input type="text" id="tc-student-id" required></div>
                         <button type="submit" class="admin-submit-btn" id="tc-submit-btn" style="background-color: #E63946;">Mark Transferred & Generate TC</button>
                     </form>
                 </div>
@@ -129,7 +122,46 @@
                 </div>
             </div>
 
-            <!-- SECTION 5: Export Database -->
+            <!-- SECTION 5: Study Materials & Syllabus -->
+            <div id="section-materials" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>Publish Study Materials & Syllabus</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Upload your documents to Google Drive, ensure sharing is set to "Anyone with the link", and paste the link below.</p>
+                    
+                    <form class="admin-form" id="admin-material-form">
+                        <div class="input-group">
+                            <label>Document Title</label>
+                            <input type="text" id="admin-mat-title" placeholder="e.g., Chapter 1 Math Notes" required>
+                        </div>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Target Class</label>
+                                <select id="admin-mat-class" required>
+                                    <option value="All">All Classes</option>
+                                    <option>LKG</option><option>U.K.G</option>
+                                    <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+                                    <option>Class 7</option><option>Class 8</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Category</label>
+                                <select id="admin-mat-category" required>
+                                    <option value="Study Material">Study Material</option>
+                                    <option value="Syllabus">Syllabus</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Document Link (Google Drive / OneDrive)</label>
+                            <input type="url" id="admin-mat-link" placeholder="Paste the shareable link here..." required>
+                        </div>
+                        <button type="submit" class="admin-submit-btn" id="admin-mat-submit-btn">Publish Document</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION 6: Export Database -->
             <div id="section-export" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Export Student Database</h3>
@@ -140,7 +172,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 6: Notices -->
+            <!-- SECTION 7: Notices -->
             <div id="section-notices" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish a New Notice</h3>
@@ -159,7 +191,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 7: Routines -->
+            <!-- SECTION 8: Routines -->
             <div id="section-routines" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Update Class Routines</h3>
@@ -173,55 +205,45 @@
                 </div>
             </div>
 
-            <!-- SECTION 8: Exam Results -->
+            <!-- SECTION 9: Exam Results -->
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Upload Examination Results</h3>
+                    <h3>Manage Examination Results</h3>
                     
                     <h4 class="section-divider">1. Add Result Manually</h4>
                     <form class="admin-form" id="manual-result-form">
-                        <div class="input-group">
-                            <label>Student ID (Roll No)</label>
-                            <input type="text" id="res-student-id" placeholder="e.g., VMI2026001" required>
+                        <div class="input-group"><label>Student ID (Roll No)</label><input type="text" id="res-student-id" required></div>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;"><label>Exam Term</label><select id="res-exam-name" required><option>Term 1</option><option>Term 2</option><option>Unit Test</option></select></div>
+                            <div class="input-group" style="flex: 1;"><label>Subject</label><input type="text" id="res-subject" required></div>
                         </div>
                         <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;">
-                                <label>Exam Term</label>
-                                <select id="res-exam-name" required>
-                                    <option value="Term 1">Term 1 (Half Yearly)</option>
-                                    <option value="Term 2">Term 2 (Final)</option>
-                                    <option value="Unit Test">Unit Test</option>
-                                </select>
-                            </div>
-                            <div class="input-group" style="flex: 1;">
-                                <label>Subject</label>
-                                <input type="text" id="res-subject" placeholder="e.g., Mathematics" required>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;">
-                                <label>Marks Obtained</label>
-                                <input type="number" id="res-marks" required>
-                            </div>
-                            <div class="input-group" style="flex: 1;">
-                                <label>Total Max Marks</label>
-                                <input type="number" id="res-total" value="100" required>
-                            </div>
+                            <div class="input-group" style="flex: 1;"><label>Marks Obtained</label><input type="number" id="res-marks" required></div>
+                            <div class="input-group" style="flex: 1;"><label>Total Max Marks</label><input type="number" id="res-total" value="100" required></div>
                         </div>
                         <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Student Result</button>
                     </form>
 
                     <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
                     <form class="admin-form" id="bulk-result-form">
-                        <div class="file-drop-zone" style="padding: 20px;">
-                            <label for="results-file" class="browse-btn">Select Results CSV/Excel</label>
-                            <input type="file" id="results-file" accept=".csv, .xlsx" hidden>
-                        </div>
+                        <div class="file-drop-zone" style="padding: 20px;"><label for="results-file" class="browse-btn">Select Results CSV/Excel</label><input type="file" id="results-file" accept=".csv, .xlsx" hidden></div>
                         <button type="submit" class="admin-submit-btn">Upload Bulk Results</button>
                     </form>
+
+                    <!-- NEW: Live Results Viewer -->
+                    <h4 class="section-divider">3. View Live Results</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <button id="refresh-results-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Results</button>
+                        <input type="text" id="res-search-input" placeholder="Search by Student ID..." style="padding: 10px; width: 300px;">
+                    </div>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="db-table">
+                            <thead><tr><th>Student ID</th><th>Term</th><th>Subject</th><th>Marks</th><th>Total</th><th>Action</th></tr></thead>
+                            <tbody id="res-table-body"><tr><td colspan="6" style="text-align: center; padding: 20px;">Click "Refresh Results"</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-
         </main>
     </div>
 
@@ -239,8 +261,6 @@
             });
         });
     </script>
-
-    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -258,7 +278,6 @@
             messagingSenderId: "215224119153",
             appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -278,320 +297,184 @@
 
         async function renderDatabaseTable(students) {
             dbTableBody.innerHTML = "";
-            if (students.length === 0) {
-                dbTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No students found.</td></tr>`;
-                return;
-            }
+            if (students.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No students found.</td></tr>`; return; }
             students.forEach(student => {
                 const tr = document.createElement('tr');
                 const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
                 tr.innerHTML = `
-                    <td><img src="${photoSrc}" class="db-thumbnail" alt="ID"></td>
+                    <td><img src="${photoSrc}" class="db-thumbnail"></td>
                     <td><strong>${student["Student ID"] || student["Roll No"] || 'N/A'}</strong></td>
-                    <td>${student.Name || 'N/A'}</td>
-                    <td>${student.Class || 'N/A'}</td>
-                    <td>${student.Phone || 'N/A'}</td>
+                    <td>${student.Name || 'N/A'}</td><td>${student.Class || 'N/A'}</td><td>${student.Phone || 'N/A'}</td>
                     <td><span style="color: ${student.Status === 'Transferred Out' ? 'red' : 'green'}; font-weight: bold;">${student.Status || 'Active'}</span></td>
                 `;
                 dbTableBody.appendChild(tr);
             });
         }
-
         refreshDbBtn.addEventListener('click', async () => {
             refreshDbBtn.innerText = "Loading...";
-            try {
-                liveStudentsData = await fetchAllStudents();
-                renderDatabaseTable(liveStudentsData);
-            } catch (error) {
-                alert("Failed to load database.");
-            } finally {
-                refreshDbBtn.innerText = "🔄 Refresh Data";
-            }
+            try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } 
+            catch (error) { alert("Failed to load database."); } finally { refreshDbBtn.innerText = "🔄 Refresh Data"; }
         });
-
         dbSearchInput.addEventListener('keyup', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filtered = liveStudentsData.filter(student => {
-                const name = (student.Name || "").toLowerCase();
-                const id = (student["Student ID"] || student["Roll No"] || "").toLowerCase();
+                const name = (student.Name || "").toLowerCase(); const id = (student["Student ID"] || student["Roll No"] || "").toLowerCase();
                 return name.includes(searchTerm) || id.includes(searchTerm);
             });
             renderDatabaseTable(filtered);
         });
 
-        // --- 2. NOTICE BOARD ENGINE ---
+        // --- 2. NOTICES ---
         const noticeForm = document.getElementById('notice-form');
         const noticeSubmitBtn = document.getElementById('notice-submit-btn');
         const noticeTableBody = document.getElementById('notice-table-body');
-
         async function loadLiveNotices() {
             try {
-                const querySnapshot = await getDocs(collection(db, "notices"));
-                const notices = [];
+                const querySnapshot = await getDocs(collection(db, "notices")); const notices = [];
                 querySnapshot.forEach((doc) => { notices.push({ id: doc.id, ...doc.data() }); });
-                notices.sort((a, b) => b.timestamp - a.timestamp);
-                
-                noticeTableBody.innerHTML = "";
-                if (notices.length === 0) {
-                    noticeTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px;">No active notices.</td></tr>`;
-                    return;
-                }
+                notices.sort((a, b) => b.timestamp - a.timestamp); noticeTableBody.innerHTML = "";
+                if (notices.length === 0) { noticeTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px;">No active notices.</td></tr>`; return; }
                 notices.forEach(notice => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${notice.date}</td>
-                        <td><strong>${notice.title}</strong></td>
-                        <td><button class="delete-btn delete-notice" data-id="${notice.id}">Delete</button></td>
-                    `;
+                    tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="delete-btn delete-notice" data-id="${notice.id}">Delete</button></td>`;
                     noticeTableBody.appendChild(tr);
                 });
-
                 document.querySelectorAll('.delete-notice').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const noticeId = e.target.getAttribute('data-id');
-                        if(confirm("Permanently delete this notice?")) {
-                            await deleteDoc(doc(db, "notices", noticeId));
-                            loadLiveNotices(); 
-                        }
+                        if(confirm("Permanently delete this notice?")) { await deleteDoc(doc(db, "notices", noticeId)); loadLiveNotices(); }
                     });
                 });
-            } catch (error) { console.error("Error loading notices: ", error); }
+            } catch (error) {}
         }
-
         document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', loadLiveNotices);
-
         noticeForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const originalBtnText = noticeSubmitBtn.innerText;
-            noticeSubmitBtn.innerText = "Publishing...";
-            const title = document.getElementById('notice-title').value;
-            const content = document.getElementById('notice-content').value;
-            const noticeId = "notice_" + Date.now();
-            
+            e.preventDefault(); const originalBtnText = noticeSubmitBtn.innerText; noticeSubmitBtn.innerText = "Publishing...";
             try {
-                await setDoc(doc(db, "notices", noticeId), {
-                    title: title, content: content, date: new Date().toLocaleDateString(), timestamp: Date.now()
-                });
-                alert("Notice Published Successfully!");
-                noticeForm.reset();
-                loadLiveNotices();
-            } catch (error) { alert("Error publishing notice."); } 
-            finally { noticeSubmitBtn.innerText = originalBtnText; }
+                await setDoc(doc(db, "notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() });
+                alert("Notice Published!"); noticeForm.reset(); loadLiveNotices();
+            } catch (error) {} finally { noticeSubmitBtn.innerText = originalBtnText; }
         });
 
         // --- 3. BULK EXCEL UPLOAD ---
-        const uploadForm = document.querySelector('.upload-form');
-        const fileInput = document.getElementById('student-file');
-        const bulkSubmitBtn = uploadForm.querySelector('.admin-submit-btn');
-
-        fileInput.addEventListener('change', function() {
-            if(this.files[0]) document.querySelector('.file-drop-zone p').innerText = "Selected File: " + this.files[0].name;
-        });
-
+        const uploadForm = document.querySelector('.upload-form'); const fileInput = document.getElementById('student-file'); const bulkSubmitBtn = uploadForm.querySelector('.admin-submit-btn');
         uploadForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const file = fileInput.files[0];
-            if (!file) return alert("Select an Excel or CSV file first.");
-
-            const originalText = bulkSubmitBtn.innerText;
-            bulkSubmitBtn.innerText = "Reading file...";
-            
+            e.preventDefault(); if (!fileInput.files[0]) return alert("Select an Excel/CSV file.");
             const reader = new FileReader();
             reader.onload = async function(event) {
-                try {
-                    const data = new Uint8Array(event.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    
-                    if (jsonData.length === 0) return alert("File is empty.");
-                    bulkSubmitBtn.innerText = `Saving ${jsonData.length} records...`;
-
-                    const batch = writeBatch(db);
-                    jsonData.forEach((row, index) => {
-                        const docId = row["Roll No"] || row["Student ID"] ? String(row["Roll No"] || row["Student ID"]) : `student_${Date.now()}_${index}`;
-                        batch.set(doc(db, "students", docId), { ...row, Status: "Active" }, { merge: true });
-                    });
-                    await batch.commit();
-                    alert(`Saved ${jsonData.length} student records.`);
-                    uploadForm.reset();
-                    document.querySelector('.file-drop-zone p').innerText = "Drag and drop your Excel or CSV file here";
-                } catch (error) { alert("Error processing file."); } 
-                finally { bulkSubmitBtn.innerText = originalText; }
+                const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+                const batch = writeBatch(db);
+                jsonData.forEach((row, index) => { const docId = row["Roll No"] || row["Student ID"] ? String(row["Roll No"] || row["Student ID"]) : `student_${Date.now()}_${index}`; batch.set(doc(db, "students", docId), { ...row, Status: "Active" }, { merge: true }); });
+                await batch.commit(); alert(`Saved ${jsonData.length} student records.`); uploadForm.reset();
             };
-            reader.readAsArrayBuffer(file);
+            reader.readAsArrayBuffer(fileInput.files[0]);
         });
 
-        // --- 4. MANUAL STUDENT ADDITION ---
-        const manualForm = document.getElementById('manual-student-form');
-        const manualSubmitBtn = document.getElementById('manual-submit-btn');
-        const photoInput = document.getElementById('manual-photo');
-        const photoPreview = document.getElementById('photo-preview');
-        let compressedPhotoBase64 = "";
-
-        photoInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) { compressedPhotoBase64 = ""; photoPreview.style.display = 'none'; return; }
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 250; const MAX_HEIGHT = 250;
-                    let width = img.width; let height = img.height;
-                    if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
-                    else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
-                    canvas.width = width; canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.6);
-                    photoPreview.src = compressedPhotoBase64;
-                    photoPreview.style.display = 'block';
-                }
-                img.src = event.target.result;
-            }
-            reader.readAsDataURL(file);
+        // --- 4. MANUAL ADD STUDENT ---
+        const manualForm = document.getElementById('manual-student-form'); let compressedPhotoBase64 = "";
+        document.getElementById('manual-photo').addEventListener('change', function(e) {
+            const reader = new FileReader(); reader.onload = function(event) {
+                const img = new Image(); img.onload = function() {
+                    const canvas = document.createElement('canvas'); canvas.width = 250; canvas.height = 250; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, 250, 250);
+                    compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.6); document.getElementById('photo-preview').src = compressedPhotoBase64; document.getElementById('photo-preview').style.display = 'block';
+                }; img.src = event.target.result;
+            }; reader.readAsDataURL(e.target.files[0]);
         });
-
         manualForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); 
-            const originalBtnText = manualSubmitBtn.innerText;
-            manualSubmitBtn.innerText = "Saving...";
-            
-            const admissionType = document.getElementById('manual-admission-type').value;
-            const studentId = document.getElementById('manual-id').value;
-            const name = document.getElementById('manual-name').value;
-            const studentClass = document.getElementById('manual-class').value;
-            const father = document.getElementById('manual-father').value;
-            const mother = document.getElementById('manual-mother').value;
-            const phone = document.getElementById('manual-phone').value;
-            const address = document.getElementById('manual-address').value;
-
-            try {
-                await setDoc(doc(db, "students", studentId), {
-                    "Admission Type": admissionType, "Student ID": studentId, "Name": name,
-                    "Class": studentClass, "Father's Name": father, "Mother's Name": mother,
-                    "Phone": phone, "Address": address, "Status": "Active", "Photo": compressedPhotoBase64
-                }, { merge: true });
-
-                alert(`Success! ${name} enrolled.`);
-                manualForm.reset(); 
-                compressedPhotoBase64 = "";
-                photoPreview.style.display = 'none';
-            } catch (error) { alert("Error saving record."); } 
-            finally { manualSubmitBtn.innerText = originalBtnText; }
+            e.preventDefault(); const studentId = document.getElementById('manual-id').value;
+            await setDoc(doc(db, "students", studentId), { "Admission Type": document.getElementById('manual-admission-type').value, "Student ID": studentId, "Name": document.getElementById('manual-name').value, "Class": document.getElementById('manual-class').value, "Father's Name": document.getElementById('manual-father').value, "Mother's Name": document.getElementById('manual-mother').value, "Phone": document.getElementById('manual-phone').value, "Address": document.getElementById('manual-address').value, "Status": "Active", "Photo": compressedPhotoBase64 }, { merge: true });
+            alert(`Success!`); manualForm.reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = "";
         });
 
         // --- 5. TRANSFER OUT & TC PDF ---
-        const tcForm = document.getElementById('tc-form');
-        const tcSubmitBtn = document.getElementById('tc-submit-btn');
-
-        tcForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const studentId = document.getElementById('tc-student-id').value;
-            const originalBtnText = tcSubmitBtn.innerText;
-            tcSubmitBtn.innerText = "Processing...";
-            
-            try {
-                const docRef = doc(db, "students", studentId);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const studentData = docSnap.data();
-                    await setDoc(docRef, { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
-
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF();
-                    pdf.setFontSize(20); pdf.setTextColor(0, 51, 102); 
-                    pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 30, null, null, "center");
-                    pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); 
-                    pdf.text("TRANSFER CERTIFICATE", 105, 45, null, null, "center");
-                    pdf.setFontSize(11); pdf.setTextColor(0, 0, 0); 
-                    pdf.text(`Date of Issue: ${new Date().toLocaleDateString()}`, 150, 60);
-                    pdf.text(`Certificate No: TC-${Date.now().toString().slice(-6)}`, 20, 60);
-                    pdf.setFontSize(12);
-                    pdf.text(`This is to certify that: ${studentData.Name || '_______________________'}`, 20, 85);
-                    pdf.text(`Student ID / Roll No: ${studentId}`, 20, 100);
-                    pdf.text(`Son/Daughter of: ${studentData["Father's Name"] || '_______'} & ${studentData["Mother's Name"] || '_______'}`, 20, 115);
-                    pdf.text(`Was reading in Class: ${studentData.Class || '_______________________'}`, 20, 130);
-                    pdf.text(`Residential Address: ${studentData.Address || '_______________________'}`, 20, 145);
-                    pdf.text("We wish the student all the best in their future endeavors.", 20, 170);
-                    pdf.text("_______________________", 20, 220); pdf.text("Clerk Signature / Seal", 25, 230);
-                    pdf.text("_______________________", 130, 220); pdf.text("Principal Signature", 140, 230);
-                    
-                    pdf.save(`TC_${studentId}.pdf`);
-                    alert(`Success! TC Downloaded.`);
-                    tcForm.reset();
-                } else { alert("Student ID not found."); }
-            } catch (error) { alert("Error generating TC."); } 
-            finally { tcSubmitBtn.innerText = originalBtnText; }
-        });
-
-        // --- 6. EXPORT DATABASE ---
-        document.getElementById('export-excel-btn').addEventListener('click', async () => {
-            try {
-                const students = await fetchAllStudents();
-                if (students.length === 0) return alert("Database empty.");
-                const cleanStudents = students.map(({ Photo, ...rest }) => rest);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students");
-                XLSX.writeFile(workbook, "VMI_Student_Database.xlsx");
-            } catch (e) { alert("Export failed"); }
-        });
-
-        document.getElementById('export-pdf-btn').addEventListener('click', async () => {
-            try {
-                const students = await fetchAllStudents();
-                if (students.length === 0) return alert("Database empty.");
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF('landscape');
-                let headers = [];
-                students.forEach(s => Object.keys(s).forEach(k => { 
-                    if (!headers.includes(k) && k !== "Photo") headers.push(k); 
-                }));
-                const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : ""));
-                doc.setFontSize(16);
-                doc.text("VMI - Master Student Database", 14, 15);
-                doc.autoTable({ head: [headers], body: tableData, startY: 20, styles: { fontSize: 8 } });
-                doc.save("VMI_Student_Database.pdf");
-            } catch (e) { alert("Export failed"); }
-        });
-
-        // --- 7. EXAM RESULTS (MANUAL) ---
-        const manualResultForm = document.getElementById('manual-result-form');
-        const resSubmitBtn = document.getElementById('res-submit-btn');
-
-        manualResultForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const originalText = resSubmitBtn.innerText;
-            resSubmitBtn.innerText = "Saving to Database...";
-
-            const studentId = document.getElementById('res-student-id').value;
-            const examName = document.getElementById('res-exam-name').value;
-            const subject = document.getElementById('res-subject').value;
-            const marks = document.getElementById('res-marks').value;
-            const total = document.getElementById('res-total').value;
-
-            const resultId = `${studentId}_${examName}_${subject}`.replace(/\s+/g, '_');
-
-            try {
-                await setDoc(doc(db, "results", resultId), {
-                    "Student ID": studentId,
-                    "Exam Term": examName,
-                    "Subject": subject,
-                    "Marks Obtained": Number(marks),
-                    "Total Marks": Number(total),
-                    "Publish Date": new Date().toLocaleDateString()
-                }, { merge: true });
-
-                alert(`Success! ${subject} marks saved for Student ID: ${studentId}.`);
-                manualResultForm.reset();
-            } catch (error) {
-                alert("Error saving marks.");
-            } finally {
-                resSubmitBtn.innerText = originalText;
+        document.getElementById('tc-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); const studentId = document.getElementById('tc-student-id').value; const docSnap = await getDoc(doc(db, "students", studentId));
+            if (docSnap.exists()) {
+                await setDoc(doc(db, "students", studentId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF(); pdf.text(`TC Generated for ${studentId}`, 20, 20); pdf.save(`TC_${studentId}.pdf`); alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset();
             }
         });
+
+        // --- 6. EXPORT DB ---
+        document.getElementById('export-excel-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "VMI_Database.xlsx"); });
+        document.getElementById('export-pdf-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("VMI_Database.pdf"); });
+
+        // --- 7. STUDY MATERIALS ---
+        document.getElementById('admin-material-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await setDoc(doc(db, "materials", `doc_${Date.now()}`), {
+                title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Admin", date: new Date().toLocaleDateString(), timestamp: Date.now()
+            });
+            alert(`Document Published!`); document.getElementById('admin-material-form').reset();
+        });
+
+        // --- 8. EXAM RESULTS (MANUAL + BULK + VIEW) ---
+        // Manual Add
+        document.getElementById('manual-result-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); const studentId = document.getElementById('res-student-id').value; const examName = document.getElementById('res-exam-name').value; const subject = document.getElementById('res-subject').value;
+            await setDoc(doc(db, "results", `${studentId}_${examName}_${subject}`.replace(/\s+/g, '_')), { "Student ID": studentId, "Exam Term": examName, "Subject": subject, "Marks Obtained": Number(document.getElementById('res-marks').value), "Total Marks": Number(document.getElementById('res-total').value), "Publish Date": new Date().toLocaleDateString() }, { merge: true });
+            alert(`Success!`); document.getElementById('manual-result-form').reset(); loadLiveResults();
+        });
+
+        // Live Viewer
+        let liveResultsData = [];
+        const refreshResBtn = document.getElementById('refresh-results-btn');
+        const resTableBody = document.getElementById('res-table-body');
+        const resSearchInput = document.getElementById('res-search-input');
+
+        async function loadLiveResults() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "results"));
+                liveResultsData = [];
+                querySnapshot.forEach((doc) => { liveResultsData.push({ id: doc.id, ...doc.data() }); });
+                renderResultsTable(liveResultsData);
+            } catch (error) { console.error("Error loading results."); }
+        }
+
+        function renderResultsTable(results) {
+            resTableBody.innerHTML = "";
+            if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
+            results.forEach(res => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${res["Student ID"] || 'N/A'}</strong></td>
+                    <td>${res["Exam Term"] || 'N/A'}</td>
+                    <td>${res["Subject"] || 'N/A'}</td>
+                    <td>${res["Marks Obtained"] || '0'}</td>
+                    <td>${res["Total Marks"] || '0'}</td>
+                    <td><button class="delete-btn delete-res" data-id="${res.id}">Delete</button></td>
+                `;
+                resTableBody.appendChild(tr);
+            });
+
+            document.querySelectorAll('.delete-res').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const resId = e.target.getAttribute('data-id');
+                    if(confirm("Permanently delete this result?")) {
+                        await deleteDoc(doc(db, "results", resId));
+                        loadLiveResults();
+                    }
+                });
+            });
+        }
+
+        refreshResBtn.addEventListener('click', () => {
+            refreshResBtn.innerText = "Loading...";
+            loadLiveResults().finally(() => refreshResBtn.innerText = "🔄 Refresh Results");
+        });
+
+        resSearchInput.addEventListener('keyup', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = liveResultsData.filter(res => {
+                const id = (res["Student ID"] || "").toLowerCase();
+                return id.includes(searchTerm);
+            });
+            renderResultsTable(filtered);
+        });
+
+        // Auto-load results when tab is clicked
+        document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults);
+
     </script>
 </body>
 </html>
