@@ -12,6 +12,9 @@
         .db-table tr:nth-child(even) { background-color: #f4f7f6; }
         .db-table tr:hover { background-color: #e9ecef; }
         .db-thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
+        .delete-btn { background-color: #E63946; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .delete-btn:hover { background-color: #c92a37; }
+        .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
     </style>
 </head>
 <body class="admin-bg">
@@ -45,17 +48,15 @@
         <!-- Admin Main Content -->
         <main class="admin-content">
             
-            <!-- SECTION 1: Upload Student Data (Bulk) -->
+            <!-- SECTION 1: Upload Student Data -->
             <div id="section-upload" class="admin-section active">
                 <div class="dashboard-card">
                     <h3>Bulk Upload Student Details</h3>
                     <p>Upload your formatted Excel (.xlsx) or CSV files to automatically populate the student database.</p>
-                    
                     <form class="upload-form" action="#" method="POST">
                         <div class="file-drop-zone">
                             <div class="upload-icon">📄</div>
                             <p>Drag and drop your Excel or CSV file here</p>
-                            <p class="or-text">or</p>
                             <label for="student-file" class="browse-btn">Browse Files</label>
                             <input type="file" id="student-file" accept=".xlsx, .csv" hidden>
                         </div>
@@ -66,82 +67,45 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Add Student / Transfer In -->
+            <!-- SECTION 2: Add Student -->
             <div id="section-add-student" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Enroll / Transfer In Student</h3>
-                    <p>Enroll a single student, upload their photo for ID Cards, or record a transfer into the database.</p>
-                    
                     <form class="admin-form" id="manual-student-form">
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;">
-                            <img id="photo-preview" src="https://via.placeholder.com/150" alt="Student Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin-bottom: 10px; display: none;">
+                            <img id="photo-preview" src="https://via.placeholder.com/150" alt="Student Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;">
                             <br>
-                            <label for="manual-photo" class="browse-btn" style="display: inline-block; cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Student Photo</label>
+                            <label for="manual-photo" class="browse-btn" style="cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Student Photo</label>
                             <input type="file" id="manual-photo" accept="image/*" hidden>
                         </div>
-
-                        <div class="input-group">
-                            <label>Admission Type</label>
-                            <select id="manual-admission-type" required>
-                                <option value="New Admission">New Admission</option>
-                                <option value="Transfer In">Transfer In</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Student ID (Roll No / Reg No)</label>
-                            <input type="text" id="manual-id" placeholder="e.g., VMI2026001" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Student Full Name</label>
-                            <input type="text" id="manual-name" placeholder="Enter student's full name" required>
-                        </div>
+                        <div class="input-group"><label>Admission Type</label><select id="manual-admission-type" required><option>New Admission</option><option>Transfer In</option></select></div>
+                        <div class="input-group"><label>Student ID</label><input type="text" id="manual-id" required></div>
+                        <div class="input-group"><label>Full Name</label><input type="text" id="manual-name" required></div>
                         <div class="input-group">
                             <label>Class</label>
                             <select id="manual-class" required>
                                 <option value="" disabled selected>-- Choose Class --</option>
-                                <option>LKG</option>
-                                <option>U.K.G</option>
-                                <option>Class 1</option>
-                                <option>Class 2</option>
-                                <option>Class 3</option>
-                                <option>Class 4</option>
-                                <option>Class 5</option>
-                                <option>Class 6</option>
-                                <option>Class 7</option>
-                                <option>Class 8</option>
+                                <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                                <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option>
                             </select>
                         </div>
-                        <div class="input-group">
-                            <label>Father's Name</label>
-                            <input type="text" id="manual-father" placeholder="Enter father's name" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Mother's Name</label>
-                            <input type="text" id="manual-mother" placeholder="Enter mother's name" required>
-                        </div>
-                        <!-- NEW FIELD: WhatsApp Number -->
-                        <div class="input-group">
-                            <label>WhatsApp / Phone Number</label>
-                            <input type="tel" id="manual-phone" placeholder="Enter 10-digit WhatsApp number" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Residential Address</label>
-                            <textarea id="manual-address" rows="2" placeholder="Enter full home address" required></textarea>
-                        </div>
+                        <div class="input-group"><label>Father's Name</label><input type="text" id="manual-father" required></div>
+                        <div class="input-group"><label>Mother's Name</label><input type="text" id="manual-mother" required></div>
+                        <div class="input-group"><label>WhatsApp Number</label><input type="tel" id="manual-phone" required></div>
+                        <div class="input-group"><label>Address</label><textarea id="manual-address" rows="2" required></textarea></div>
                         <button type="submit" class="admin-submit-btn" id="manual-submit-btn">Save Student Record</button>
                     </form>
                 </div>
             </div>
 
-            <!-- SECTION 3: Transfer Out & TC Generation -->
+            <!-- SECTION 3: Transfer Out -->
             <div id="section-transfer-out" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Transfer Out & Print Certificate</h3>
-                    
                     <form class="admin-form" id="tc-form">
                         <div class="input-group">
                             <label>Student ID to Transfer Out</label>
-                            <input type="text" id="tc-student-id" placeholder="Enter exact Student ID" required>
+                            <input type="text" id="tc-student-id" required>
                         </div>
                         <button type="submit" class="admin-submit-btn" id="tc-submit-btn" style="background-color: #E63946;">Mark Transferred & Generate TC</button>
                     </form>
@@ -152,28 +116,14 @@
             <div id="section-view-db" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Live Student Database</h3>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center;">
-                        <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px; font-size: 0.9rem;">🔄 Refresh Data</button>
-                        <input type="text" id="db-search-input" placeholder="Search by Name or ID..." style="padding: 10px; width: 300px; border: 1px solid #ccc; border-radius: 5px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Data</button>
+                        <input type="text" id="db-search-input" placeholder="Search by Name or ID..." style="padding: 10px; width: 300px;">
                     </div>
-                    
-                    <div style="max-height: 500px; overflow-y: auto; overflow-x: auto; border: 1px solid #eee;">
+                    <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead>
-                                <tr>
-                                    <th>Photo</th>
-                                    <th>ID</th>
-                                    <th>Name</th>
-                                    <th>Class</th>
-                                    <th>Phone (WhatsApp)</th> <!-- New Column -->
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody id="db-table-body">
-                                <tr>
-                                    <td colspan="6" style="text-align: center; padding: 20px;">Click "Refresh Data" to load students.</td>
-                                </tr>
-                            </tbody>
+                            <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Class</th><th>Phone</th><th>Status</th></tr></thead>
+                            <tbody id="db-table-body"><tr><td colspan="6" style="text-align: center; padding: 20px;">Click "Refresh Data"</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -190,25 +140,26 @@
                 </div>
             </div>
 
-            <!-- SECTION 6: Manage Notices -->
+            <!-- SECTION 6: Notices -->
             <div id="section-notices" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish a New Notice</h3>
-                    <form class="admin-form">
-                        <div class="input-group">
-                            <label>Notice Title</label>
-                            <input type="text" placeholder="e.g., Holiday Announcement" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Notice Content</label>
-                            <textarea rows="4" placeholder="Type the full notice details here..." required></textarea>
-                        </div>
-                        <button type="submit" class="admin-submit-btn">Publish Notice</button>
+                    <form class="admin-form" id="notice-form">
+                        <div class="input-group"><label>Notice Title</label><input type="text" id="notice-title" required></div>
+                        <div class="input-group"><label>Content</label><textarea id="notice-content" rows="4" required></textarea></div>
+                        <button type="submit" class="admin-submit-btn" id="notice-submit-btn">Publish Notice</button>
                     </form>
+                    <h3 style="margin-top: 40px;">Live Active Notices</h3>
+                    <div style="max-height: 300px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px;">
+                        <table class="db-table">
+                            <thead><tr><th>Publish Date</th><th>Title</th><th>Action</th></tr></thead>
+                            <tbody id="notice-table-body"><tr><td colspan="3" style="text-align: center;">Loading notices...</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- SECTION 7: Update Routines -->
+            <!-- SECTION 7: Routines -->
             <div id="section-routines" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Update Class Routines</h3>
@@ -226,12 +177,47 @@
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Upload Examination Results</h3>
-                    <form class="admin-form">
-                        <div class="file-drop-zone" style="padding: 20px;">
-                            <label for="results-file" class="browse-btn">Select Results CSV</label>
-                            <input type="file" id="results-file" accept=".csv" hidden>
+                    
+                    <h4 class="section-divider">1. Add Result Manually</h4>
+                    <form class="admin-form" id="manual-result-form">
+                        <div class="input-group">
+                            <label>Student ID (Roll No)</label>
+                            <input type="text" id="res-student-id" placeholder="e.g., VMI2026001" required>
                         </div>
-                        <button type="submit" class="admin-submit-btn">Publish Results</button>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Exam Term</label>
+                                <select id="res-exam-name" required>
+                                    <option value="Term 1">Term 1 (Half Yearly)</option>
+                                    <option value="Term 2">Term 2 (Final)</option>
+                                    <option value="Unit Test">Unit Test</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Subject</label>
+                                <input type="text" id="res-subject" placeholder="e.g., Mathematics" required>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Marks Obtained</label>
+                                <input type="number" id="res-marks" required>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Total Max Marks</label>
+                                <input type="number" id="res-total" value="100" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Student Result</button>
+                    </form>
+
+                    <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
+                    <form class="admin-form" id="bulk-result-form">
+                        <div class="file-drop-zone" style="padding: 20px;">
+                            <label for="results-file" class="browse-btn">Select Results CSV/Excel</label>
+                            <input type="file" id="results-file" accept=".csv, .xlsx" hidden>
+                        </div>
+                        <button type="submit" class="admin-submit-btn">Upload Bulk Results</button>
                     </form>
                 </div>
             </div>
@@ -239,6 +225,7 @@
         </main>
     </div>
 
+    <!-- UI Tab Switching Script -->
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
@@ -253,13 +240,15 @@
         });
     </script>
 
+    <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 
+    <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, writeBatch, setDoc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
@@ -272,8 +261,9 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        let liveStudentsData = [];
 
+        // --- GLOBAL HELPER ---
+        let liveStudentsData = [];
         async function fetchAllStudents() {
             const querySnapshot = await getDocs(collection(db, "students"));
             const students = [];
@@ -281,7 +271,7 @@
             return students;
         }
 
-        // --- VIEW LIVE DATABASE ---
+        // --- 1. VIEW LIVE DATABASE ---
         const refreshDbBtn = document.getElementById('refresh-db-btn');
         const dbTableBody = document.getElementById('db-table-body');
         const dbSearchInput = document.getElementById('db-search-input');
@@ -292,17 +282,15 @@
                 dbTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No students found.</td></tr>`;
                 return;
             }
-
             students.forEach(student => {
                 const tr = document.createElement('tr');
                 const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
-                
                 tr.innerHTML = `
-                    <td><img src="${photoSrc}" class="db-thumbnail" alt="ID Photo"></td>
+                    <td><img src="${photoSrc}" class="db-thumbnail" alt="ID"></td>
                     <td><strong>${student["Student ID"] || student["Roll No"] || 'N/A'}</strong></td>
                     <td>${student.Name || 'N/A'}</td>
                     <td>${student.Class || 'N/A'}</td>
-                    <td>${student.Phone || 'N/A'}</td> <!-- Displays Phone Number -->
+                    <td>${student.Phone || 'N/A'}</td>
                     <td><span style="color: ${student.Status === 'Transferred Out' ? 'red' : 'green'}; font-weight: bold;">${student.Status || 'Active'}</span></td>
                 `;
                 dbTableBody.appendChild(tr);
@@ -310,13 +298,12 @@
         }
 
         refreshDbBtn.addEventListener('click', async () => {
-            const originalText = refreshDbBtn.innerText;
             refreshDbBtn.innerText = "Loading...";
             try {
                 liveStudentsData = await fetchAllStudents();
                 renderDatabaseTable(liveStudentsData);
             } catch (error) {
-                alert("Failed to load database: " + error.message);
+                alert("Failed to load database.");
             } finally {
                 refreshDbBtn.innerText = "🔄 Refresh Data";
             }
@@ -324,15 +311,75 @@
 
         dbSearchInput.addEventListener('keyup', (e) => {
             const searchTerm = e.target.value.toLowerCase();
-            const filteredStudents = liveStudentsData.filter(student => {
+            const filtered = liveStudentsData.filter(student => {
                 const name = (student.Name || "").toLowerCase();
                 const id = (student["Student ID"] || student["Roll No"] || "").toLowerCase();
                 return name.includes(searchTerm) || id.includes(searchTerm);
             });
-            renderDatabaseTable(filteredStudents);
+            renderDatabaseTable(filtered);
         });
 
-        // --- BULK EXCEL UPLOAD ---
+        // --- 2. NOTICE BOARD ENGINE ---
+        const noticeForm = document.getElementById('notice-form');
+        const noticeSubmitBtn = document.getElementById('notice-submit-btn');
+        const noticeTableBody = document.getElementById('notice-table-body');
+
+        async function loadLiveNotices() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "notices"));
+                const notices = [];
+                querySnapshot.forEach((doc) => { notices.push({ id: doc.id, ...doc.data() }); });
+                notices.sort((a, b) => b.timestamp - a.timestamp);
+                
+                noticeTableBody.innerHTML = "";
+                if (notices.length === 0) {
+                    noticeTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px;">No active notices.</td></tr>`;
+                    return;
+                }
+                notices.forEach(notice => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${notice.date}</td>
+                        <td><strong>${notice.title}</strong></td>
+                        <td><button class="delete-btn delete-notice" data-id="${notice.id}">Delete</button></td>
+                    `;
+                    noticeTableBody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.delete-notice').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const noticeId = e.target.getAttribute('data-id');
+                        if(confirm("Permanently delete this notice?")) {
+                            await deleteDoc(doc(db, "notices", noticeId));
+                            loadLiveNotices(); 
+                        }
+                    });
+                });
+            } catch (error) { console.error("Error loading notices: ", error); }
+        }
+
+        document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', loadLiveNotices);
+
+        noticeForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalBtnText = noticeSubmitBtn.innerText;
+            noticeSubmitBtn.innerText = "Publishing...";
+            const title = document.getElementById('notice-title').value;
+            const content = document.getElementById('notice-content').value;
+            const noticeId = "notice_" + Date.now();
+            
+            try {
+                await setDoc(doc(db, "notices", noticeId), {
+                    title: title, content: content, date: new Date().toLocaleDateString(), timestamp: Date.now()
+                });
+                alert("Notice Published Successfully!");
+                noticeForm.reset();
+                loadLiveNotices();
+            } catch (error) { alert("Error publishing notice."); } 
+            finally { noticeSubmitBtn.innerText = originalBtnText; }
+        });
+
+        // --- 3. BULK EXCEL UPLOAD ---
         const uploadForm = document.querySelector('.upload-form');
         const fileInput = document.getElementById('student-file');
         const bulkSubmitBtn = uploadForm.querySelector('.admin-submit-btn');
@@ -344,12 +391,11 @@
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const file = fileInput.files[0];
-            if (!file) return alert("Please browse and select an Excel or CSV file first.");
+            if (!file) return alert("Select an Excel or CSV file first.");
 
             const originalText = bulkSubmitBtn.innerText;
-            bulkSubmitBtn.innerText = "Reading Excel file...";
-            bulkSubmitBtn.style.backgroundColor = "#555";
-
+            bulkSubmitBtn.innerText = "Reading file...";
+            
             const reader = new FileReader();
             reader.onload = async function(event) {
                 try {
@@ -357,7 +403,7 @@
                     const workbook = XLSX.read(data, { type: 'array' });
                     const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
                     
-                    if (jsonData.length === 0) return alert("The uploaded file is empty.");
+                    if (jsonData.length === 0) return alert("File is empty.");
                     bulkSubmitBtn.innerText = `Saving ${jsonData.length} records...`;
 
                     const batch = writeBatch(db);
@@ -365,22 +411,17 @@
                         const docId = row["Roll No"] || row["Student ID"] ? String(row["Roll No"] || row["Student ID"]) : `student_${Date.now()}_${index}`;
                         batch.set(doc(db, "students", docId), { ...row, Status: "Active" }, { merge: true });
                     });
-
                     await batch.commit();
-                    alert(`Success! Saved ${jsonData.length} student records into the database.`);
+                    alert(`Saved ${jsonData.length} student records.`);
                     uploadForm.reset();
                     document.querySelector('.file-drop-zone p').innerText = "Drag and drop your Excel or CSV file here";
-                } catch (error) {
-                    alert("Error: " + error.message);
-                } finally {
-                    bulkSubmitBtn.innerText = originalText;
-                    bulkSubmitBtn.style.backgroundColor = "#003366";
-                }
+                } catch (error) { alert("Error processing file."); } 
+                finally { bulkSubmitBtn.innerText = originalText; }
             };
             reader.readAsArrayBuffer(file);
         });
 
-        // --- MANUAL STUDENT ADDITION ---
+        // --- 4. MANUAL STUDENT ADDITION ---
         const manualForm = document.getElementById('manual-student-form');
         const manualSubmitBtn = document.getElementById('manual-submit-btn');
         const photoInput = document.getElementById('manual-photo');
@@ -389,36 +430,23 @@
 
         photoInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
-            if (!file) {
-                compressedPhotoBase64 = "";
-                photoPreview.style.display = 'none';
-                return;
-            }
-
+            if (!file) { compressedPhotoBase64 = ""; photoPreview.style.display = 'none'; return; }
+            
             const reader = new FileReader();
             reader.onload = function(event) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 250; 
-                    const MAX_HEIGHT = 250;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                    } else {
-                        if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
+                    const MAX_WIDTH = 250; const MAX_HEIGHT = 250;
+                    let width = img.width; let height = img.height;
+                    if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
+                    else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
+                    canvas.width = width; canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-
                     compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.6);
                     photoPreview.src = compressedPhotoBase64;
-                    photoPreview.style.display = 'inline-block';
+                    photoPreview.style.display = 'block';
                 }
                 img.src = event.target.result;
             }
@@ -436,35 +464,25 @@
             const studentClass = document.getElementById('manual-class').value;
             const father = document.getElementById('manual-father').value;
             const mother = document.getElementById('manual-mother').value;
-            const phone = document.getElementById('manual-phone').value; // Get Phone Number
+            const phone = document.getElementById('manual-phone').value;
             const address = document.getElementById('manual-address').value;
 
             try {
                 await setDoc(doc(db, "students", studentId), {
-                    "Admission Type": admissionType,
-                    "Student ID": studentId,
-                    "Name": name,
-                    "Class": studentClass,
-                    "Father's Name": father,
-                    "Mother's Name": mother,
-                    "Phone": phone, // Save Phone Number to database
-                    "Address": address,
-                    "Status": "Active",
-                    "Photo": compressedPhotoBase64
+                    "Admission Type": admissionType, "Student ID": studentId, "Name": name,
+                    "Class": studentClass, "Father's Name": father, "Mother's Name": mother,
+                    "Phone": phone, "Address": address, "Status": "Active", "Photo": compressedPhotoBase64
                 }, { merge: true });
 
-                alert(`Success! ${name} has been enrolled.`);
+                alert(`Success! ${name} enrolled.`);
                 manualForm.reset(); 
                 compressedPhotoBase64 = "";
                 photoPreview.style.display = 'none';
-            } catch (error) {
-                alert("Error: " + error.message);
-            } finally {
-                manualSubmitBtn.innerText = originalBtnText;
-            }
+            } catch (error) { alert("Error saving record."); } 
+            finally { manualSubmitBtn.innerText = originalBtnText; }
         });
 
-        // --- TRANSFER OUT ---
+        // --- 5. TRANSFER OUT & TC PDF ---
         const tcForm = document.getElementById('tc-form');
         const tcSubmitBtn = document.getElementById('tc-submit-btn');
 
@@ -472,9 +490,8 @@
             e.preventDefault();
             const studentId = document.getElementById('tc-student-id').value;
             const originalBtnText = tcSubmitBtn.innerText;
-            tcSubmitBtn.innerText = "Searching Database...";
-            tcSubmitBtn.style.backgroundColor = "#555";
-
+            tcSubmitBtn.innerText = "Processing...";
+            
             try {
                 const docRef = doc(db, "students", studentId);
                 const docSnap = await getDoc(docRef);
@@ -485,43 +502,32 @@
 
                     const { jsPDF } = window.jspdf;
                     const pdf = new jsPDF();
-                    pdf.setFontSize(20);
-                    pdf.setTextColor(0, 51, 102); 
+                    pdf.setFontSize(20); pdf.setTextColor(0, 51, 102); 
                     pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 30, null, null, "center");
-                    pdf.setFontSize(14);
-                    pdf.setTextColor(255, 103, 31); 
+                    pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); 
                     pdf.text("TRANSFER CERTIFICATE", 105, 45, null, null, "center");
-                    pdf.setFontSize(11);
-                    pdf.setTextColor(0, 0, 0); 
-                    const today = new Date().toLocaleDateString();
-                    pdf.text(`Date of Issue: ${today}`, 150, 60);
+                    pdf.setFontSize(11); pdf.setTextColor(0, 0, 0); 
+                    pdf.text(`Date of Issue: ${new Date().toLocaleDateString()}`, 150, 60);
                     pdf.text(`Certificate No: TC-${Date.now().toString().slice(-6)}`, 20, 60);
                     pdf.setFontSize(12);
                     pdf.text(`This is to certify that: ${studentData.Name || '_______________________'}`, 20, 85);
                     pdf.text(`Student ID / Roll No: ${studentId}`, 20, 100);
-                    pdf.text(`Son/Daughter of: ${studentData["Father's Name"] || '_______________________'} & ${studentData["Mother's Name"] || '_______________________'}`, 20, 115);
+                    pdf.text(`Son/Daughter of: ${studentData["Father's Name"] || '_______'} & ${studentData["Mother's Name"] || '_______'}`, 20, 115);
                     pdf.text(`Was reading in Class: ${studentData.Class || '_______________________'}`, 20, 130);
                     pdf.text(`Residential Address: ${studentData.Address || '_______________________'}`, 20, 145);
                     pdf.text("We wish the student all the best in their future endeavors.", 20, 170);
-                    pdf.text("_______________________", 20, 220);
-                    pdf.text("Clerk Signature / Seal", 25, 230);
-                    pdf.text("_______________________", 130, 220);
-                    pdf.text("Principal Signature", 140, 230);
-                    pdf.save(`TC_${studentId}_${studentData.Name || 'Student'}.pdf`);
-                    alert(`Success! ${studentData.Name || studentId} has been transferred out and their TC has downloaded.`);
+                    pdf.text("_______________________", 20, 220); pdf.text("Clerk Signature / Seal", 25, 230);
+                    pdf.text("_______________________", 130, 220); pdf.text("Principal Signature", 140, 230);
+                    
+                    pdf.save(`TC_${studentId}.pdf`);
+                    alert(`Success! TC Downloaded.`);
                     tcForm.reset();
-                } else {
-                    alert("No student found matching that ID.");
-                }
-            } catch (error) {
-                alert("Error: " + error.message);
-            } finally {
-                tcSubmitBtn.innerText = originalBtnText;
-                tcSubmitBtn.style.backgroundColor = "#E63946";
-            }
+                } else { alert("Student ID not found."); }
+            } catch (error) { alert("Error generating TC."); } 
+            finally { tcSubmitBtn.innerText = originalBtnText; }
         });
 
-        // --- EXPORT DATABASE ---
+        // --- 6. EXPORT DATABASE ---
         document.getElementById('export-excel-btn').addEventListener('click', async () => {
             try {
                 const students = await fetchAllStudents();
@@ -545,10 +551,46 @@
                 }));
                 const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : ""));
                 doc.setFontSize(16);
-                doc.text("Vivekananda Mission Institute - Master Student Database", 14, 15);
+                doc.text("VMI - Master Student Database", 14, 15);
                 doc.autoTable({ head: [headers], body: tableData, startY: 20, styles: { fontSize: 8 } });
                 doc.save("VMI_Student_Database.pdf");
             } catch (e) { alert("Export failed"); }
+        });
+
+        // --- 7. EXAM RESULTS (MANUAL) ---
+        const manualResultForm = document.getElementById('manual-result-form');
+        const resSubmitBtn = document.getElementById('res-submit-btn');
+
+        manualResultForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const originalText = resSubmitBtn.innerText;
+            resSubmitBtn.innerText = "Saving to Database...";
+
+            const studentId = document.getElementById('res-student-id').value;
+            const examName = document.getElementById('res-exam-name').value;
+            const subject = document.getElementById('res-subject').value;
+            const marks = document.getElementById('res-marks').value;
+            const total = document.getElementById('res-total').value;
+
+            const resultId = `${studentId}_${examName}_${subject}`.replace(/\s+/g, '_');
+
+            try {
+                await setDoc(doc(db, "results", resultId), {
+                    "Student ID": studentId,
+                    "Exam Term": examName,
+                    "Subject": subject,
+                    "Marks Obtained": Number(marks),
+                    "Total Marks": Number(total),
+                    "Publish Date": new Date().toLocaleDateString()
+                }, { merge: true });
+
+                alert(`Success! ${subject} marks saved for Student ID: ${studentId}.`);
+                manualResultForm.reset();
+            } catch (error) {
+                alert("Error saving marks.");
+            } finally {
+                resSubmitBtn.innerText = originalText;
+            }
         });
     </script>
 </body>
