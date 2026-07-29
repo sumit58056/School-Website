@@ -12,14 +12,15 @@
         .db-table tr:nth-child(even) { background-color: #f4f7f6; }
         .db-table tr:hover { background-color: #e9ecef; }
         .db-thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
-        .delete-btn { background-color: #E63946; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .delete-btn { background-color: #E63946; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-left: 5px; }
         .delete-btn:hover { background-color: #c92a37; }
+        .print-btn { background-color: #217346; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .print-btn:hover { background-color: #1e6b3e; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
         .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
     </style>
 </head>
 <body class="admin-bg">
-    <!-- Admin Top Navbar -->
     <header class="admin-header">
         <div class="logo">
             <img src="logo.jpg" alt="VMI Logo">
@@ -32,7 +33,6 @@
     </header>
 
     <div class="admin-layout">
-        <!-- Admin Sidebar -->
         <aside class="admin-sidebar">
             <ul class="admin-nav">
                 <li><a href="#" class="nav-link active" data-target="section-upload">📁 Upload Student Data</a></li>
@@ -47,9 +47,7 @@
             </ul>
         </aside>
 
-        <!-- Admin Main Content -->
         <main class="admin-content">
-            
             <!-- SECTION 1: Upload Student Data -->
             <div id="section-upload" class="admin-section active">
                 <div class="dashboard-card">
@@ -129,8 +127,6 @@
             <div id="section-materials" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish Study Materials & Syllabus</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Upload your documents to Google Drive, ensure sharing is set to "Anyone with the link", and paste the link below.</p>
-                    
                     <form class="admin-form" id="admin-material-form">
                         <div class="input-group"><label>Document Title</label><input type="text" id="admin-mat-title" required></div>
                         <div style="display: flex; gap: 15px;">
@@ -194,8 +190,20 @@
                     
                     <h4 class="section-divider">1. Upload Report Card (Manual)</h4>
                     <form class="admin-form" id="manual-result-form">
+                        <!-- ROW 1: ID and Name -->
+                        <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                            <div class="input-group" style="flex: 1;">
+                                <label>Student ID (Roll No)</label>
+                                <input type="text" id="res-student-id" placeholder="Enter ID & press Tab" required>
+                            </div>
+                            <div class="input-group" style="flex: 2;">
+                                <label>Student Name</label>
+                                <input type="text" id="res-student-name" placeholder="Auto-filled from database" readonly style="background-color: #e9ecef; cursor: not-allowed; color: #003366; font-weight: bold;">
+                            </div>
+                        </div>
+
+                        <!-- ROW 2: Class and Term -->
                         <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;"><label>Student ID</label><input type="text" id="res-student-id" required></div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Student Class</label>
                                 <select id="res-class" required>
@@ -213,23 +221,25 @@
                             </div>
                         </div>
 
-                        <h5 style="margin-top: 10px; color: #FF671F;">Academic Subjects (Dynamic Max Marks)</h5>
+                        <h5 style="margin-top: 10px; color: #FF671F;">Academic Subjects (Dynamic Max Marks & Visibility)</h5>
                         <div class="marks-grid">
-                            <div class="input-group"><label>English</label><input type="number" class="acad-mark" id="m-eng" placeholder="Marks" required></div>
-                            <div class="input-group"><label>Bengali</label><input type="number" class="acad-mark" id="m-ben" placeholder="Marks" required></div>
-                            <div class="input-group"><label>Hindi</label><input type="number" class="acad-mark" id="m-hin" placeholder="Marks" required></div>
-                            <div class="input-group"><label>Sanskrit</label><input type="number" class="acad-mark" id="m-san" placeholder="Marks" required></div>
-                            <div class="input-group"><label>Mathematics</label><input type="number" class="acad-mark" id="m-mat" placeholder="Marks" required></div>
-                            <div class="input-group"><label>EVS / Science</label><input type="number" class="acad-mark" id="m-evs" placeholder="Marks" required></div>
-                            <div class="input-group"><label>History</label><input type="number" class="acad-mark" id="m-his" placeholder="Marks" required></div>
-                            <div class="input-group"><label>Geography</label><input type="number" class="acad-mark" id="m-geo" placeholder="Marks" required></div>
+                            <div class="input-group" id="grp-eng"><label>English</label><input type="number" step="0.5" class="acad-mark" id="m-eng" placeholder="Marks" required></div>
+                            <div class="input-group" id="grp-ben"><label>Bengali</label><input type="number" step="0.5" class="acad-mark" id="m-ben" placeholder="Marks" required></div>
+                            <div class="input-group" id="grp-hin" style="display:none;"><label>Hindi</label><input type="number" step="0.5" class="acad-mark" id="m-hin" placeholder="Marks"></div>
+                            <div class="input-group" id="grp-san" style="display:none;"><label>Sanskrit</label><input type="number" step="0.5" class="acad-mark" id="m-san" placeholder="Marks"></div>
+                            <div class="input-group" id="grp-mat"><label>Mathematics</label><input type="number" step="0.5" class="acad-mark" id="m-mat" placeholder="Marks" required></div>
+                            <div class="input-group" id="grp-evs"><label>EVS / Science</label><input type="number" step="0.5" class="acad-mark" id="m-evs" placeholder="Marks" required></div>
+                            <div class="input-group" id="grp-his" style="display:none;"><label>History</label><input type="number" step="0.5" class="acad-mark" id="m-his" placeholder="Marks"></div>
+                            <div class="input-group" id="grp-geo" style="display:none;"><label>Geography</label><input type="number" step="0.5" class="acad-mark" id="m-geo" placeholder="Marks"></div>
                         </div>
 
-                        <h5 style="margin-top: 10px; color: #FF671F;">Co-Curricular Grades</h5>
-                        <div class="marks-grid">
-                            <div class="input-group"><label>Dance</label><select id="g-dance"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
-                            <div class="input-group"><label>Music</label><select id="g-music"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
-                            <div class="input-group" id="art-container" style="display: none;"><label>Art & Craft (Annual Only)</label><select id="g-art"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                        <div id="co-curricular-section" style="display: none;">
+                            <h5 style="margin-top: 10px; color: #FF671F;">Co-Curricular Grades (Annual Exam Only)</h5>
+                            <div class="marks-grid">
+                                <div class="input-group"><label>Dance</label><select id="g-dance"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                                <div class="input-group"><label>Music</label><select id="g-music"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                                <div class="input-group"><label>Art & Craft</label><select id="g-art"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                            </div>
                         </div>
 
                         <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Report Card</button>
@@ -242,14 +252,17 @@
                     </form>
 
                     <h4 class="section-divider">3. View Live Results</h4>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                        <button id="refresh-results-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Results</button>
-                        <input type="text" id="res-search-input" placeholder="Search by Student ID..." style="padding: 10px; width: 300px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <button id="refresh-results-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh</button>
+                            <button id="bulk-print-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px; background-color: #217346; margin-left: 10px;">🖨️ Bulk Print</button>
+                        </div>
+                        <input type="text" id="res-search-input" placeholder="Search ID or Class..." style="padding: 8px 12px; width: 200px; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Student ID</th><th>Term</th><th>Total Marks</th><th>Percentage</th><th>Action</th></tr></thead>
-                            <tbody id="res-table-body"><tr><td colspan="5" style="text-align: center; padding: 20px;">Click "Refresh Results"</td></tr></tbody>
+                            <thead><tr><th>Student ID</th><th>Class</th><th>Term</th><th>Total Marks</th><th>Percentage</th><th>Actions</th></tr></thead>
+                            <tbody id="res-table-body"><tr><td colspan="6" style="text-align: center; padding: 20px;">Click "Refresh Results"</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -257,7 +270,6 @@
         </main>
     </div>
 
-    <!-- UI Tab Switching Script -->
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
@@ -291,7 +303,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- 1. VIEW LIVE DATABASE ---
+        // --- GLOBAL HELPERS (Student DB, Materials, Transfer Out, Notices) ---
         let liveStudentsData = [];
         const refreshDbBtn = document.getElementById('refresh-db-btn');
         const dbTableBody = document.getElementById('db-table-body');
@@ -324,115 +336,105 @@
             try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } 
             catch (error) {} finally { refreshDbBtn.innerText = "🔄 Refresh Data"; }
         });
-        dbSearchInput.addEventListener('keyup', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const filtered = liveStudentsData.filter(student => {
-                const name = (student.Name || "").toLowerCase(); const id = (student["Student ID"] || student["Roll No"] || "").toLowerCase();
-                return name.includes(searchTerm) || id.includes(searchTerm);
-            });
-            renderDatabaseTable(filtered);
-        });
 
-        // --- 2. NOTICES ---
-        const noticeForm = document.getElementById('notice-form');
-        const noticeTableBody = document.getElementById('notice-table-body');
+        // Notices
         async function loadLiveNotices() {
             try {
                 const querySnapshot = await getDocs(collection(db, "notices")); const notices = [];
                 querySnapshot.forEach((doc) => { notices.push({ id: doc.id, ...doc.data() }); });
-                notices.sort((a, b) => b.timestamp - a.timestamp); noticeTableBody.innerHTML = "";
-                if (notices.length === 0) { noticeTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px;">No active notices.</td></tr>`; return; }
+                notices.sort((a, b) => b.timestamp - a.timestamp); document.getElementById('notice-table-body').innerHTML = "";
                 notices.forEach(notice => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="delete-btn delete-notice" data-id="${notice.id}">Delete</button></td>`;
-                    noticeTableBody.appendChild(tr);
+                    const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="delete-btn delete-notice" data-id="${notice.id}">Delete</button></td>`;
+                    document.getElementById('notice-table-body').appendChild(tr);
                 });
                 document.querySelectorAll('.delete-notice').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
-                        if(confirm("Permanently delete this notice?")) { await deleteDoc(doc(db, "notices", e.target.getAttribute('data-id'))); loadLiveNotices(); }
+                        if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "notices", e.target.getAttribute('data-id'))); loadLiveNotices(); }
                     });
                 });
             } catch (error) {}
         }
         document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', loadLiveNotices);
-        noticeForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); document.getElementById('notice-submit-btn').innerText = "Publishing...";
-            try {
-                await setDoc(doc(db, "notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() });
-                alert("Notice Published!"); noticeForm.reset(); loadLiveNotices();
-            } catch (error) {} finally { document.getElementById('notice-submit-btn').innerText = "Publish Notice"; }
+        document.getElementById('notice-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); await setDoc(doc(db, "notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); loadLiveNotices();
         });
 
-        // --- 3. BULK EXCEL UPLOAD ---
-        const uploadForm = document.querySelector('.upload-form'); const fileInput = document.getElementById('student-file');
-        uploadForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); if (!fileInput.files[0]) return alert("Select an Excel/CSV file.");
-            const reader = new FileReader();
-            reader.onload = async function(event) {
-                const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                const batch = writeBatch(db);
-                jsonData.forEach((row, index) => { const docId = row["Roll No"] || row["Student ID"] ? String(row["Roll No"] || row["Student ID"]) : `student_${Date.now()}_${index}`; batch.set(doc(db, "students", docId), { ...row, Status: "Active" }, { merge: true }); });
-                await batch.commit(); alert(`Saved ${jsonData.length} student records.`); uploadForm.reset();
-            };
-            reader.readAsArrayBuffer(fileInput.files[0]);
-        });
 
-        // --- 4. MANUAL ADD STUDENT ---
-        const manualForm = document.getElementById('manual-student-form'); let compressedPhotoBase64 = "";
-        document.getElementById('manual-photo').addEventListener('change', function(e) {
-            const reader = new FileReader(); reader.onload = function(event) {
-                const img = new Image(); img.onload = function() {
-                    const canvas = document.createElement('canvas'); canvas.width = 250; canvas.height = 250; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, 250, 250);
-                    compressedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.6); document.getElementById('photo-preview').src = compressedPhotoBase64; document.getElementById('photo-preview').style.display = 'block';
-                }; img.src = event.target.result;
-            }; reader.readAsDataURL(e.target.files[0]);
-        });
-        manualForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); const studentId = document.getElementById('manual-id').value;
-            await setDoc(doc(db, "students", studentId), { "Admission Type": document.getElementById('manual-admission-type').value, "Student ID": studentId, "Name": document.getElementById('manual-name').value, "Class": document.getElementById('manual-class').value, "Father's Name": document.getElementById('manual-father').value, "Mother's Name": document.getElementById('manual-mother').value, "Phone": document.getElementById('manual-phone').value, "Address": document.getElementById('manual-address').value, "Status": "Active", "Photo": compressedPhotoBase64 }, { merge: true });
-            alert(`Success!`); manualForm.reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = "";
-        });
+        // --- REPORT CARD (EXAM RESULTS) ENGINE ---
 
-        // --- 5. TRANSFER OUT & TC PDF ---
-        document.getElementById('tc-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); const studentId = document.getElementById('tc-student-id').value; const docSnap = await getDoc(doc(db, "students", studentId));
-            if (docSnap.exists()) {
-                await setDoc(doc(db, "students", studentId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
-                const { jsPDF } = window.jspdf; const pdf = new jsPDF(); pdf.text(`TC Generated for ${studentId}`, 20, 20); pdf.save(`TC_${studentId}.pdf`); alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset();
-            }
-        });
-
-        // --- 6. EXPORT DB ---
-        document.getElementById('export-excel-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "VMI_Database.xlsx"); });
-        document.getElementById('export-pdf-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("VMI_Database.pdf"); });
-
-        // --- 7. STUDY MATERIALS ---
-        document.getElementById('admin-material-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await setDoc(doc(db, "materials", `doc_${Date.now()}`), {
-                title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Admin", date: new Date().toLocaleDateString(), timestamp: Date.now()
-            });
-            alert(`Document Published!`); document.getElementById('admin-material-form').reset();
-        });
-
-        // --- 8. REPORT CARD (EXAM RESULTS) ENGINE ---
         const termSelect = document.getElementById('res-exam-name');
         const classSelect = document.getElementById('res-class');
-        const artContainer = document.getElementById('art-container');
+        const coCurricularSection = document.getElementById('co-curricular-section');
         const markInputs = document.querySelectorAll('.acad-mark');
+        const studentIdInput = document.getElementById('res-student-id');
+        const studentNameInput = document.getElementById('res-student-name');
         let currentMaxPerSubject = 100;
+        let activeSubjectCount = 8;
+
+        // Auto-fetch student name on ID input blur
+        studentIdInput.addEventListener('blur', async () => {
+            const studentId = studentIdInput.value.trim();
+            if (!studentId) { studentNameInput.value = ""; return; }
+            
+            studentNameInput.value = "Searching Database...";
+            
+            try {
+                const docSnap = await getDoc(doc(db, "students", studentId));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    studentNameInput.value = data.Name || "Name Missing";
+                    
+                    // Auto-select class
+                    if(data.Class) {
+                        classSelect.value = data.Class;
+                        updateFormRules();
+                    }
+                } else {
+                    studentNameInput.value = "Not Found - Check ID";
+                }
+            } catch (error) {
+                studentNameInput.value = "Database connection error.";
+            }
+        });
 
         function updateFormRules() {
             const term = termSelect.value;
             const stuClass = classSelect.value;
             
-            if(term === 'Annual Examination') { artContainer.style.display = 'block'; } 
-            else { artContainer.style.display = 'none'; document.getElementById('g-art').value = ""; }
+            // 1. Show Co-curricular ONLY for Annual Exam
+            if(term === 'Annual Examination') {
+                coCurricularSection.style.display = 'block';
+            } else {
+                coCurricularSection.style.display = 'none';
+                document.getElementById('g-dance').value = "";
+                document.getElementById('g-music').value = "";
+                document.getElementById('g-art').value = "";
+            }
 
-            if(term && stuClass) {
+            // 2. Dynamic Subject Displays Based on Class
+            ['grp-hin', 'grp-san', 'grp-his', 'grp-geo'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+                document.getElementById(id.replace('grp', 'm')).required = false;
+                document.getElementById(id.replace('grp', 'm')).value = "";
+            });
+            
+            if(stuClass) {
+                const hasHindi = ['Class 3', 'Class 4'];
+                const hasSanskrit = ['Class 7', 'Class 8'];
+                const hasHistoryGeo = ['Class 3', 'Class 4', 'Class 6', 'Class 7', 'Class 8'];
+
+                activeSubjectCount = 4; // Base: Eng, Ben, Mat, Evs
+
+                if(hasHindi.includes(stuClass)) { document.getElementById('grp-hin').style.display = 'block'; document.getElementById('m-hin').required = true; activeSubjectCount++; }
+                if(hasSanskrit.includes(stuClass)) { document.getElementById('grp-san').style.display = 'block'; document.getElementById('m-san').required = true; activeSubjectCount++; }
+                if(hasHistoryGeo.includes(stuClass)) { 
+                    ['grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'block'; document.getElementById(id.replace('grp', 'm')).required = true; });
+                    activeSubjectCount += 2; 
+                }
+
+                // Calculate max marks
                 const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass);
-                const isSenior = ['Class 6', 'Class 7', 'Class 8'].includes(stuClass);
-
+                
                 if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30;
                 else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40;
                 else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80;
@@ -446,6 +448,7 @@
         termSelect.addEventListener('change', updateFormRules);
         classSelect.addEventListener('change', updateFormRules);
 
+        // Manual Result Submit
         const manualResultForm = document.getElementById('manual-result-form');
         const resSubmitBtn = document.getElementById('res-submit-btn');
 
@@ -457,70 +460,93 @@
             const term = termSelect.value;
             const docId = `${studentId}_${term}`.replace(/\s+/g, '_');
 
-            const marks = {
-                "English": Number(document.getElementById('m-eng').value) || 0,
-                "Bengali": Number(document.getElementById('m-ben').value) || 0,
-                "Hindi": Number(document.getElementById('m-hin').value) || 0,
-                "Sanskrit": Number(document.getElementById('m-san').value) || 0,
-                "Mathematics": Number(document.getElementById('m-mat').value) || 0,
-                "EVS_Science": Number(document.getElementById('m-evs').value) || 0,
-                "History": Number(document.getElementById('m-his').value) || 0,
-                "Geography": Number(document.getElementById('m-geo').value) || 0
-            };
+            // Collect active marks
+            const marks = {};
+            if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value);
+            if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value);
+            if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value);
+            if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value);
+            if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value);
+            if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value);
+            if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value);
+            if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value);
 
             let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0);
-            let totalPossible = currentMaxPerSubject * 8;
+            let totalPossible = currentMaxPerSubject * activeSubjectCount;
             let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%";
 
-            const grades = { "Dance": document.getElementById('g-dance').value, "Music": document.getElementById('g-music').value };
-            if(term === 'Annual Examination') grades["Art_and_Craft"] = document.getElementById('g-art').value;
+            const grades = {};
+            if(term === 'Annual Examination') {
+                grades["Dance"] = document.getElementById('g-dance').value;
+                grades["Music"] = document.getElementById('g-music').value;
+                grades["Art_and_Craft"] = document.getElementById('g-art').value;
+            }
 
             try {
                 await setDoc(doc(db, "results", docId), {
-                    "Student ID": studentId, "Class": classSelect.value, "Exam Term": term,
-                    "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible,
-                    "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Admin",
+                    "Student ID": studentId,
+                    "Student Name": document.getElementById('res-student-name').value, // Save Name!
+                    "Class": classSelect.value,
+                    "Exam Term": term,
+                    "Academic Marks": marks,
+                    "Total Marks": totalObtained,
+                    "Max Marks": totalPossible,
+                    "Percentage": percentage,
+                    "CoCurricular Grades": grades,
+                    "Uploaded By": "Admin",
                     "Publish Date": new Date().toLocaleDateString()
                 }, { merge: true });
 
-                alert(`Success! ${term} Report Card saved.`);
+                alert(`Success! ${term} Report Card saved for ${studentId}.`);
                 manualResultForm.reset();
-                artContainer.style.display = 'none';
+                coCurricularSection.style.display = 'none';
+                studentNameInput.value = ""; // Clear name
                 loadLiveResults();
-            } catch (error) { alert("Error saving: " + error.message); } 
-            finally { resSubmitBtn.innerText = "Save Report Card"; }
+            } catch (error) {
+                alert("Error saving: " + error.message);
+            } finally {
+                resSubmitBtn.innerText = "Save Report Card";
+            }
         });
 
-        // 9. Live Results Viewer
+        // Live Results Viewer & Printing
         let liveResultsData = [];
+        let currentlyDisplayedResults = []; // Track filtered items for bulk print
         const refreshResBtn = document.getElementById('refresh-results-btn');
         const resTableBody = document.getElementById('res-table-body');
         const resSearchInput = document.getElementById('res-search-input');
+        const bulkPrintBtn = document.getElementById('bulk-print-btn');
 
         async function loadLiveResults() {
             try {
                 const querySnapshot = await getDocs(collection(db, "results"));
                 liveResultsData = [];
                 querySnapshot.forEach((doc) => { liveResultsData.push({ id: doc.id, ...doc.data() }); });
-                renderResultsTable(liveResultsData);
+                currentlyDisplayedResults = [...liveResultsData];
+                renderResultsTable(currentlyDisplayedResults);
             } catch (error) {}
         }
 
         function renderResultsTable(results) {
             resTableBody.innerHTML = "";
-            if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
-            results.forEach(res => {
+            if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
+            results.forEach((res, index) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${res["Student ID"] || 'N/A'}</strong></td>
+                    <td>${res["Class"] || 'N/A'}</td>
                     <td>${res["Exam Term"] || 'N/A'}</td>
                     <td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td>
                     <td>${res["Percentage"] || '0%'}</td>
-                    <td><button class="delete-btn delete-res" data-id="${res.id}">Delete</button></td>
+                    <td>
+                        <button class="print-btn print-res" data-index="${index}">Print</button>
+                        <button class="delete-btn delete-res" data-id="${res.id}">Delete</button>
+                    </td>
                 `;
                 resTableBody.appendChild(tr);
             });
 
+            // Delete Event
             document.querySelectorAll('.delete-res').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const resId = e.target.getAttribute('data-id');
@@ -528,6 +554,14 @@
                         await deleteDoc(doc(db, "results", resId));
                         loadLiveResults();
                     }
+                });
+            });
+
+            // Individual Print Event
+            document.querySelectorAll('.print-res').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    generateReportCardPDF([currentlyDisplayedResults[index]], `ReportCard_${currentlyDisplayedResults[index]["Student ID"]}.pdf`);
                 });
             });
         }
@@ -539,13 +573,116 @@
 
         resSearchInput.addEventListener('keyup', (e) => {
             const searchTerm = e.target.value.toLowerCase();
-            const filtered = liveResultsData.filter(res => {
-                return (res["Student ID"] || "").toLowerCase().includes(searchTerm);
+            currentlyDisplayedResults = liveResultsData.filter(res => {
+                return (res["Student ID"] || "").toLowerCase().includes(searchTerm) || (res["Class"] || "").toLowerCase().includes(searchTerm);
             });
-            renderResultsTable(filtered);
+            renderResultsTable(currentlyDisplayedResults);
         });
 
         document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults);
+
+        // Bulk Print Event
+        bulkPrintBtn.addEventListener('click', () => {
+            if(currentlyDisplayedResults.length === 0) return alert("No results to print!");
+            generateReportCardPDF(currentlyDisplayedResults, `VMI_Bulk_ReportCards_${Date.now()}.pdf`);
+        });
+
+        // Function to generate the Report Card using jsPDF
+        function generateReportCardPDF(resultsArray, fileName) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            resultsArray.forEach((result, index) => {
+                if (index > 0) doc.addPage(); // Add page for multiple results
+
+                // Header
+                doc.setFontSize(22);
+                doc.setTextColor(0, 51, 102);
+                doc.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center");
+                
+                doc.setFontSize(14);
+                doc.setTextColor(255, 103, 31);
+                doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center");
+
+                doc.setFontSize(11);
+                doc.setTextColor(0, 0, 0);
+                
+                // Student Details
+                const stName = result["Student Name"] ? result["Student Name"] : 'N/A';
+                doc.text(`Student Name: ${stName}`, 20, 50);
+                doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50);
+                
+                doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60);
+                doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60);
+                
+                doc.setLineWidth(0.5);
+                doc.line(20, 65, 190, 65);
+
+                // Table Data formatting
+                let startY = 75;
+                const academicMarks = result["Academic Marks"] || {};
+                
+                // Academic Table
+                doc.setFontSize(12);
+                doc.setTextColor(0, 51, 102);
+                doc.text("Academic Performance", 20, startY);
+                
+                let academicData = [];
+                for (const [subject, mark] of Object.entries(academicMarks)) {
+                    academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]);
+                }
+                
+                doc.autoTable({
+                    startY: startY + 5,
+                    head: [['Subject', 'Marks Obtained', 'Max Marks']],
+                    body: academicData,
+                    theme: 'grid',
+                    headStyles: { fillColor: [0, 51, 102] }
+                });
+
+                let finalY = doc.lastAutoTable.finalY + 15;
+
+                // Overall Totals
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY);
+                doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY);
+                
+                finalY += 15;
+
+                // Co-curricular Table (If Annual)
+                if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) {
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 51, 102);
+                    doc.text("Co-Curricular Grades", 20, finalY);
+                    
+                    let coData = [];
+                    for (const [subject, grade] of Object.entries(result["CoCurricular Grades"])) {
+                        if(grade) coData.push([subject.replace(/_/g, ' '), grade]);
+                    }
+                    
+                    doc.autoTable({
+                        startY: finalY + 5,
+                        head: [['Activity', 'Grade']],
+                        body: coData,
+                        theme: 'grid',
+                        headStyles: { fillColor: [255, 103, 31] }
+                    });
+                    
+                    finalY = doc.lastAutoTable.finalY + 15;
+                }
+
+                // Signatures
+                finalY = Math.max(finalY + 20, 250); // Push to bottom
+                doc.text("_______________________", 20, finalY);
+                doc.text("Class Teacher", 30, finalY + 10);
+                
+                doc.text("_______________________", 130, finalY);
+                doc.text("Principal", 145, finalY + 10);
+            });
+
+            doc.save(fileName);
+        }
 
     </script>
 </body>
