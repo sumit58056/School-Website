@@ -13,10 +13,13 @@
         .db-table tr:hover { background-color: #e9ecef; }
         .db-thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
         .delete-btn { background-color: #E63946; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .delete-btn:hover { background-color: #c92a37; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
+        .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
     </style>
 </head>
 <body class="admin-bg">
+    <!-- Admin Top Navbar -->
     <header class="admin-header">
         <div class="logo">
             <img src="logo.jpg" alt="VMI Logo">
@@ -129,33 +132,12 @@
                     <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Upload your documents to Google Drive, ensure sharing is set to "Anyone with the link", and paste the link below.</p>
                     
                     <form class="admin-form" id="admin-material-form">
-                        <div class="input-group">
-                            <label>Document Title</label>
-                            <input type="text" id="admin-mat-title" placeholder="e.g., Chapter 1 Math Notes" required>
-                        </div>
+                        <div class="input-group"><label>Document Title</label><input type="text" id="admin-mat-title" required></div>
                         <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;">
-                                <label>Target Class</label>
-                                <select id="admin-mat-class" required>
-                                    <option value="All">All Classes</option>
-                                    <option>LKG</option><option>U.K.G</option>
-                                    <option>Class 1</option><option>Class 2</option><option>Class 3</option>
-                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option>
-                                    <option>Class 7</option><option>Class 8</option>
-                                </select>
-                            </div>
-                            <div class="input-group" style="flex: 1;">
-                                <label>Category</label>
-                                <select id="admin-mat-category" required>
-                                    <option value="Study Material">Study Material</option>
-                                    <option value="Syllabus">Syllabus</option>
-                                </select>
-                            </div>
+                            <div class="input-group" style="flex: 1;"><label>Target Class</label><select id="admin-mat-class" required><option value="All">All Classes</option><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option></select></div>
+                            <div class="input-group" style="flex: 1;"><label>Category</label><select id="admin-mat-category" required><option>Study Material</option><option>Syllabus</option></select></div>
                         </div>
-                        <div class="input-group">
-                            <label>Document Link (Google Drive / OneDrive)</label>
-                            <input type="url" id="admin-mat-link" placeholder="Paste the shareable link here..." required>
-                        </div>
+                        <div class="input-group"><label>Document Link (Google Drive)</label><input type="url" id="admin-mat-link" required></div>
                         <button type="submit" class="admin-submit-btn" id="admin-mat-submit-btn">Publish Document</button>
                     </form>
                 </div>
@@ -210,18 +192,47 @@
                 <div class="dashboard-card">
                     <h3>Manage Examination Results</h3>
                     
-                    <h4 class="section-divider">1. Add Result Manually</h4>
+                    <h4 class="section-divider">1. Upload Report Card (Manual)</h4>
                     <form class="admin-form" id="manual-result-form">
-                        <div class="input-group"><label>Student ID (Roll No)</label><input type="text" id="res-student-id" required></div>
                         <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;"><label>Exam Term</label><select id="res-exam-name" required><option>Term 1</option><option>Term 2</option><option>Unit Test</option></select></div>
-                            <div class="input-group" style="flex: 1;"><label>Subject</label><input type="text" id="res-subject" required></div>
+                            <div class="input-group" style="flex: 1;"><label>Student ID</label><input type="text" id="res-student-id" required></div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Student Class</label>
+                                <select id="res-class" required>
+                                    <option value="" disabled selected>-- Select Class --</option>
+                                    <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Exam Term</label>
+                                <select id="res-exam-name" required>
+                                    <option value="" disabled selected>-- Select Term --</option>
+                                    <option>1st Summative</option><option>2nd Summative</option><option>Annual Examination</option>
+                                </select>
+                            </div>
                         </div>
-                        <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;"><label>Marks Obtained</label><input type="number" id="res-marks" required></div>
-                            <div class="input-group" style="flex: 1;"><label>Total Max Marks</label><input type="number" id="res-total" value="100" required></div>
+
+                        <h5 style="margin-top: 10px; color: #FF671F;">Academic Subjects (Dynamic Max Marks)</h5>
+                        <div class="marks-grid">
+                            <div class="input-group"><label>English</label><input type="number" class="acad-mark" id="m-eng" placeholder="Marks" required></div>
+                            <div class="input-group"><label>Bengali</label><input type="number" class="acad-mark" id="m-ben" placeholder="Marks" required></div>
+                            <div class="input-group"><label>Hindi</label><input type="number" class="acad-mark" id="m-hin" placeholder="Marks" required></div>
+                            <div class="input-group"><label>Sanskrit</label><input type="number" class="acad-mark" id="m-san" placeholder="Marks" required></div>
+                            <div class="input-group"><label>Mathematics</label><input type="number" class="acad-mark" id="m-mat" placeholder="Marks" required></div>
+                            <div class="input-group"><label>EVS / Science</label><input type="number" class="acad-mark" id="m-evs" placeholder="Marks" required></div>
+                            <div class="input-group"><label>History</label><input type="number" class="acad-mark" id="m-his" placeholder="Marks" required></div>
+                            <div class="input-group"><label>Geography</label><input type="number" class="acad-mark" id="m-geo" placeholder="Marks" required></div>
                         </div>
-                        <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Student Result</button>
+
+                        <h5 style="margin-top: 10px; color: #FF671F;">Co-Curricular Grades</h5>
+                        <div class="marks-grid">
+                            <div class="input-group"><label>Dance</label><select id="g-dance"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                            <div class="input-group"><label>Music</label><select id="g-music"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                            <div class="input-group" id="art-container" style="display: none;"><label>Art & Craft (Annual Only)</label><select id="g-art"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                        </div>
+
+                        <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Report Card</button>
                     </form>
 
                     <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
@@ -230,7 +241,6 @@
                         <button type="submit" class="admin-submit-btn">Upload Bulk Results</button>
                     </form>
 
-                    <!-- NEW: Live Results Viewer -->
                     <h4 class="section-divider">3. View Live Results</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                         <button id="refresh-results-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Results</button>
@@ -238,8 +248,8 @@
                     </div>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Student ID</th><th>Term</th><th>Subject</th><th>Marks</th><th>Total</th><th>Action</th></tr></thead>
-                            <tbody id="res-table-body"><tr><td colspan="6" style="text-align: center; padding: 20px;">Click "Refresh Results"</td></tr></tbody>
+                            <thead><tr><th>Student ID</th><th>Term</th><th>Total Marks</th><th>Percentage</th><th>Action</th></tr></thead>
+                            <tbody id="res-table-body"><tr><td colspan="5" style="text-align: center; padding: 20px;">Click "Refresh Results"</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -281,19 +291,18 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- GLOBAL HELPER ---
+        // --- 1. VIEW LIVE DATABASE ---
         let liveStudentsData = [];
+        const refreshDbBtn = document.getElementById('refresh-db-btn');
+        const dbTableBody = document.getElementById('db-table-body');
+        const dbSearchInput = document.getElementById('db-search-input');
+
         async function fetchAllStudents() {
             const querySnapshot = await getDocs(collection(db, "students"));
             const students = [];
             querySnapshot.forEach((doc) => { students.push(doc.data()); });
             return students;
         }
-
-        // --- 1. VIEW LIVE DATABASE ---
-        const refreshDbBtn = document.getElementById('refresh-db-btn');
-        const dbTableBody = document.getElementById('db-table-body');
-        const dbSearchInput = document.getElementById('db-search-input');
 
         async function renderDatabaseTable(students) {
             dbTableBody.innerHTML = "";
@@ -313,7 +322,7 @@
         refreshDbBtn.addEventListener('click', async () => {
             refreshDbBtn.innerText = "Loading...";
             try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } 
-            catch (error) { alert("Failed to load database."); } finally { refreshDbBtn.innerText = "🔄 Refresh Data"; }
+            catch (error) {} finally { refreshDbBtn.innerText = "🔄 Refresh Data"; }
         });
         dbSearchInput.addEventListener('keyup', (e) => {
             const searchTerm = e.target.value.toLowerCase();
@@ -326,7 +335,6 @@
 
         // --- 2. NOTICES ---
         const noticeForm = document.getElementById('notice-form');
-        const noticeSubmitBtn = document.getElementById('notice-submit-btn');
         const noticeTableBody = document.getElementById('notice-table-body');
         async function loadLiveNotices() {
             try {
@@ -341,23 +349,22 @@
                 });
                 document.querySelectorAll('.delete-notice').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
-                        const noticeId = e.target.getAttribute('data-id');
-                        if(confirm("Permanently delete this notice?")) { await deleteDoc(doc(db, "notices", noticeId)); loadLiveNotices(); }
+                        if(confirm("Permanently delete this notice?")) { await deleteDoc(doc(db, "notices", e.target.getAttribute('data-id'))); loadLiveNotices(); }
                     });
                 });
             } catch (error) {}
         }
         document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', loadLiveNotices);
         noticeForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); const originalBtnText = noticeSubmitBtn.innerText; noticeSubmitBtn.innerText = "Publishing...";
+            e.preventDefault(); document.getElementById('notice-submit-btn').innerText = "Publishing...";
             try {
                 await setDoc(doc(db, "notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() });
                 alert("Notice Published!"); noticeForm.reset(); loadLiveNotices();
-            } catch (error) {} finally { noticeSubmitBtn.innerText = originalBtnText; }
+            } catch (error) {} finally { document.getElementById('notice-submit-btn').innerText = "Publish Notice"; }
         });
 
         // --- 3. BULK EXCEL UPLOAD ---
-        const uploadForm = document.querySelector('.upload-form'); const fileInput = document.getElementById('student-file'); const bulkSubmitBtn = uploadForm.querySelector('.admin-submit-btn');
+        const uploadForm = document.querySelector('.upload-form'); const fileInput = document.getElementById('student-file');
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault(); if (!fileInput.files[0]) return alert("Select an Excel/CSV file.");
             const reader = new FileReader();
@@ -408,15 +415,83 @@
             alert(`Document Published!`); document.getElementById('admin-material-form').reset();
         });
 
-        // --- 8. EXAM RESULTS (MANUAL + BULK + VIEW) ---
-        // Manual Add
-        document.getElementById('manual-result-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); const studentId = document.getElementById('res-student-id').value; const examName = document.getElementById('res-exam-name').value; const subject = document.getElementById('res-subject').value;
-            await setDoc(doc(db, "results", `${studentId}_${examName}_${subject}`.replace(/\s+/g, '_')), { "Student ID": studentId, "Exam Term": examName, "Subject": subject, "Marks Obtained": Number(document.getElementById('res-marks').value), "Total Marks": Number(document.getElementById('res-total').value), "Publish Date": new Date().toLocaleDateString() }, { merge: true });
-            alert(`Success!`); document.getElementById('manual-result-form').reset(); loadLiveResults();
+        // --- 8. REPORT CARD (EXAM RESULTS) ENGINE ---
+        const termSelect = document.getElementById('res-exam-name');
+        const classSelect = document.getElementById('res-class');
+        const artContainer = document.getElementById('art-container');
+        const markInputs = document.querySelectorAll('.acad-mark');
+        let currentMaxPerSubject = 100;
+
+        function updateFormRules() {
+            const term = termSelect.value;
+            const stuClass = classSelect.value;
+            
+            if(term === 'Annual Examination') { artContainer.style.display = 'block'; } 
+            else { artContainer.style.display = 'none'; document.getElementById('g-art').value = ""; }
+
+            if(term && stuClass) {
+                const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass);
+                const isSenior = ['Class 6', 'Class 7', 'Class 8'].includes(stuClass);
+
+                if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30;
+                else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40;
+                else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80;
+
+                markInputs.forEach(input => {
+                    input.max = currentMaxPerSubject;
+                    input.placeholder = `Max: ${currentMaxPerSubject}`;
+                });
+            }
+        }
+        termSelect.addEventListener('change', updateFormRules);
+        classSelect.addEventListener('change', updateFormRules);
+
+        const manualResultForm = document.getElementById('manual-result-form');
+        const resSubmitBtn = document.getElementById('res-submit-btn');
+
+        manualResultForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resSubmitBtn.innerText = "Saving to Database...";
+
+            const studentId = document.getElementById('res-student-id').value;
+            const term = termSelect.value;
+            const docId = `${studentId}_${term}`.replace(/\s+/g, '_');
+
+            const marks = {
+                "English": Number(document.getElementById('m-eng').value) || 0,
+                "Bengali": Number(document.getElementById('m-ben').value) || 0,
+                "Hindi": Number(document.getElementById('m-hin').value) || 0,
+                "Sanskrit": Number(document.getElementById('m-san').value) || 0,
+                "Mathematics": Number(document.getElementById('m-mat').value) || 0,
+                "EVS_Science": Number(document.getElementById('m-evs').value) || 0,
+                "History": Number(document.getElementById('m-his').value) || 0,
+                "Geography": Number(document.getElementById('m-geo').value) || 0
+            };
+
+            let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0);
+            let totalPossible = currentMaxPerSubject * 8;
+            let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%";
+
+            const grades = { "Dance": document.getElementById('g-dance').value, "Music": document.getElementById('g-music').value };
+            if(term === 'Annual Examination') grades["Art_and_Craft"] = document.getElementById('g-art').value;
+
+            try {
+                await setDoc(doc(db, "results", docId), {
+                    "Student ID": studentId, "Class": classSelect.value, "Exam Term": term,
+                    "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible,
+                    "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Admin",
+                    "Publish Date": new Date().toLocaleDateString()
+                }, { merge: true });
+
+                alert(`Success! ${term} Report Card saved.`);
+                manualResultForm.reset();
+                artContainer.style.display = 'none';
+                loadLiveResults();
+            } catch (error) { alert("Error saving: " + error.message); } 
+            finally { resSubmitBtn.innerText = "Save Report Card"; }
         });
 
-        // Live Viewer
+        // 9. Live Results Viewer
         let liveResultsData = [];
         const refreshResBtn = document.getElementById('refresh-results-btn');
         const resTableBody = document.getElementById('res-table-body');
@@ -428,20 +503,19 @@
                 liveResultsData = [];
                 querySnapshot.forEach((doc) => { liveResultsData.push({ id: doc.id, ...doc.data() }); });
                 renderResultsTable(liveResultsData);
-            } catch (error) { console.error("Error loading results."); }
+            } catch (error) {}
         }
 
         function renderResultsTable(results) {
             resTableBody.innerHTML = "";
-            if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
+            if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
             results.forEach(res => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td><strong>${res["Student ID"] || 'N/A'}</strong></td>
                     <td>${res["Exam Term"] || 'N/A'}</td>
-                    <td>${res["Subject"] || 'N/A'}</td>
-                    <td>${res["Marks Obtained"] || '0'}</td>
-                    <td>${res["Total Marks"] || '0'}</td>
+                    <td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td>
+                    <td>${res["Percentage"] || '0%'}</td>
                     <td><button class="delete-btn delete-res" data-id="${res.id}">Delete</button></td>
                 `;
                 resTableBody.appendChild(tr);
@@ -450,7 +524,7 @@
             document.querySelectorAll('.delete-res').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const resId = e.target.getAttribute('data-id');
-                    if(confirm("Permanently delete this result?")) {
+                    if(confirm("Permanently delete this report card?")) {
                         await deleteDoc(doc(db, "results", resId));
                         loadLiveResults();
                     }
@@ -466,13 +540,11 @@
         resSearchInput.addEventListener('keyup', (e) => {
             const searchTerm = e.target.value.toLowerCase();
             const filtered = liveResultsData.filter(res => {
-                const id = (res["Student ID"] || "").toLowerCase();
-                return id.includes(searchTerm);
+                return (res["Student ID"] || "").toLowerCase().includes(searchTerm);
             });
             renderResultsTable(filtered);
         });
 
-        // Auto-load results when tab is clicked
         document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults);
 
     </script>
