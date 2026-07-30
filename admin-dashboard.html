@@ -49,6 +49,7 @@
                 <li><a href="#" class="nav-link" data-target="section-notices">📝 Manage Notices</a></li>
                 <li><a href="#" class="nav-link" data-target="section-results">📊 Exam Results</a></li>
                 <li><a href="#" class="nav-link" data-target="section-admit">🎫 Admit Cards</a></li>
+                <li><a href="#" class="nav-link" data-target="section-id-cards">🪪 ID Card Generator</a></li>
             </ul>
         </aside>
 
@@ -238,9 +239,6 @@
                     <h3>Generate Admit Cards</h3>
                     
                     <h4 class="section-divider">1. Set Exam Schedule</h4>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 15px;">Select Class and Term to dynamically load the required subject fields.</p>
-                    
-                    <!-- Manual Schedule Entry -->
                     <form class="admin-form" id="schedule-form" style="margin-bottom: 25px;">
                         <div style="display: flex; gap: 15px;">
                             <div class="input-group" style="flex: 1;">
@@ -259,15 +257,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div id="sch-subjects-container" class="marks-grid" style="margin-top: 15px;">
-                            <!-- Dynamically populated based on class and term -->
-                        </div>
+                        <div id="sch-subjects-container" class="marks-grid" style="margin-top: 15px;"></div>
                         <button type="submit" class="admin-submit-btn" id="sch-submit-btn">Save Schedule</button>
                     </form>
 
-                    <!-- Bulk Upload Schedule -->
                     <h5 style="margin-top: 20px; color: #FF671F;">Or Bulk Upload Schedule (CSV)</h5>
-                    <p style="font-size: 0.8rem; color: #555;">CSV Columns needed: Class, Term, English, Bengali, Mathematics, etc.</p>
                     <form class="admin-form" id="bulk-schedule-form">
                         <div class="file-drop-zone" style="padding: 15px;"><label for="sch-file" class="browse-btn">Select Schedule CSV</label><input type="file" id="sch-file" accept=".csv, .xlsx" hidden></div>
                         <button type="submit" class="admin-submit-btn" style="background-color: #003366;">Upload Schedule Database</button>
@@ -278,11 +272,7 @@
                         <div style="display: flex; gap: 15px;">
                             <div class="input-group" style="flex: 1;">
                                 <label>Generate Type</label>
-                                <select id="admit-gen-type" required>
-                                    <option value="single">Single Student</option>
-                                    <option value="class">Whole Class</option>
-                                    <option value="all">All Students</option>
-                                </select>
+                                <select id="admit-gen-type" required><option value="single">Single Student</option><option value="class">Whole Class</option><option value="all">All Students</option></select>
                             </div>
                             <div class="input-group" style="flex: 1;" id="admit-target-container">
                                 <label id="admit-target-label">Student ID</label>
@@ -290,13 +280,96 @@
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Exam Term</label>
-                                <select id="admit-gen-term" required>
-                                    <option>1st Summative</option><option>2nd Summative</option><option>Annual Examination</option>
-                                </select>
+                                <select id="admit-gen-term" required><option>1st Summative</option><option>2nd Summative</option><option>Annual Examination</option></select>
                             </div>
                         </div>
                         <button type="submit" class="admin-submit-btn btn-blue" id="admit-gen-btn">Generate Admit Card PDF</button>
                     </form>
+                </div>
+            </div>
+
+            <!-- SECTION 10: ID CARDS -->
+            <div id="section-id-cards" class="admin-section">
+                <div class="dashboard-card" style="max-width: 900px;">
+                    <h3>Professional PVC ID Card Generator</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate, preview, and download custom PVC ID cards for students and teachers with scannable colorful QR codes. <strong>The PDF download perfectly captures this visual design.</strong></p>
+                    
+                    <!-- Global Assets Configuration -->
+                    <h4 class="section-divider">1. School Branding Assets (Global)</h4>
+                    <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                        <div class="input-group" style="flex: 1;">
+                            <label>School Logo</label>
+                            <input type="file" id="global-logo" accept="image/*">
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label>Principal Signature</label>
+                            <input type="file" id="global-sign" accept="image/*">
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label>School Seal / Stamp</label>
+                            <input type="file" id="global-seal" accept="image/*">
+                        </div>
+                    </div>
+
+                    <!-- Card Configuration & Dimension Adjuster -->
+                    <h4 class="section-divider">2. Card Settings & Dimensions (PVC Printer Scaling)</h4>
+                    <div style="display: flex; gap: 15px; margin-bottom: 25px;">
+                        <div class="input-group" style="flex: 1;">
+                            <label>Card Type</label>
+                            <select id="id-card-type">
+                                <option value="student">Student ID (Geometric Split - Horizontal)</option>
+                                <option value="teacher">Teacher ID (Executive Portrait - Vertical)</option>
+                            </select>
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label>Width Scaling Factor (mm)</label>
+                            <input type="number" id="card-width" value="85.5" step="0.5" required>
+                        </div>
+                        <div class="input-group" style="flex: 1;">
+                            <label>Height Scaling Factor (mm)</label>
+                            <input type="number" id="card-height" value="54.0" step="0.5" required>
+                        </div>
+                    </div>
+
+                    <!-- Data Entry Form -->
+                    <h4 class="section-divider">3. Card Information Entry</h4>
+                    <form class="admin-form" id="id-card-form">
+                        <div id="student-fields-group">
+                            <div class="input-group">
+                                <label>Student ID (Type to auto-fetch data)</label>
+                                <input type="text" id="id-stu-id" placeholder="e.g. VMI/26/0001">
+                            </div>
+                        </div>
+
+                        <div id="teacher-fields-group" style="display: none;">
+                            <div class="marks-grid">
+                                <div class="input-group"><label>Teacher Name</label><input type="text" id="id-tch-name"></div>
+                                <div class="input-group"><label>Father's Name</label><input type="text" id="id-tch-father"></div>
+                                <div class="input-group"><label>Department</label><input type="text" id="id-tch-dept" placeholder="e.g. Mathematics"></div>
+                                <div class="input-group"><label>Date of Joining</label><input type="text" id="id-tch-doj" placeholder="DD/MM/YYYY"></div>
+                                <div class="input-group"><label>Blood Group</label><input type="text" id="id-tch-blood" placeholder="e.g. B+"></div>
+                                <div class="input-group"><label>Teacher Photo</label><input type="file" id="id-tch-photo" accept="image/*"></div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="admin-submit-btn btn-blue" id="preview-card-btn" style="margin-top: 15px;">Generate Preview & QR Code</button>
+                    </form>
+
+                    <!-- Live Preview Area -->
+                    <h4 class="section-divider">4. Live Card Preview (Front & Back)</h4>
+                    <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; background: #fdfdfd; padding: 20px; border: 1px dashed #ccc; border-radius: 6px;">
+                        <div>
+                            <p style="text-align: center; font-weight: bold; color: #003366; font-size: 0.85rem;">FRONT SIDE</p>
+                            <!-- ID Card Container for PDF Capture -->
+                            <div id="preview-front" style="width: 324px; height: 204px; background: white; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative; overflow: hidden; border-radius: 6px; box-sizing: border-box;"></div>
+                        </div>
+                        <div>
+                            <p style="text-align: center; font-weight: bold; color: #003366; font-size: 0.85rem;">BACK SIDE</p>
+                            <div id="preview-back" style="width: 324px; height: 204px; background: white; border: 1px solid #ddd; box-shadow: 0 4px 8px rgba(0,0,0,0.1); position: relative; overflow: hidden; border-radius: 6px; box-sizing: border-box; display: flex; align-items: center; justify-content: center;"></div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="admin-submit-btn btn-green" id="download-id-pdf" style="margin-top: 25px; width: 100%;">📥 Download Printable ID Card PDF</button>
                 </div>
             </div>
 
@@ -329,6 +402,9 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <!-- Essential for High-Fidelity ID Card PDF Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <!-- Firebase Integration -->
     <script type="module">
@@ -370,7 +446,7 @@
             renderDatabaseTable(filtered);
         });
 
-        // Notices, Manual Add, TC, Export, Materials (Preserved Logic)
+        // Notices, Manual Add, TC, Export, Materials
         document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', async () => {
             try { const querySnapshot = await getDocs(collection(db, "notices")); const notices = []; querySnapshot.forEach((doc) => { notices.push({ id: doc.id, ...doc.data() }); }); notices.sort((a, b) => b.timestamp - a.timestamp); const tbody = document.getElementById('notice-table-body'); tbody.innerHTML = ""; if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No active notices.</td></tr>`; return; } notices.forEach(notice => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="action-btn btn-red delete-notice" data-id="${notice.id}">Delete</button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-notice').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "notices", e.target.getAttribute('data-id'))); document.querySelector('.nav-link[data-target="section-notices"]').click(); } }); }); } catch (error) {}
         });
@@ -387,36 +463,25 @@
 
 
         // --- REPORT CARD ENGINE ---
-        const termSelect = document.getElementById('res-exam-name');
-        const classSelect = document.getElementById('res-class');
-        const coCurricularSection = document.getElementById('co-curricular-section');
-        const markInputs = document.querySelectorAll('.acad-mark');
-        const studentIdInput = document.getElementById('res-student-id');
-        const studentNameInput = document.getElementById('res-student-name');
+        const termSelect = document.getElementById('res-exam-name'); const classSelect = document.getElementById('res-class'); const coCurricularSection = document.getElementById('co-curricular-section'); const markInputs = document.querySelectorAll('.acad-mark'); const rStudentIdInput = document.getElementById('res-student-id'); const rStudentNameInput = document.getElementById('res-student-name');
         let currentMaxPerSubject = 100; let activeSubjectCount = 8;
 
-        studentIdInput.addEventListener('blur', async () => {
-            const studentId = studentIdInput.value.trim(); if (!studentId) { studentNameInput.value = ""; return; }
-            studentNameInput.value = "Searching...";
-            try {
-                const docSnap = await getDoc(doc(db, "students", studentId));
-                if (docSnap.exists()) { const data = docSnap.data(); studentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } 
-                else { studentNameInput.value = "Not Found - Check ID"; }
-            } catch (error) { studentNameInput.value = "Error."; }
+        rStudentIdInput.addEventListener('blur', async () => {
+            const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; }
+            rStudentNameInput.value = "Searching...";
+            try { const docSnap = await getDoc(doc(db, "students", studentId)); if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } } catch (error) { rStudentNameInput.value = "Error."; }
         });
 
         function updateFormRules() {
             const term = termSelect.value; const stuClass = classSelect.value;
             if(term === 'Annual Examination') { coCurricularSection.style.display = 'block'; } else { coCurricularSection.style.display = 'none'; document.getElementById('g-dance').value = ""; document.getElementById('g-music').value = ""; document.getElementById('g-art').value = ""; }
             ['grp-hin', 'grp-san', 'grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'none'; document.getElementById(id.replace('grp', 'm')).required = false; document.getElementById(id.replace('grp', 'm')).value = ""; });
-            
             if(stuClass) {
                 const hasHindi = ['Class 3', 'Class 4']; const hasSanskrit = ['Class 7', 'Class 8']; const hasHistoryGeo = ['Class 3', 'Class 4', 'Class 6', 'Class 7', 'Class 8'];
                 activeSubjectCount = 4;
                 if(hasHindi.includes(stuClass)) { document.getElementById('grp-hin').style.display = 'block'; document.getElementById('m-hin').required = true; activeSubjectCount++; }
                 if(hasSanskrit.includes(stuClass)) { document.getElementById('grp-san').style.display = 'block'; document.getElementById('m-san').required = true; activeSubjectCount++; }
                 if(hasHistoryGeo.includes(stuClass)) { ['grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'block'; document.getElementById(id.replace('grp', 'm')).required = true; }); activeSubjectCount += 2; }
-
                 const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass);
                 if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30; else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40; else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80;
                 markInputs.forEach(input => { input.max = currentMaxPerSubject; input.placeholder = `Max: ${currentMaxPerSubject}`; });
@@ -428,338 +493,279 @@
             e.preventDefault(); document.getElementById('res-submit-btn').innerText = "Saving...";
             const studentId = document.getElementById('res-student-id').value; const term = termSelect.value; const docId = `${studentId}_${term}`.replace(/\s+/g, '_');
             const marks = {};
-            if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value);
-            if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value);
-            if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value);
-            if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value);
-            if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value);
-            if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value);
-            if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value);
-            if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value);
-
+            if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value); if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value); if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value); if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value); if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value); if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value); if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value); if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value);
             let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0); let totalPossible = currentMaxPerSubject * activeSubjectCount; let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%";
-            const grades = {};
-            if(term === 'Annual Examination') { grades["Dance"] = document.getElementById('g-dance').value; grades["Music"] = document.getElementById('g-music').value; grades["Art_and_Craft"] = document.getElementById('g-art').value; }
-
-            try {
-                await setDoc(doc(db, "results", docId), { "Student ID": studentId, "Student Name": document.getElementById('res-student-name').value, "Class": classSelect.value, "Exam Term": term, "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible, "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true });
-                alert(`Success!`); document.getElementById('manual-result-form').reset(); studentNameInput.value=""; updateFormRules(); loadLiveResults();
-            } catch (error) { alert("Error"); } finally { document.getElementById('res-submit-btn').innerText = "Save Report Card"; }
+            const grades = {}; if(term === 'Annual Examination') { grades["Dance"] = document.getElementById('g-dance').value; grades["Music"] = document.getElementById('g-music').value; grades["Art_and_Craft"] = document.getElementById('g-art').value; }
+            try { await setDoc(doc(db, "results", docId), { "Student ID": studentId, "Student Name": document.getElementById('res-student-name').value, "Class": classSelect.value, "Exam Term": term, "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible, "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true }); alert(`Success!`); document.getElementById('manual-result-form').reset(); rStudentNameInput.value=""; updateFormRules(); loadLiveResults(); } catch (error) { alert("Error"); } finally { document.getElementById('res-submit-btn').innerText = "Save Report Card"; }
         });
 
-        // Live Results Viewer, Detailed Marks Modal, and Export
-        let liveResultsData = []; let currentlyDisplayedResults = [];
-        const resTableBody = document.getElementById('res-table-body');
+        // Live Results Viewer & Export
+        let liveResultsData = []; let currentlyDisplayedResults = []; const resTableBody = document.getElementById('res-table-body');
         
-        async function loadLiveResults() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "results"));
-                liveResultsData = []; querySnapshot.forEach((doc) => { liveResultsData.push({ id: doc.id, ...doc.data() }); });
-                currentlyDisplayedResults = [...liveResultsData]; renderResultsTable(currentlyDisplayedResults);
-            } catch (error) {}
-        }
+        async function loadLiveResults() { try { const querySnapshot = await getDocs(collection(db, "results")); liveResultsData = []; querySnapshot.forEach((doc) => { liveResultsData.push({ id: doc.id, ...doc.data() }); }); currentlyDisplayedResults = [...liveResultsData]; renderResultsTable(currentlyDisplayedResults); } catch (error) {} }
 
         function renderResultsTable(results) {
-            resTableBody.innerHTML = "";
-            if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
+            resTableBody.innerHTML = ""; if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; }
             results.forEach((res, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>${res["Student ID"] || 'N/A'}</strong></td>
-                    <td>${res["Class"] || 'N/A'}</td>
-                    <td>${res["Exam Term"] || 'N/A'}</td>
-                    <td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td>
-                    <td>${res["Percentage"] || '0%'}</td>
-                    <td>
-                        <button class="action-btn btn-blue view-res" data-index="${index}">👁️ View</button>
-                        <button class="action-btn btn-green print-res" data-index="${index}">Print</button>
-                        <button class="action-btn btn-red delete-res" data-id="${res.id}">Delete</button>
-                    </td>
-                `;
-                resTableBody.appendChild(tr);
+                const tr = document.createElement('tr'); tr.innerHTML = `<td><strong>${res["Student ID"] || 'N/A'}</strong></td><td>${res["Class"] || 'N/A'}</td><td>${res["Exam Term"] || 'N/A'}</td><td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td><td>${res["Percentage"] || '0%'}</td><td><button class="action-btn btn-blue view-res" data-index="${index}">👁️ View</button><button class="action-btn btn-green print-res" data-index="${index}">Print</button><button class="action-btn btn-red delete-res" data-id="${res.id}">Delete</button></td>`; resTableBody.appendChild(tr);
             });
-
-            // Delete
-            document.querySelectorAll('.delete-res').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    if(confirm("Permanently delete this report card?")) { await deleteDoc(doc(db, "results", e.target.getAttribute('data-id'))); loadLiveResults(); }
-                });
-            });
-
-            // Print Individual
-            document.querySelectorAll('.print-res').forEach(btn => {
-                btn.addEventListener('click', (e) => { generateReportCardPDF([currentlyDisplayedResults[e.target.getAttribute('data-index')]], `ReportCard_${currentlyDisplayedResults[e.target.getAttribute('data-index')]["Student ID"]}.pdf`); });
-            });
-
-            // View Detailed Numbers (Modal)
+            document.querySelectorAll('.delete-res').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Permanently delete this report card?")) { await deleteDoc(doc(db, "results", e.target.getAttribute('data-id'))); loadLiveResults(); } }); });
+            document.querySelectorAll('.print-res').forEach(btn => { btn.addEventListener('click', (e) => { generateReportCardPDF([currentlyDisplayedResults[e.target.getAttribute('data-index')]], `ReportCard_${currentlyDisplayedResults[e.target.getAttribute('data-index')]["Student ID"]}.pdf`); }); });
             document.querySelectorAll('.view-res').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const res = currentlyDisplayedResults[e.target.getAttribute('data-index')];
-                    const modalBody = document.getElementById('modal-body');
+                    const res = currentlyDisplayedResults[e.target.getAttribute('data-index')]; const modalBody = document.getElementById('modal-body');
                     let html = `<strong>Student:</strong> ${res["Student Name"] || res["Student ID"]}<br><strong>Class:</strong> ${res["Class"]}<br><strong>Term:</strong> ${res["Exam Term"]}<hr style="margin:10px 0;">`;
                     html += `<table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Marks</th></tr>`;
-                    for(const [sub, mark] of Object.entries(res["Academic Marks"] || {})) {
-                        html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace('_',' ')}</td><td style="border:1px solid #ccc; padding:5px;">${mark}</td></tr>`;
-                    }
+                    for(const [sub, mark] of Object.entries(res["Academic Marks"] || {})) { html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace('_',' ')}</td><td style="border:1px solid #ccc; padding:5px;">${mark}</td></tr>`; }
                     html += `</table>`;
-                    
                     if(res["CoCurricular Grades"] && Object.keys(res["CoCurricular Grades"]).length > 0) {
                         html += `<h4 style="margin-top:15px; color:#FF671F;">Co-Curricular Grades</h4><table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Grade</th></tr>`;
-                        for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) {
-                            if(grade) html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace(/_/g,' ')}</td><td style="border:1px solid #ccc; padding:5px;">${grade}</td></tr>`;
-                        }
-                        html += `</table>`;
+                        for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace(/_/g,' ')}</td><td style="border:1px solid #ccc; padding:5px;">${grade}</td></tr>`; } html += `</table>`;
                     }
-                    modalBody.innerHTML = html;
-                    document.getElementById('marks-modal').style.display = 'flex';
+                    modalBody.innerHTML = html; document.getElementById('marks-modal').style.display = 'flex';
                 });
             });
         }
-        document.getElementById('refresh-results-btn').addEventListener('click', () => { loadLiveResults(); });
-        document.getElementById('res-search-input').addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTable(currentlyDisplayedResults); });
-        document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults);
-        document.getElementById('bulk-print-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `VMI_Bulk_ReportCards_${Date.now()}.pdf`); });
-
-        // NEW: Export Master Score Sheet
+        document.getElementById('refresh-results-btn').addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input').addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTable(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `VMI_Bulk_ReportCards_${Date.now()}.pdf`); });
         document.getElementById('export-results-btn').addEventListener('click', () => {
             if(currentlyDisplayedResults.length === 0) return alert("No results to export!");
-            
-            const exportData = currentlyDisplayedResults.map(res => {
-                const flatRow = {
-                    "Student ID": res["Student ID"],
-                    "Student Name": res["Student Name"] || "N/A",
-                    "Class": res["Class"],
-                    "Term": res["Exam Term"],
-                    "Total Marks": res["Total Marks"],
-                    "Max Marks": res["Max Marks"],
-                    "Percentage": res["Percentage"]
-                };
-                
-                if(res["Academic Marks"]) {
-                    for(const [sub, mark] of Object.entries(res["Academic Marks"])) {
-                        flatRow[sub.replace('_', ' ')] = mark;
-                    }
-                }
-                
-                if(res["CoCurricular Grades"]) {
-                    for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) {
-                        if(grade) flatRow[sub.replace(/_/g, ' ')] = grade;
-                    }
-                }
-                return flatRow;
-            });
-            
-            const workbook = XLSX.utils.book_new();
-            const worksheet = XLSX.utils.json_to_sheet(exportData);
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet");
-            XLSX.writeFile(workbook, `VMI_Master_Results_${Date.now()}.xlsx`);
+            const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; });
+            const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `VMI_Master_Results_${Date.now()}.xlsx`);
         });
 
-        // Function: Print Report Card PDF
         function generateReportCardPDF(resultsArray, fileName) {
             const { jsPDF } = window.jspdf; const doc = new jsPDF();
             resultsArray.forEach((result, index) => {
                 if (index > 0) doc.addPage();
-                doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center");
-                doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center");
-                doc.setFontSize(11); doc.setTextColor(0, 0, 0);
-                doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50);
-                doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60);
-                doc.setLineWidth(0.5); doc.line(20, 65, 190, 65);
-                let startY = 75; const academicMarks = result["Academic Marks"] || {};
-                doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY);
-                let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); }
-                doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } });
-                let finalY = doc.lastAutoTable.finalY + 15;
-                doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15;
-                if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) {
-                    doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY);
-                    let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); }
-                    doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15;
-                }
+                doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0);
+                doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60);
+                doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY);
+                let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } });
+                let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15;
+                if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; }
                 finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10);
-            });
-            doc.save(fileName);
+            }); doc.save(fileName);
         }
 
         // --- ADMIT CARD ENGINE ---
-        const schClass = document.getElementById('sch-class');
-        const schTerm = document.getElementById('sch-term');
-        const schSubjectsContainer = document.getElementById('sch-subjects-container');
-        
+        const schClass = document.getElementById('sch-class'); const schTerm = document.getElementById('sch-term'); const schSubjectsContainer = document.getElementById('sch-subjects-container');
         function updateScheduleSubjects() {
-            const cls = schClass.value;
-            const term = schTerm.value;
-            schSubjectsContainer.innerHTML = ""; 
-            if(!cls || !term) return;
-
+            const cls = schClass.value; const term = schTerm.value; schSubjectsContainer.innerHTML = ""; if(!cls || !term) return;
             const subjects = ['English', 'Bengali', 'Mathematics', 'EVS_Science'];
             if(['Class 3', 'Class 4'].includes(cls)) subjects.push('Hindi', 'History', 'Geography');
             if(['Class 6'].includes(cls)) subjects.push('History', 'Geography');
             if(['Class 7', 'Class 8'].includes(cls)) subjects.push('Sanskrit', 'History', 'Geography');
-
             if(term === 'Annual Examination') { subjects.push('Dance', 'Music', 'Art_and_Craft'); }
-
-            subjects.forEach(sub => {
-                schSubjectsContainer.innerHTML += `
-                    <div class="input-group">
-                        <label>${sub.replace(/_/g, ' ')} Date & Time</label>
-                        <input type="text" class="sch-date-input" data-subject="${sub}" placeholder="e.g., 12/04/2026, 10:00 AM" required>
-                    </div>`;
-            });
+            subjects.forEach(sub => { schSubjectsContainer.innerHTML += `<div class="input-group"><label>${sub.replace(/_/g, ' ')} Date & Time</label><input type="text" class="sch-date-input" data-subject="${sub}" placeholder="e.g., 12/04/2026, 10:00 AM" required></div>`; });
         }
-        
-        schClass.addEventListener('change', updateScheduleSubjects);
-        schTerm.addEventListener('change', updateScheduleSubjects);
+        schClass.addEventListener('change', updateScheduleSubjects); schTerm.addEventListener('change', updateScheduleSubjects);
 
-        document.getElementById('schedule-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const cls = document.getElementById('sch-class').value;
-            const term = document.getElementById('sch-term').value;
-            const docId = `schedule_${cls}_${term}`.replace(/\s+/g, '_');
-            
-            const scheduleData = {};
-            document.querySelectorAll('.sch-date-input').forEach(input => {
-                scheduleData[input.getAttribute('data-subject')] = input.value;
-            });
+        document.getElementById('schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const cls = document.getElementById('sch-class').value; const term = document.getElementById('sch-term').value; const docId = `schedule_${cls}_${term}`.replace(/\s+/g, '_'); const scheduleData = {}; document.querySelectorAll('.sch-date-input').forEach(input => { scheduleData[input.getAttribute('data-subject')] = input.value; }); try { await setDoc(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }); alert(`Exam Schedule for ${cls} - ${term} saved!`); } catch (err) { alert("Error saving schedule."); } });
+        document.getElementById('bulk-schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('sch-file').files[0]; if (!file) return alert("Select an Excel/CSV file."); const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); if (jsonData.length === 0) return alert("File is empty."); const batch = writeBatch(db); jsonData.forEach((row) => { const cls = row["Class"]; const term = row["Term"]; if(cls && term) { const docId = `schedule_${cls}_${term}`.replace(/\s+/g, '_'); const scheduleData = { ...row }; delete scheduleData["Class"]; delete scheduleData["Term"]; batch.set(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded schedules from CSV.`); document.getElementById('bulk-schedule-form').reset(); } catch (error) { alert("Error processing file. Ensure headers are correct."); } }; reader.readAsArrayBuffer(file); });
 
+        const admitGenType = document.getElementById('admit-gen-type'); const admitTargetContainer = document.getElementById('admit-target-container'); const admitTargetLabel = document.getElementById('admit-target-label'); const admitTargetVal = document.getElementById('admit-target-val');
+        admitGenType.addEventListener('change', () => { if(admitGenType.value === 'all') { admitTargetContainer.style.display = 'none'; admitTargetVal.required = false; } else { admitTargetContainer.style.display = 'block'; admitTargetVal.required = true; admitTargetLabel.innerText = admitGenType.value === 'class' ? "Enter Class Name (e.g., Class 1)" : "Enter Student ID"; admitTargetVal.placeholder = admitGenType.value === 'class' ? "e.g., Class 1" : "Enter ID"; } });
+
+        document.getElementById('admit-print-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = document.getElementById('admit-gen-btn'); btn.innerText = "Generating PDF..."; const genType = admitGenType.value; const targetVal = admitTargetVal.value.trim(); const term = document.getElementById('admit-gen-term').value;
             try {
-                await setDoc(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData });
-                alert(`Exam Schedule for ${cls} - ${term} saved!`);
-            } catch (err) { alert("Error saving schedule."); }
+                let targetStudents = [];
+                if(genType === 'single') { const snap = await getDoc(doc(db, "students", targetVal)); if(snap.exists()) targetStudents.push(snap.data()); } else if(genType === 'class') { const q = query(collection(db, "students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } else { const snaps = await getDocs(collection(db, "students")); snaps.forEach(d => targetStudents.push(d.data())); }
+                if(targetStudents.length === 0) { alert("No students found."); btn.innerText = "Generate Admit Card PDF"; return; }
+                const schSnaps = await getDocs(collection(db, "exam_schedules")); const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
+                const { jsPDF } = window.jspdf; const docPdf = new jsPDF();
+                targetStudents.forEach((student, index) => {
+                    const cls = student.Class; const schId = `schedule_${cls}_${term}`.replace(/\s+/g, '_'); const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
+                    if(index > 0) docPdf.addPage(); docPdf.rect(10, 10, 190, 277); docPdf.setFontSize(22); docPdf.setTextColor(0, 51, 102); docPdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); docPdf.setFontSize(14); docPdf.setTextColor(255, 103, 31); docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, 35, null, null, "center"); docPdf.setLineWidth(0.5); docPdf.line(15, 45, 195, 45); docPdf.setFontSize(12); docPdf.setTextColor(0, 0, 0); docPdf.text(`Student Name: ${student.Name || 'N/A'}`, 20, 55); docPdf.text(`Student ID (Roll No): ${student["Student ID"] || student["Roll No"] || 'N/A'}`, 20, 65); docPdf.text(`Class: ${student.Class || 'N/A'}`, 20, 75); docPdf.text(`Father's Name: ${student["Father's Name"] || 'N/A'}`, 20, 85); docPdf.rect(155, 50, 35, 40); docPdf.setFontSize(10); docPdf.text("Photograph", 163, 70);
+                    if(studentSchedule) { let tableData = []; for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableData.push([sub.replace(/_/g, ' '), dateStr]); } docPdf.autoTable({ startY: 100, head: [['Subject', 'Date & Time']], body: tableData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] }, margin: { left: 20, right: 20 } }); } else { docPdf.setTextColor(255, 0, 0); docPdf.text("Exam schedule not published for this class yet.", 20, 110); docPdf.setTextColor(0, 0, 0); }
+                    let bottomY = 250; docPdf.text("_______________________", 20, bottomY); docPdf.text("Student Signature", 25, bottomY + 10); docPdf.text("_______________________", 130, bottomY); docPdf.text("Principal Signature", 135, bottomY + 10);
+                }); docPdf.save(`Admit_Cards_${term.replace(/\s+/g, '_')}.pdf`);
+            } catch (err) { alert("Error generating PDF: " + err.message); } finally { btn.innerText = "Generate Admit Card PDF"; }
         });
 
-        document.getElementById('bulk-schedule-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const file = document.getElementById('sch-file').files[0];
-            if (!file) return alert("Select an Excel/CSV file.");
-            
-            const reader = new FileReader();
-            reader.onload = async function(event) {
-                try {
-                    const data = new Uint8Array(event.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    if (jsonData.length === 0) return alert("File is empty.");
-                    
-                    const batch = writeBatch(db);
-                    jsonData.forEach((row) => {
-                        const cls = row["Class"];
-                        const term = row["Term"];
-                        if(cls && term) {
-                            const docId = `schedule_${cls}_${term}`.replace(/\s+/g, '_');
-                            const scheduleData = { ...row };
-                            delete scheduleData["Class"];
-                            delete scheduleData["Term"];
-                            batch.set(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true });
-                        }
-                    });
-                    
-                    await batch.commit();
-                    alert(`Successfully uploaded schedules from CSV.`);
-                    document.getElementById('bulk-schedule-form').reset();
-                } catch (error) { alert("Error processing file. Ensure headers are correct."); } 
-            };
-            reader.readAsArrayBuffer(file);
-        });
+        // --- ID CARD GENERATOR ENGINE ---
+        const cardTypeSelect = document.getElementById('id-card-type');
+        const studentGroup = document.getElementById('student-fields-group');
+        const teacherGroup = document.getElementById('teacher-fields-group');
+        const previewFront = document.getElementById('preview-front');
+        const previewBack = document.getElementById('preview-back');
+        
+        let globalAssets = { logo: "", sign: "", seal: "" };
+        let activeCardData = null;
 
-        const admitGenType = document.getElementById('admit-gen-type');
-        const admitTargetContainer = document.getElementById('admit-target-container');
-        const admitTargetLabel = document.getElementById('admit-target-label');
-        const admitTargetVal = document.getElementById('admit-target-val');
+        async function convertToBase64(file) { return new Promise((resolve) => { const reader = new FileReader(); reader.onload = (e) => resolve(e.target.result); reader.readAsDataURL(file); }); }
+        document.getElementById('global-logo').addEventListener('change', async function() { if(this.files[0]) globalAssets.logo = await convertToBase64(this.files[0]); });
+        document.getElementById('global-sign').addEventListener('change', async function() { if(this.files[0]) globalAssets.sign = await convertToBase64(this.files[0]); });
+        document.getElementById('global-seal').addEventListener('change', async function() { if(this.files[0]) globalAssets.seal = await convertToBase64(this.files[0]); });
 
-        admitGenType.addEventListener('change', () => {
-            if(admitGenType.value === 'all') {
-                admitTargetContainer.style.display = 'none';
-                admitTargetVal.required = false;
+        cardTypeSelect.addEventListener('change', () => {
+            if(cardTypeSelect.value === 'student') {
+                studentGroup.style.display = 'block'; teacherGroup.style.display = 'none';
+                previewFront.style.width = "324px"; previewFront.style.height = "204px"; previewBack.style.width = "324px"; previewBack.style.height = "204px";
             } else {
-                admitTargetContainer.style.display = 'block';
-                admitTargetVal.required = true;
-                admitTargetLabel.innerText = admitGenType.value === 'class' ? "Enter Class Name (e.g., Class 1)" : "Enter Student ID";
-                admitTargetVal.placeholder = admitGenType.value === 'class' ? "e.g., Class 1" : "Enter ID";
+                studentGroup.style.display = 'none'; teacherGroup.style.display = 'block';
+                previewFront.style.width = "204px"; previewFront.style.height = "324px"; previewBack.style.width = "204px"; previewBack.style.height = "324px";
             }
         });
 
-        document.getElementById('admit-print-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('admit-gen-btn');
-            btn.innerText = "Generating PDF...";
-            const genType = admitGenType.value;
-            const targetVal = admitTargetVal.value.trim();
-            const term = document.getElementById('admit-gen-term').value;
+        const idStuIdInput = document.getElementById('id-stu-id');
+        let fetchedStudentData = null;
 
+        idStuIdInput.addEventListener('blur', async () => {
+            const idVal = idStuIdInput.value.trim();
+            if(!idVal) return;
             try {
-                let targetStudents = [];
-                if(genType === 'single') {
-                    const snap = await getDoc(doc(db, "students", targetVal));
-                    if(snap.exists()) targetStudents.push(snap.data());
-                } else if(genType === 'class') {
-                    const q = query(collection(db, "students"), where("Class", "==", targetVal));
-                    const snaps = await getDocs(q);
-                    snaps.forEach(d => targetStudents.push(d.data()));
+                const docSnap = await getDoc(doc(db, "students", idVal));
+                if(docSnap.exists()) {
+                    fetchedStudentData = docSnap.data();
+                    alert(`Loaded Student: ${fetchedStudentData.Name}`);
                 } else {
-                    const snaps = await getDocs(collection(db, "students"));
-                    snaps.forEach(d => targetStudents.push(d.data()));
+                    alert("Student ID not found in database.");
+                    fetchedStudentData = null;
                 }
+            } catch(err) { console.error(err); }
+        });
 
-                if(targetStudents.length === 0) { alert("No students found."); btn.innerText = "Generate Admit Card PDF"; return; }
+        document.getElementById('preview-card-btn').addEventListener('click', async () => {
+            const type = cardTypeSelect.value;
+            previewFront.innerHTML = ""; previewBack.innerHTML = "";
+            
+            // Logic for Placeholder Assets
+            const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
+            const signHtml = globalAssets.sign ? `<img src="${globalAssets.sign}" style="height:15px; max-width:60px; display:block; margin:0 auto;">` : `<div style="height:15px;"></div>`;
+            const sealHtml = globalAssets.seal ? `<img src="${globalAssets.seal}" style="width:40px; height:40px; object-fit:contain; opacity:0.8;">` : ``;
 
-                const schSnaps = await getDocs(collection(db, "exam_schedules"));
-                const schedules = {};
-                schSnaps.forEach(d => { schedules[d.id] = d.data(); });
+            if(type === 'student') {
+                if(!fetchedStudentData) return alert("Please enter a valid student ID first.");
+                activeCardData = {
+                    type: 'student', title: fetchedStudentData.Name, id: fetchedStudentData["Student ID"] || fetchedStudentData["Roll No"], class: fetchedStudentData.Class, father: fetchedStudentData["Father's Name"], address: fetchedStudentData.Address, phone: fetchedStudentData.Phone, photo: fetchedStudentData.Photo || 'https://via.placeholder.com/60x75'
+                };
 
+                previewFront.innerHTML = `
+                    <div style="display:flex; height:100%; position:relative; background:#fff;">
+                        <div style="background:#003366; width:35%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; border-right: 4px solid #FF671F; box-sizing:border-box;">
+                            <img src="${activeCardData.photo}" style="width:70px; height:85px; border:2px solid white; border-radius:4px; object-fit:cover; z-index:2;">
+                        </div>
+                        <div style="width:65%; padding:10px 15px; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;">
+                            <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
+                                ${logoHtml}
+                                <div>
+                                    <div style="font-weight:bold; color:#003366; font-size:11px; line-height:1;">VIVEKANANDA MISSION INSTITUTE</div>
+                                    <div style="font-size:6px; color:#FF671F; font-weight:bold; margin-top:1px;">STUDENT IDENTITY CARD</div>
+                                </div>
+                            </div>
+                            <div style="font-size:8px; display:flex; flex-direction:column; gap:2px; margin-top:5px; color:#003366;">
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">NAME</span> <b>${activeCardData.title}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">ID NO</span> <b>${activeCardData.id}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">CLASS</span> <b>${activeCardData.class}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">FATHER</span> <b>${activeCardData.father}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">PHONE</span> <b>${activeCardData.phone}</b></div>
+                                <div style="line-height:1.1;"><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px; vertical-align:top;">ADDRESS</span> <span style="display:inline-block; width:110px;">${activeCardData.address}</span></div>
+                            </div>
+                            <div style="position:absolute; bottom:10px; right:15px; text-align:center;">
+                                ${signHtml}
+                                <div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">Principal</div>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                let tchPhoto = 'https://via.placeholder.com/70x85';
+                const photoInput = document.getElementById('id-tch-photo');
+                if(photoInput.files[0]) tchPhoto = await convertToBase64(photoInput.files[0]);
+
+                activeCardData = {
+                    type: 'teacher', name: document.getElementById('id-tch-name').value, father: document.getElementById('id-tch-father').value, dept: document.getElementById('id-tch-dept').value, doj: document.getElementById('id-tch-doj').value, blood: document.getElementById('id-tch-blood').value, photo: tchPhoto
+                };
+
+                previewFront.innerHTML = `
+                    <div style="height:100%; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;">
+                        <div style="background:#003366; padding:10px 5px; text-align:center; border-bottom:3px solid #FF671F; display:flex; flex-direction:column; align-items:center;">
+                            ${logoHtml}
+                            <div style="color:white; font-size:10px; font-weight:bold; margin-top:2px;">VIVEKANANDA MISSION</div>
+                            <div style="color:#d0e1f9; font-size:7px;">FACULTY IDENTITY CARD</div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center; padding:15px 10px; flex:1;">
+                            <img src="${activeCardData.photo}" style="width:65px; height:75px; border:2px solid #FF671F; border-radius:6px; object-fit:cover; margin-bottom:8px;">
+                            <div style="font-size:12px; font-weight:bold; color:#003366; text-transform:uppercase; text-align:center; line-height:1.1; margin-bottom:10px;">${activeCardData.name}</div>
+                            <div style="font-size:8px; width:100%; display:flex; flex-direction:column; gap:3px; color:#003366; padding:0 5px;">
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">FATHER</span> <b>${activeCardData.father}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">DEPT</span> <b>${activeCardData.dept}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">DOJ</span> <b>${activeCardData.doj}</b></div>
+                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">BLOOD</span> <b style="color:#E63946;">${activeCardData.blood}</b></div>
+                            </div>
+                        </div>
+                        <div style="position:absolute; bottom:25px; right:15px; text-align:center;">
+                            ${signHtml}
+                            <div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">Principal</div>
+                        </div>
+                        <div style="background:#FF671F; height:20px; width:100%; position:absolute; bottom:0;"></div>
+                    </div>`;
+            }
+
+            previewBack.innerHTML = `
+                <div style="display:flex; flex-direction:${type==='student'?'row':'column'}; align-items:center; justify-content:space-around; width:100%; height:100%; padding:15px; box-sizing:border-box;">
+                    <div style="font-size:7px; line-height:1.4; flex:1;">
+                        <strong style="color:#FF671F; font-size:9px;">INSTRUCTIONS:</strong><br>
+                        1. Carry this card at all times.<br>
+                        2. Report loss to the Principal.<br>
+                        3. Duplicate card fee: Rs. 100/-.<br>
+                        4. This card is non-transferable.
+                        <div style="margin-top:10px; text-align:center;">${sealHtml}</div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <div id="live-qr-code" style="padding:4px; background:white;"></div>
+                        <div style="font-size:6px; color:#003366; margin-top:3px; font-weight:bold;">SCAN PROFILE</div>
+                    </div>
+                </div>`;
+
+            // FIX: Generate Colorful QR Code by removing massive base64 photo data
+            let qrText = "";
+            if (activeCardData.type === 'student') {
+                qrText = `Name: ${activeCardData.title}\nID: ${activeCardData.id}\nClass: ${activeCardData.class}\nPhone: ${activeCardData.phone}\nAddress: ${activeCardData.address}`;
+            } else {
+                qrText = `Name: ${activeCardData.name}\nDept: ${activeCardData.dept}\nBlood: ${activeCardData.blood}\nDOJ: ${activeCardData.doj}`;
+            }
+
+            new QRCode(document.getElementById("live-qr-code"), {
+                text: qrText, 
+                width: 70, 
+                height: 70, 
+                colorDark: "#003366", 
+                colorLight: "#ffffff", 
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        });
+
+        document.getElementById('download-id-pdf').addEventListener('click', async () => {
+            if(!activeCardData) return alert("Please generate a card preview first!");
+            const btn = document.getElementById('download-id-pdf');
+            btn.innerText = "Generating PDF (Please wait)...";
+            
+            try {
+                const wMm = Number(document.getElementById('card-width').value);
+                const hMm = Number(document.getElementById('card-height').value);
+                const isLandscape = wMm > hMm;
+                
+                const frontCanvas = await html2canvas(document.getElementById('preview-front'), { scale: 3, useCORS: true, backgroundColor: "#ffffff" });
+                const backCanvas = await html2canvas(document.getElementById('preview-back'), { scale: 3, useCORS: true, backgroundColor: "#ffffff" });
+                
+                const frontImg = frontCanvas.toDataURL('image/jpeg', 1.0);
+                const backImg = backCanvas.toDataURL('image/jpeg', 1.0);
+                
                 const { jsPDF } = window.jspdf;
-                const docPdf = new jsPDF();
-
-                targetStudents.forEach((student, index) => {
-                    const cls = student.Class;
-                    const schId = `schedule_${cls}_${term}`.replace(/\s+/g, '_');
-                    const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
-
-                    if(index > 0) docPdf.addPage();
-                    docPdf.rect(10, 10, 190, 277);
-                    
-                    docPdf.setFontSize(22); docPdf.setTextColor(0, 51, 102);
-                    docPdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center");
-                    docPdf.setFontSize(14); docPdf.setTextColor(255, 103, 31);
-                    docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, 35, null, null, "center");
-                    
-                    docPdf.setLineWidth(0.5); docPdf.line(15, 45, 195, 45);
-
-                    docPdf.setFontSize(12); docPdf.setTextColor(0, 0, 0);
-                    docPdf.text(`Student Name: ${student.Name || 'N/A'}`, 20, 55);
-                    docPdf.text(`Student ID (Roll No): ${student["Student ID"] || student["Roll No"] || 'N/A'}`, 20, 65);
-                    docPdf.text(`Class: ${student.Class || 'N/A'}`, 20, 75);
-                    docPdf.text(`Father's Name: ${student["Father's Name"] || 'N/A'}`, 20, 85);
-
-                    docPdf.rect(155, 50, 35, 40);
-                    docPdf.setFontSize(10); docPdf.text("Photograph", 163, 70);
-
-                    if(studentSchedule) {
-                        let tableData = [];
-                        for(const [sub, dateStr] of Object.entries(studentSchedule)) {
-                            tableData.push([sub.replace(/_/g, ' '), dateStr]);
-                        }
-                        docPdf.autoTable({
-                            startY: 100, head: [['Subject', 'Date & Time']], body: tableData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] }, margin: { left: 20, right: 20 }
-                        });
-                    } else {
-                        docPdf.setTextColor(255, 0, 0);
-                        docPdf.text("Exam schedule not published for this class yet.", 20, 110);
-                        docPdf.setTextColor(0, 0, 0);
-                    }
-
-                    let bottomY = 250;
-                    docPdf.text("_______________________", 20, bottomY);
-                    docPdf.text("Student Signature", 25, bottomY + 10);
-                    docPdf.text("_______________________", 130, bottomY);
-                    docPdf.text("Principal Signature", 135, bottomY + 10);
-                });
-
-                docPdf.save(`Admit_Cards_${term.replace(/\s+/g, '_')}.pdf`);
-
-            } catch (err) { alert("Error generating PDF: " + err.message); }
-            finally { btn.innerText = "Generate Admit Card PDF"; }
+                const pdf = new jsPDF({ orientation: isLandscape ? 'l' : 'p', unit: 'mm', format: [wMm, hMm] });
+                
+                pdf.addImage(frontImg, 'JPEG', 0, 0, wMm, hMm);
+                pdf.addPage();
+                pdf.addImage(backImg, 'JPEG', 0, 0, wMm, hMm);
+                
+                pdf.save(`ID_Card_${activeCardData.id || activeCardData.name}.pdf`);
+            } catch(err) {
+                alert("Error generating PDF. Make sure all images have loaded correctly.");
+                console.error(err);
+            } finally {
+                btn.innerText = "📥 Download Printable ID Card PDF";
+            }
         });
     </script>
 </body>
