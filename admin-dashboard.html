@@ -50,9 +50,9 @@
             <ul class="admin-nav">
                 <li><a href="#" class="nav-link active" data-target="section-upload">📁 Upload Student Data</a></li>
                 <li><a href="#" class="nav-link" data-target="section-add-student">👤 Add / Transfer In</a></li>
-                <li><a href="#" class="nav-link" data-target="section-transfer-out">🔄 Transfer Out (TC)</a></li>
+                <li><a href="#" class="nav-link" data-target="section-transferred">🎓 Transferred Students</a></li>
                 <li><a href="#" class="nav-link" data-target="section-view-db">👁️ View Students DB</a></li>
-                <li><a href="#" class="nav-link" data-target="section-teachers">👨‍🏫 Manage Teachers</a></li>
+                <li><a href="#" class="nav-link" data-target="section-teachers">👨‍💼 Manage Staff</a></li>
                 <li><a href="#" class="nav-link" data-target="section-materials">📚 Study Materials</a></li>
                 <li><a href="#" class="nav-link" data-target="section-export">📥 Export Database</a></li>
                 <li><a href="#" class="nav-link" data-target="section-notices">📝 Manage Notices</a></li>
@@ -83,6 +83,7 @@
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;"><img id="photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;"><br><label for="manual-photo" class="browse-btn" style="cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Student Photo</label><input type="file" id="manual-photo" accept="image/*" hidden></div>
                         <div class="marks-grid">
                             <div class="input-group"><label>Admission Type</label><select id="manual-admission-type" required><option>New Admission</option><option>Transfer In</option></select></div>
+                            <div class="input-group"><label>Date of Admission</label><input type="text" id="manual-doa" placeholder="DD/MM/YYYY" required></div>
                             <div class="input-group"><label>Class</label><select id="manual-class" required><option value="" disabled selected>-- Choose Class --</option><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option></select></div>
                             <div class="input-group"><label>Student ID</label><input type="text" id="manual-id" required></div>
                             <div class="input-group"><label>Roll No.</label><input type="text" id="manual-roll" required></div>
@@ -97,14 +98,33 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: Transfer Out -->
-            <div id="section-transfer-out" class="admin-section">
-                <div class="dashboard-card">
-                    <h3>Transfer Out & Print Certificate</h3>
-                    <form class="admin-form" id="tc-form">
-                        <div class="input-group"><label>Student ID to Transfer Out</label><input type="text" id="tc-student-id" required></div>
-                        <button type="submit" class="admin-submit-btn btn-red" id="tc-submit-btn">Mark Transferred & Generate TC</button>
+            <!-- SECTION 3: Transferred Students -->
+            <div id="section-transferred" class="admin-section">
+                <div class="dashboard-card" style="max-width: 100%;">
+                    <h3>Transferred Students Hub</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Use the "Transfer" button in the Live Database to move students here. Below you can view their details and generate official Transfer Certificates.</p>
+
+                    <h4 class="section-divider">Manual Transfer Entry</h4>
+                    <form class="admin-form" id="tc-form" style="margin-bottom: 30px;">
+                        <div style="display:flex; gap:15px; align-items:flex-end;">
+                            <div class="input-group" style="flex:1;">
+                                <label>Student ID to Transfer Out</label>
+                                <input type="text" id="tc-student-id" placeholder="Enter Student ID" required>
+                            </div>
+                            <button type="submit" class="admin-submit-btn btn-red" style="flex:1;">Mark Transferred & Generate TC</button>
+                        </div>
                     </form>
+
+                    <h4 class="section-divider">Transferred Students Database</h4>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                        <button id="refresh-tc-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Sync Transfer Data</button>
+                    </div>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="db-table">
+                            <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>D.O.A.</th><th>Transfer Date</th><th>Actions</th></tr></thead>
+                            <tbody id="tc-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Refresh Data" in Main DB to load.</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -114,7 +134,7 @@
                     <h3>Live Student Database</h3>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                         <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Data</button>
-                        <input type="text" id="db-search-input" placeholder="Search by Name or ID..." style="padding: 10px; width: 300px;">
+                        <input type="text" id="db-search-input" placeholder="Search Active Students by Name or ID..." style="padding: 10px; width: 300px;">
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
@@ -125,21 +145,30 @@
                 </div>
             </div>
 
-            <!-- SECTION 5: Manage Teachers -->
+            <!-- SECTION 5: Manage Staff -->
             <div id="section-teachers" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Add / Manage Teachers</h3>
+                    <h3>Add / Manage Staff</h3>
                     <form class="admin-form" id="teacher-form">
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;">
                             <img id="tch-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;"><br>
-                            <label for="tch-photo" class="browse-btn" style="cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Teacher Photo</label>
+                            <label for="tch-photo" class="browse-btn" style="cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Staff Photo</label>
                             <input type="file" id="tch-photo" accept="image/*" hidden>
                         </div>
                         <div class="marks-grid">
-                            <div class="input-group"><label>Teacher ID (Code)</label><input type="text" id="tch-id" placeholder="e.g. VMI/TCH/001" required></div>
+                            <div class="input-group">
+                                <label>Department / Role</label>
+                                <select id="tch-dept" required>
+                                    <option value="" disabled selected>-- Select Role --</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Principal">Principal</option>
+                                    <option value="Teaching Staff">Teaching Staff</option>
+                                    <option value="Non-Teaching Staff">Non-Teaching Staff</option>
+                                </select>
+                            </div>
+                            <div class="input-group"><label>Staff ID (Code)</label><input type="text" id="tch-id" placeholder="e.g. VMI/TCH/001" required></div>
                             <div class="input-group"><label>Full Name</label><input type="text" id="tch-name" required></div>
                             <div class="input-group"><label>Father's Name</label><input type="text" id="tch-father" required></div>
-                            <div class="input-group"><label>Department</label><input type="text" id="tch-dept" placeholder="e.g. Mathematics" required></div>
                             <div class="input-group"><label>Date of Joining</label><input type="text" id="tch-doj" placeholder="DD/MM/YYYY" required></div>
                             <div class="input-group"><label>Phone Number</label><input type="text" id="tch-phone" required></div>
                             <div class="input-group"><label>Blood Group</label><input type="text" id="tch-blood" required></div>
@@ -154,17 +183,17 @@
                         </div>
 
                         <div class="input-group"><label>Residential Address</label><textarea id="tch-address" rows="2" required></textarea></div>
-                        <button type="submit" class="admin-submit-btn" id="save-teacher-btn">Save Teacher Record</button>
+                        <button type="submit" class="admin-submit-btn" id="save-teacher-btn">Save Staff Record</button>
                     </form>
                     
-                    <h4 class="section-divider">Live Teacher Database</h4>
+                    <h4 class="section-divider">Live Staff Database</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                        <button id="refresh-tch-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh Teachers</button>
+                        <button id="refresh-tch-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh Staff DB</button>
                     </div>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Dept</th><th>Phone</th><th>PAN</th><th>Actions</th></tr></thead>
-                            <tbody id="tch-table-body"><tr><td colspan="7" style="text-align: center; padding: 20px;">Loading teachers...</td></tr></tbody>
+                            <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Role</th><th>Phone</th><th>PAN</th><th>Actions</th></tr></thead>
+                            <tbody id="tch-table-body"><tr><td colspan="7" style="text-align: center; padding: 20px;">Click Refresh to load...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -197,10 +226,10 @@
                         <button id="export-pdf-btn" class="admin-submit-btn btn-red" style="flex: 1;">📄 Export Students to PDF</button>
                     </div>
 
-                    <h4 class="section-divider">Teacher Database</h4>
+                    <h4 class="section-divider">Staff Database</h4>
                     <div style="display: flex; gap: 15px;">
-                        <button id="export-tch-excel-btn" class="admin-submit-btn btn-green" style="flex: 1;">📊 Export Teachers to Excel</button>
-                        <button id="export-tch-pdf-btn" class="admin-submit-btn btn-red" style="flex: 1;">📄 Export Teachers to PDF</button>
+                        <button id="export-tch-excel-btn" class="admin-submit-btn btn-green" style="flex: 1;">📊 Export Staff to Excel</button>
+                        <button id="export-tch-pdf-btn" class="admin-submit-btn btn-red" style="flex: 1;">📄 Export Staff to PDF</button>
                     </div>
                 </div>
             </div>
@@ -343,6 +372,11 @@
                             <div class="input-group" style="flex: 1;" id="admit-target-container">
                                 <label id="admit-target-label">Student ID</label>
                                 <input type="text" id="admit-target-val" placeholder="Enter ID" required>
+                                <select id="admit-target-class" style="display:none;">
+                                    <option value="" disabled selected>-- Select Class --</option>
+                                    <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option>
+                                </select>
                             </div>
                             <div class="input-group" style="flex: 1;">
                                 <label>Exam Term</label>
@@ -369,7 +403,7 @@
             <div id="section-id-cards" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>Professional PVC ID Card Generator</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate, preview, and download custom PVC ID cards for students and teachers. <strong style="color:#E63946;">Note: Logos and Seals are managed in the 'Global Settings' tab.</strong></p>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate, preview, and download custom PVC ID cards for students and staff. <strong style="color:#E63946;">Note: Logos and Seals are managed in the 'Global Settings' tab.</strong></p>
 
                     <h4 class="section-divider">1. Card Settings & Dimensions (PVC Printer Scaling)</h4>
                     <div style="display: flex; gap: 15px; margin-bottom: 25px;">
@@ -377,7 +411,7 @@
                             <label>Card Type</label>
                             <select id="id-card-type">
                                 <option value="student">Student ID (Geometric Split - Horizontal)</option>
-                                <option value="teacher">Teacher ID (Executive Portrait - Vertical)</option>
+                                <option value="teacher">Staff ID (Executive Portrait - Vertical)</option>
                             </select>
                         </div>
                         <div class="input-group" style="flex: 1;"><label>Width Scaling Factor (mm)</label><input type="number" id="card-width" value="85.5" step="0.5" required></div>
@@ -390,7 +424,7 @@
                             <div class="input-group"><label>Student ID (Type to auto-fetch data)</label><input type="text" id="id-stu-id" placeholder="e.g. VMI/26/0001"></div>
                         </div>
                         <div id="teacher-fields-group" style="display: none;">
-                            <div class="input-group"><label>Teacher ID (Type to auto-fetch data)</label><input type="text" id="id-tch-id-fetch" placeholder="e.g. VMI/TCH/001"></div>
+                            <div class="input-group"><label>Staff ID (Type to auto-fetch data)</label><input type="text" id="id-tch-id-fetch" placeholder="e.g. VMI/TCH/001"></div>
                         </div>
                         <button type="button" class="admin-submit-btn btn-blue" id="preview-card-btn" style="margin-top: 15px;">Generate Preview & QR Code</button>
                     </form>
@@ -415,7 +449,7 @@
                             <select id="bulk-id-target">
                                 <option value="class">Class-wise Students</option>
                                 <option value="all-students">All Students</option>
-                                <option value="all-teachers">All Teachers</option>
+                                <option value="all-teachers">All Staff</option>
                             </select>
                         </div>
                         <div class="input-group" style="flex: 1;" id="bulk-id-class-container">
@@ -487,11 +521,20 @@
         </div>
     </div>
 
+    <!-- Student Full Details View Modal -->
+    <div id="view-student-modal" class="modal-overlay">
+        <div class="modal-content" style="width: 550px;">
+            <button class="modal-close" onclick="document.getElementById('view-student-modal').style.display='none'">&times;</button>
+            <h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #FF671F; padding-bottom: 5px;">Student Full Profile</h3>
+            <div id="view-student-body" style="font-size: 0.95rem; line-height: 1.8; color: #333;"></div>
+        </div>
+    </div>
+
     <!-- Teacher Full Details View Modal -->
     <div id="view-teacher-modal" class="modal-overlay">
         <div class="modal-content" style="width: 550px;">
             <button class="modal-close" onclick="document.getElementById('view-teacher-modal').style.display='none'">&times;</button>
-            <h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #FF671F; padding-bottom: 5px;">Teacher Full Profile</h3>
+            <h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #FF671F; padding-bottom: 5px;">Staff Full Profile</h3>
             <div id="view-teacher-body" style="font-size: 0.95rem; line-height: 1.8; color: #333;"></div>
         </div>
     </div>
@@ -512,6 +555,7 @@
                     <div class="input-group"><label>Student ID</label><input type="text" id="edit-stu-id" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Roll No.</label><input type="text" id="edit-stu-roll"></div>
                     <div class="input-group"><label>Full Name</label><input type="text" id="edit-stu-name" required></div>
+                    <div class="input-group"><label>Date of Admission</label><input type="text" id="edit-stu-doa" placeholder="DD/MM/YYYY"></div>
                     <div class="input-group">
                         <label>Class</label>
                         <select id="edit-stu-class" required>
@@ -534,7 +578,7 @@
     <div id="edit-teacher-modal" class="modal-overlay">
         <div class="modal-content" style="width: 600px;">
             <button class="modal-close" onclick="document.getElementById('edit-teacher-modal').style.display='none'">&times;</button>
-            <h3 style="color: #003366; margin-bottom: 15px;">Edit Teacher Details</h3>
+            <h3 style="color: #003366; margin-bottom: 15px;">Edit Staff Details</h3>
             <form id="edit-teacher-form" class="admin-form">
                 <input type="hidden" id="edit-tch-doc-id">
                 <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;">
@@ -543,10 +587,18 @@
                     <input type="file" id="edit-tch-photo" accept="image/*" hidden>
                 </div>
                 <div class="marks-grid">
-                    <div class="input-group"><label>Teacher ID</label><input type="text" id="edit-tch-id-field" readonly style="background:#eee;"></div>
+                    <div class="input-group">
+                        <label>Department / Role</label>
+                        <select id="edit-tch-dept" required>
+                            <option value="Manager">Manager</option>
+                            <option value="Principal">Principal</option>
+                            <option value="Teaching Staff">Teaching Staff</option>
+                            <option value="Non-Teaching Staff">Non-Teaching Staff</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Staff ID</label><input type="text" id="edit-tch-id-field" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Full Name</label><input type="text" id="edit-tch-name" required></div>
                     <div class="input-group"><label>Father's Name</label><input type="text" id="edit-tch-father" required></div>
-                    <div class="input-group"><label>Department</label><input type="text" id="edit-tch-dept" required></div>
                     <div class="input-group"><label>Date of Joining</label><input type="text" id="edit-tch-doj" required></div>
                     <div class="input-group"><label>Phone Number</label><input type="text" id="edit-tch-phone" required></div>
                     <div class="input-group"><label>Blood Group</label><input type="text" id="edit-tch-blood" required></div>
@@ -561,7 +613,7 @@
                 </div>
 
                 <div class="input-group"><label>Address</label><textarea id="edit-tch-address" rows="2"></textarea></div>
-                <button type="submit" class="admin-submit-btn btn-green">Update Teacher Database</button>
+                <button type="submit" class="admin-submit-btn btn-green">Update Staff Database</button>
             </form>
         </div>
     </div>
@@ -579,6 +631,15 @@
                 this.classList.add('active');
                 document.getElementById(this.getAttribute('data-target')).classList.add('active');
             });
+        });
+        
+        // Smart ID Hint
+        document.getElementById('tch-dept').addEventListener('change', (e) => {
+            const val = e.target.value;
+            const idInput = document.getElementById('tch-id');
+            if(val === 'Manager') idInput.placeholder = 'e.g. VMI/MGR/001';
+            else if(val === 'Principal') idInput.placeholder = 'e.g. VMI/PRC/001';
+            else idInput.placeholder = 'e.g. VMI/STF/001';
         });
     </script>
     
@@ -691,6 +752,7 @@
 
         // --- 3. STUDENT DATABASE MODULE ---
         let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = "";
+        let currentActiveStudents = []; let currentTransferredStudents = [];
         
         async function fetchAllStudents() { 
             const querySnapshot = await getDocs(collection(db, "students")); 
@@ -701,21 +763,78 @@
 
         async function renderDatabaseTable(students) {
             const dbTableBody = document.getElementById('db-table-body'); dbTableBody.innerHTML = "";
+            const tcTableBody = document.getElementById('tc-table-body'); tcTableBody.innerHTML = "";
+            
             const validStudents = students.filter(s => (s["Student ID"] || s["Roll No"]) && s.Name && s.Name.trim() !== "" && s.Name !== "N/A");
-            if (validStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No students found.</td></tr>`; return; }
-            validStudents.forEach((student, index) => {
-                const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
-                tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student.Phone || 'N/A'}</td><td><span style="color: ${student.Status === 'Transferred Out' ? 'red' : 'green'}; font-weight: bold;">${student.Status || 'Active'}</span></td><td><button class="action-btn btn-blue edit-stu-btn" data-index="${index}">Edit</button></td>`;
-                dbTableBody.appendChild(tr);
+            
+            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out');
+            currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
+
+            // Render Active Students
+            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found.</td></tr>`; }
+            else {
+                currentActiveStudents.forEach((student, index) => {
+                    const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
+                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student.Phone || 'N/A'}</td><td><span style="color: green; font-weight: bold;">Active</span></td>
+                    <td>
+                        <button class="action-btn btn-blue view-stu-btn" data-index="${index}">👁️ View</button>
+                        <button class="action-btn btn-green edit-stu-btn" data-index="${index}">Edit</button>
+                        <button class="action-btn btn-red transfer-stu-btn" data-index="${index}">Transfer</button>
+                    </td>`;
+                    dbTableBody.appendChild(tr);
+                });
+            }
+
+            // Render Transferred Students
+            if (currentTransferredStudents.length === 0) { tcTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No transferred students found.</td></tr>`; }
+            else {
+                currentTransferredStudents.forEach((student, index) => {
+                    const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
+                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student["Date of Admission"] || 'N/A'}</td><td><span style="color: #E63946; font-weight: bold;">${student.TransferDate || 'N/A'}</span></td>
+                    <td>
+                        <button class="action-btn btn-blue view-tc-stu-btn" data-index="${index}">👁️ View</button>
+                        <button class="action-btn btn-green print-tc-btn" data-index="${index}">Print TC</button>
+                    </td>`;
+                    tcTableBody.appendChild(tr);
+                });
+            }
+
+            // Bind Actions for Active Students
+            document.querySelectorAll('.view-stu-btn').forEach(btn => {
+                btn.addEventListener('click', (ev) => {
+                    const student = currentActiveStudents[ev.target.getAttribute('data-index')];
+                    const body = document.getElementById('view-student-body');
+                    body.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #003366;">
+                        </div>
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Student ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Student ID"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Roll No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Roll No"] || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Name || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Class:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Class || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Admission:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Date of Admission"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Phone:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Phone || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Admission Type:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Admission Type"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Status:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Status || 'Active'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
+                        </table>
+                    `;
+                    document.getElementById('view-student-modal').style.display = 'flex';
+                });
             });
+
             document.querySelectorAll('.edit-stu-btn').forEach(btn => { 
                 btn.addEventListener('click', (e) => {
-                    const student = validStudents[e.target.getAttribute('data-index')]; 
+                    const student = currentActiveStudents[e.target.getAttribute('data-index')]; 
                     document.getElementById('edit-stu-doc-id').value = student.docId; 
                     document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
                     document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
                     document.getElementById('edit-stu-name').value = student.Name || ''; 
                     document.getElementById('edit-stu-class').value = student.Class || 'LKG'; 
+                    document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
                     document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; 
                     document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; 
                     document.getElementById('edit-stu-phone').value = student.Phone || ''; 
@@ -726,12 +845,88 @@
                     document.getElementById('edit-student-modal').style.display = 'flex';
                 });
             });
+
+            document.querySelectorAll('.transfer-stu-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const student = currentActiveStudents[e.target.getAttribute('data-index')];
+                    if(confirm(`Are you sure you want to officially transfer out ${student.Name}? This will move them to the Transferred Database.`)) {
+                        await setDoc(doc(db, "students", student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
+                        document.getElementById('refresh-db-btn').click();
+                    }
+                });
+            });
+
+            // Bind Actions for Transferred Students
+            document.querySelectorAll('.view-tc-stu-btn').forEach(btn => {
+                btn.addEventListener('click', (ev) => {
+                    const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
+                    const body = document.getElementById('view-student-body');
+                    body.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #E63946;">
+                        </div>
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Student ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Student ID"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Roll No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Roll No"] || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Name || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Class:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Class || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Admission:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Date of Admission"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee; color:#E63946;">Date of Transfer:</td><td style="padding:6px; border-bottom:1px solid #eee; color:#E63946; font-weight:bold;">${student.TransferDate || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Phone:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Phone || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Status:</td><td style="padding:6px; border-bottom:1px solid #eee;">Transferred Out</td></tr>
+                        </table>
+                    `;
+                    document.getElementById('view-student-modal').style.display = 'flex';
+                });
+            });
+
+            document.querySelectorAll('.print-tc-btn').forEach(btn => {
+                btn.addEventListener('click', (ev) => {
+                    const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
+                    const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                    
+                    if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
+                    pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center");
+                    pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
+                    pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
+                    
+                    pdf.setFontSize(12); pdf.setTextColor(0, 0, 0);
+                    pdf.text(`This is to certify that`, 20, 60);
+                    pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal');
+                    
+                    pdf.text(`Son/Daughter of`, 20, 75);
+                    pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal');
+                    
+                    pdf.text(`was admitted to this institution on`, 20, 90);
+                    pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal');
+                    
+                    pdf.text(`and has been officially transferred on`, 20, 105);
+                    pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal');
+                    
+                    pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal');
+                    pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal');
+                    
+                    if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); }
+                    if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); }
+                    
+                    pdf.text("_______________________", 140, 205);
+                    pdf.text("Principal Signature", 145, 212);
+                    
+                    pdf.save(`TC_${student["Student ID"] || 'N/A'}.pdf`);
+                });
+            });
         }
         
         document.getElementById('refresh-db-btn').addEventListener('click', async (e) => { 
             e.target.innerText = "Loading..."; 
             try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Refresh Data"; } 
         });
+        
+        // Ensure the TC tab also syncs the DB
+        document.getElementById('refresh-tc-btn').addEventListener('click', () => document.getElementById('refresh-db-btn').click());
+        document.querySelector('.nav-link[data-target="section-transferred"]').addEventListener('click', () => document.getElementById('refresh-db-btn').click());
+
         document.getElementById('db-search-input').addEventListener('keyup', (e) => { 
             const searchTerm = e.target.value.toLowerCase(); 
             const filtered = liveStudentsData.filter(student => (student.Name || "").toLowerCase().includes(searchTerm) || (student["Student ID"] || student["Roll No"] || "").toLowerCase().includes(searchTerm)); 
@@ -744,7 +939,7 @@
             e.preventDefault(); const studentId = document.getElementById('manual-id').value; 
             try { 
                 const safeDocId = makeSafeId(studentId);
-                await setDoc(doc(db, "students", safeDocId), { "Admission Type": document.getElementById('manual-admission-type').value, "Student ID": studentId, "Roll No": document.getElementById('manual-roll').value, "Name": document.getElementById('manual-name').value, "Class": document.getElementById('manual-class').value, "Father's Name": document.getElementById('manual-father').value, "Mother's Name": document.getElementById('manual-mother').value, "Phone": document.getElementById('manual-phone').value, "Address": document.getElementById('manual-address').value, "Status": "Active", "Photo": compressedPhotoBase64 }, { merge: true }); 
+                await setDoc(doc(db, "students", safeDocId), { "Admission Type": document.getElementById('manual-admission-type').value, "Date of Admission": document.getElementById('manual-doa').value, "Student ID": studentId, "Roll No": document.getElementById('manual-roll').value, "Name": document.getElementById('manual-name').value, "Class": document.getElementById('manual-class').value, "Father's Name": document.getElementById('manual-father').value, "Mother's Name": document.getElementById('manual-mother').value, "Phone": document.getElementById('manual-phone').value, "Address": document.getElementById('manual-address').value, "Status": "Active", "Photo": compressedPhotoBase64 }, { merge: true }); 
                 alert(`Success!`); document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; 
             } catch(e) { alert("Error adding student."); }
         });
@@ -753,19 +948,40 @@
         document.getElementById('edit-student-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); const docId = document.getElementById('edit-stu-doc-id').value; 
             try { 
-                await setDoc(doc(db, "students", docId), { Name: document.getElementById('edit-stu-name').value, "Roll No": document.getElementById('edit-stu-roll').value, Class: document.getElementById('edit-stu-class').value, "Father's Name": document.getElementById('edit-stu-father').value, "Mother's Name": document.getElementById('edit-stu-mother').value, Phone: document.getElementById('edit-stu-phone').value, Address: document.getElementById('edit-stu-address').value, Status: document.getElementById('edit-stu-status').value, Photo: editStuPhotoBase64 }, { merge: true }); 
+                await setDoc(doc(db, "students", docId), { Name: document.getElementById('edit-stu-name').value, "Roll No": document.getElementById('edit-stu-roll').value, Class: document.getElementById('edit-stu-class').value, "Date of Admission": document.getElementById('edit-stu-doa').value, "Father's Name": document.getElementById('edit-stu-father').value, "Mother's Name": document.getElementById('edit-stu-mother').value, Phone: document.getElementById('edit-stu-phone').value, Address: document.getElementById('edit-stu-address').value, Status: document.getElementById('edit-stu-status').value, Photo: editStuPhotoBase64 }, { merge: true }); 
                 alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; document.getElementById('refresh-db-btn').click(); 
             } catch (err) { alert("Error updating student."); } 
         });
 
+        // Manual TC Generation Form
         document.getElementById('tc-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); const studentId = document.getElementById('tc-student-id').value; 
             const safeDocId = makeSafeId(studentId);
             const docSnap = await getDoc(doc(db, "students", safeDocId)); 
             if (docSnap.exists()) { 
+                const student = docSnap.data();
                 await setDoc(doc(db, "students", safeDocId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true }); 
-                const { jsPDF } = window.jspdf; const pdf = new jsPDF(); pdf.text(`TC Generated for ${studentId}`, 20, 20); pdf.save(`TC_${studentId}.pdf`); 
-                alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); 
+                
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
+                pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center");
+                pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
+                pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
+                
+                pdf.setFontSize(12); pdf.setTextColor(0, 0, 0);
+                pdf.text(`This is to certify that`, 20, 60);
+                pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal');
+                
+                pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal');
+                
+                if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); }
+                if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); }
+                
+                pdf.text("_______________________", 140, 205);
+                pdf.text("Principal Signature", 145, 212);
+
+                pdf.save(`TC_${studentId}.pdf`); 
+                alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
             } else { alert("Student not found."); }
         });
 
@@ -784,7 +1000,7 @@
             }; reader.readAsArrayBuffer(file); 
         });
 
-        // --- 4. TEACHERS DATABASE MODULE ---
+        // --- 4. STAFF DATABASE MODULE ---
         let liveTeachersData = []; let tchPhotoBase64 = ""; let editTchPhotoBase64 = "";
 
         const tchForm = document.getElementById('teacher-form');
@@ -801,11 +1017,11 @@
                 await setDoc(doc(db, "teachers", safeDocId), { 
                     TeacherID: tchId, Name: document.getElementById('tch-name').value, FatherName: document.getElementById('tch-father').value, Department: document.getElementById('tch-dept').value, DateOfJoining: document.getElementById('tch-doj').value, BloodGroup: document.getElementById('tch-blood').value, Phone: document.getElementById('tch-phone').value, Address: document.getElementById('tch-address').value, Photo: tchPhotoBase64, PAN: document.getElementById('tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('tch-acc-no').value, IFSC: document.getElementById('tch-ifsc').value.toUpperCase(), BankName: document.getElementById('tch-bank').value
                 }); 
-                alert("Teacher Record Saved!"); 
+                alert("Staff Record Saved!"); 
                 tchForm.reset(); document.getElementById('tch-photo-preview').style.display = 'none'; tchPhotoBase64 = ""; 
                 document.getElementById('refresh-tch-btn').click(); 
-            } catch (err) { alert("Error saving teacher."); console.error(err); } 
-            finally { btn.innerText = "Save Teacher Record"; }
+            } catch (err) { alert("Error saving staff record."); console.error(err); } 
+            finally { btn.innerText = "Save Staff Record"; }
         });
 
         document.querySelector('.nav-link[data-target="section-teachers"]').addEventListener('click', () => {
@@ -827,7 +1043,7 @@
                 });
 
                 if (validTeachers.length === 0) { 
-                    tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No teachers found in database. Add a new teacher above.</td></tr>`; 
+                    tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No staff found in database. Add a new record above.</td></tr>`; 
                     return; 
                 }
                 
@@ -860,7 +1076,7 @@
                                 <img src="${tch.Photo || tch.photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #003366;">
                             </div>
                             <table style="width:100%; border-collapse: collapse;">
-                                <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Teacher ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.TeacherID || tch.id || 'N/A'}</td></tr>
+                                <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Staff ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.TeacherID || tch.id || 'N/A'}</td></tr>
                                 <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Name || tch.name || 'N/A'}</td></tr>
                                 <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.FatherName || tch.father || 'N/A'}</td></tr>
                                 <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Department:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Department || tch.dept || 'N/A'}</td></tr>
@@ -878,7 +1094,7 @@
                     });
                 });
 
-                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { delBtn.addEventListener('click', async (ev) => { if(confirm("Permanently delete teacher?")) { await deleteDoc(doc(db, "teachers", ev.target.getAttribute('data-id'))); document.getElementById('refresh-tch-btn').click(); } }); });
+                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { delBtn.addEventListener('click', async (ev) => { if(confirm("Permanently delete this record?")) { await deleteDoc(doc(db, "teachers", ev.target.getAttribute('data-id'))); document.getElementById('refresh-tch-btn').click(); } }); });
                 document.querySelectorAll('.edit-tch-btn').forEach(editBtn => {
                     editBtn.addEventListener('click', (ev) => {
                         const tch = validTeachers[ev.target.getAttribute('data-index')];
@@ -887,9 +1103,9 @@
                     });
                 });
             } catch (error) { 
-                console.error("Teacher Fetch Error:", error);
+                console.error("Staff Fetch Error:", error);
                 tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red; padding: 20px;">Database Error: ${error.message}</td></tr>`;
-            } finally { btn.innerText = "🔄 Refresh Teachers"; }
+            } finally { btn.innerText = "🔄 Refresh Staff DB"; }
         });
 
         document.getElementById('edit-tch-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editTchPhotoBase64 = base64; document.getElementById('edit-tch-photo-preview-edit').src = base64; }); } });
@@ -897,8 +1113,8 @@
             e.preventDefault(); const docId = document.getElementById('edit-tch-doc-id').value; const btn = e.target.querySelector('button[type="submit"]'); btn.innerText = "Updating...";
             try { 
                 await setDoc(doc(db, "teachers", docId), { Name: document.getElementById('edit-tch-name').value, FatherName: document.getElementById('edit-tch-father').value, Department: document.getElementById('edit-tch-dept').value, DateOfJoining: document.getElementById('edit-tch-doj').value, BloodGroup: document.getElementById('edit-tch-blood').value, Phone: document.getElementById('edit-tch-phone').value, Address: document.getElementById('edit-tch-address').value, Photo: editTchPhotoBase64, PAN: document.getElementById('edit-tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('edit-tch-acc-no').value, IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase(), BankName: document.getElementById('edit-tch-bank').value }, { merge: true }); 
-                alert("Teacher successfully updated!"); document.getElementById('edit-teacher-modal').style.display = 'none'; document.getElementById('refresh-tch-btn').click(); 
-            } catch (err) { alert("Error updating teacher."); console.error(err); } finally { btn.innerText = "Update Teacher Database"; }
+                alert("Staff record successfully updated!"); document.getElementById('edit-teacher-modal').style.display = 'none'; document.getElementById('refresh-tch-btn').click(); 
+            } catch (err) { alert("Error updating record."); console.error(err); } finally { btn.innerText = "Update Staff Database"; }
         });
 
         // --- 5. EXPORT DATABASE MODULE ---
@@ -908,14 +1124,14 @@
         document.getElementById('export-tch-excel-btn').addEventListener('click', async () => { 
             const qSnaps = await getDocs(collection(db, "teachers")); let tData = []; 
             qSnaps.forEach(d => { const dt = d.data(); delete dt.Photo; delete dt.photo; tData.push(dt); });
-            const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(tData), "Teachers"); XLSX.writeFile(workbook, "VMI_Teachers_Database.xlsx"); 
+            const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(tData), "Staff"); XLSX.writeFile(workbook, "VMI_Staff_Database.xlsx"); 
         });
         document.getElementById('export-tch-pdf-btn').addEventListener('click', async () => { 
             const qSnaps = await getDocs(collection(db, "teachers")); let tData = []; qSnaps.forEach(d => tData.push(d.data()));
             const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; 
             tData.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "photo") headers.push(k); })); 
             const tableData = tData.map(s => headers.map(h => s[h] ? String(s[h]) : "")); 
-            doc.autoTable({ head: [headers], body: tableData }); doc.save("VMI_Teachers_Database.pdf"); 
+            doc.autoTable({ head: [headers], body: tableData }); doc.save("VMI_Staff_Database.pdf"); 
         });
 
         // --- 6. NOTICES & MATERIALS MODULE ---
@@ -960,13 +1176,27 @@
         document.getElementById('schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const cls = document.getElementById('sch-class').value; const term = document.getElementById('sch-term').value; const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = {}; document.querySelectorAll('.sch-date-input').forEach(input => { scheduleData[input.getAttribute('data-subject')] = input.value; }); try { await setDoc(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }); alert(`Exam Schedule for ${cls} - ${term} saved!`); } catch (err) { alert("Error saving schedule."); } });
         document.getElementById('bulk-schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('sch-file').files[0]; if (!file) return alert("Select an Excel/CSV file."); const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); if (jsonData.length === 0) return alert("File is empty."); const batch = writeBatch(db); jsonData.forEach((row) => { const cls = row["Class"]; const term = row["Term"]; if(cls && term) { const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = { ...row }; delete scheduleData["Class"]; delete scheduleData["Term"]; batch.set(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded schedules from CSV.`); document.getElementById('bulk-schedule-form').reset(); } catch (error) { alert("Error processing file. Ensure headers are correct."); } }; reader.readAsArrayBuffer(file); });
 
-        const admitGenType = document.getElementById('admit-gen-type'); const admitTargetContainer = document.getElementById('admit-target-container'); const admitTargetLabel = document.getElementById('admit-target-label'); const admitTargetVal = document.getElementById('admit-target-val');
-        admitGenType.addEventListener('change', () => { if(admitGenType.value === 'all') { admitTargetContainer.style.display = 'none'; admitTargetVal.required = false; } else { admitTargetContainer.style.display = 'block'; admitTargetVal.required = true; admitTargetLabel.innerText = admitGenType.value === 'class' ? "Enter Class Name (e.g., Class 1)" : "Enter Student ID"; admitTargetVal.placeholder = admitGenType.value === 'class' ? "e.g., Class 1" : "Enter ID"; } });
+        const admitGenType = document.getElementById('admit-gen-type'); const admitTargetContainer = document.getElementById('admit-target-container'); const admitTargetLabel = document.getElementById('admit-target-label'); const admitTargetVal = document.getElementById('admit-target-val'); const admitTargetClass = document.getElementById('admit-target-class');
+        admitGenType.addEventListener('change', () => { 
+            if(admitGenType.value === 'all') { 
+                admitTargetContainer.style.display = 'none'; admitTargetVal.required = false; admitTargetClass.required = false;
+            } else if(admitGenType.value === 'class') { 
+                admitTargetContainer.style.display = 'block'; admitTargetLabel.innerText = "Select Class";
+                admitTargetVal.style.display = 'none'; admitTargetVal.required = false;
+                admitTargetClass.style.display = 'block'; admitTargetClass.required = true;
+            } else {
+                admitTargetContainer.style.display = 'block'; admitTargetLabel.innerText = "Student ID";
+                admitTargetVal.style.display = 'block'; admitTargetVal.required = true;
+                admitTargetClass.style.display = 'none'; admitTargetClass.required = false;
+            }
+        });
 
         // Admit Card Live Preview
         document.getElementById('admit-preview-btn').addEventListener('click', async () => {
             const btn = document.getElementById('admit-preview-btn'); btn.innerText = "Generating Preview...";
-            const genType = admitGenType.value; const targetVal = admitTargetVal.value.trim(); const term = document.getElementById('admit-gen-term').value;
+            const genType = admitGenType.value; 
+            const targetVal = genType === 'class' ? admitTargetClass.value : admitTargetVal.value.trim(); 
+            const term = document.getElementById('admit-gen-term').value;
             try {
                 let targetStudents = [];
                 if(genType === 'single') { const snap = await getDoc(doc(db, "students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
@@ -1034,7 +1264,10 @@
 
         // 3-PER-PAGE ADMIT CARD PDF DOWNLOAD
         document.getElementById('admit-print-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('admit-gen-btn'); btn.innerText = "Generating PDF..."; const genType = admitGenType.value; const targetVal = admitTargetVal.value.trim(); const term = document.getElementById('admit-gen-term').value;
+            e.preventDefault(); const btn = document.getElementById('admit-gen-btn'); btn.innerText = "Generating PDF..."; 
+            const genType = admitGenType.value; 
+            const targetVal = genType === 'class' ? admitTargetClass.value : admitTargetVal.value.trim(); 
+            const term = document.getElementById('admit-gen-term').value;
             try {
                 let targetStudents = []; 
                 if(genType === 'single') { const snap = await getDoc(doc(db, "students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
@@ -1115,12 +1348,17 @@
         idStuIdInput.addEventListener('blur', async () => { const idVal = idStuIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "students", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Student: ${docSnap.data().Name}`); } else { alert("Student not found."); } } catch(err) {} });
 
         const idTchIdInput = document.getElementById('id-tch-id-fetch');
-        idTchIdInput.addEventListener('blur', async () => { const idVal = idTchIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Teacher: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Teacher not found."); } } catch(err) {} });
+        idTchIdInput.addEventListener('blur', async () => { const idVal = idTchIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
 
         function renderCardHTML(dataObj, type) {
             const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
-            const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:15px; max-width:60px; display:block; margin:0 auto;">` : `<div style="height:15px;"></div>`;
             const sealHtml = globalAssets.seal ? `<img src="${globalAssets.seal}" style="width:35px; height:35px; object-fit:contain; opacity:0.8;">` : ``;
+
+            // Smart Signature Logic
+            const isExecutive = type === 'teacher' && (dataObj.dept === 'Principal' || dataObj.dept === 'Manager');
+            const signSrc = isExecutive ? globalAssets.secSign : globalAssets.prinSign;
+            const signTitle = isExecutive ? "Secretary" : "Principal";
+            const signHtml = signSrc ? `<img src="${signSrc}" style="height:15px; max-width:60px; display:block; margin:0 auto;">` : `<div style="height:15px;"></div>`;
 
             let fHtml = "", bHtml = "", qText = "";
 
@@ -1177,7 +1415,7 @@
                         <div style="background:#003366; padding:10px 5px; text-align:center; border-bottom:3px solid #FF671F; display:flex; flex-direction:column; align-items:center;">
                             ${logoHtml}
                             <div style="color:white; font-size:10px; font-weight:bold; margin-top:2px;">VIVEKANANDA MISSION</div>
-                            <div style="color:#d0e1f9; font-size:7px;">FACULTY IDENTITY CARD</div>
+                            <div style="color:#d0e1f9; font-size:7px;">STAFF IDENTITY CARD</div>
                         </div>
                         <div style="display:flex; flex-direction:column; align-items:center; padding:15px 10px; flex:1;">
                             <img src="${dataObj.photo}" style="width:65px; height:75px; border:2px solid #FF671F; border-radius:6px; object-fit:cover; margin-bottom:8px;">
@@ -1190,7 +1428,7 @@
                                 <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">BLOOD</span> <b style="color:#E63946;">${dataObj.blood}</b></div>
                             </div>
                         </div>
-                        <div style="position:absolute; bottom:25px; right:15px; text-align:center;">${signHtml}<div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">Principal</div></div>
+                        <div style="position:absolute; bottom:25px; right:15px; text-align:center;">${signHtml}<div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">${signTitle}</div></div>
                         <div style="background:#FF671F; height:20px; width:100%; position:absolute; bottom:0;"></div>
                     </div>`;
 
@@ -1233,9 +1471,9 @@
                 activeCardData = { type: 'student', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85' };
             } else {
                 const tchId = document.getElementById('id-tch-id-fetch').value.trim();
-                if(!tchId) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Teacher ID."); }
+                if(!tchId) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Staff ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(tchId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
-                if(!data) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Teacher ID not found in database!"); }
+                if(!data) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Staff ID not found in database!"); }
                 activeCardData = { type: 'teacher', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85' };
             }
             renderCardHTML(activeCardData, type); previewBtn.innerText = "Generate Preview & QR Code";
