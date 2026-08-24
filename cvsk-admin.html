@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Dashboard | VMI Network</title>
+    <title>CVSK Admin Dashboard | Branch Portal</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .db-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
@@ -16,7 +16,6 @@
         .btn-red { background-color: #E63946; } .btn-red:hover { background-color: #c92a37; }
         .btn-green { background-color: #217346; } .btn-green:hover { background-color: #1e6b3e; }
         .btn-blue { background-color: #007BFF; } .btn-blue:hover { background-color: #0056b3; }
-        .btn-purple { background-color: #6a0dad; } .btn-purple:hover { background-color: #4b0082; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
         .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         
@@ -36,22 +35,19 @@
         /* Instruction Boxes */
         .info-box { background: #f4f7f6; border-left: 4px solid #003366; padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; color: #333; }
         .info-box strong { color: #003366; }
-        .campus-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
-        .badge-main { background: #003366; color: white; }
-        .badge-branch { background: #FF671F; color: white; }
     </style>
 </head>
 <body class="admin-bg">
     <header class="admin-header">
         <div class="logo">
-            <img src="logo.jpg" alt="VMI Logo">
+            <img src="logo.jpg" alt="CVSK Logo" onerror="this.src='https://via.placeholder.com/50/003366/FFFFFF?text=CVSK'">
             <div style="display:flex; flex-direction:column;">
-                <h2>VMI Super Admin</h2>
-                <span style="font-size: 0.8rem; color:#f4f7f6;">Network Management Portal</span>
+                <h2>Chandidas Vivekananda Siksha Kendram</h2>
+                <span style="font-size: 0.8rem; color:#f4f7f6;">Branch Admin Portal</span>
             </div>
         </div>
         <div class="admin-profile">
-            <span>Welcome, Super Administrator</span>
+            <span>Welcome, Branch Administrator</span>
             <a href="index.html" class="logout-btn">Log Out</a>
         </div>
     </header>
@@ -59,9 +55,8 @@
     <div class="admin-layout">
         <aside class="admin-sidebar">
             <ul class="admin-nav">
-                <li><a href="#" class="nav-link active" data-target="section-universal-search" style="background-color: #002244; border-left: 4px solid #6a0dad;">🌐 Universal Search</a></li>
-                <li><a href="#" class="nav-link" data-target="section-upload">📁 Upload Student Data</a></li>
-                <li><a href="#" class="nav-link" data-target="section-add-student">👤 Add / Transfer In</a></li>
+                <li><a href="#" class="nav-link active" data-target="section-upload">📁 Upload Student Data</a></li>
+                <li><a href="#" class="nav-link" data-target="section-add-student">👤 Enroll Student</a></li>
                 <li><a href="#" class="nav-link" data-target="section-transferred">🎓 Transferred Students</a></li>
                 <li><a href="#" class="nav-link" data-target="section-view-db">👁️ View Students DB</a></li>
                 <li><a href="#" class="nav-link" data-target="section-teachers">👨‍💼 Manage Staff</a></li>
@@ -71,38 +66,18 @@
                 <li><a href="#" class="nav-link" data-target="section-results">📊 Exam Results</a></li>
                 <li><a href="#" class="nav-link" data-target="section-admit">🎫 Admit Cards</a></li>
                 <li><a href="#" class="nav-link" data-target="section-id-cards">🪪 ID Card Generator</a></li>
-                <li><a href="#" class="nav-link" data-target="section-settings">⚙️ Global Settings</a></li>
+                <li><a href="#" class="nav-link" data-target="section-send-main" style="background-color: #002244; border-left: 4px solid #FF671F;">📤 Send Docs to Main</a></li>
             </ul>
         </aside>
 
         <main class="admin-content">
-            <!-- SECTION 0: Universal Search -->
-            <div id="section-universal-search" class="admin-section active">
-                <div class="dashboard-card" style="max-width: 100%;">
-                    <h3>🌐 Cross-Campus Universal Search</h3>
-                    <div class="info-box">
-                        Search the entire network (Main Campus & Branch Campus) simultaneously. You can search by <strong>Student Name, Aadhaar Number, or PEN Number</strong>.
-                    </div>
-                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                        <input type="text" id="uni-search-input" placeholder="Enter Name, Aadhaar, or PEN..." style="padding: 12px; width: 100%; max-width: 500px; border-radius: 4px; border: 1px solid #ccc;">
-                        <button id="uni-search-btn" class="admin-submit-btn btn-purple" style="width: auto; padding: 12px 25px;">Search Network</button>
-                    </div>
-                    <div style="max-height: 500px; overflow-y: auto;">
-                        <table class="db-table">
-                            <thead><tr><th>Campus</th><th>Photo</th><th>ID / Roll</th><th>Name</th><th>Class</th><th>Aadhaar</th><th>PEN</th><th>Status</th></tr></thead>
-                            <tbody id="uni-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Enter a search term above...</td></tr></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
             <!-- SECTION 1: Upload Student Data -->
-            <div id="section-upload" class="admin-section">
+            <div id="section-upload" class="admin-section active">
                 <div class="dashboard-card">
-                    <h3>Bulk Upload Student Details (Main Campus)</h3>
+                    <h3>Bulk Upload Student Details (Branch DB)</h3>
                     <div class="info-box">
-                        <strong>Upload Instructions:</strong> Upload a `.xlsx` or `.csv` file. Your file must have these headers in the first row:<br>
-                        <em>Student ID, Roll No, Aadhaar Number, PEN No, UDISE No, Name, Class, DOB, Blood Group, Religion, Caste, CWSN, Height, Weight, Father's Name, Mother's Name, Father Qual, Mother Qual, Phone, Address</em>
+                        <strong>Upload Instructions:</strong> Upload a `.xlsx` or `.csv` file. Your file must have these exact headers:<br>
+                        <em>Student ID, Roll No, Aadhaar Number, PEN Number, UDISE Number, Name, Class, DOB, Blood Group, Religion, Caste, CWSN, Height, Weight, Father's Name, Mother's Name, Father Qual, Mother Qual, Phone, Address</em>
                     </div>
                     <form class="upload-form" action="#" method="POST">
                         <div class="file-drop-zone"><div class="upload-icon">📄</div><p>Drag and drop your Excel or CSV file here</p><label for="student-file" class="browse-btn">Browse Files</label><input type="file" id="student-file" accept=".xlsx, .csv" hidden></div>
@@ -114,23 +89,36 @@
             <!-- SECTION 2: Add Student -->
             <div id="section-add-student" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Enroll / Transfer In Student (Main Campus)</h3>
+                    <h3>Enroll / Transfer In Student</h3>
                     <form class="admin-form" id="manual-student-form">
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;">
-                            <div class="info-box" style="text-align:left; margin-bottom:15px;"><strong>Photo Upload:</strong> Select a clear, front-facing passport-style photo (JPEG/PNG). The system will automatically compress and square-crop the image to save database space.</div>
                             <img id="photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;"><br>
                             <label for="manual-photo" class="browse-btn" style="cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Student Photo</label>
                             <input type="file" id="manual-photo" accept="image/*" hidden>
                         </div>
                         <h4 class="section-divider" style="margin-top:0;">Academic Details</h4>
                         <div class="marks-grid">
-                            <div class="input-group"><label>Admission Type</label><select id="manual-admission-type" required><option>New Admission</option><option>Transfer In</option><option>Existing Student</option></select></div>
+                            <div class="input-group">
+                                <label>Admission Type</label>
+                                <select id="manual-admission-type" required>
+                                    <option>New Admission</option>
+                                    <option>Transfer In</option>
+                                    <option>Existing Student</option>
+                                </select>
+                            </div>
                             <div class="input-group"><label>Date of Admission</label><input type="text" id="manual-doa" placeholder="DD/MM/YYYY" required></div>
+                            <div class="input-group" id="manual-tc-group" style="display:none; grid-column: span 2;">
+                                <label style="color: #E63946;">Upload Transfer Certificate (PDF/JPG)</label>
+                                <input type="file" id="manual-tc-file" accept=".pdf, .jpg, .jpeg, .png">
+                            </div>
                             <div class="input-group"><label>Class</label><select id="manual-class" required><option value="" disabled selected>-- Choose Class --</option><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
-                            <div class="input-group"><label>Student ID</label><input type="text" id="manual-id" required></div>
+                            <div class="input-group"><label>Student ID</label><input type="text" id="manual-id" placeholder="e.g. CVSK/26/0001" required></div>
                             <div class="input-group"><label>Roll No.</label><input type="text" id="manual-roll" required></div>
-                            <div class="input-group"><label>Aadhaar Number (Mandatory)</label><input type="text" id="manual-aadhar" placeholder="12-digit number" required maxlength="12" pattern="[0-9]{12}"></div>
-                            <div class="input-group"><label>PEN Number</label><input type="text" id="manual-pen" placeholder="Optional"></div>
+                            <div class="input-group"><label>Aadhaar Number (Mandatory)</label><input type="text" id="manual-aadhar" required maxlength="12" pattern="[0-9]{12}" title="Must be a 12-digit number"></div>
+                            <div class="input-group">
+                                <label>PEN Number</label>
+                                <input type="text" id="manual-pen" placeholder="(Mandatory Class 2+)">
+                            </div>
                             <div class="input-group"><label>UDISE Number</label><input type="text" id="manual-udise" placeholder="Optional"></div>
                         </div>
 
@@ -155,6 +143,7 @@
                             <div class="input-group" style="grid-column: span 2;"><label>WhatsApp Number</label><input type="tel" id="manual-phone" required></div>
                         </div>
                         <div class="input-group"><label>Residential Address</label><textarea id="manual-address" rows="2" required></textarea></div>
+                        
                         <button type="submit" class="admin-submit-btn" id="manual-submit-btn">Save Student Record</button>
                     </form>
                 </div>
@@ -164,13 +153,18 @@
             <div id="section-transferred" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Transferred Students Hub</h3>
-                    <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
-                        <label style="font-weight: bold; color: #003366;">Select Campus Data:</label>
-                        <select id="tc-campus-select" style="padding: 8px; border-radius: 4px; font-size: 1rem; border: 2px solid #FF671F;">
-                            <option value="main">Main Campus (VMI)</option>
-                            <option value="branch">Branch Campus (CVSK)</option>
-                        </select>
-                    </div>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Use the "Transfer" button in the Live Database to move students here. Below you can view their details and generate official Transfer Certificates.</p>
+
+                    <h4 class="section-divider">Manual Transfer Entry</h4>
+                    <form class="admin-form" id="tc-form" style="margin-bottom: 30px;">
+                        <div style="display:flex; gap:15px; align-items:flex-end;">
+                            <div class="input-group" style="flex:1;">
+                                <label>Student ID to Transfer Out</label>
+                                <input type="text" id="tc-student-id" placeholder="Enter Student ID" required>
+                            </div>
+                            <button type="submit" class="admin-submit-btn btn-red" style="flex:1;">Mark Transferred & Generate TC</button>
+                        </div>
+                    </form>
 
                     <h4 class="section-divider">Transferred Students Database</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
@@ -179,7 +173,7 @@
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
                             <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>D.O.A.</th><th>Transfer Date</th><th>Actions</th></tr></thead>
-                            <tbody id="tc-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Refresh Data" to load.</td></tr></tbody>
+                            <tbody id="tc-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Refresh Data" in Main DB to load.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -188,18 +182,10 @@
             <!-- SECTION 4: View Live Database -->
             <div id="section-view-db" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
-                    <h3>Network Student Database</h3>
-                    <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
-                        <label style="font-weight: bold; color: #003366;">Select Campus Data:</label>
-                        <select id="db-campus-select" style="padding: 8px; border-radius: 4px; font-size: 1rem; border: 2px solid #FF671F;">
-                            <option value="main">Main Campus (VMI)</option>
-                            <option value="branch">Branch Campus (CVSK)</option>
-                        </select>
-                    </div>
-                    
+                    <h3>Live Student Database</h3>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                        <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh DB</button>
-                        <input type="text" id="db-search-input" placeholder="Search Filter..." style="padding: 10px; width: 300px;">
+                        <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Data</button>
+                        <input type="text" id="db-search-input" placeholder="Search Active Students by Name or ID..." style="padding: 10px; width: 300px;">
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
@@ -213,16 +199,7 @@
             <!-- SECTION 5: Manage Staff -->
             <div id="section-teachers" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Manage Network Staff</h3>
-                    
-                    <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
-                        <label style="font-weight: bold; color: #003366;">Select Campus Data:</label>
-                        <select id="staff-campus-select" style="padding: 8px; border-radius: 4px; font-size: 1rem; border: 2px solid #FF671F;">
-                            <option value="main">Main Campus Staff (VMI)</option>
-                            <option value="branch">Branch Campus Staff (CVSK)</option>
-                        </select>
-                    </div>
-
+                    <h3>Add / Manage Branch Staff</h3>
                     <form class="admin-form" id="teacher-form">
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;">
                             <img id="tch-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;"><br>
@@ -240,7 +217,7 @@
                                     <option value="Non-Teaching Staff">Non-Teaching Staff</option>
                                 </select>
                             </div>
-                            <div class="input-group"><label>Staff ID (Code)</label><input type="text" id="tch-id" placeholder="e.g. VMI/TCH/001" required></div>
+                            <div class="input-group"><label>Staff ID (Code)</label><input type="text" id="tch-id" placeholder="e.g. CVSK/STF/001" required></div>
                             <div class="input-group"><label>Full Name</label><input type="text" id="tch-name" required></div>
                             <div class="input-group"><label>Father's Name</label><input type="text" id="tch-father" required></div>
                             <div class="input-group"><label>Date of Joining</label><input type="text" id="tch-doj" placeholder="DD/MM/YYYY" required></div>
@@ -273,6 +250,35 @@
                 </div>
             </div>
 
+            <!-- SECTION: Send to Main Campus -->
+            <div id="section-send-main" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>📤 Secure Document Transfer to Main Campus</h3>
+                    <div class="info-box">
+                        Use this portal to directly email Official Documents, Staff Reports, or Transfer Certificates to the Main Campus administration at <strong>vivekanandamissioninsmuluk@gmail.com</strong>.
+                    </div>
+                    <form class="admin-form" id="send-main-form">
+                        <div class="input-group">
+                            <label>Document Subject / Category</label>
+                            <select id="send-subject" required>
+                                <option value="Monthly Student Report - CVSK Branch">Monthly Student Report</option>
+                                <option value="Staff Payroll & Attendance - CVSK Branch">Staff Payroll & Attendance</option>
+                                <option value="Transfer Certificate Approval - CVSK Branch">Transfer Certificate File</option>
+                                <option value="General Admin Inquiry - CVSK Branch">General Admin Inquiry</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Notes / Message for Main Campus Admin</label>
+                            <textarea id="send-notes" rows="5" required placeholder="Type your message here..."></textarea>
+                        </div>
+                        <div class="info-box" style="border-left-color: #FF671F;">
+                            <em>Clicking "Prepare Email" will open your default mail client with the details pre-filled. You must manually attach the files inside your email client before hitting send.</em>
+                        </div>
+                        <button type="submit" class="admin-submit-btn btn-blue" id="prepare-email-btn">Prepare Email to Main Campus</button>
+                    </form>
+                </div>
+            </div>
+
             <!-- SECTION 6: Study Materials -->
             <div id="section-materials" class="admin-section">
                 <div class="dashboard-card">
@@ -292,8 +298,7 @@
             <!-- SECTION 7: Export Database -->
             <div id="section-export" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Export Databases</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">This exports data based on the Campus currently selected in the View DB / Staff DB tabs.</p>
+                    <h3>Export Branch Databases</h3>
                     
                     <h4 class="section-divider">Student Database</h4>
                     <div style="display: flex; gap: 15px; margin-bottom: 25px;">
@@ -331,7 +336,7 @@
             <!-- SECTION 9: Exam Results -->
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Manage Examination Results (Main Campus)</h3>
+                    <h3>Manage Examination Results</h3>
                     
                     <h4 class="section-divider">1. Upload Report Card (Manual)</h4>
                     <form class="admin-form" id="manual-result-form">
@@ -406,7 +411,7 @@
             <!-- SECTION 10: Admit Cards -->
             <div id="section-admit" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Generate Admit Cards (Main Campus)</h3>
+                    <h3>Generate Admit Cards (3-per-Page A4)</h3>
                     
                     <h4 class="section-divider">1. Set Exam Schedule</h4>
                     <form class="admin-form" id="schedule-form" style="margin-bottom: 25px;">
@@ -477,8 +482,8 @@
             <!-- SECTION 11: ID CARDS -->
             <div id="section-id-cards" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
-                    <h3>Professional PVC ID Card Generator (Main Campus)</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate custom PVC ID cards for students and staff.</p>
+                    <h3>Professional PVC ID Card Generator</h3>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate, preview, and download custom PVC ID cards for students and staff. <strong style="color:#E63946;">Note: Logos and Seals are managed in the 'Global Settings' tab.</strong></p>
 
                     <h4 class="section-divider">1. Card Settings & Dimensions (PVC Printer Scaling)</h4>
                     <div style="display: flex; gap: 15px; margin-bottom: 25px;">
@@ -496,10 +501,10 @@
                     <h4 class="section-divider">2. Single Card Preview</h4>
                     <form class="admin-form" id="id-card-form">
                         <div id="student-fields-group">
-                            <div class="input-group"><label>Student ID</label><input type="text" id="id-stu-id" placeholder="e.g. VMI/26/0001"></div>
+                            <div class="input-group"><label>Student ID (Type to auto-fetch data)</label><input type="text" id="id-stu-id" placeholder="e.g. CVSK/26/0001"></div>
                         </div>
                         <div id="teacher-fields-group" style="display: none;">
-                            <div class="input-group"><label>Staff ID</label><input type="text" id="id-tch-id-fetch" placeholder="e.g. VMI/TCH/001"></div>
+                            <div class="input-group"><label>Staff ID (Type to auto-fetch data)</label><input type="text" id="id-tch-id-fetch" placeholder="e.g. CVSK/STF/001"></div>
                         </div>
                         <button type="button" class="admin-submit-btn btn-blue" id="preview-card-btn" style="margin-top: 15px;">Generate Preview & QR Code</button>
                     </form>
@@ -517,6 +522,7 @@
                     <button type="button" class="admin-submit-btn btn-green" id="download-id-pdf" style="margin-top: 15px; width: 100%;">📥 Download Single ID Card</button>
 
                     <h4 class="section-divider">3. Bulk Export ID Cards</h4>
+                    <p style="font-size: 0.8rem; color: #666; margin-bottom: 15px;">The system will automatically scan databases for missing photos or data before generating the PDF.</p>
                     <div style="display: flex; gap: 15px; margin-bottom: 15px;">
                         <div class="input-group" style="flex: 1;">
                             <label>Export Target</label>
@@ -541,15 +547,19 @@
             <div id="section-settings" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>⚙️ Global Settings & Official Assets</h3>
+                    <div class="info-box">
+                        <strong>Upload Instructions:</strong> Upload PNG format images with a <strong>transparent background</strong> for the cleanest results on ID Cards and Admit Cards. High-resolution files are automatically compressed to safely fit within database limits.
+                    </div>
+                    
                     <form class="admin-form" id="global-settings-form">
                         <div class="settings-grid">
                             <div class="input-group">
-                                <label>School Logo</label>
+                                <label>Branch Logo</label>
                                 <input type="file" id="set-logo" accept="image/*">
                                 <div class="asset-preview"><img id="prev-set-logo" src="" alt="None"></div>
                             </div>
                             <div class="input-group">
-                                <label>School Round Seal</label>
+                                <label>Branch Round Seal</label>
                                 <input type="file" id="set-seal" accept="image/*">
                                 <div class="asset-preview"><img id="prev-set-seal" src="" alt="None"></div>
                             </div>
@@ -576,14 +586,14 @@
                                 <div class="asset-preview"><img id="prev-set-sign-sec" src="" alt="None"></div>
                             </div>
                         </div>
-                        <button type="submit" class="admin-submit-btn btn-blue" style="margin-top: 10px;">Save Global Assets</button>
+                        <button type="submit" class="admin-submit-btn btn-blue" style="margin-top: 10px;">Save Branch Assets</button>
                     </form>
                 </div>
             </div>
 
-        <!-- Footer moved INSIDE main and positioning fixed -->
+            <!-- Footer moved INSIDE main and positioning fixed -->
             <footer style="text-align: center; padding: 20px; margin-top: 40px; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd;">
-                &copy; 2026 Vivekananda Mission Institute. All Rights Reserved.
+                &copy; 2026 Chandidas Vivekananda Siksha Kendram. All Rights Reserved.
             </footer>
 
         </main>
@@ -623,7 +633,6 @@
             <h3 style="color: #003366; margin-bottom: 15px;">Edit Student Details</h3>
             <form id="edit-student-form" class="admin-form">
                 <input type="hidden" id="edit-stu-doc-id">
-                <input type="hidden" id="edit-stu-campus">
                 <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;">
                     <img id="edit-stu-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;">
                     <label for="edit-stu-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label>
@@ -632,12 +641,25 @@
                 
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 10px; grid-column: span 2;">Academic Info</h5>
                 <div class="marks-grid">
-                    <div class="input-group"><label>Admission Type</label><select id="edit-stu-admission-type" required><option>New Admission</option><option>Transfer In</option><option>Existing Student</option></select></div>
+                    <div class="input-group">
+                        <label>Admission Type</label>
+                        <select id="edit-stu-admission-type" required>
+                            <option>New Admission</option>
+                            <option>Transfer In</option>
+                            <option>Existing Student</option>
+                        </select>
+                    </div>
                     <div class="input-group"><label>Student ID</label><input type="text" id="edit-stu-id" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Roll No.</label><input type="text" id="edit-stu-roll"></div>
-                    <div class="input-group"><label>Class</label><select id="edit-stu-class" required><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+                    <div class="input-group">
+                        <label>Class</label>
+                        <select id="edit-stu-class" required>
+                            <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                            <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                        </select>
+                    </div>
                     <div class="input-group"><label>Date of Admission</label><input type="text" id="edit-stu-doa" placeholder="DD/MM/YYYY"></div>
-                    <div class="input-group"><label>Aadhaar Number</label><input type="text" id="edit-stu-aadhar" maxlength="12"></div>
+                    <div class="input-group"><label>Aadhaar Number (Mandatory)</label><input type="text" id="edit-stu-aadhar" required maxlength="12" pattern="[0-9]{12}"></div>
                     <div class="input-group"><label>PEN Number</label><input type="text" id="edit-stu-pen"></div>
                     <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
                     <div class="input-group"><label>Status</label><select id="edit-stu-status"><option>Active</option><option>Transferred Out</option></select></div>
@@ -677,7 +699,6 @@
             <h3 style="color: #003366; margin-bottom: 15px;">Edit Staff Details</h3>
             <form id="edit-teacher-form" class="admin-form">
                 <input type="hidden" id="edit-tch-doc-id">
-                <input type="hidden" id="edit-tch-campus">
                 <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;">
                     <img id="edit-tch-photo-preview-edit" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;">
                     <label for="edit-tch-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label>
@@ -734,9 +755,24 @@
         document.getElementById('tch-dept').addEventListener('change', (e) => {
             const val = e.target.value;
             const idInput = document.getElementById('tch-id');
-            if(val === 'Manager') idInput.placeholder = 'e.g. VMI/MGR/001';
-            else if(val === 'Principal') idInput.placeholder = 'e.g. VMI/PRC/001';
-            else idInput.placeholder = 'e.g. VMI/STF/001';
+            if(val === 'Manager') idInput.placeholder = 'e.g. CVSK/MGR/001';
+            else if(val === 'Principal') idInput.placeholder = 'e.g. CVSK/PRC/001';
+            else idInput.placeholder = 'e.g. CVSK/STF/001';
+        });
+
+        // Dynamic Transfer Certificate Field
+        document.getElementById('manual-admission-type').addEventListener('change', (e) => {
+            const tcGroup = document.getElementById('manual-tc-group');
+            if (e.target.value === 'Transfer In') { tcGroup.style.display = 'block'; } 
+            else { tcGroup.style.display = 'none'; document.getElementById('manual-tc-file').value = ""; }
+        });
+
+        // Main Campus Mailto Form
+        document.getElementById('send-main-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const subject = encodeURIComponent(document.getElementById('send-subject').value);
+            const body = encodeURIComponent(document.getElementById('send-notes').value + "\n\n[Please attach the required file before sending]");
+            window.location.href = `mailto:vivekanandamissioninsmuluk@gmail.com?subject=${subject}&body=${body}`;
         });
     </script>
     
@@ -796,6 +832,7 @@
             }; reader.readAsDataURL(file);
         }
 
+        // Live IFSC Fetcher
         async function fetchBankDetails(ifscCode, targetInput) {
             if (ifscCode.length === 11) {
                 try {
@@ -809,9 +846,10 @@
         document.getElementById('tch-ifsc').addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('tch-bank')); });
         document.getElementById('edit-tch-ifsc').addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('edit-tch-bank')); });
 
+        // --- 2. GLOBAL SETTINGS MANAGER ---
         async function loadGlobalSettings() {
             try { 
-                const snap = await getDoc(doc(db, "settings", "global_assets")); 
+                const snap = await getDoc(doc(db, "settings", "cvsk_assets")); 
                 if (snap.exists()) { 
                     globalAssets = { ...globalAssets, ...snap.data() }; 
                     document.getElementById('prev-set-logo').src = globalAssets.logo || ""; 
@@ -829,89 +867,30 @@
         for(const [inputId, key] of Object.entries(assetMap)) { 
             document.getElementById(inputId).addEventListener('change', function(e) { 
                 if(this.files[0]) { 
-                    resizeAssetKeepRatio(this.files[0], (base64) => { globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; }); 
+                    resizeAssetKeepRatio(this.files[0], (base64) => { 
+                        globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; 
+                    }); 
                 } 
             }); 
         }
         document.getElementById('global-settings-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); const btn = e.target.querySelector('button'); btn.innerText = "Saving...";
-            try { await setDoc(doc(db, "settings", "global_assets"), globalAssets, {merge: true}); alert("Global Assets Saved Successfully!"); } 
-            catch(err) { alert("Failed to save assets: " + err.message); } finally { btn.innerText = "Save Global Assets"; }
+            e.preventDefault(); 
+            const btn = e.target.querySelector('button'); btn.innerText = "Saving...";
+            try { 
+                await setDoc(doc(db, "settings", "cvsk_assets"), globalAssets, {merge: true}); 
+                alert("Global Assets Saved Successfully!"); 
+            } catch(err) { alert("Failed to save assets: " + err.message); }
+            finally { btn.innerText = "Save Branch Assets"; }
         });
-
-
-        // --- 2. UNIVERSAL NETWORK SEARCH ---
-        document.getElementById('uni-search-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('uni-search-btn');
-            const term = document.getElementById('uni-search-input').value.toLowerCase().trim();
-            const tableBody = document.getElementById('uni-table-body');
-            
-            if(!term) { alert("Please enter a search term."); return; }
-            btn.innerText = "Searching...";
-            tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">Scanning network database...</td></tr>`;
-
-            try {
-                let results = [];
-
-                // Fetch Main Campus
-                const mainSnaps = await getDocs(collection(db, "students"));
-                mainSnaps.forEach(doc => { 
-                    const d = doc.data(); 
-                    if(d.Name && d["Student ID"]) results.push({ campus: 'main', docId: doc.id, ...d }); 
-                });
-
-                // Fetch Branch Campus
-                const branchSnaps = await getDocs(collection(db, "cvsk_students"));
-                branchSnaps.forEach(doc => { 
-                    const d = doc.data(); 
-                    if(d.Name && d["Student ID"]) results.push({ campus: 'branch', docId: doc.id, ...d }); 
-                });
-
-                // Filter Logic
-                const filtered = results.filter(s => {
-                    const name = (s.Name || "").toLowerCase();
-                    const aadhar = (s["Aadhaar Number"] || s.Aadhaar || "").toLowerCase();
-                    const pen = (s["PEN Number"] || s.PEN || "").toLowerCase();
-                    return name.includes(term) || aadhar.includes(term) || pen.includes(term);
-                });
-
-                if(filtered.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: red;">No student found across any campus matching "${term}".</td></tr>`;
-                    return;
-                }
-
-                tableBody.innerHTML = "";
-                filtered.forEach(s => {
-                    const tr = document.createElement('tr');
-                    const badge = s.campus === 'main' ? `<span class="campus-badge badge-main">Main (VMI)</span>` : `<span class="campus-badge badge-branch">Branch (CVSK)</span>`;
-                    const photoSrc = s.Photo || 'https://via.placeholder.com/40';
-                    tr.innerHTML = `
-                        <td>${badge}</td>
-                        <td><img src="${photoSrc}" class="db-thumbnail"></td>
-                        <td><strong>${s["Student ID"]}</strong><br><span style="font-size:0.75rem; color:#666;">Roll: ${s["Roll No"] || 'N/A'}</span></td>
-                        <td>${s.Name}</td>
-                        <td>${s.Class || 'N/A'}</td>
-                        <td>${s["Aadhaar Number"] || s.Aadhaar || 'N/A'}</td>
-                        <td>${s["PEN Number"] || s.PEN || 'N/A'}</td>
-                        <td><span style="font-weight:bold; color:${s.Status === 'Transferred Out' ? '#E63946' : 'green'};">${s.Status || 'Active'}</span></td>
-                    `;
-                    tableBody.appendChild(tr);
-                });
-            } catch(e) {
-                tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: red;">Search Error.</td></tr>`;
-            } finally { btn.innerText = "Search Network"; }
-        });
-
 
         // --- 3. STUDENT DATABASE MODULE ---
-        let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = "";
+        let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = ""; let transferCertBase64 = "";
         let currentActiveStudents = []; let currentTransferredStudents = [];
         
-        async function fetchAllStudents(targetCampus) { 
-            const colName = targetCampus === 'main' ? "students" : "cvsk_students";
-            const querySnapshot = await getDocs(collection(db, colName)); 
+        async function fetchAllStudents() { 
+            const querySnapshot = await getDocs(collection(db, "cvsk_students")); 
             const students = []; 
-            querySnapshot.forEach((docSnap) => { students.push({ docId: docSnap.id, campus: targetCampus, ...docSnap.data() }); }); 
+            querySnapshot.forEach((docSnap) => { students.push({ docId: docSnap.id, ...docSnap.data() }); }); 
             return students; 
         }
 
@@ -925,7 +904,7 @@
             currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
 
             // Render Active Students
-            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in selected campus.</td></tr>`; }
+            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in branch database.</td></tr>`; }
             else {
                 currentActiveStudents.forEach((student, index) => {
                     const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
@@ -940,7 +919,7 @@
             }
 
             // Render Transferred Students
-            if (currentTransferredStudents.length === 0) { tcTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No transferred students found in selected campus.</td></tr>`; }
+            if (currentTransferredStudents.length === 0) { tcTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No transferred students found in branch database.</td></tr>`; }
             else {
                 currentTransferredStudents.forEach((student, index) => {
                     const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
@@ -964,7 +943,6 @@
                                 <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
                                 <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
                                 <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
-                                <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div>
                             </div>
                             <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
@@ -999,7 +977,6 @@
                 btn.addEventListener('click', (e) => {
                     const student = currentActiveStudents[e.target.getAttribute('data-index')]; 
                     document.getElementById('edit-stu-doc-id').value = student.docId; 
-                    document.getElementById('edit-stu-campus').value = student.campus; 
                     document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
                     document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
                     document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; 
@@ -1034,9 +1011,8 @@
             document.querySelectorAll('.transfer-stu-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const student = currentActiveStudents[e.target.getAttribute('data-index')];
-                    const colName = student.campus === 'main' ? "students" : "cvsk_students";
                     if(confirm(`Are you sure you want to officially transfer out ${student.Name}? This will move them to the Transferred Database.`)) {
-                        await setDoc(doc(db, colName, student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
+                        await setDoc(doc(db, "cvsk_students", student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
                         document.getElementById('refresh-db-btn').click();
                     }
                 });
@@ -1053,7 +1029,6 @@
                                 <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #E63946;">
                                 <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
                                 <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
-                                <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div>
                             </div>
                             <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
@@ -1079,10 +1054,8 @@
                     const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
                     const { jsPDF } = window.jspdf; const pdf = new jsPDF();
                     
-                    const schoolName = student.campus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
-                    
                     if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
-                    pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center");
+                    pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center");
                     pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
                     pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
                     
@@ -1115,16 +1088,12 @@
         
         document.getElementById('refresh-db-btn').addEventListener('click', async (e) => { 
             e.target.innerText = "Loading..."; 
-            const targetCampus = document.getElementById('db-campus-select').value;
-            try { liveStudentsData = await fetchAllStudents(targetCampus); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Refresh Data"; } 
+            try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Refresh Data"; } 
         });
         
         // Ensure the TC tab also syncs the DB
-        document.getElementById('refresh-tc-btn').addEventListener('click', async (e) => {
-            e.target.innerText = "Loading..."; 
-            const targetCampus = document.getElementById('tc-campus-select').value;
-            try { liveStudentsData = await fetchAllStudents(targetCampus); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Sync Transfer Data"; } 
-        });
+        document.getElementById('refresh-tc-btn').addEventListener('click', () => document.getElementById('refresh-db-btn').click());
+        document.querySelector('.nav-link[data-target="section-transferred"]').addEventListener('click', () => document.getElementById('refresh-db-btn').click());
 
         document.getElementById('db-search-input').addEventListener('keyup', (e) => { 
             const searchTerm = e.target.value.toLowerCase(); 
@@ -1134,17 +1103,46 @@
         
         document.getElementById('manual-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
         
+        document.getElementById('manual-tc-file').addEventListener('change', function(e) {
+            if(this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) { transferCertBase64 = event.target.result; };
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
         document.getElementById('manual-student-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); const studentId = document.getElementById('manual-id').value; 
+            e.preventDefault(); 
+            
+            const aadharVal = document.getElementById('manual-aadhar').value;
+            const classVal = document.getElementById('manual-class').value;
+            const penVal = document.getElementById('manual-pen').value;
+
+            // Validation: PEN required from Class 2 onwards
+            const reqPenClasses = ['Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
+            if(reqPenClasses.includes(classVal) && !penVal) {
+                return alert("PEN Number is mandatory for Class 2 and above.");
+            }
+
+            // Validation: Aadhaar Double Entry Check
+            try {
+                const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
+                const aadharSnaps = await getDocs(aadharQuery);
+                if(!aadharSnaps.empty) {
+                    return alert("Submission Blocked: A student with this Aadhaar Number is already enrolled in the system!");
+                }
+            } catch(e) { console.error("Validation error", e); }
+
+            const studentId = document.getElementById('manual-id').value; 
             try { 
                 const safeDocId = makeSafeId(studentId);
-                await setDoc(doc(db, "students", safeDocId), { 
+                await setDoc(doc(db, "cvsk_students", safeDocId), { 
                     "Admission Type": document.getElementById('manual-admission-type').value, 
                     "Date of Admission": document.getElementById('manual-doa').value, 
                     "Student ID": studentId, 
                     "Roll No": document.getElementById('manual-roll').value, 
-                    "Aadhaar Number": document.getElementById('manual-aadhar').value, 
-                    "PEN Number": document.getElementById('manual-pen').value, 
+                    "Aadhaar Number": aadharVal, 
+                    "PEN Number": penVal, 
                     "UDISE Number": document.getElementById('manual-udise').value, 
                     "Name": document.getElementById('manual-name').value, 
                     "DOB": document.getElementById('manual-dob').value, 
@@ -1154,17 +1152,20 @@
                     "CWSN": document.getElementById('manual-cwsn').value, 
                     "Height": document.getElementById('manual-height').value, 
                     "Weight": document.getElementById('manual-weight').value, 
-                    "Class": document.getElementById('manual-class').value, 
+                    "Class": classVal, 
                     "Father's Name": document.getElementById('manual-father').value, 
                     "Father Qualification": document.getElementById('manual-f-qual').value, 
                     "Mother's Name": document.getElementById('manual-mother').value, 
                     "Mother Qualification": document.getElementById('manual-m-qual').value, 
                     "Phone": document.getElementById('manual-phone').value, 
                     "Address": document.getElementById('manual-address').value, 
+                    "Transfer Certificate Data": transferCertBase64,
                     "Status": "Active", 
                     "Photo": compressedPhotoBase64 
                 }, { merge: true }); 
-                alert(`Success!`); document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; 
+                alert(`Student Enrolled Successfully!`); 
+                document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; transferCertBase64 = "";
+                document.getElementById('manual-tc-group').style.display = 'none';
             } catch(e) { alert("Error adding student."); }
         });
         
@@ -1172,16 +1173,36 @@
         document.getElementById('edit-student-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             const docId = document.getElementById('edit-stu-doc-id').value; 
-            const campus = document.getElementById('edit-stu-campus').value;
-            const colName = campus === 'main' ? 'students' : 'cvsk_students';
+            const aadharVal = document.getElementById('edit-stu-aadhar').value;
+            const classVal = document.getElementById('edit-stu-class').value;
+            const penVal = document.getElementById('edit-stu-pen').value;
+
+            // Validation: PEN required from Class 2 onwards
+            const reqPenClasses = ['Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
+            if(reqPenClasses.includes(classVal) && !penVal) {
+                return alert("PEN Number is mandatory for Class 2 and above.");
+            }
+
+            // Validation: Aadhaar Double Entry Check (Exclude self)
+            try {
+                const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
+                const aadharSnaps = await getDocs(aadharQuery);
+                let isDuplicate = false;
+                aadharSnaps.forEach(docSnap => {
+                    if(docSnap.id !== docId) isDuplicate = true;
+                });
+                if(isDuplicate) {
+                    return alert("Update Blocked: Another student already exists with this Aadhaar Number!");
+                }
+            } catch(e) {}
 
             try { 
-                await setDoc(doc(db, colName, docId), { 
+                await setDoc(doc(db, "cvsk_students", docId), { 
                     "Admission Type": document.getElementById('edit-stu-admission-type').value, 
                     Name: document.getElementById('edit-stu-name').value, 
                     "Roll No": document.getElementById('edit-stu-roll').value, 
-                    "Aadhaar Number": document.getElementById('edit-stu-aadhar').value, 
-                    "PEN Number": document.getElementById('edit-stu-pen').value, 
+                    "Aadhaar Number": aadharVal, 
+                    "PEN Number": penVal, 
                     "UDISE Number": document.getElementById('edit-stu-udise').value, 
                     "DOB": document.getElementById('edit-stu-dob').value, 
                     "Blood Group": document.getElementById('edit-stu-blood').value, 
@@ -1190,7 +1211,7 @@
                     "CWSN": document.getElementById('edit-stu-cwsn').value, 
                     "Height": document.getElementById('edit-stu-height').value, 
                     "Weight": document.getElementById('edit-stu-weight').value, 
-                    Class: document.getElementById('edit-stu-class').value, 
+                    Class: classVal, 
                     "Date of Admission": document.getElementById('edit-stu-doa').value, 
                     "Father's Name": document.getElementById('edit-stu-father').value, 
                     "Father Qualification": document.getElementById('edit-stu-f-qual').value, 
@@ -1201,13 +1222,40 @@
                     Status: document.getElementById('edit-stu-status').value, 
                     Photo: editStuPhotoBase64 
                 }, { merge: true }); 
-                alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; 
-                if(document.getElementById('section-view-db').classList.contains('active')) {
-                    document.getElementById('refresh-db-btn').click(); 
-                } else {
-                    document.getElementById('uni-search-btn').click();
-                }
+                alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; document.getElementById('refresh-db-btn').click(); 
             } catch (err) { alert("Error updating student."); } 
+        });
+
+        // Manual TC Generation Form
+        document.getElementById('tc-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); const studentId = document.getElementById('tc-student-id').value; 
+            const safeDocId = makeSafeId(studentId);
+            const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); 
+            if (docSnap.exists()) { 
+                const student = docSnap.data();
+                await setDoc(doc(db, "cvsk_students", safeDocId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true }); 
+                
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
+                pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center");
+                pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
+                pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
+                
+                pdf.setFontSize(12); pdf.setTextColor(0, 0, 0);
+                pdf.text(`This is to certify that`, 20, 60);
+                pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal');
+                
+                pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal');
+                
+                if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); }
+                if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); }
+                
+                pdf.text("_______________________", 140, 205);
+                pdf.text("Principal Signature", 145, 212);
+
+                pdf.save(`TC_${studentId}.pdf`); 
+                alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
+            } else { alert("Student not found in Branch database."); }
         });
 
         document.querySelector('.upload-form').addEventListener('submit', async (e) => { 
@@ -1219,7 +1267,7 @@
                 jsonData.forEach((row, index) => { 
                     const rawId = String(row["Roll No"] || row["Student ID"] || "");
                     const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; 
-                    batch.set(doc(db, "students", docId), { ...row, Status: "Active" }, { merge: true }); 
+                    batch.set(doc(db, "cvsk_students", docId), { ...row, Status: "Active" }, { merge: true }); 
                 }); 
                 await batch.commit(); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); 
             }; reader.readAsArrayBuffer(file); 
@@ -1237,11 +1285,9 @@
             btn.innerText = "Saving Record to Database...";
             const tchId = document.getElementById('tch-id').value; 
             const safeDocId = makeSafeId(tchId);
-            const targetCampus = document.getElementById('staff-campus-select').value;
-            const colName = targetCampus === 'main' ? 'teachers' : 'cvsk_staff';
 
             try { 
-                await setDoc(doc(db, colName, safeDocId), { 
+                await setDoc(doc(db, "cvsk_staff", safeDocId), { 
                     TeacherID: tchId, Name: document.getElementById('tch-name').value, FatherName: document.getElementById('tch-father').value, Department: document.getElementById('tch-dept').value, DateOfJoining: document.getElementById('tch-doj').value, BloodGroup: document.getElementById('tch-blood').value, Phone: document.getElementById('tch-phone').value, Address: document.getElementById('tch-address').value, Photo: tchPhotoBase64, PAN: document.getElementById('tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('tch-acc-no').value, IFSC: document.getElementById('tch-ifsc').value.toUpperCase(), BankName: document.getElementById('tch-bank').value
                 }); 
                 alert("Staff Record Saved!"); 
@@ -1251,16 +1297,18 @@
             finally { btn.innerText = "Save Staff Record"; }
         });
 
+        document.querySelector('.nav-link[data-target="section-teachers"]').addEventListener('click', () => {
+            document.getElementById('refresh-tch-btn').click();
+        });
+
         document.getElementById('refresh-tch-btn').addEventListener('click', async (e) => {
             const btn = e.target; btn.innerText = "Loading Database...";
             const tchTable = document.getElementById('tch-table-body');
-            const targetCampus = document.getElementById('staff-campus-select').value;
-            const colName = targetCampus === 'main' ? 'teachers' : 'cvsk_staff';
             
             try {
-                const querySnapshot = await getDocs(collection(db, colName));
+                const querySnapshot = await getDocs(collection(db, "cvsk_staff"));
                 liveTeachersData = [];
-                querySnapshot.forEach((docSnap) => { liveTeachersData.push({ docId: docSnap.id, campus: targetCampus, ...docSnap.data() }); });
+                querySnapshot.forEach((docSnap) => { liveTeachersData.push({ docId: docSnap.id, ...docSnap.data() }); });
                 
                 const validTeachers = liveTeachersData.filter(t => {
                     const name = t.Name || t.name || t["Teacher Name"];
@@ -1268,7 +1316,7 @@
                 });
 
                 if (validTeachers.length === 0) { 
-                    tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No staff found in database. Add a new record above.</td></tr>`; 
+                    tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No staff found in branch database. Add a new record above.</td></tr>`; 
                     return; 
                 }
                 
@@ -1299,7 +1347,6 @@
                         body.innerHTML = `
                             <div style="text-align:center; margin-bottom:15px;">
                                 <img src="${tch.Photo || tch.photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #003366;">
-                                <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px; display:inline-block;">Campus: ${tch.campus === 'main' ? 'VMI' : 'CVSK'}</div>
                             </div>
                             <table style="width:100%; border-collapse: collapse;">
                                 <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Staff ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.TeacherID || tch.id || 'N/A'}</td></tr>
@@ -1320,22 +1367,11 @@
                     });
                 });
 
-                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { 
-                    delBtn.addEventListener('click', async (ev) => { 
-                        if(confirm("Permanently delete this record?")) { 
-                            const targetCol = targetCampus === 'main' ? 'teachers' : 'cvsk_staff';
-                            await deleteDoc(doc(db, targetCol, ev.target.getAttribute('data-id'))); 
-                            document.getElementById('refresh-tch-btn').click(); 
-                        } 
-                    }); 
-                });
-                
+                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { delBtn.addEventListener('click', async (ev) => { if(confirm("Permanently delete this record?")) { await deleteDoc(doc(db, "cvsk_staff", ev.target.getAttribute('data-id'))); document.getElementById('refresh-tch-btn').click(); } }); });
                 document.querySelectorAll('.edit-tch-btn').forEach(editBtn => {
                     editBtn.addEventListener('click', (ev) => {
                         const tch = validTeachers[ev.target.getAttribute('data-index')];
-                        document.getElementById('edit-tch-doc-id').value = tch.docId; 
-                        document.getElementById('edit-tch-campus').value = tch.campus; 
-                        document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || ''; document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; document.getElementById('edit-tch-bank').value = tch.BankName || '';
+                        document.getElementById('edit-tch-doc-id').value = tch.docId; document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || ''; document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; document.getElementById('edit-tch-bank').value = tch.BankName || '';
                         editTchPhotoBase64 = tch.Photo || tch.photo || ""; document.getElementById('edit-tch-photo-preview-edit').src = editTchPhotoBase64 || 'https://via.placeholder.com/150'; document.getElementById('edit-teacher-modal').style.display = 'flex';
                     });
                 });
@@ -1347,53 +1383,34 @@
 
         document.getElementById('edit-tch-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editTchPhotoBase64 = base64; document.getElementById('edit-tch-photo-preview-edit').src = base64; }); } });
         document.getElementById('edit-teacher-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
-            const docId = document.getElementById('edit-tch-doc-id').value; 
-            const campus = document.getElementById('edit-tch-campus').value;
-            const targetCol = campus === 'main' ? 'teachers' : 'cvsk_staff';
-            const btn = e.target.querySelector('button[type="submit"]'); btn.innerText = "Updating...";
+            e.preventDefault(); const docId = document.getElementById('edit-tch-doc-id').value; const btn = e.target.querySelector('button[type="submit"]'); btn.innerText = "Updating...";
             try { 
-                await setDoc(doc(db, targetCol, docId), { Name: document.getElementById('edit-tch-name').value, FatherName: document.getElementById('edit-tch-father').value, Department: document.getElementById('edit-tch-dept').value, DateOfJoining: document.getElementById('edit-tch-doj').value, BloodGroup: document.getElementById('edit-tch-blood').value, Phone: document.getElementById('edit-tch-phone').value, Address: document.getElementById('edit-tch-address').value, Photo: editTchPhotoBase64, PAN: document.getElementById('edit-tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('edit-tch-acc-no').value, IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase(), BankName: document.getElementById('edit-tch-bank').value }, { merge: true }); 
+                await setDoc(doc(db, "cvsk_staff", docId), { Name: document.getElementById('edit-tch-name').value, FatherName: document.getElementById('edit-tch-father').value, Department: document.getElementById('edit-tch-dept').value, DateOfJoining: document.getElementById('edit-tch-doj').value, BloodGroup: document.getElementById('edit-tch-blood').value, Phone: document.getElementById('edit-tch-phone').value, Address: document.getElementById('edit-tch-address').value, Photo: editTchPhotoBase64, PAN: document.getElementById('edit-tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('edit-tch-acc-no').value, IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase(), BankName: document.getElementById('edit-tch-bank').value }, { merge: true }); 
                 alert("Staff record successfully updated!"); document.getElementById('edit-teacher-modal').style.display = 'none'; document.getElementById('refresh-tch-btn').click(); 
             } catch (err) { alert("Error updating record."); console.error(err); } finally { btn.innerText = "Update Staff Database"; }
         });
 
         // --- 5. EXPORT DATABASE MODULE ---
-        document.getElementById('export-excel-btn').addEventListener('click', async () => { 
-            const campus = document.getElementById('db-campus-select').value;
-            const students = await fetchAllStudents(campus); 
-            const cleanStudents = students.map(({ Photo, docId, campus, ...rest }) => rest); 
-            const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, `VMI_Network_Students_${campus}.xlsx`); 
-        });
-        document.getElementById('export-pdf-btn').addEventListener('click', async () => { 
-            const campus = document.getElementById('db-campus-select').value;
-            const students = await fetchAllStudents(campus); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; 
-            students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId" && k !== "campus") headers.push(k); })); 
-            const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); 
-            doc.autoTable({ head: [headers], body: tableData }); doc.save(`VMI_Network_Students_${campus}.pdf`); 
-        });
+        document.getElementById('export-excel-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, docId, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "CVSK_Student_Database.xlsx"); });
+        document.getElementById('export-pdf-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Student_Database.pdf"); });
         
         document.getElementById('export-tch-excel-btn').addEventListener('click', async () => { 
-            const campus = document.getElementById('staff-campus-select').value;
-            const colName = campus === 'main' ? 'teachers' : 'cvsk_staff';
-            const qSnaps = await getDocs(collection(db, colName)); let tData = []; 
+            const qSnaps = await getDocs(collection(db, "cvsk_staff")); let tData = []; 
             qSnaps.forEach(d => { const dt = d.data(); delete dt.Photo; delete dt.photo; tData.push(dt); });
-            const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(tData), "Staff"); XLSX.writeFile(workbook, `VMI_Network_Staff_${campus}.xlsx`); 
+            const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(tData), "Staff"); XLSX.writeFile(workbook, "CVSK_Staff_Database.xlsx"); 
         });
         document.getElementById('export-tch-pdf-btn').addEventListener('click', async () => { 
-            const campus = document.getElementById('staff-campus-select').value;
-            const colName = campus === 'main' ? 'teachers' : 'cvsk_staff';
-            const qSnaps = await getDocs(collection(db, colName)); let tData = []; qSnaps.forEach(d => tData.push(d.data()));
+            const qSnaps = await getDocs(collection(db, "cvsk_staff")); let tData = []; qSnaps.forEach(d => tData.push(d.data()));
             const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; 
             tData.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "photo") headers.push(k); })); 
             const tableData = tData.map(s => headers.map(h => s[h] ? String(s[h]) : "")); 
-            doc.autoTable({ head: [headers], body: tableData }); doc.save(`VMI_Network_Staff_${campus}.pdf`); 
+            doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Staff_Database.pdf"); 
         });
 
         // --- 6. NOTICES & MATERIALS MODULE ---
-        document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', async () => { try { const querySnapshot = await getDocs(collection(db, "notices")); const notices = []; querySnapshot.forEach((docSnap) => { notices.push({ id: docSnap.id, ...docSnap.data() }); }); notices.sort((a, b) => b.timestamp - a.timestamp); const tbody = document.getElementById('notice-table-body'); tbody.innerHTML = ""; if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No active notices.</td></tr>`; return; } notices.forEach(notice => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="action-btn btn-red delete-notice" data-id="${notice.id}">Delete</button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-notice').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "notices", e.target.getAttribute('data-id'))); document.querySelector('.nav-link[data-target="section-notices"]').click(); } }); }); } catch (error) {} });
-        document.getElementById('notice-form').addEventListener('submit', async (e) => { e.preventDefault(); await setDoc(doc(db, "notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); });
-        document.getElementById('admin-material-form').addEventListener('submit', async (e) => { e.preventDefault(); await setDoc(doc(db, "materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); });
+        document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', async () => { try { const querySnapshot = await getDocs(collection(db, "cvsk_notices")); const notices = []; querySnapshot.forEach((docSnap) => { notices.push({ id: docSnap.id, ...docSnap.data() }); }); notices.sort((a, b) => b.timestamp - a.timestamp); const tbody = document.getElementById('notice-table-body'); tbody.innerHTML = ""; if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No active notices.</td></tr>`; return; } notices.forEach(notice => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="action-btn btn-red delete-notice" data-id="${notice.id}">Delete</button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-notice').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "cvsk_notices", e.target.getAttribute('data-id'))); document.querySelector('.nav-link[data-target="section-notices"]').click(); } }); }); } catch (error) {} });
+        document.getElementById('notice-form').addEventListener('submit', async (e) => { e.preventDefault(); await setDoc(doc(db, "cvsk_notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); });
+        document.getElementById('admin-material-form').addEventListener('submit', async (e) => { e.preventDefault(); await setDoc(doc(db, "cvsk_materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Branch Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); });
         
         // --- 7. EXAM RESULTS & ADMIT CARDS MODULE ---
         const termSelect = document.getElementById('res-exam-name'); const classSelect = document.getElementById('res-class'); const coCurricularSection = document.getElementById('co-curricular-section'); const markInputs = document.querySelectorAll('.acad-mark'); const rStudentIdInput = document.getElementById('res-student-id'); const rStudentNameInput = document.getElementById('res-student-name');
@@ -1403,7 +1420,7 @@
             rStudentNameInput.value = "Searching..."; 
             try { 
                 const safeDocId = makeSafeId(studentId);
-                const docSnap = await getDoc(doc(db, "students", safeDocId)); 
+                const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); 
                 if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } 
             } catch (error) { rStudentNameInput.value = "Error."; } 
         });
@@ -1414,23 +1431,23 @@
             const studentId = document.getElementById('res-student-id').value; const term = termSelect.value; 
             const docId = `${makeSafeId(studentId)}_${makeSafeId(term)}`; 
             const marks = {}; if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value); if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value); if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value); if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value); if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value); if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value); if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value); if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value); let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0); let totalPossible = currentMaxPerSubject * activeSubjectCount; let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%"; const grades = {}; if(term === 'Annual Examination') { grades["Dance"] = document.getElementById('g-dance').value; grades["Music"] = document.getElementById('g-music').value; grades["Art_and_Craft"] = document.getElementById('g-art').value; } 
-            try { await setDoc(doc(db, "results", docId), { "Student ID": studentId, "Student Name": document.getElementById('res-student-name').value, "Class": classSelect.value, "Exam Term": term, "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible, "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true }); alert(`Success!`); document.getElementById('manual-result-form').reset(); rStudentNameInput.value=""; updateFormRules(); loadLiveResults(); } catch (error) { alert("Error"); } finally { document.getElementById('res-submit-btn').innerText = "Save Report Card"; } 
+            try { await setDoc(doc(db, "cvsk_results", docId), { "Student ID": studentId, "Student Name": document.getElementById('res-student-name').value, "Class": classSelect.value, "Exam Term": term, "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible, "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Branch Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true }); alert(`Success!`); document.getElementById('manual-result-form').reset(); rStudentNameInput.value=""; updateFormRules(); loadLiveResults(); } catch (error) { alert("Error"); } finally { document.getElementById('res-submit-btn').innerText = "Save Report Card"; } 
         });
 
         let liveResultsData = []; let currentlyDisplayedResults = []; const resTableBody = document.getElementById('res-table-body');
-        async function loadLiveResults() { try { const querySnapshot = await getDocs(collection(db, "results")); liveResultsData = []; querySnapshot.forEach((docSnap) => { const d = docSnap.data(); if(d["Student ID"] && d.Class) liveResultsData.push({ id: docSnap.id, ...d }); }); currentlyDisplayedResults = [...liveResultsData]; renderResultsTableResults(currentlyDisplayedResults); } catch (error) {} }
-        function renderResultsTableResults(results) { resTableBody.innerHTML = ""; if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; } results.forEach((res, index) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><strong>${res["Student ID"] || 'N/A'}</strong></td><td>${res["Class"] || 'N/A'}</td><td>${res["Exam Term"] || 'N/A'}</td><td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td><td>${res["Percentage"] || '0%'}</td><td><button class="action-btn btn-blue view-res" data-index="${index}">👁️ View</button><button class="action-btn btn-green print-res" data-index="${index}">Print</button><button class="action-btn btn-red delete-res" data-id="${res.id}">Delete</button></td>`; resTableBody.appendChild(tr); }); document.querySelectorAll('.delete-res').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Permanently delete this report card?")) { await deleteDoc(doc(db, "results", e.target.getAttribute('data-id'))); loadLiveResults(); } }); }); document.querySelectorAll('.print-res').forEach(btn => { btn.addEventListener('click', (e) => { generateReportCardPDF([currentlyDisplayedResults[e.target.getAttribute('data-index')]], `ReportCard_${currentlyDisplayedResults[e.target.getAttribute('data-index')]["Student ID"]}.pdf`); }); }); document.querySelectorAll('.view-res').forEach(btn => { btn.addEventListener('click', (e) => { const res = currentlyDisplayedResults[e.target.getAttribute('data-index')]; const modalBody = document.getElementById('modal-body'); let html = `<strong>Student:</strong> ${res["Student Name"] || res["Student ID"]}<br><strong>Class:</strong> ${res["Class"]}<br><strong>Term:</strong> ${res["Exam Term"]}<hr style="margin:10px 0;">`; html += `<table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Marks</th></tr>`; for(const [sub, mark] of Object.entries(res["Academic Marks"] || {})) { html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace('_',' ')}</td><td style="border:1px solid #ccc; padding:5px;">${mark}</td></tr>`; } html += `</table>`; if(res["CoCurricular Grades"] && Object.keys(res["CoCurricular Grades"]).length > 0) { html += `<h4 style="margin-top:15px; color:#FF671F;">Co-Curricular Grades</h4><table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Grade</th></tr>`; for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace(/_/g,' ')}</td><td style="border:1px solid #ccc; padding:5px;">${grade}</td></tr>`; } html += `</table>`; } modalBody.innerHTML = html; document.getElementById('marks-modal').style.display = 'flex'; }); }); }
-        document.getElementById('refresh-results-btn').addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input').addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTableResults(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `VMI_Bulk_ReportCards_${Date.now()}.pdf`); });
-        document.getElementById('export-results-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length === 0) return alert("No results to export!"); const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; }); const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `VMI_Master_Results_${Date.now()}.xlsx`); });
+        async function loadLiveResults() { try { const querySnapshot = await getDocs(collection(db, "cvsk_results")); liveResultsData = []; querySnapshot.forEach((docSnap) => { const d = docSnap.data(); if(d["Student ID"] && d.Class) liveResultsData.push({ id: docSnap.id, ...d }); }); currentlyDisplayedResults = [...liveResultsData]; renderResultsTableResults(currentlyDisplayedResults); } catch (error) {} }
+        function renderResultsTableResults(results) { resTableBody.innerHTML = ""; if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; } results.forEach((res, index) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><strong>${res["Student ID"] || 'N/A'}</strong></td><td>${res["Class"] || 'N/A'}</td><td>${res["Exam Term"] || 'N/A'}</td><td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td><td>${res["Percentage"] || '0%'}</td><td><button class="action-btn btn-blue view-res" data-index="${index}">👁️ View</button><button class="action-btn btn-green print-res" data-index="${index}">Print</button><button class="action-btn btn-red delete-res" data-id="${res.id}">Delete</button></td>`; resTableBody.appendChild(tr); }); document.querySelectorAll('.delete-res').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Permanently delete this report card?")) { await deleteDoc(doc(db, "cvsk_results", e.target.getAttribute('data-id'))); loadLiveResults(); } }); }); document.querySelectorAll('.print-res').forEach(btn => { btn.addEventListener('click', (e) => { generateReportCardPDF([currentlyDisplayedResults[e.target.getAttribute('data-index')]], `ReportCard_${currentlyDisplayedResults[e.target.getAttribute('data-index')]["Student ID"]}.pdf`); }); }); document.querySelectorAll('.view-res').forEach(btn => { btn.addEventListener('click', (e) => { const res = currentlyDisplayedResults[e.target.getAttribute('data-index')]; const modalBody = document.getElementById('modal-body'); let html = `<strong>Student:</strong> ${res["Student Name"] || res["Student ID"]}<br><strong>Class:</strong> ${res["Class"]}<br><strong>Term:</strong> ${res["Exam Term"]}<hr style="margin:10px 0;">`; html += `<table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Marks</th></tr>`; for(const [sub, mark] of Object.entries(res["Academic Marks"] || {})) { html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace('_',' ')}</td><td style="border:1px solid #ccc; padding:5px;">${mark}</td></tr>`; } html += `</table>`; if(res["CoCurricular Grades"] && Object.keys(res["CoCurricular Grades"]).length > 0) { html += `<h4 style="margin-top:15px; color:#FF671F;">Co-Curricular Grades</h4><table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Grade</th></tr>`; for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace(/_/g,' ')}</td><td style="border:1px solid #ccc; padding:5px;">${grade}</td></tr>`; } html += `</table>`; } modalBody.innerHTML = html; document.getElementById('marks-modal').style.display = 'flex'; }); }); }
+        document.getElementById('refresh-results-btn').addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input').addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTableResults(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `CVSK_Bulk_ReportCards_${Date.now()}.pdf`); });
+        document.getElementById('export-results-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length === 0) return alert("No results to export!"); const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; }); const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `CVSK_Master_Results_${Date.now()}.xlsx`); });
 
-        function generateReportCardPDF(resultsArray, fileName) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); resultsArray.forEach((result, index) => { if (index > 0) doc.addPage(); doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0); doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; } finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); }); doc.save(fileName); }
+        function generateReportCardPDF(resultsArray, fileName) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); resultsArray.forEach((result, index) => { if (index > 0) doc.addPage(); doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0); doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; } finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); }); doc.save(fileName); }
 
         // --- ADMIT CARD ENGINE ---
         const schClass = document.getElementById('sch-class'); const schTerm = document.getElementById('sch-term'); const schSubjectsContainer = document.getElementById('sch-subjects-container');
         function updateScheduleSubjects() { const cls = schClass.value; const term = schTerm.value; schSubjectsContainer.innerHTML = ""; if(!cls || !term) return; const subjects = ['English', 'Bengali', 'Mathematics', 'EVS_Science']; if(['Class 3', 'Class 4'].includes(cls)) subjects.push('Hindi', 'History', 'Geography'); if(['Class 6'].includes(cls)) subjects.push('History', 'Geography'); if(['Class 7', 'Class 8', 'Class 9', 'Class 10'].includes(cls)) subjects.push('Sanskrit', 'History', 'Geography'); if(term === 'Annual Examination') { subjects.push('Dance', 'Music', 'Art_and_Craft'); } subjects.forEach(sub => { schSubjectsContainer.innerHTML += `<div class="input-group"><label>${sub.replace(/_/g, ' ')} Date & Time</label><input type="text" class="sch-date-input" data-subject="${sub}" placeholder="e.g., 12/04/2026, 10:00 AM" required></div>`; }); }
         schClass.addEventListener('change', updateScheduleSubjects); schTerm.addEventListener('change', updateScheduleSubjects);
-        document.getElementById('schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const cls = document.getElementById('sch-class').value; const term = document.getElementById('sch-term').value; const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = {}; document.querySelectorAll('.sch-date-input').forEach(input => { scheduleData[input.getAttribute('data-subject')] = input.value; }); try { await setDoc(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }); alert(`Exam Schedule for ${cls} - ${term} saved!`); } catch (err) { alert("Error saving schedule."); } });
-        document.getElementById('bulk-schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('sch-file').files[0]; if (!file) return alert("Select an Excel/CSV file."); const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); if (jsonData.length === 0) return alert("File is empty."); const batch = writeBatch(db); jsonData.forEach((row) => { const cls = row["Class"]; const term = row["Term"]; if(cls && term) { const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = { ...row }; delete scheduleData["Class"]; delete scheduleData["Term"]; batch.set(doc(db, "exam_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded schedules from CSV.`); document.getElementById('bulk-schedule-form').reset(); } catch (error) { alert("Error processing file. Ensure headers are correct."); } }; reader.readAsArrayBuffer(file); });
+        document.getElementById('schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const cls = document.getElementById('sch-class').value; const term = document.getElementById('sch-term').value; const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = {}; document.querySelectorAll('.sch-date-input').forEach(input => { scheduleData[input.getAttribute('data-subject')] = input.value; }); try { await setDoc(doc(db, "cvsk_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }); alert(`Exam Schedule for ${cls} - ${term} saved!`); } catch (err) { alert("Error saving schedule."); } });
+        document.getElementById('bulk-schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('sch-file').files[0]; if (!file) return alert("Select an Excel/CSV file."); const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); if (jsonData.length === 0) return alert("File is empty."); const batch = writeBatch(db); jsonData.forEach((row) => { const cls = row["Class"]; const term = row["Term"]; if(cls && term) { const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = { ...row }; delete scheduleData["Class"]; delete scheduleData["Term"]; batch.set(doc(db, "cvsk_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded schedules from CSV.`); document.getElementById('bulk-schedule-form').reset(); } catch (error) { alert("Error processing file. Ensure headers are correct."); } }; reader.readAsArrayBuffer(file); });
 
         const admitGenType = document.getElementById('admit-gen-type'); const admitTargetContainer = document.getElementById('admit-target-container'); const admitTargetLabel = document.getElementById('admit-target-label'); const admitTargetVal = document.getElementById('admit-target-val'); const admitTargetClass = document.getElementById('admit-target-class');
         admitGenType.addEventListener('change', () => { 
@@ -1455,13 +1472,13 @@
             const term = document.getElementById('admit-gen-term').value;
             try {
                 let targetStudents = [];
-                if(genType === 'single') { const snap = await getDoc(doc(db, "students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
-                else if(genType === 'class') { const q = query(collection(db, "students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } 
-                else { const snaps = await getDocs(collection(db, "students")); snaps.forEach(d => targetStudents.push(d.data())); }
+                if(genType === 'single') { const snap = await getDoc(doc(db, "cvsk_students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
+                else if(genType === 'class') { const q = query(collection(db, "cvsk_students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } 
+                else { const snaps = await getDocs(collection(db, "cvsk_students")); snaps.forEach(d => targetStudents.push(d.data())); }
                 
                 if(targetStudents.length === 0) { alert("No valid students found for preview."); btn.innerText = "👁️ Preview Sample Admit Card"; return; }
                 
-                const schSnaps = await getDocs(collection(db, "exam_schedules")); 
+                const schSnaps = await getDocs(collection(db, "cvsk_schedules")); 
                 const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
                 
                 const student = targetStudents[0]; 
@@ -1484,8 +1501,8 @@
                     <div style="display:flex; justify-content:center; align-items:center; gap:15px; margin-bottom:5px;">
                         ${logoHtml}
                         <div style="text-align: center;">
-                            <h2 style="color: #003366; margin: 0; font-size: 20px;">VIVEKANANDA MISSION INSTITUTE</h2>
-                            <p style="color: #555; margin: 2px 0 0 0; font-size: 10px;">Muluk, Bolpur, Birbhum, W.B. - 731204</p>
+                            <h2 style="color: #003366; margin: 0; font-size: 20px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</h2>
+                            <p style="color: #555; margin: 2px 0 0 0; font-size: 10px;">Branch Campus Registration</p>
                         </div>
                     </div>
                     <div style="text-align: center; margin-bottom: 10px;">
@@ -1526,13 +1543,13 @@
             const term = document.getElementById('admit-gen-term').value;
             try {
                 let targetStudents = []; 
-                if(genType === 'single') { const snap = await getDoc(doc(db, "students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
-                else if(genType === 'class') { const q = query(collection(db, "students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } 
-                else { const snaps = await getDocs(collection(db, "students")); snaps.forEach(d => targetStudents.push(d.data())); }
+                if(genType === 'single') { const snap = await getDoc(doc(db, "cvsk_students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
+                else if(genType === 'class') { const q = query(collection(db, "cvsk_students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } 
+                else { const snaps = await getDocs(collection(db, "cvsk_students")); snaps.forEach(d => targetStudents.push(d.data())); }
                 
                 if(targetStudents.length === 0) { alert("No students found."); btn.innerText = "📥 Download Admit Card PDF(s)"; return; }
                 
-                const schSnaps = await getDocs(collection(db, "exam_schedules")); const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
+                const schSnaps = await getDocs(collection(db, "cvsk_schedules")); const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
                 const { jsPDF } = window.jspdf; const docPdf = new jsPDF();
                 
                 const cardWidth = 190; const cardHeight = 92; const startX = 10; const spacing = 5.25;
@@ -1548,8 +1565,8 @@
                     docPdf.setLineWidth(0.2); docPdf.rect(startX, currentY, cardWidth, cardHeight);
                     if(globalAssets.logo) { docPdf.addImage(globalAssets.logo, 'PNG', startX + 5, currentY + 3, 16, 16); }
                     
-                    docPdf.setFontSize(16); docPdf.setTextColor(0, 51, 102); docPdf.text("VIVEKANANDA MISSION INSTITUTE", 105, currentY + 9, null, null, "center");
-                    docPdf.setFontSize(9); docPdf.setTextColor(50, 50, 50); docPdf.text("Muluk, Bolpur, Birbhum, W.B. - 731204", 105, currentY + 14, null, null, "center");
+                    docPdf.setFontSize(16); docPdf.setTextColor(0, 51, 102); docPdf.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, currentY + 9, null, null, "center");
+                    docPdf.setFontSize(9); docPdf.setTextColor(50, 50, 50); docPdf.text("Branch Campus Registration", 105, currentY + 14, null, null, "center");
                     docPdf.setFontSize(12); docPdf.setTextColor(255, 103, 31); docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, currentY + 21, null, null, "center");
                     docPdf.setLineWidth(0.5); docPdf.line(startX + 5, currentY + 24, startX + cardWidth - 5, currentY + 24);
                     
@@ -1562,7 +1579,7 @@
                     
                     docPdf.setLineWidth(0.2); docPdf.rect(startX + 155, currentY + 27, 28, 33);
                     if(student.Photo) { docPdf.addImage(student.Photo, 'JPEG', startX + 155, currentY + 27, 28, 33); } 
-                    else { docPdf.setFontSize(8); docPdf.setTextColor(150, 150, 150); docPdf.text("Photograph", startX + 160, currentY + 45); }
+                    else { docPdf.setFontSize(8); docPdf.setTextColor(150, 150, 150); docPdf.text("Photo", startX + 160, currentY + 45); }
                     docPdf.setTextColor(0, 0, 0);
                     
                     if(studentSchedule) {
@@ -1580,7 +1597,7 @@
                     docPdf.setFontSize(9); docPdf.setFont(undefined, 'bold');
                     docPdf.line(startX + 145, currentY + 85, startX + 185, currentY + 85);
                     docPdf.text("Principal", startX + 155, currentY + 89);
-                }); docPdf.save(`Admit_Cards_${term.replace(/\s+/g, '_')}.pdf`);
+                }); docPdf.save(`CVSK_Admit_Cards_${term.replace(/\s+/g, '_')}.pdf`);
             } catch (err) { alert("Error generating PDF: " + err.message); } finally { btn.innerText = "📥 Download Admit Card PDF(s)"; }
         });
 
@@ -1601,10 +1618,10 @@
         });
 
         const idStuIdInput = document.getElementById('id-stu-id');
-        idStuIdInput.addEventListener('blur', async () => { const idVal = idStuIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "students", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Student: ${docSnap.data().Name}`); } else { alert("Student not found."); } } catch(err) {} });
+        idStuIdInput.addEventListener('blur', async () => { const idVal = idStuIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_students", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Student: ${docSnap.data().Name}`); } else { alert("Student not found."); } } catch(err) {} });
 
         const idTchIdInput = document.getElementById('id-tch-id-fetch');
-        idTchIdInput.addEventListener('blur', async () => { const idVal = idTchIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
+        idTchIdInput.addEventListener('blur', async () => { const idVal = idTchIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
 
         function renderCardHTML(dataObj, type) {
             const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
@@ -1627,7 +1644,7 @@
                         <div style="width:65%; padding:10px 15px; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;">
                             <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
                                 ${logoHtml}
-                                <div><div style="font-weight:bold; color:#003366; font-size:11px; line-height:1;">VIVEKANANDA MISSION INSTITUTE</div><div style="font-size:6px; color:#FF671F; font-weight:bold; margin-top:1px;">STUDENT IDENTITY CARD</div></div>
+                                <div><div style="font-weight:bold; color:#003366; font-size:9.5px; line-height:1;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</div><div style="font-size:6px; color:#FF671F; font-weight:bold; margin-top:1px;">STUDENT IDENTITY CARD</div></div>
                             </div>
                             <div style="font-size:8px; display:flex; flex-direction:column; gap:2px; margin-top:5px; color:#003366;">
                                 <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">NAME</span> <b>${dataObj.title}</b></div>
@@ -1654,8 +1671,8 @@
                             <div style="margin-top:10px; text-align:left;">${sealHtml}</div>
                             <div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3;">
                                 <strong style="color:#FF671F;">If found, please return to:</strong><br>
-                                Vivekananda Mission Institute<br>
-                                Muluk, Bolpur, Birbhum, W.B. - 731204
+                                Chandidas Vivekananda Siksha Kendram<br>
+                                Branch Address Pending...
                             </div>
                         </div>
                         <div style="width:35%; background:#003366; border-left:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
@@ -1670,7 +1687,7 @@
                     <div style="height:100%; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;">
                         <div style="background:#003366; padding:10px 5px; text-align:center; border-bottom:3px solid #FF671F; display:flex; flex-direction:column; align-items:center;">
                             ${logoHtml}
-                            <div style="color:white; font-size:10px; font-weight:bold; margin-top:2px;">VIVEKANANDA MISSION</div>
+                            <div style="color:white; font-size:9.5px; font-weight:bold; margin-top:2px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</div>
                             <div style="color:#d0e1f9; font-size:7px;">STAFF IDENTITY CARD</div>
                         </div>
                         <div style="display:flex; flex-direction:column; align-items:center; padding:15px 10px; flex:1;">
@@ -1700,8 +1717,8 @@
                             <div style="margin-top:10px; text-align:center;">${sealHtml}</div>
                             <div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3; text-align:center;">
                                 <strong style="color:#FF671F;">If found, please return to:</strong><br>
-                                Vivekananda Mission Institute<br>
-                                Muluk, Bolpur, Birbhum, W.B. - 731204
+                                Chandidas Vivekananda Siksha Kendram<br>
+                                Branch Address Pending...
                             </div>
                         </div>
                         <div style="height:35%; background:#003366; border-top:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
@@ -1722,13 +1739,13 @@
             if(type === 'student') {
                 const stuId = document.getElementById('id-stu-id').value.trim();
                 if(!stuId) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Student ID."); }
-                let data = null; try { const docSnap = await getDoc(doc(db, "students", makeSafeId(stuId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
+                let data = null; try { const docSnap = await getDoc(doc(db, "cvsk_students", makeSafeId(stuId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
                 if(!data) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Student ID not found in database!"); }
                 activeCardData = { type: 'student', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', dob: data.DOB || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85' };
             } else {
                 const tchId = document.getElementById('id-tch-id-fetch').value.trim();
                 if(!tchId) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Staff ID."); }
-                let data = null; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(tchId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
+                let data = null; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(tchId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
                 if(!data) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Staff ID not found in database!"); }
                 activeCardData = { type: 'teacher', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85' };
             }
@@ -1754,7 +1771,7 @@
             let targets = []; let isStudent = true;
             try {
                 if(targetType === 'class' || targetType === 'all-students') {
-                    const qSnaps = await getDocs(collection(db, "students"));
+                    const qSnaps = await getDocs(collection(db, "cvsk_students"));
                     qSnaps.forEach(docSnap => { 
                         const d = docSnap.data(); 
                         if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") {
@@ -1762,7 +1779,7 @@
                         }
                     });
                 } else {
-                    isStudent = false; const qSnaps = await getDocs(collection(db, "teachers"));
+                    isStudent = false; const qSnaps = await getDocs(collection(db, "cvsk_staff"));
                     qSnaps.forEach(docSnap => { 
                         const d = docSnap.data();
                         const name = d.Name || d.name;
@@ -1797,7 +1814,7 @@
                     pdf.addImage(frontCanvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, wMm, hMm); pdf.addPage(); pdf.addImage(backCanvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, wMm, hMm);
                 }
 
-                btn.innerText = "Saving PDF..."; pdf.save(`VMI_Bulk_IDs_${targetType}_${Date.now()}.pdf`);
+                btn.innerText = "Saving PDF..."; pdf.save(`CVSK_Bulk_IDs_${targetType}_${Date.now()}.pdf`);
             } catch(err) { alert("An error occurred during bulk generation."); console.error(err); } finally { btn.innerText = "📄 Generate Bulk ID PDF"; previewFront.innerHTML = ""; previewBack.innerHTML = ""; }
         });
         document.getElementById('bulk-id-target').addEventListener('change', (e) => { document.getElementById('bulk-id-class-container').style.display = (e.target.value === 'class') ? 'block' : 'none'; });
