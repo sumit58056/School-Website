@@ -74,7 +74,7 @@
                     <h3>Bulk Upload Student Details</h3>
                     <div class="info-box">
                         <strong>Upload Instructions:</strong> Please upload a standard `.xlsx` or `.csv` file. Ensure your file has the following exact column headers in the first row:<br>
-                        <em>Student ID, Roll No, Name, Class, Father's Name, Mother's Name, Phone, Address</em>
+                        <em>Student ID, Roll No, PEN Number, UDISE Number, Name, Class, Father's Name, Mother's Name, Phone, Address</em>
                     </div>
                     <form class="upload-form" action="#" method="POST">
                         <div class="file-drop-zone"><div class="upload-icon">📄</div><p>Drag and drop your Excel or CSV file here</p><label for="student-file" class="browse-btn">Browse Files</label><input type="file" id="student-file" accept=".xlsx, .csv" hidden></div>
@@ -100,6 +100,8 @@
                             <div class="input-group"><label>Class</label><select id="manual-class" required><option value="" disabled selected>-- Choose Class --</option><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option></select></div>
                             <div class="input-group"><label>Student ID</label><input type="text" id="manual-id" required></div>
                             <div class="input-group"><label>Roll No.</label><input type="text" id="manual-roll" required></div>
+                            <div class="input-group"><label>PEN Number</label><input type="text" id="manual-pen" placeholder="Optional"></div>
+                            <div class="input-group"><label>UDISE Number</label><input type="text" id="manual-udise" placeholder="Optional"></div>
                             <div class="input-group"><label>Full Name</label><input type="text" id="manual-name" required></div>
                             <div class="input-group"><label>WhatsApp Number</label><input type="tel" id="manual-phone" required></div>
                             <div class="input-group"><label>Father's Name</label><input type="text" id="manual-father" required></div>
@@ -206,7 +208,7 @@
                     </div>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Dept</th><th>Phone</th><th>PAN</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Role</th><th>Phone</th><th>PAN</th><th>Actions</th></tr></thead>
                             <tbody id="tch-table-body"><tr><td colspan="7" style="text-align: center; padding: 20px;">Click Refresh to load...</td></tr></tbody>
                         </table>
                     </div>
@@ -576,6 +578,8 @@
                 <div class="marks-grid">
                     <div class="input-group"><label>Student ID</label><input type="text" id="edit-stu-id" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Roll No.</label><input type="text" id="edit-stu-roll"></div>
+                    <div class="input-group"><label>PEN Number</label><input type="text" id="edit-stu-pen"></div>
+                    <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
                     <div class="input-group"><label>Full Name</label><input type="text" id="edit-stu-name" required></div>
                     <div class="input-group"><label>Date of Admission</label><input type="text" id="edit-stu-doa" placeholder="DD/MM/YYYY"></div>
                     <div class="input-group">
@@ -833,6 +837,8 @@
                         <table style="width:100%; border-collapse: collapse;">
                             <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Student ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Student ID"] || 'N/A'}</td></tr>
                             <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Roll No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Roll No"] || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">PEN Number:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["PEN Number"] || student.PEN || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">UDISE Number:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["UDISE Number"] || student.UDISE || 'N/A'}</td></tr>
                             <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Name || 'N/A'}</td></tr>
                             <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Class:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Class || 'N/A'}</td></tr>
                             <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Admission:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Date of Admission"] || 'N/A'}</td></tr>
@@ -854,6 +860,8 @@
                     document.getElementById('edit-stu-doc-id').value = student.docId; 
                     document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
                     document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
+                    document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; 
+                    document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; 
                     document.getElementById('edit-stu-name').value = student.Name || ''; 
                     document.getElementById('edit-stu-class').value = student.Class || 'LKG'; 
                     document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
@@ -890,6 +898,8 @@
                         <table style="width:100%; border-collapse: collapse;">
                             <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Student ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Student ID"] || 'N/A'}</td></tr>
                             <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Roll No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Roll No"] || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">PEN Number:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["PEN Number"] || student.PEN || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">UDISE Number:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["UDISE Number"] || student.UDISE || 'N/A'}</td></tr>
                             <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Name || 'N/A'}</td></tr>
                             <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Class:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Class || 'N/A'}</td></tr>
                             <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Admission:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Date of Admission"] || 'N/A'}</td></tr>
@@ -961,7 +971,22 @@
             e.preventDefault(); const studentId = document.getElementById('manual-id').value; 
             try { 
                 const safeDocId = makeSafeId(studentId);
-                await setDoc(doc(db, "students", safeDocId), { "Admission Type": document.getElementById('manual-admission-type').value, "Date of Admission": document.getElementById('manual-doa').value, "Student ID": studentId, "Roll No": document.getElementById('manual-roll').value, "Name": document.getElementById('manual-name').value, "Class": document.getElementById('manual-class').value, "Father's Name": document.getElementById('manual-father').value, "Mother's Name": document.getElementById('manual-mother').value, "Phone": document.getElementById('manual-phone').value, "Address": document.getElementById('manual-address').value, "Status": "Active", "Photo": compressedPhotoBase64 }, { merge: true }); 
+                await setDoc(doc(db, "students", safeDocId), { 
+                    "Admission Type": document.getElementById('manual-admission-type').value, 
+                    "Date of Admission": document.getElementById('manual-doa').value, 
+                    "Student ID": studentId, 
+                    "Roll No": document.getElementById('manual-roll').value, 
+                    "PEN Number": document.getElementById('manual-pen').value, 
+                    "UDISE Number": document.getElementById('manual-udise').value, 
+                    "Name": document.getElementById('manual-name').value, 
+                    "Class": document.getElementById('manual-class').value, 
+                    "Father's Name": document.getElementById('manual-father').value, 
+                    "Mother's Name": document.getElementById('manual-mother').value, 
+                    "Phone": document.getElementById('manual-phone').value, 
+                    "Address": document.getElementById('manual-address').value, 
+                    "Status": "Active", 
+                    "Photo": compressedPhotoBase64 
+                }, { merge: true }); 
                 alert(`Success!`); document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; 
             } catch(e) { alert("Error adding student."); }
         });
@@ -970,7 +995,20 @@
         document.getElementById('edit-student-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); const docId = document.getElementById('edit-stu-doc-id').value; 
             try { 
-                await setDoc(doc(db, "students", docId), { Name: document.getElementById('edit-stu-name').value, "Roll No": document.getElementById('edit-stu-roll').value, Class: document.getElementById('edit-stu-class').value, "Date of Admission": document.getElementById('edit-stu-doa').value, "Father's Name": document.getElementById('edit-stu-father').value, "Mother's Name": document.getElementById('edit-stu-mother').value, Phone: document.getElementById('edit-stu-phone').value, Address: document.getElementById('edit-stu-address').value, Status: document.getElementById('edit-stu-status').value, Photo: editStuPhotoBase64 }, { merge: true }); 
+                await setDoc(doc(db, "students", docId), { 
+                    Name: document.getElementById('edit-stu-name').value, 
+                    "Roll No": document.getElementById('edit-stu-roll').value, 
+                    "PEN Number": document.getElementById('edit-stu-pen').value, 
+                    "UDISE Number": document.getElementById('edit-stu-udise').value, 
+                    Class: document.getElementById('edit-stu-class').value, 
+                    "Date of Admission": document.getElementById('edit-stu-doa').value, 
+                    "Father's Name": document.getElementById('edit-stu-father').value, 
+                    "Mother's Name": document.getElementById('edit-stu-mother').value, 
+                    Phone: document.getElementById('edit-stu-phone').value, 
+                    Address: document.getElementById('edit-stu-address').value, 
+                    Status: document.getElementById('edit-stu-status').value, 
+                    Photo: editStuPhotoBase64 
+                }, { merge: true }); 
                 alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; document.getElementById('refresh-db-btn').click(); 
             } catch (err) { alert("Error updating student."); } 
         });
