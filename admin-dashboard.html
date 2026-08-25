@@ -33,12 +33,27 @@
         .asset-preview { width: 100%; height: 80px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; margin-top: 10px; background: #f9f9f9; overflow: hidden; border-radius: 4px;}
         .asset-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
-        /* Instruction Boxes */
+        /* Instruction & Alert Boxes */
         .info-box { background: #f4f7f6; border-left: 4px solid #003366; padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; color: #333; }
         .info-box strong { color: #003366; }
         .campus-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
         .badge-main { background: #003366; color: white; }
         .badge-branch { background: #FF671F; color: white; }
+        .status-verified { color: #217346; font-weight: bold; }
+        .status-pending { color: #E63946; font-weight: bold; }
+
+        #global-pending-alert {
+            display: none;
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 15px 20px;
+            border-left: 5px solid #ffc107;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body class="admin-bg">
@@ -52,7 +67,7 @@
         </div>
         <div class="admin-profile">
             <span>Welcome, Super Administrator</span>
-            <a href="index.html" class="logout-btn">Log Out</a>
+            <a href="login.html" class="logout-btn">Log Out</a>
         </div>
     </header>
 
@@ -76,12 +91,21 @@
         </aside>
 
         <main class="admin-content">
+            <!-- GLOBAL PENDING NOTIFICATION -->
+            <div id="global-pending-alert">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.5rem;">🔔</span>
+                    <span style="font-size: 0.95rem;">You have <strong id="global-pending-count" style="font-size: 1.1rem;">0</strong> student records <strong>Pending Verification</strong> from the network.</span>
+                </div>
+                <button id="view-pending-btn" class="admin-submit-btn btn-purple" style="width: auto; padding: 8px 15px; margin: 0; font-size: 0.85rem;">View Pending Records</button>
+            </div>
+
             <!-- SECTION 0: Universal Search -->
             <div id="section-universal-search" class="admin-section active">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>🌐 Cross-Campus Universal Search</h3>
                     <div class="info-box">
-                        Search the entire network (Main Campus & Branch Campus) simultaneously. You can search by <strong>Student Name, Aadhaar Number, or PEN Number</strong>.
+                        Search the entire network (Main Campus & Branch Campus) simultaneously. You can search by <strong>Student Name, Aadhaar Number, or PEN Number</strong>. You can view or fully edit students directly from these results.
                     </div>
                     <div style="display: flex; gap: 15px; margin-bottom: 20px;">
                         <input type="text" id="uni-search-input" placeholder="Enter Name, Aadhaar, or PEN..." style="padding: 12px; width: 100%; max-width: 500px; border-radius: 4px; border: 1px solid #ccc;">
@@ -89,8 +113,8 @@
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Campus</th><th>Photo</th><th>ID / Roll</th><th>Name</th><th>Class</th><th>Aadhaar</th><th>PEN</th><th>Status</th></tr></thead>
-                            <tbody id="uni-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Enter a search term above...</td></tr></tbody>
+                            <thead><tr><th>Campus</th><th>Photo</th><th>ID / Roll</th><th>Name</th><th>Class</th><th>Aadhaar</th><th>Verification</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="uni-table-body"><tr><td colspan="9" style="text-align: center; padding: 20px;">Enter a search term above...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -102,7 +126,7 @@
                     <h3>Bulk Upload Student Details (Main Campus)</h3>
                     <div class="info-box">
                         <strong>Upload Instructions:</strong> Upload a `.xlsx` or `.csv` file. Your file must have these headers in the first row:<br>
-                        <em>Student ID, Roll No, Aadhaar Number, PEN No, UDISE No, Name, Class, DOB, Blood Group, Religion, Caste, CWSN, Height, Weight, Father's Name, Mother's Name, Father Qual, Mother Qual, Phone, Address</em>
+                        <em>Student ID, Roll No, Aadhaar Number, PEN No, UDISE No, Name, Class, DOB, Blood Group, Religion, Caste, CWSN, Height, Weight, Father's Name, Mother's Name, Father Qual, Mother Qual, Phone, Address, DISE Class, DISE Section, DISE Roll</em>
                     </div>
                     <form class="upload-form" action="#" method="POST">
                         <div class="file-drop-zone"><div class="upload-icon">📄</div><p>Drag and drop your Excel or CSV file here</p><label for="student-file" class="browse-btn">Browse Files</label><input type="file" id="student-file" accept=".xlsx, .csv" hidden></div>
@@ -132,6 +156,17 @@
                             <div class="input-group"><label>Aadhaar Number (Mandatory)</label><input type="text" id="manual-aadhar" placeholder="12-digit number" required maxlength="12" pattern="[0-9]{12}"></div>
                             <div class="input-group"><label>PEN Number</label><input type="text" id="manual-pen" placeholder="Optional"></div>
                             <div class="input-group"><label>UDISE Number</label><input type="text" id="manual-udise" placeholder="Optional"></div>
+                            <div class="input-group" style="grid-column: span 2;">
+                                <label>Upload Student Document (Optional PDF/JPG)</label>
+                                <input type="file" id="manual-doc-file" accept=".pdf, .jpg, .jpeg, .png">
+                            </div>
+                        </div>
+                        
+                        <h4 class="section-divider">DISE Details (Super Admin Fillable: Class 5 - 10)</h4>
+                        <div class="marks-grid">
+                            <div class="input-group"><label>DISE Class</label><input type="text" id="manual-dise-class" placeholder="e.g. 5"></div>
+                            <div class="input-group"><label>DISE Section</label><input type="text" id="manual-dise-section" placeholder="e.g. A"></div>
+                            <div class="input-group"><label>DISE Roll</label><input type="text" id="manual-dise-roll" placeholder="e.g. 12"></div>
                         </div>
 
                         <h4 class="section-divider">Student Demographics</h4>
@@ -203,7 +238,7 @@
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>Verification</th><th>Status</th><th>Actions</th></tr></thead>
                             <tbody id="db-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Refresh Data"</td></tr></tbody>
                         </table>
                     </div>
@@ -581,7 +616,7 @@
                 </div>
             </div>
 
-        <!-- Footer moved INSIDE main and positioning fixed -->
+            <!-- Footer moved INSIDE main and positioning fixed -->
             <footer style="text-align: center; padding: 20px; margin-top: 40px; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd;">
                 &copy; 2026 Vivekananda Mission Institute. All Rights Reserved.
             </footer>
@@ -632,15 +667,33 @@
                 
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 10px; grid-column: span 2;">Academic Info</h5>
                 <div class="marks-grid">
+                    <div class="input-group"><label>Verification Status</label><select id="edit-stu-verification" style="font-weight:bold; color:#003366; background:#eef4fc;"><option>Pending</option><option>Verified</option></select></div>
                     <div class="input-group"><label>Admission Type</label><select id="edit-stu-admission-type" required><option>New Admission</option><option>Transfer In</option><option>Existing Student</option></select></div>
                     <div class="input-group"><label>Student ID</label><input type="text" id="edit-stu-id" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Roll No.</label><input type="text" id="edit-stu-roll"></div>
-                    <div class="input-group"><label>Class</label><select id="edit-stu-class" required><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+                    <div class="input-group">
+                        <label>Class</label>
+                        <select id="edit-stu-class" required>
+                            <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                            <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                        </select>
+                    </div>
                     <div class="input-group"><label>Date of Admission</label><input type="text" id="edit-stu-doa" placeholder="DD/MM/YYYY"></div>
                     <div class="input-group"><label>Aadhaar Number</label><input type="text" id="edit-stu-aadhar" maxlength="12"></div>
                     <div class="input-group"><label>PEN Number</label><input type="text" id="edit-stu-pen"></div>
                     <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
                     <div class="input-group"><label>Status</label><select id="edit-stu-status"><option>Active</option><option>Transferred Out</option></select></div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label style="color: #FF671F;">Upload New General Document (PDF/JPG)</label>
+                        <input type="file" id="edit-stu-doc-file" accept=".pdf, .jpg, .jpeg, .png">
+                    </div>
+                </div>
+
+                <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">DISE Details (Super Admin Fillable: Class 5 - 10)</h5>
+                <div class="marks-grid">
+                    <div class="input-group"><label>DISE Class</label><input type="text" id="edit-stu-dise-class" placeholder="e.g. 5"></div>
+                    <div class="input-group"><label>DISE Section</label><input type="text" id="edit-stu-dise-section" placeholder="e.g. A"></div>
+                    <div class="input-group"><label>DISE Roll</label><input type="text" id="edit-stu-dise-roll" placeholder="e.g. 12"></div>
                 </div>
 
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">Demographics</h5>
@@ -840,7 +893,44 @@
         });
 
 
+        // --- PENDING NOTIFICATION SYSTEM ---
+        async function checkPendingNotifications() {
+            try {
+                let pendingCount = 0;
+                const mainSnaps = await getDocs(collection(db, "students"));
+                mainSnaps.forEach(doc => { if(doc.data().VerificationStatus === 'Pending') pendingCount++; });
+                
+                const branchSnaps = await getDocs(collection(db, "cvsk_students"));
+                branchSnaps.forEach(doc => { if(doc.data().VerificationStatus === 'Pending') pendingCount++; });
+                
+                const alertBox = document.getElementById('global-pending-alert');
+                if(pendingCount > 0) {
+                    document.getElementById('global-pending-count').innerText = pendingCount;
+                    alertBox.style.display = 'flex';
+                } else {
+                    alertBox.style.display = 'none';
+                }
+            } catch(e) {}
+        }
+        checkPendingNotifications(); // Run on load
+
+        document.getElementById('view-pending-btn').addEventListener('click', async () => {
+            document.querySelector('.nav-link[data-target="section-view-db"]').click();
+            document.getElementById('refresh-db-btn').innerText = "Loading Pending...";
+            
+            try { 
+                let mainStudents = await fetchAllStudents('main');
+                let branchStudents = await fetchAllStudents('branch');
+                liveStudentsData = [...mainStudents, ...branchStudents]; 
+                
+                const pendingStudents = liveStudentsData.filter(s => s.VerificationStatus === 'Pending');
+                renderDatabaseTable(pendingStudents);
+            } catch (error) {} 
+            finally { document.getElementById('refresh-db-btn').innerText = "🔄 Refresh DB"; } 
+        });
+
         // --- 2. UNIVERSAL NETWORK SEARCH ---
+        let currentUniversalResults = [];
         document.getElementById('uni-search-btn').addEventListener('click', async () => {
             const btn = document.getElementById('uni-search-btn');
             const term = document.getElementById('uni-search-input').value.toLowerCase().trim();
@@ -848,7 +938,7 @@
             
             if(!term) { alert("Please enter a search term."); return; }
             btn.innerText = "Searching...";
-            tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">Scanning network database...</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px;">Scanning network database...</td></tr>`;
 
             try {
                 let results = [];
@@ -876,15 +966,28 @@
                 });
 
                 if(filtered.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: red;">No student found across any campus matching "${term}".</td></tr>`;
+                    tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px; color: red;">No student found across any campus matching "${term}".</td></tr>`;
                     return;
                 }
 
                 tableBody.innerHTML = "";
-                filtered.forEach(s => {
+                currentUniversalResults = filtered;
+
+                filtered.forEach((s, index) => {
                     const tr = document.createElement('tr');
                     const badge = s.campus === 'main' ? `<span class="campus-badge badge-main">Main (VMI)</span>` : `<span class="campus-badge badge-branch">Branch (CVSK)</span>`;
                     const photoSrc = s.Photo || 'https://via.placeholder.com/40';
+                    const isPending = s.VerificationStatus === 'Pending';
+                    const verifClass = isPending ? 'status-pending' : 'status-verified';
+                    
+                    let actionBtns = `
+                        <button class="action-btn btn-blue view-uni-btn" data-index="${index}">👁️ View</button>
+                        <button class="action-btn btn-green edit-uni-btn" data-index="${index}">Edit</button>
+                    `;
+                    if(isPending) {
+                        actionBtns = `<button class="action-btn btn-purple verify-quick-btn" data-id="${s.docId}" data-campus="${s.campus}">✅ Verify</button>` + actionBtns;
+                    }
+
                     tr.innerHTML = `
                         <td>${badge}</td>
                         <td><img src="${photoSrc}" class="db-thumbnail"></td>
@@ -892,19 +995,132 @@
                         <td>${s.Name}</td>
                         <td>${s.Class || 'N/A'}</td>
                         <td>${s["Aadhaar Number"] || s.Aadhaar || 'N/A'}</td>
-                        <td>${s["PEN Number"] || s.PEN || 'N/A'}</td>
+                        <td><span class="${verifClass}">${s.VerificationStatus || 'Verified'}</span></td>
                         <td><span style="font-weight:bold; color:${s.Status === 'Transferred Out' ? '#E63946' : 'green'};">${s.Status || 'Active'}</span></td>
+                        <td>${actionBtns}</td>
                     `;
                     tableBody.appendChild(tr);
                 });
+
+                // Attach Quick Verify Event
+                document.querySelectorAll('.verify-quick-btn').forEach(btn => {
+                    btn.addEventListener('click', async (ev) => {
+                        const docId = ev.target.getAttribute('data-id');
+                        const campus = ev.target.getAttribute('data-campus');
+                        const colName = campus === 'main' ? 'students' : 'cvsk_students';
+                        if(confirm("Approve and Verify this student record?")) {
+                            ev.target.innerText = "Verifying...";
+                            try {
+                                await setDoc(doc(db, colName, docId), { VerificationStatus: "Verified" }, { merge: true });
+                                checkPendingNotifications();
+                                document.getElementById('uni-search-btn').click();
+                            } catch(e) { alert("Error verifying."); ev.target.innerText = "✅ Verify"; }
+                        }
+                    });
+                });
+
+                // Attach View Event
+                document.querySelectorAll('.view-uni-btn').forEach(btn => {
+                    btn.addEventListener('click', (ev) => {
+                        const student = currentUniversalResults[ev.target.getAttribute('data-index')];
+                        const body = document.getElementById('view-student-body');
+                        
+                        let docsHtml = '';
+                        if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`;
+                        if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`;
+                        if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>';
+
+                        body.innerHTML = `
+                            <div style="display:flex; gap: 20px; align-items: flex-start;">
+                                <div style="text-align:center; width: 130px;">
+                                    <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
+                                    <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
+                                    <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
+                                    <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div>
+                                </div>
+                                <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div>
+                                </div>
+                            </div>
+                            <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4>
+                            <table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">
+                                <tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'}</td></tr>
+                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr>
+                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'}</td></tr>
+                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
+                            </table>
+                            <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                            <div style="padding: 10px 0;">${docsHtml}</div>
+                        `;
+                        document.getElementById('view-student-modal').style.display = 'flex';
+                    });
+                });
+
+                // Attach Edit Event
+                document.querySelectorAll('.edit-uni-btn').forEach(btn => {
+                    btn.addEventListener('click', (ev) => {
+                        const student = currentUniversalResults[ev.target.getAttribute('data-index')];
+                        document.getElementById('edit-stu-doc-id').value = student.docId; 
+                        document.getElementById('edit-stu-campus').value = student.campus; 
+                        document.getElementById('edit-stu-verification').value = student.VerificationStatus || 'Verified';
+                        document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
+                        document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
+                        document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; 
+                        document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; 
+                        document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; 
+                        document.getElementById('edit-stu-name').value = student.Name || ''; 
+                        document.getElementById('edit-stu-class').value = student.Class || 'LKG'; 
+                        document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; 
+                        document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
+                        
+                        document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || '';
+                        document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || '';
+                        document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || '';
+
+                        document.getElementById('edit-stu-dob').value = student.DOB || '';
+                        document.getElementById('edit-stu-blood').value = student["Blood Group"] || '';
+                        document.getElementById('edit-stu-religion').value = student.Religion || '';
+                        document.getElementById('edit-stu-caste').value = student.Caste || 'General';
+                        document.getElementById('edit-stu-cwsn').value = student.CWSN || 'No';
+                        document.getElementById('edit-stu-height').value = student.Height || '';
+                        document.getElementById('edit-stu-weight').value = student.Weight || '';
+                        document.getElementById('edit-stu-f-qual').value = student["Father Qualification"] || '';
+                        document.getElementById('edit-stu-m-qual').value = student["Mother Qualification"] || '';
+
+                        document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; 
+                        document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; 
+                        document.getElementById('edit-stu-phone').value = student.Phone || ''; 
+                        document.getElementById('edit-stu-address').value = student.Address || ''; 
+                        document.getElementById('edit-stu-status').value = student.Status || 'Active'; 
+                        editStuPhotoBase64 = student.Photo || ""; 
+                        document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; 
+                        document.getElementById('edit-student-modal').style.display = 'flex';
+                    });
+                });
+
             } catch(e) {
-                tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: red;">Search Error.</td></tr>`;
+                tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px; color: red;">Search Error.</td></tr>`;
             } finally { btn.innerText = "Search Network"; }
         });
 
 
         // --- 3. STUDENT DATABASE MODULE ---
         let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = "";
+        let manualDocBase64 = ""; let editDocBase64 = "";
         let currentActiveStudents = []; let currentTransferredStudents = [];
         
         async function fetchAllStudents(targetCampus) { 
@@ -929,12 +1145,20 @@
             else {
                 currentActiveStudents.forEach((student, index) => {
                     const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
-                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student.Phone || 'N/A'}</td><td><span style="color: green; font-weight: bold;">Active</span></td>
-                    <td>
+                    const isPending = student.VerificationStatus === 'Pending';
+                    const verifClass = isPending ? 'status-pending' : 'status-verified';
+                    
+                    let actionBtns = `
                         <button class="action-btn btn-blue view-stu-btn" data-index="${index}">👁️ View</button>
                         <button class="action-btn btn-green edit-stu-btn" data-index="${index}">Edit</button>
                         <button class="action-btn btn-red transfer-stu-btn" data-index="${index}">Transfer</button>
-                    </td>`;
+                    `;
+                    if(isPending) {
+                        actionBtns = `<button class="action-btn btn-purple verify-quick-btn" data-id="${student.docId}" data-campus="${student.campus}">✅ Verify</button>` + actionBtns;
+                    }
+
+                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td><span class="${verifClass}">${student.VerificationStatus || 'Verified'}</span></td><td><span style="color: green; font-weight: bold;">Active</span></td>
+                    <td>${actionBtns}</td>`;
                     dbTableBody.appendChild(tr);
                 });
             }
@@ -953,11 +1177,34 @@
                 });
             }
 
+            // Attach Quick Verify Event
+            document.querySelectorAll('.verify-quick-btn').forEach(btn => {
+                btn.addEventListener('click', async (ev) => {
+                    const docId = ev.target.getAttribute('data-id');
+                    const campus = ev.target.getAttribute('data-campus');
+                    const colName = campus === 'main' ? 'students' : 'cvsk_students';
+                    if(confirm("Approve and Verify this student record?")) {
+                        ev.target.innerText = "Verifying...";
+                        try {
+                            await setDoc(doc(db, colName, docId), { VerificationStatus: "Verified" }, { merge: true });
+                            checkPendingNotifications();
+                            document.getElementById('refresh-db-btn').click();
+                        } catch(e) { alert("Error verifying."); ev.target.innerText = "✅ Verify"; }
+                    }
+                });
+            });
+
             // Bind Actions for Active Students
             document.querySelectorAll('.view-stu-btn').forEach(btn => {
                 btn.addEventListener('click', (ev) => {
                     const student = currentActiveStudents[ev.target.getAttribute('data-index')];
                     const body = document.getElementById('view-student-body');
+
+                    let docsHtml = '';
+                    if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`;
+                    if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`;
+                    if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>';
+
                     body.innerHTML = `
                         <div style="display:flex; gap: 20px; align-items: flex-start;">
                             <div style="text-align:center; width: 130px;">
@@ -979,6 +1226,7 @@
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div>
                             </div>
                         </div>
@@ -990,6 +1238,8 @@
                             <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'}</td></tr>
                             <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
                         </table>
+                        <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                        <div style="padding: 10px 0;">${docsHtml}</div>
                     `;
                     document.getElementById('view-student-modal').style.display = 'flex';
                 });
@@ -1000,6 +1250,7 @@
                     const student = currentActiveStudents[e.target.getAttribute('data-index')]; 
                     document.getElementById('edit-stu-doc-id').value = student.docId; 
                     document.getElementById('edit-stu-campus').value = student.campus; 
+                    document.getElementById('edit-stu-verification').value = student.VerificationStatus || 'Verified';
                     document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
                     document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
                     document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; 
@@ -1010,6 +1261,10 @@
                     document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; 
                     document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
                     
+                    document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || '';
+                    document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || '';
+                    document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || '';
+
                     document.getElementById('edit-stu-dob').value = student.DOB || '';
                     document.getElementById('edit-stu-blood').value = student["Blood Group"] || '';
                     document.getElementById('edit-stu-religion').value = student.Religion || '';
@@ -1025,7 +1280,7 @@
                     document.getElementById('edit-stu-phone').value = student.Phone || ''; 
                     document.getElementById('edit-stu-address').value = student.Address || ''; 
                     document.getElementById('edit-stu-status').value = student.Status || 'Active'; 
-                    editStuPhotoBase64 = student.Photo || ""; 
+                    editStuPhotoBase64 = student.Photo || ""; editDocBase64 = student.Document || "";
                     document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; 
                     document.getElementById('edit-student-modal').style.display = 'flex';
                 });
@@ -1047,6 +1302,12 @@
                 btn.addEventListener('click', (ev) => {
                     const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
                     const body = document.getElementById('view-student-body');
+
+                    let docsHtml = '';
+                    if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`;
+                    if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`;
+                    if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>';
+
                     body.innerHTML = `
                         <div style="display:flex; gap: 20px; align-items: flex-start;">
                             <div style="text-align:center; width: 130px;">
@@ -1069,6 +1330,8 @@
                                 <div style="background:#ffe5e5; padding:8px; border-radius:4px; border:1px solid #E63946;"><strong style="color:#E63946;">Transfer Date:</strong> <br>${student.TransferDate || 'N/A'}</div>
                             </div>
                         </div>
+                        <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                        <div style="padding: 10px 0;">${docsHtml}</div>
                     `;
                     document.getElementById('view-student-modal').style.display = 'flex';
                 });
@@ -1116,7 +1379,7 @@
         document.getElementById('refresh-db-btn').addEventListener('click', async (e) => { 
             e.target.innerText = "Loading..."; 
             const targetCampus = document.getElementById('db-campus-select').value;
-            try { liveStudentsData = await fetchAllStudents(targetCampus); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Refresh Data"; } 
+            try { liveStudentsData = await fetchAllStudents(targetCampus); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Refresh DB"; } 
         });
         
         // Ensure the TC tab also syncs the DB
@@ -1133,9 +1396,12 @@
         });
         
         document.getElementById('manual-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
-        
+        document.getElementById('manual-doc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { manualDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+
         document.getElementById('manual-student-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); const studentId = document.getElementById('manual-id').value; 
+            e.preventDefault(); 
+            const studentId = document.getElementById('manual-id').value; 
+            const aadharVal = document.getElementById('manual-aadhar').value;
             try { 
                 const safeDocId = makeSafeId(studentId);
                 await setDoc(doc(db, "students", safeDocId), { 
@@ -1143,9 +1409,12 @@
                     "Date of Admission": document.getElementById('manual-doa').value, 
                     "Student ID": studentId, 
                     "Roll No": document.getElementById('manual-roll').value, 
-                    "Aadhaar Number": document.getElementById('manual-aadhar').value, 
+                    "Aadhaar Number": aadharVal, 
                     "PEN Number": document.getElementById('manual-pen').value, 
                     "UDISE Number": document.getElementById('manual-udise').value, 
+                    "DISE Class": document.getElementById('manual-dise-class').value, 
+                    "DISE Section": document.getElementById('manual-dise-section').value, 
+                    "DISE Roll": document.getElementById('manual-dise-roll').value, 
                     "Name": document.getElementById('manual-name').value, 
                     "DOB": document.getElementById('manual-dob').value, 
                     "Blood Group": document.getElementById('manual-blood').value, 
@@ -1161,28 +1430,37 @@
                     "Mother Qualification": document.getElementById('manual-m-qual').value, 
                     "Phone": document.getElementById('manual-phone').value, 
                     "Address": document.getElementById('manual-address').value, 
+                    "VerificationStatus": "Verified",
+                    "Document": manualDocBase64,
                     "Status": "Active", 
                     "Photo": compressedPhotoBase64 
                 }, { merge: true }); 
-                alert(`Success!`); document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; 
+                alert(`Success!`); document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; manualDocBase64 = "";
             } catch(e) { alert("Error adding student."); }
         });
         
         document.getElementById('edit-stu-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editStuPhotoBase64 = base64; document.getElementById('edit-stu-photo-preview').src = base64; }); } });
+        document.getElementById('edit-stu-doc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { editDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+
         document.getElementById('edit-student-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             const docId = document.getElementById('edit-stu-doc-id').value; 
             const campus = document.getElementById('edit-stu-campus').value;
             const colName = campus === 'main' ? 'students' : 'cvsk_students';
+            const aadharVal = document.getElementById('edit-stu-aadhar').value;
 
             try { 
-                await setDoc(doc(db, colName, docId), { 
+                const payload = { 
+                    "VerificationStatus": document.getElementById('edit-stu-verification').value,
                     "Admission Type": document.getElementById('edit-stu-admission-type').value, 
                     Name: document.getElementById('edit-stu-name').value, 
                     "Roll No": document.getElementById('edit-stu-roll').value, 
-                    "Aadhaar Number": document.getElementById('edit-stu-aadhar').value, 
+                    "Aadhaar Number": aadharVal, 
                     "PEN Number": document.getElementById('edit-stu-pen').value, 
                     "UDISE Number": document.getElementById('edit-stu-udise').value, 
+                    "DISE Class": document.getElementById('edit-stu-dise-class').value, 
+                    "DISE Section": document.getElementById('edit-stu-dise-section').value, 
+                    "DISE Roll": document.getElementById('edit-stu-dise-roll').value, 
                     "DOB": document.getElementById('edit-stu-dob').value, 
                     "Blood Group": document.getElementById('edit-stu-blood').value, 
                     "Religion": document.getElementById('edit-stu-religion').value, 
@@ -1200,14 +1478,51 @@
                     Address: document.getElementById('edit-stu-address').value, 
                     Status: document.getElementById('edit-stu-status').value, 
                     Photo: editStuPhotoBase64 
-                }, { merge: true }); 
+                };
+                if(editDocBase64) payload.Document = editDocBase64;
+
+                await setDoc(doc(db, colName, docId), payload, { merge: true }); 
                 alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; 
+                checkPendingNotifications();
                 if(document.getElementById('section-view-db').classList.contains('active')) {
                     document.getElementById('refresh-db-btn').click(); 
                 } else {
                     document.getElementById('uni-search-btn').click();
                 }
             } catch (err) { alert("Error updating student."); } 
+        });
+
+        // Manual TC Generation Form
+        document.getElementById('tc-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); const studentId = document.getElementById('tc-student-id').value; 
+            const safeDocId = makeSafeId(studentId);
+            // Default to main campus for manual TC logic here
+            const docSnap = await getDoc(doc(db, "students", safeDocId)); 
+            if (docSnap.exists()) { 
+                const student = docSnap.data();
+                await setDoc(doc(db, "students", safeDocId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true }); 
+                
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF();
+                if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
+                pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center");
+                pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
+                pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
+                
+                pdf.setFontSize(12); pdf.setTextColor(0, 0, 0);
+                pdf.text(`This is to certify that`, 20, 60);
+                pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal');
+                
+                pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal');
+                
+                if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); }
+                if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); }
+                
+                pdf.text("_______________________", 140, 205);
+                pdf.text("Principal Signature", 145, 212);
+
+                pdf.save(`TC_${studentId}.pdf`); 
+                alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
+            } else { alert("Student not found in Main database."); }
         });
 
         document.querySelector('.upload-form').addEventListener('submit', async (e) => { 
@@ -1219,7 +1534,7 @@
                 jsonData.forEach((row, index) => { 
                     const rawId = String(row["Roll No"] || row["Student ID"] || "");
                     const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; 
-                    batch.set(doc(db, "students", docId), { ...row, Status: "Active" }, { merge: true }); 
+                    batch.set(doc(db, "students", docId), { ...row, Status: "Active", VerificationStatus: "Verified" }, { merge: true }); 
                 }); 
                 await batch.commit(); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); 
             }; reader.readAsArrayBuffer(file); 

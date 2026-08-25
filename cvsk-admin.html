@@ -16,12 +16,13 @@
         .btn-red { background-color: #E63946; } .btn-red:hover { background-color: #c92a37; }
         .btn-green { background-color: #217346; } .btn-green:hover { background-color: #1e6b3e; }
         .btn-blue { background-color: #007BFF; } .btn-blue:hover { background-color: #0056b3; }
+        .btn-purple { background-color: #6a0dad; } .btn-purple:hover { background-color: #4b0082; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
         .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         
         /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
-        .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 500px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 650px; max-height: 90vh; overflow-y: auto; position: relative; }
         .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #666; }
         
         /* High-Res QR Code Rendering */
@@ -35,6 +36,8 @@
         /* Instruction Boxes */
         .info-box { background: #f4f7f6; border-left: 4px solid #003366; padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; color: #333; }
         .info-box strong { color: #003366; }
+        .status-verified { color: #217346; font-weight: bold; }
+        .status-pending { color: #E63946; font-weight: bold; }
     </style>
 </head>
 <body class="admin-bg">
@@ -42,13 +45,13 @@
         <div class="logo">
             <img src="logo.jpg" alt="CVSK Logo" onerror="this.src='https://via.placeholder.com/50/003366/FFFFFF?text=CVSK'">
             <div style="display:flex; flex-direction:column;">
-                <h2>Chandidas Vivekananda Siksha Kendram</h2>
+                <h2>Chandidas Vivekananda Siksha Kendram (Mission)</h2>
                 <span style="font-size: 0.8rem; color:#f4f7f6;">Branch Admin Portal</span>
             </div>
         </div>
         <div class="admin-profile">
             <span>Welcome, Branch Administrator</span>
-            <a href="index.html" class="logout-btn">Log Out</a>
+            <a href="login.html" class="logout-btn">Log Out</a>
         </div>
     </header>
 
@@ -120,6 +123,10 @@
                                 <input type="text" id="manual-pen" placeholder="(Mandatory Class 2+)">
                             </div>
                             <div class="input-group"><label>UDISE Number</label><input type="text" id="manual-udise" placeholder="Optional"></div>
+                            <div class="input-group" style="grid-column: span 2;">
+                                <label>Upload Student Document (Optional PDF/JPG)</label>
+                                <input type="file" id="manual-doc-file" accept=".pdf, .jpg, .jpeg, .png">
+                            </div>
                         </div>
 
                         <h4 class="section-divider">Student Demographics</h4>
@@ -189,7 +196,7 @@
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>Phone</th><th>Verification</th><th>Actions</th></tr></thead>
                             <tbody id="db-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Refresh Data"</td></tr></tbody>
                         </table>
                     </div>
@@ -591,9 +598,9 @@
                 </div>
             </div>
 
-            <!-- Footer moved INSIDE main and positioning fixed -->
+            <!-- Footer placed INSIDE main for scrolling stability -->
             <footer style="text-align: center; padding: 20px; margin-top: 40px; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd;">
-                &copy; 2026 Chandidas Vivekananda Siksha Kendram. All Rights Reserved.
+                &copy; 2026 Vivekananda Mission Institute. All Rights Reserved.
             </footer>
 
         </main>
@@ -626,7 +633,7 @@
         </div>
     </div>
 
-    <!-- Edit Student Modal -->
+    <!-- Edit Student Modal (Includes Super Admin Read-Only Fields) -->
     <div id="edit-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 700px;">
             <button class="modal-close" onclick="document.getElementById('edit-student-modal').style.display='none'">&times;</button>
@@ -663,6 +670,18 @@
                     <div class="input-group"><label>PEN Number</label><input type="text" id="edit-stu-pen"></div>
                     <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
                     <div class="input-group"><label>Status</label><select id="edit-stu-status"><option>Active</option><option>Transferred Out</option></select></div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label style="color: #FF671F;">Upload New Document (PDF/JPG)</label>
+                        <input type="file" id="edit-stu-doc-file" accept=".pdf, .jpg, .jpeg, .png">
+                    </div>
+                </div>
+
+                <!-- DISE Fields Locked as Read-Only for Branch Level -->
+                <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">DISE Details (Super Admin Access Only)</h5>
+                <div class="marks-grid">
+                    <div class="input-group"><label>DISE Class</label><input type="text" id="edit-stu-dise-class" placeholder="Super Admin Access Only" readonly style="background:#eee; cursor:not-allowed;"></div>
+                    <div class="input-group"><label>DISE Section</label><input type="text" id="edit-stu-dise-section" placeholder="Super Admin Access Only" readonly style="background:#eee; cursor:not-allowed;"></div>
+                    <div class="input-group"><label>DISE Roll</label><input type="text" id="edit-stu-dise-roll" placeholder="Super Admin Access Only" readonly style="background:#eee; cursor:not-allowed;"></div>
                 </div>
 
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">Demographics</h5>
@@ -832,7 +851,6 @@
             }; reader.readAsDataURL(file);
         }
 
-        // Live IFSC Fetcher
         async function fetchBankDetails(ifscCode, targetInput) {
             if (ifscCode.length === 11) {
                 try {
@@ -846,7 +864,6 @@
         document.getElementById('tch-ifsc').addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('tch-bank')); });
         document.getElementById('edit-tch-ifsc').addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('edit-tch-bank')); });
 
-        // --- 2. GLOBAL SETTINGS MANAGER ---
         async function loadGlobalSettings() {
             try { 
                 const snap = await getDoc(doc(db, "settings", "cvsk_assets")); 
@@ -884,7 +901,8 @@
         });
 
         // --- 3. STUDENT DATABASE MODULE ---
-        let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = ""; let transferCertBase64 = "";
+        let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = ""; 
+        let transferCertBase64 = ""; let manualDocBase64 = ""; let editDocBase64 = "";
         let currentActiveStudents = []; let currentTransferredStudents = [];
         
         async function fetchAllStudents() { 
@@ -908,12 +926,19 @@
             else {
                 currentActiveStudents.forEach((student, index) => {
                     const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
-                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student.Phone || 'N/A'}</td><td><span style="color: green; font-weight: bold;">Active</span></td>
-                    <td>
-                        <button class="action-btn btn-blue view-stu-btn" data-index="${index}">👁️ View</button>
-                        <button class="action-btn btn-green edit-stu-btn" data-index="${index}">Edit</button>
-                        <button class="action-btn btn-red transfer-stu-btn" data-index="${index}">Transfer</button>
-                    </td>`;
+                    const isVerified = student.VerificationStatus === 'Verified';
+                    
+                    let actionButtons = `<button class="action-btn btn-blue view-stu-btn" data-index="${index}">👁️ View</button>`;
+                    
+                    if(isVerified) {
+                        actionButtons += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;" onclick="alert('This record has been verified by the Super Admin and is locked. Please contact the Main Campus to request edits.')">🔒 Locked</button>`;
+                    } else {
+                        actionButtons += `<button class="action-btn btn-green edit-stu-btn" data-index="${index}">Edit</button>
+                                          <button class="action-btn btn-red transfer-stu-btn" data-index="${index}">Transfer</button>`;
+                    }
+
+                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student.Phone || 'N/A'}</td><td><span class="${isVerified ? 'status-verified' : 'status-pending'}">${student.VerificationStatus || 'Pending'}</span></td>
+                    <td>${actionButtons}</td>`;
                     dbTableBody.appendChild(tr);
                 });
             }
@@ -937,6 +962,12 @@
                 btn.addEventListener('click', (ev) => {
                     const student = currentActiveStudents[ev.target.getAttribute('data-index')];
                     const body = document.getElementById('view-student-body');
+
+                    let docsHtml = '';
+                    if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`;
+                    if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`;
+                    if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>';
+
                     body.innerHTML = `
                         <div style="display:flex; gap: 20px; align-items: flex-start;">
                             <div style="text-align:center; width: 130px;">
@@ -957,6 +988,7 @@
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div>
                             </div>
                         </div>
@@ -968,6 +1000,8 @@
                             <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'}</td></tr>
                             <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
                         </table>
+                        <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                        <div style="padding: 10px 0;">${docsHtml}</div>
                     `;
                     document.getElementById('view-student-modal').style.display = 'flex';
                 });
@@ -987,6 +1021,10 @@
                     document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; 
                     document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
                     
+                    document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || '';
+                    document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || '';
+                    document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || '';
+
                     document.getElementById('edit-stu-dob').value = student.DOB || '';
                     document.getElementById('edit-stu-blood').value = student["Blood Group"] || '';
                     document.getElementById('edit-stu-religion').value = student.Religion || '';
@@ -1002,7 +1040,7 @@
                     document.getElementById('edit-stu-phone').value = student.Phone || ''; 
                     document.getElementById('edit-stu-address').value = student.Address || ''; 
                     document.getElementById('edit-stu-status').value = student.Status || 'Active'; 
-                    editStuPhotoBase64 = student.Photo || ""; 
+                    editStuPhotoBase64 = student.Photo || ""; editDocBase64 = student.Document || "";
                     document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; 
                     document.getElementById('edit-student-modal').style.display = 'flex';
                 });
@@ -1023,6 +1061,12 @@
                 btn.addEventListener('click', (ev) => {
                     const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
                     const body = document.getElementById('view-student-body');
+
+                    let docsHtml = '';
+                    if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`;
+                    if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`;
+                    if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>';
+
                     body.innerHTML = `
                         <div style="display:flex; gap: 20px; align-items: flex-start;">
                             <div style="text-align:center; width: 130px;">
@@ -1044,6 +1088,8 @@
                                 <div style="background:#ffe5e5; padding:8px; border-radius:4px; border:1px solid #E63946;"><strong style="color:#E63946;">Transfer Date:</strong> <br>${student.TransferDate || 'N/A'}</div>
                             </div>
                         </div>
+                        <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                        <div style="padding: 10px 0;">${docsHtml}</div>
                     `;
                     document.getElementById('view-student-modal').style.display = 'flex';
                 });
@@ -1102,14 +1148,8 @@
         });
         
         document.getElementById('manual-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
-        
-        document.getElementById('manual-tc-file').addEventListener('change', function(e) {
-            if(this.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(event) { transferCertBase64 = event.target.result; };
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
+        document.getElementById('manual-tc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { transferCertBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+        document.getElementById('manual-doc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { manualDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
 
         document.getElementById('manual-student-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); 
@@ -1124,12 +1164,12 @@
                 return alert("PEN Number is mandatory for Class 2 and above.");
             }
 
-            // Validation: Aadhaar Double Entry Check
+            // Validation: Duplicate Check
             try {
                 const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
                 const aadharSnaps = await getDocs(aadharQuery);
                 if(!aadharSnaps.empty) {
-                    return alert("Submission Blocked: A student with this Aadhaar Number is already enrolled in the system!");
+                    return alert("Submission Blocked: A student with this identifier is already enrolled in the branch system!");
                 }
             } catch(e) { console.error("Validation error", e); }
 
@@ -1160,16 +1200,20 @@
                     "Phone": document.getElementById('manual-phone').value, 
                     "Address": document.getElementById('manual-address').value, 
                     "Transfer Certificate Data": transferCertBase64,
+                    "Document": manualDocBase64,
+                    "VerificationStatus": "Pending", // Sent as Pending for Super Admin Approval
                     "Status": "Active", 
                     "Photo": compressedPhotoBase64 
                 }, { merge: true }); 
-                alert(`Student Enrolled Successfully!`); 
-                document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; transferCertBase64 = "";
+                alert(`Student Enrolled Successfully! Record is sent to Super Admin for Verification.`); 
+                document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; transferCertBase64 = ""; manualDocBase64 = "";
                 document.getElementById('manual-tc-group').style.display = 'none';
             } catch(e) { alert("Error adding student."); }
         });
         
         document.getElementById('edit-stu-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editStuPhotoBase64 = base64; document.getElementById('edit-stu-photo-preview').src = base64; }); } });
+        document.getElementById('edit-stu-doc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { editDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+
         document.getElementById('edit-student-form').addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             const docId = document.getElementById('edit-stu-doc-id').value; 
@@ -1183,7 +1227,7 @@
                 return alert("PEN Number is mandatory for Class 2 and above.");
             }
 
-            // Validation: Aadhaar Double Entry Check (Exclude self)
+            // Validation: Duplicate Check (Exclude self)
             try {
                 const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
                 const aadharSnaps = await getDocs(aadharQuery);
@@ -1192,12 +1236,12 @@
                     if(docSnap.id !== docId) isDuplicate = true;
                 });
                 if(isDuplicate) {
-                    return alert("Update Blocked: Another student already exists with this Aadhaar Number!");
+                    return alert("Update Blocked: Another student already exists with this identifier!");
                 }
             } catch(e) {}
 
             try { 
-                await setDoc(doc(db, "cvsk_students", docId), { 
+                const payload = { 
                     "Admission Type": document.getElementById('edit-stu-admission-type').value, 
                     Name: document.getElementById('edit-stu-name').value, 
                     "Roll No": document.getElementById('edit-stu-roll').value, 
@@ -1221,8 +1265,11 @@
                     Address: document.getElementById('edit-stu-address').value, 
                     Status: document.getElementById('edit-stu-status').value, 
                     Photo: editStuPhotoBase64 
-                }, { merge: true }); 
-                alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; document.getElementById('refresh-db-btn').click(); 
+                };
+                if(editDocBase64) payload.Document = editDocBase64;
+
+                await setDoc(doc(db, "cvsk_students", docId), payload, { merge: true }); 
+                alert("Student updated successfully!"); document.getElementById('edit-student-modal').style.display = 'none'; document.getElementById('refresh-db-btn').click(); 
             } catch (err) { alert("Error updating student."); } 
         });
 
@@ -1245,7 +1292,17 @@
                 pdf.text(`This is to certify that`, 20, 60);
                 pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal');
                 
+                pdf.text(`Son/Daughter of`, 20, 75);
+                pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal');
+                
+                pdf.text(`was admitted to this institution on`, 20, 90);
+                pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal');
+                
+                pdf.text(`and has been officially transferred on`, 20, 105);
+                pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal');
+                
                 pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal');
+                pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal');
                 
                 if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); }
                 if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); }
@@ -1267,7 +1324,7 @@
                 jsonData.forEach((row, index) => { 
                     const rawId = String(row["Roll No"] || row["Student ID"] || "");
                     const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; 
-                    batch.set(doc(db, "cvsk_students", docId), { ...row, Status: "Active" }, { merge: true }); 
+                    batch.set(doc(db, "cvsk_students", docId), { ...row, Status: "Active", VerificationStatus: "Pending" }, { merge: true }); 
                 }); 
                 await batch.commit(); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); 
             }; reader.readAsArrayBuffer(file); 
@@ -1672,7 +1729,7 @@
                             <div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3;">
                                 <strong style="color:#FF671F;">If found, please return to:</strong><br>
                                 Chandidas Vivekananda Siksha Kendram<br>
-                                Branch Address Pending...
+                                Branch Campus Bolpur
                             </div>
                         </div>
                         <div style="width:35%; background:#003366; border-left:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
@@ -1718,7 +1775,7 @@
                             <div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3; text-align:center;">
                                 <strong style="color:#FF671F;">If found, please return to:</strong><br>
                                 Chandidas Vivekananda Siksha Kendram<br>
-                                Branch Address Pending...
+                                Branch Campus Bolpur
                             </div>
                         </div>
                         <div style="height:35%; background:#003366; border-top:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
