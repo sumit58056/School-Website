@@ -3,109 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Login | VMI</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Universal Portal Login | VMI Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { 
+            background: linear-gradient(135deg, #003366 0%, #001a33 100%); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            color: #333;
+        }
+        .login-container {
+            background: #ffffff;
+            width: 100%;
+            max-width: 450px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .login-header {
+            background: #f8f9fa;
+            padding: 30px 20px 20px 20px;
+            text-align: center;
+            border-bottom: 3px solid #FF671F;
+        }
+        .login-header img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #003366;
+            margin-bottom: 15px;
+        }
+        .login-header h2 { color: #003366; font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; }
+        .login-header p { color: #666; font-size: 0.9rem; }
+        
+        .login-body { padding: 30px; }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #003366; margin-bottom: 8px; }
+        .input-group select, .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background-color: #fdfdfd;
+        }
+        .input-group select:focus, .input-group input:focus {
+            outline: none;
+            border-color: #FF671F;
+            box-shadow: 0 0 0 3px rgba(255, 103, 31, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: #FF671F;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        .login-btn:hover { background: #e05514; }
+        .login-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 0.8rem;
+            color: #888;
+            background: #f4f7f6;
+            border-top: 1px solid #eee;
+        }
+        #error-msg {
+            color: #E63946;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 600;
+            display: none;
+        }
+    </style>
 </head>
-<body class="login-bg">
-    
+<body>
+
     <div class="login-container">
         <div class="login-header">
-            <img src="logo.jpg" alt="VMI Logo">
-            <h2>VMI Portal Login</h2>
-            <p>Enter your credentials to access your dashboard</p>
+            <img src="logo.jpg" alt="Network Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=NET'">
+            <h2>Network Portal Login</h2>
+            <p>Select your campus and role to continue</p>
+        </div>
+        
+        <div class="login-body">
+            <p id="error-msg"></p>
+            <form id="universal-login-form">
+                
+                <div class="input-group">
+                    <label>🏫 Select Campus</label>
+                    <select id="school-select" required>
+                        <option value="" disabled selected>-- Choose your School --</option>
+                        <option value="vmi_main">Vivekananda Mission Institute</option>
+                        <option value="cvsk">Chandidas Vivekananda Siksha Kendram (Mission)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>👤 Select Role</label>
+                    <select id="role-select" required>
+                        <option value="" disabled selected>-- Choose your Role --</option>
+                        <option value="admin">Administrator</option>
+                        <option value="teacher">Teacher / Staff</option>
+                        <option value="student">Student / Parent</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>User ID</label>
+                    <input type="text" id="user-id" placeholder="Enter your ID" required>
+                </div>
+
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="user-pass" placeholder="Enter your Password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Secure Login</button>
+            </form>
         </div>
 
-        <!-- NOTE: Removed action and method attributes here -->
-        <form class="login-form">
-            <div class="input-group">
-                <label for="role">Login As</label>
-                <select id="role" name="role" required>
-                    <option value="student">Student / Parent</option>
-                    <option value="faculty">Faculty</option>
-                    <option value="admin">Administrator</option>
-                </select>
-            </div>
-
-            <div class="input-group">
-                <label for="userid">User ID / Email</label>
-                <!-- Changed to type="email" for Firebase Auth -->
-                <input type="email" id="userid" name="userid" placeholder="Enter your Admin Email" required>
-            </div>
-
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-
-            <div class="form-actions">
-                <div class="remember-me">
-                    <input type="checkbox" id="remember">
-                    <label for="remember">Remember me</label>
-                </div>
-                <a href="#" class="forgot-password">Forgot Password?</a>
-            </div>
-
-            <button type="submit" class="login-submit-btn">Secure Login</button>
-        </form>
-
         <div class="login-footer">
-            <p><a href="index.html">← Return to Homepage</a></p>
+            &copy; 2026 Educational Network. All Rights Reserved. <br>
+            <span style="font-size: 0.7rem; margin-top: 5px; display: block;">Contact Support: prodhanaacharya2025@gmail.com</span>
         </div>
     </div>
 
-    <!-- Firebase SDK Integration -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-        // Your specific Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
-            authDomain: "vmi-portal.firebaseapp.com",
-            projectId: "vmi-portal",
-            storageBucket: "vmi-portal.firebasestorage.app",
-            messagingSenderId: "215224119153",
-            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // Handle the Login Form Submission
-        const loginForm = document.querySelector('.login-form');
-        const submitBtn = document.querySelector('.login-submit-btn');
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // This is the magic line that stops the 405 error!
+    <script>
+        document.getElementById('universal-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "Authenticating...";
-            submitBtn.style.backgroundColor = "#555";
+            const school = document.getElementById('school-select').value;
+            const role = document.getElementById('role-select').value;
+            const userId = document.getElementById('user-id').value;
+            const pass = document.getElementById('user-pass').value;
+            const errorMsg = document.getElementById('error-msg');
 
-            const role = document.getElementById('role').value;
-            const email = document.getElementById('userid').value; 
-            const password = document.getElementById('password').value;
+            errorMsg.style.display = 'none';
 
-            // Enforce Admin role
-            if (role !== 'admin') {
-                alert("Currently, only Administrator logins are active.");
-                submitBtn.innerText = originalBtnText;
-                submitBtn.style.backgroundColor = "#003366";
-                return;
-            }
-
-            // Attempt Firebase Login
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Login Successful! Redirecting to dashboard...");
+            // Routing Logic
+            if (school === 'vmi_main') {
+                if (role === 'admin') {
                     window.location.href = "admin-dashboard.html";
-                })
-                .catch((error) => {
-                    alert("Login Failed: " + error.message);
-                    submitBtn.innerText = originalBtnText;
-                    submitBtn.style.backgroundColor = "#003366";
-                });
+                } else {
+                    errorMsg.innerText = "Main Campus Teacher/Student Portals are currently under construction.";
+                    errorMsg.style.display = 'block';
+                }
+            } else if (school === 'cvsk') {
+                if (role === 'admin') {
+                    window.location.href = "cvsk-admin.html";
+                } else {
+                    errorMsg.innerText = "CVSK Teacher/Student Portals are currently under construction.";
+                    errorMsg.style.display = 'block';
+                }
+            }
         });
     </script>
 </body>

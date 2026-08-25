@@ -3,177 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Portal Login | VMI Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #003366 0%, #001a33 100%); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            color: #333;
-        }
-        .login-container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 450px;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .login-header {
-            background: #f8f9fa;
-            padding: 30px 20px 20px 20px;
-            text-align: center;
-            border-bottom: 3px solid #FF671F;
-        }
-        .login-header img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid #003366;
-            margin-bottom: 15px;
-        }
-        .login-header h2 { color: #003366; font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; }
-        .login-header p { color: #666; font-size: 0.9rem; }
-        
-        .login-body { padding: 30px; }
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #003366; margin-bottom: 8px; }
-        .input-group select, .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background-color: #fdfdfd;
-        }
-        .input-group select:focus, .input-group input:focus {
-            outline: none;
-            border-color: #FF671F;
-            box-shadow: 0 0 0 3px rgba(255, 103, 31, 0.1);
-        }
-        
-        .login-btn {
-            width: 100%;
-            background: #FF671F;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        .login-btn:hover { background: #e05514; }
-        .login-footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 0.8rem;
-            color: #888;
-            background: #f4f7f6;
-            border-top: 1px solid #eee;
-        }
-        #error-msg {
-            color: #E63946;
-            font-size: 0.85rem;
-            text-align: center;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: none;
-        }
-    </style>
+    <title>Vivekananda Mission Institute | Official Portal</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="login-container">
-        <div class="login-header">
-            <!-- You can change this logo to a network logo if you have one -->
-            <img src="logo.jpg" alt="Network Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=NET'">
-            <h2>Network Portal Login</h2>
-            <p>Select your campus and role to continue</p>
-        </div>
-        
-        <div class="login-body">
-            <p id="error-msg"></p>
-            <form id="universal-login-form">
-                
-                <div class="input-group">
-                    <label>🏫 Select Campus</label>
-                    <select id="school-select" required>
-                        <option value="" disabled selected>-- Choose your School --</option>
-                        <option value="vmi_main">Vivekananda Mission Institute</option>
-                        <option value="cvsk">Chandidas Vivekananda Siksha Kendram (Mission)</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>👤 Select Role</label>
-                    <select id="role-select" required>
-                        <option value="" disabled selected>-- Choose your Role --</option>
-                        <option value="admin">Administrator</option>
-                        <option value="teacher">Teacher / Staff</option>
-                        <option value="student">Student / Parent</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label>User ID</label>
-                    <input type="text" id="user-id" placeholder="Enter your ID" required>
-                </div>
-
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="user-pass" placeholder="Enter your Password" required>
-                </div>
-
-                <button type="submit" class="login-btn">Secure Login</button>
-            </form>
-        </div>
-
-        <div class="login-footer">
-            &copy; 2026 Educational Network. All Rights Reserved. <br>
-            <span style="font-size: 0.7rem; margin-top: 5px; display: block;">Contact Support: prodhanaacharya2025@gmail.com</span>
-        </div>
+    <!-- Scrolling Alert Bar -->
+    <div class="top-alert">
+        <marquee behavior="scroll" direction="left" scrollamount="5">
+            🚨 Urgent: Updated Weekly Routines for LKG through Class 8 are now live in the Academics Portal! | Admissions for the 2026-2027 Academic Year are now Open. 🚨
+        </marquee>
     </div>
 
-    <script>
-        document.getElementById('universal-login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+    <header>
+        <div class="logo">
+            <a href="#home"><img src="logo.jpg" alt="Vivekananda Mission Institute Logo"></a>
+        </div>
+       <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                
+                <li class="dropdown">
+                    <a href="#">About VMI ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Principal's Desk</a></li>
+                        <li><a href="faculty.html">Faculty</a></li>
+                        <li><a href="#">Facilities</a></li>
+                        <li><a href="#">Achievements</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#">Academics & Life ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="academics.html">Academic Routines</a></li>
+                        <li><a href="#">Photo Gallery</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#">Student & Parent Hub ▾</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Student Corner</a></li>
+                        <li><a href="#">Examination Results</a></li>
+                        <li><a href="#">Parents Corner</a></li>
+                        <li><a href="downloads.html">Downloads (Forms & Syllabus)</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="index.html#notice-board">Notices</a></li>
+                <li><a href="contact.html">Contact Us</a></li>
+                
+                <!-- New Login Button -->
+                <li class="nav-login"><a href="login.html">🔒 Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-seal">
+            <img src="logo.jpg" alt="Ornate School Seal">
+        </div>
+        <div class="hero-content">
+            <h2>Welcome to Vivekananda Mission Institute</h2>
             
-            const school = document.getElementById('school-select').value;
-            const role = document.getElementById('role-select').value;
-            const userId = document.getElementById('user-id').value;
-            const pass = document.getElementById('user-pass').value;
-            const errorMsg = document.getElementById('error-msg');
+            <!-- New NEP 2020 and IKS Badge & Description -->
+            <div class="nep-iks-badge">Aligned with NEP 2020 & IKS (Govt. of India)</div>
+            <p class="hero-tagline">Educate · Enlighten · Innovate</p>
+            <p class="hero-description">
+                We proudly implement the <strong>National Education Policy (NEP) 2020</strong> frameworks alongside the rich traditions of the <strong>Indian Knowledge Systems (IKS)</strong>. Our curriculum offers a holistic, multidisciplinary approach that nurtures 21st-century analytical skills while deeply rooting our students in India's cultural, scientific, and intellectual heritage.
+            </p>
+            
+            <a href="#quick-links" class="cta-button" style="text-decoration: none; display: inline-block;">Explore Our School</a>
+        </div>
+    </section>
 
-            errorMsg.style.display = 'none';
+    <!-- Interactive Quick Links -->
+    <section id="quick-links" class="quick-links">
+        <div class="link-grid">
+            <a href="academics.html" class="link-card">
+                <div class="icon">📚</div>
+                <h3>Academic Routines</h3>
+                <p>View the updated weekly schedules for LKG to Class 8.</p>
+            </a>
+            <a href="#contact" class="link-card">
+                <div class="icon">🎓</div>
+                <h3>Admissions</h3>
+                <p>Learn about our enrollment process and requirements.</p>
+            </a>
+            <a href="#contact" class="link-card">
+                <div class="icon">📞</div>
+                <h3>Contact Us</h3>
+                <p>Get in touch with the administration office.</p>
+            </a>
+        </div>
+    </section>
 
-            // Routing Logic
-            if (school === 'vmi_main') {
-                if (role === 'admin') {
-                    window.location.href = "admin-dashboard.html";
-                } else {
-                    errorMsg.innerText = "Main Campus Teacher/Student Portals are currently under construction.";
-                    errorMsg.style.display = 'block';
-                }
-            } else if (school === 'cvsk') {
-                if (role === 'admin') {
-                    // This will be the new file we create for the branch!
-                    window.location.href = "cvsk-admin.html";
-                } else {
-                    errorMsg.innerText = "CVSK Teacher/Student Portals are currently under construction.";
-                    errorMsg.style.display = 'block';
-                }
+    <!-- Split Section: Principal's Message & Notice Board -->
+    <section class="content-split">
+        <div class="principal-message">
+            <h2>From the Principal's Desk</h2>
+            <div class="message-box">
+                <p>"Welcome to Vivekananda Mission Institute. Our goal is to foster an environment where students not only excel academically but also grow physically and morally. With our newly structured routines and dedicated faculty, we are committed to providing a holistic education for every child."</p>
+                <h4>- Principal, VMI</h4>
+            </div>
+        </div>
+
+        <div id="notice-board" class="notices-side">
+            <h2>Notice Board</h2>
+            <div class="notice-card">
+                <h3>Updated Weekly Routine</h3>
+                <p>New academic routines have been posted. Please note the updated Social Studies (SST) timings.</p>
+                <span class="date">July 24, 2026</span>
+            </div>
+            <div class="notice-card">
+                <h3>Friday Afternoon Schedule</h3>
+                <p>A reminder that the last two periods on Fridays are now dedicated to physical activities and games.</p>
+                <span class="date">July 22, 2026</span>
+            </div>
+            <div class="notice-card">
+                <h3>Classroom Allocations</h3>
+                <p>Class 1 and Class 2 are assigned to separate rooms in the primary wing.</p>
+                <span class="date">July 20, 2026</span>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="footer-container">
+            <img src="logo.jpg" class="footer-logo" alt="Small Seal">
+            <div class="footer-text">
+                <p>&copy; 2026 Vivekananda Mission Institute. All rights reserved.</p>
+                <p>Muluk, Bolpur, Birbhum | Contact: info@vivekanandamission.edu</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Firebase SDK Integration -->
+    <script type="module">
+        // 1. Import Firebase functions via CDN for static HTML
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // 2. Your specific Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
+            authDomain: "vmi-portal.firebaseapp.com",
+            projectId: "vmi-portal",
+            storageBucket: "vmi-portal.firebasestorage.app",
+            messagingSenderId: "215224119153",
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
+        };
+
+        // 3. Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 4. Handle the Login Form Submission
+        const loginForm = document.querySelector('.login-form');
+        const submitBtn = document.querySelector('.login-submit-btn');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Authenticating...";
+            submitBtn.style.backgroundColor = "#555";
+
+            const role = document.getElementById('role').value;
+            const email = document.getElementById('userid').value; 
+            const password = document.getElementById('password').value;
+
+            if (role !== 'admin') {
+                alert("Currently, only Administrator logins are active.");
+                submitBtn.innerText = originalBtnText;
+                submitBtn.style.backgroundColor = "#003366";
+                return;
             }
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    alert("Login Successful! Redirecting to dashboard...");
+                    window.location.href = "admin-dashboard.html";
+                })
+                .catch((error) => {
+                    alert("Login Failed: " + error.message);
+                    submitBtn.innerText = originalBtnText;
+                    submitBtn.style.backgroundColor = "#003366";
+                });
         });
     </script>
 </body>
