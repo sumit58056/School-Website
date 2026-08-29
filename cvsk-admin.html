@@ -12,20 +12,19 @@
         .db-table tr:nth-child(even) { background-color: #f4f7f6; }
         .db-table tr:hover { background-color: #e9ecef; }
         .db-thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
-        .action-btn { border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 2px; color: white; }
-        .btn-red { background-color: #E63946; } .btn-red:hover { background-color: #c92a37; }
-        .btn-green { background-color: #217346; } .btn-green:hover { background-color: #1e6b3e; }
-        .btn-blue { background-color: #007BFF; } .btn-blue:hover { background-color: #0056b3; }
-        .btn-purple { background-color: #6a0dad; } .btn-purple:hover { background-color: #4b0082; }
+        .action-btn { border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 2px; color: white; transition: all 0.3s ease; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-red { background-color: #E63946; } .btn-red:hover:not(:disabled) { background-color: #c92a37; }
+        .btn-green { background-color: #217346; } .btn-green:hover:not(:disabled) { background-color: #1e6b3e; }
+        .btn-blue { background-color: #007BFF; } .btn-blue:hover:not(:disabled) { background-color: #0056b3; }
+        .btn-purple { background-color: #6a0dad; } .btn-purple:hover:not(:disabled) { background-color: #4b0082; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
         .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         
-        /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
         .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 650px; max-height: 90vh; overflow-y: auto; position: relative; }
         .modal-close { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #666; }
         
-        /* High-Res QR Code Rendering */
         .qr-render-box { width: 75px; height: 75px; background: white; padding: 4px; border-radius: 4px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; }
         .qr-render-box img, .qr-render-box canvas { width: 100% !important; height: 100% !important; object-fit: contain; image-rendering: pixelated; }
 
@@ -33,9 +32,7 @@
         .asset-preview { width: 100%; height: 80px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; margin-top: 10px; background: #f9f9f9; overflow: hidden; border-radius: 4px;}
         .asset-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
-        /* Instruction Boxes */
         .info-box { background: #f4f7f6; border-left: 4px solid #003366; padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; color: #333; }
-        .info-box strong { color: #003366; }
         .status-verified { color: #217346; font-weight: bold; }
         .status-pending { color: #E63946; font-weight: bold; }
     </style>
@@ -84,7 +81,7 @@
                     </div>
                     <form class="upload-form" action="#" method="POST">
                         <div class="file-drop-zone"><div class="upload-icon">📄</div><p>Drag and drop your Excel or CSV file here</p><label for="student-file" class="browse-btn">Browse Files</label><input type="file" id="student-file" accept=".xlsx, .csv" hidden></div>
-                        <div class="form-actions"><button type="submit" class="admin-submit-btn">Upload to Database</button></div>
+                        <div class="form-actions"><button type="submit" class="admin-submit-btn" id="upload-bulk-btn">Upload to Database</button></div>
                     </form>
                 </div>
             </div>
@@ -169,7 +166,7 @@
                                 <label>Student ID to Transfer Out</label>
                                 <input type="text" id="tc-student-id" placeholder="Enter Student ID" required>
                             </div>
-                            <button type="submit" class="admin-submit-btn btn-red" style="flex:1;">Mark Transferred & Generate TC</button>
+                            <button type="submit" class="admin-submit-btn btn-red" id="tc-submit-btn" style="flex:1;">Mark Transferred & Generate TC</button>
                         </div>
                     </form>
 
@@ -180,7 +177,7 @@
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
                             <thead><tr><th>Photo</th><th>ID</th><th>Roll</th><th>Name</th><th>Class</th><th>D.O.A.</th><th>Transfer Date</th><th>Actions</th></tr></thead>
-                            <tbody id="tc-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Refresh Data" in Main DB to load.</td></tr></tbody>
+                            <tbody id="tc-table-body"><tr><td colspan="8" style="text-align: center; padding: 20px;">Click "Sync Transfer Data" to load.</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -218,6 +215,8 @@
                                 <label>Department / Role</label>
                                 <select id="tch-dept" required>
                                     <option value="" disabled selected>-- Select Role --</option>
+                                    <option value="Super Admin">Super Admin</option>
+                                    <option value="Admin">Admin</option>
                                     <option value="Manager">Manager</option>
                                     <option value="Principal">Principal</option>
                                     <option value="Teaching Staff">Teaching Staff</option>
@@ -247,6 +246,7 @@
                     <h4 class="section-divider">Live Staff Database</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                         <button id="refresh-tch-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh Staff DB</button>
+                        <input type="text" id="tch-search-input" placeholder="Search Staff by Name, ID, PAN..." style="padding: 8px 12px; width: 250px; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
@@ -394,7 +394,7 @@
                     <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
                     <form class="admin-form" id="bulk-result-form">
                         <div class="file-drop-zone" style="padding: 20px;"><label for="results-file" class="browse-btn">Select Results CSV/Excel</label><input type="file" id="results-file" accept=".csv, .xlsx" hidden></div>
-                        <button type="submit" class="admin-submit-btn">Upload Bulk Results</button>
+                        <button type="submit" class="admin-submit-btn" id="res-bulk-submit">Upload Bulk Results</button>
                     </form>
 
                     <h4 class="section-divider">3. View Live Results</h4>
@@ -446,7 +446,7 @@
                     <h5 style="margin-top: 20px; color: #FF671F;">Or Bulk Upload Schedule (CSV)</h5>
                     <form class="admin-form" id="bulk-schedule-form">
                         <div class="file-drop-zone" style="padding: 15px;"><label for="sch-file" class="browse-btn">Select Schedule CSV</label><input type="file" id="sch-file" accept=".csv, .xlsx" hidden></div>
-                        <button type="submit" class="admin-submit-btn" style="background-color: #003366;">Upload Schedule Database</button>
+                        <button type="submit" class="admin-submit-btn" id="sch-bulk-submit" style="background-color: #003366;">Upload Schedule Database</button>
                     </form>
 
                     <h4 class="section-divider">2. Print & Preview Admit Cards</h4>
@@ -593,7 +593,7 @@
                                 <div class="asset-preview"><img id="prev-set-sign-sec" src="" alt="None"></div>
                             </div>
                         </div>
-                        <button type="submit" class="admin-submit-btn btn-blue" style="margin-top: 10px;">Save Branch Assets</button>
+                        <button type="submit" class="admin-submit-btn btn-blue" id="save-settings-btn" style="margin-top: 10px;">Save Branch Assets</button>
                     </form>
                 </div>
             </div>
@@ -671,7 +671,7 @@
                     <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
                     <div class="input-group"><label>Status</label><select id="edit-stu-status"><option>Active</option><option>Transferred Out</option></select></div>
                     <div class="input-group" style="grid-column: span 2;">
-                        <label style="color: #FF671F;">Upload New Document (PDF/JPG)</label>
+                        <label style="color: #FF671F;">Upload New General Document (PDF/JPG)</label>
                         <input type="file" id="edit-stu-doc-file" accept=".pdf, .jpg, .jpeg, .png">
                     </div>
                 </div>
@@ -706,7 +706,7 @@
                 </div>
 
                 <div class="input-group"><label>Residential Address</label><textarea id="edit-stu-address" rows="2"></textarea></div>
-                <button type="submit" class="admin-submit-btn btn-green">Update Student Database</button>
+                <button type="submit" class="admin-submit-btn btn-green" id="edit-student-save-btn">Update Student Database</button>
             </form>
         </div>
     </div>
@@ -727,6 +727,8 @@
                     <div class="input-group">
                         <label>Department / Role</label>
                         <select id="edit-tch-dept" required>
+                            <option value="Super Admin">Super Admin</option>
+                            <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
                             <option value="Principal">Principal</option>
                             <option value="Teaching Staff">Teaching Staff</option>
@@ -750,14 +752,13 @@
                 </div>
 
                 <div class="input-group"><label>Address</label><textarea id="edit-tch-address" rows="2"></textarea></div>
-                <button type="submit" class="admin-submit-btn btn-green">Update Staff Database</button>
+                <button type="submit" class="admin-submit-btn btn-green" id="edit-teacher-save-btn">Update Staff Database</button>
             </form>
         </div>
     </div>
 
     <!-- UI Scripts & Libraries -->
     <script>
-        // Tab Navigation
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
         navLinks.forEach(link => {
@@ -766,28 +767,38 @@
                 navLinks.forEach(nav => nav.classList.remove('active'));
                 sections.forEach(section => section.classList.remove('active'));
                 this.classList.add('active');
-                document.getElementById(this.getAttribute('data-target')).classList.add('active');
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+                
+                if(target === 'section-teachers') {
+                    document.getElementById('refresh-tch-btn')?.click();
+                } else if(target === 'section-view-db') {
+                    document.getElementById('refresh-db-btn')?.click();
+                } else if(target === 'section-transferred') {
+                    document.getElementById('refresh-tc-btn')?.click();
+                }
             });
         });
-        
-        // Smart ID Hint
-        document.getElementById('tch-dept').addEventListener('change', (e) => {
+
+        document.getElementById('tch-dept')?.addEventListener('change', (e) => {
             const val = e.target.value;
             const idInput = document.getElementById('tch-id');
-            if(val === 'Manager') idInput.placeholder = 'e.g. CVSK/MGR/001';
+            if(val === 'Super Admin') idInput.placeholder = 'e.g. CVSK/SADM/001';
+            else if(val === 'Admin') idInput.placeholder = 'e.g. CVSK/ADM/001';
+            else if(val === 'Manager') idInput.placeholder = 'e.g. CVSK/MGR/001';
             else if(val === 'Principal') idInput.placeholder = 'e.g. CVSK/PRC/001';
             else idInput.placeholder = 'e.g. CVSK/STF/001';
         });
 
         // Dynamic Transfer Certificate Field
-        document.getElementById('manual-admission-type').addEventListener('change', (e) => {
+        document.getElementById('manual-admission-type')?.addEventListener('change', (e) => {
             const tcGroup = document.getElementById('manual-tc-group');
             if (e.target.value === 'Transfer In') { tcGroup.style.display = 'block'; } 
             else { tcGroup.style.display = 'none'; document.getElementById('manual-tc-file').value = ""; }
         });
 
         // Main Campus Mailto Form
-        document.getElementById('send-main-form').addEventListener('submit', (e) => {
+        document.getElementById('send-main-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             const subject = encodeURIComponent(document.getElementById('send-subject').value);
             const body = encodeURIComponent(document.getElementById('send-notes').value + "\n\n[Please attach the required file before sending]");
@@ -820,10 +831,7 @@
         // --- 1. GLOBAL HELPERS & IMAGE COMPRESSION ---
         let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "" };
         
-        function makeSafeId(idStr) {
-            if(!idStr) return "";
-            return String(idStr).replace(/\//g, '_').replace(/\s+/g, '_');
-        }
+        function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
 
         function resizeAssetKeepRatio(file, callback) {
             const reader = new FileReader(); 
@@ -861,8 +869,8 @@
                 } catch (error) { targetInput.value = "Network Error"; }
             } else { targetInput.value = ""; }
         }
-        document.getElementById('tch-ifsc').addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('tch-bank')); });
-        document.getElementById('edit-tch-ifsc').addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('edit-tch-bank')); });
+        document.getElementById('tch-ifsc')?.addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('tch-bank')); });
+        document.getElementById('edit-tch-ifsc')?.addEventListener('input', (e) => { fetchBankDetails(e.target.value.toUpperCase(), document.getElementById('edit-tch-bank')); });
 
         async function loadGlobalSettings() {
             try { 
@@ -882,7 +890,7 @@
 
         const assetMap = { 'set-logo':'logo', 'set-seal':'seal', 'set-mc-seal':'mcSeal', 'set-sign-prin':'prinSign', 'set-sign-mgr':'mgrSign', 'set-sign-sec':'secSign' };
         for(const [inputId, key] of Object.entries(assetMap)) { 
-            document.getElementById(inputId).addEventListener('change', function(e) { 
+            document.getElementById(inputId)?.addEventListener('change', function(e) { 
                 if(this.files[0]) { 
                     resizeAssetKeepRatio(this.files[0], (base64) => { 
                         globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; 
@@ -890,15 +898,31 @@
                 } 
             }); 
         }
-        document.getElementById('global-settings-form').addEventListener('submit', async (e) => { 
+        document.getElementById('global-settings-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
-            const btn = e.target.querySelector('button'); btn.innerText = "Saving...";
+            const btn = document.getElementById('save-settings-btn');
+            btn.disabled = true; btn.innerText = "Saving...";
             try { 
                 await setDoc(doc(db, "settings", "cvsk_assets"), globalAssets, {merge: true}); 
                 alert("Global Assets Saved Successfully!"); 
             } catch(err) { alert("Failed to save assets: " + err.message); }
-            finally { btn.innerText = "Save Branch Assets"; }
+            finally { btn.disabled = false; btn.innerText = "Save Branch Assets"; }
         });
+
+        // AUDIT LOGGING
+        async function logAction(userRole, action, target, details) {
+            try {
+                const logDoc = doc(collection(db, "audit_logs"));
+                await setDoc(logDoc, {
+                    timestamp: Date.now(),
+                    dateString: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+                    user: userRole,
+                    action: action,
+                    target: target,
+                    details: details
+                });
+            } catch(e) { console.error("Audit log failed", e); }
+        }
 
         // --- 3. STUDENT DATABASE MODULE ---
         let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = ""; 
@@ -908,11 +932,11 @@
         async function fetchAllStudents() { 
             const querySnapshot = await getDocs(collection(db, "cvsk_students")); 
             const students = []; 
-            querySnapshot.forEach((docSnap) => { students.push({ docId: docSnap.id, ...docSnap.data() }); }); 
+            querySnapshot.forEach((docSnap) => { students.push({ docId: docSnap.id, campus: 'branch', ...docSnap.data() }); }); 
             return students; 
         }
 
-        async function renderDatabaseTable(students) {
+        function renderDatabaseTable(students) {
             const dbTableBody = document.getElementById('db-table-body'); dbTableBody.innerHTML = "";
             const tcTableBody = document.getElementById('tc-table-body'); tcTableBody.innerHTML = "";
             
@@ -960,7 +984,7 @@
             // Bind Actions for Active Students
             document.querySelectorAll('.view-stu-btn').forEach(btn => {
                 btn.addEventListener('click', (ev) => {
-                    const student = currentActiveStudents[ev.target.getAttribute('data-index')];
+                    const student = currentActiveStudents[ev.currentTarget.getAttribute('data-index')];
                     const body = document.getElementById('view-student-body');
 
                     let docsHtml = '';
@@ -1009,7 +1033,7 @@
 
             document.querySelectorAll('.edit-stu-btn').forEach(btn => { 
                 btn.addEventListener('click', (e) => {
-                    const student = currentActiveStudents[e.target.getAttribute('data-index')]; 
+                    const student = currentActiveStudents[e.currentTarget.getAttribute('data-index')]; 
                     document.getElementById('edit-stu-doc-id').value = student.docId; 
                     document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
                     document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
@@ -1046,12 +1070,18 @@
                 });
             });
 
-            document.querySelectorAll('.transfer-stu-btn').forEach(btn => {
-                btn.addEventListener('click', async (e) => {
-                    const student = currentActiveStudents[e.target.getAttribute('data-index')];
+            document.querySelectorAll('.transfer-stu-btn').forEach(transferBtn => {
+                transferBtn.addEventListener('click', async (e) => {
+                    const button = e.currentTarget;
+                    if(button.disabled) return;
+                    const student = currentActiveStudents[button.getAttribute('data-index')];
                     if(confirm(`Are you sure you want to officially transfer out ${student.Name}? This will move them to the Transferred Database.`)) {
-                        await setDoc(doc(db, "cvsk_students", student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
-                        document.getElementById('refresh-db-btn').click();
+                        button.disabled = true; button.innerText = "Processing...";
+                        try {
+                            await setDoc(doc(db, "cvsk_students", student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
+                            await logAction("Branch Admin", "TRANSFERRED STUDENT", student["Student ID"], `Marked as Transferred Out.`);
+                            document.getElementById('refresh-db-btn').click();
+                        } catch(err) { button.disabled = false; button.innerText = "Transfer"; }
                     }
                 });
             });
@@ -1059,7 +1089,7 @@
             // Bind Actions for Transferred Students
             document.querySelectorAll('.view-tc-stu-btn').forEach(btn => {
                 btn.addEventListener('click', (ev) => {
-                    const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
+                    const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')];
                     const body = document.getElementById('view-student-body');
 
                     let docsHtml = '';
@@ -1097,11 +1127,13 @@
 
             document.querySelectorAll('.print-tc-btn').forEach(btn => {
                 btn.addEventListener('click', (ev) => {
-                    const student = currentTransferredStudents[ev.target.getAttribute('data-index')];
+                    const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')];
                     const { jsPDF } = window.jspdf; const pdf = new jsPDF();
                     
+                    const schoolName = "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
+                    
                     if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
-                    pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center");
+                    pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center");
                     pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
                     pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
                     
@@ -1132,28 +1164,38 @@
             });
         }
         
-        document.getElementById('refresh-db-btn').addEventListener('click', async (e) => { 
-            e.target.innerText = "Loading..."; 
-            try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { e.target.innerText = "🔄 Refresh Data"; } 
+        document.getElementById('refresh-db-btn')?.addEventListener('click', async (e) => { 
+            const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading..."; 
+            try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { btn.disabled = false; btn.innerText = "🔄 Refresh Data"; } 
         });
         
         // Ensure the TC tab also syncs the DB
-        document.getElementById('refresh-tc-btn').addEventListener('click', () => document.getElementById('refresh-db-btn').click());
-        document.querySelector('.nav-link[data-target="section-transferred"]').addEventListener('click', () => document.getElementById('refresh-db-btn').click());
+        document.getElementById('refresh-tc-btn')?.addEventListener('click', async (e) => {
+            const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading..."; 
+            try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { btn.disabled = false; btn.innerText = "🔄 Sync Transfer Data"; } 
+        });
 
-        document.getElementById('db-search-input').addEventListener('keyup', (e) => { 
+        document.getElementById('db-search-input')?.addEventListener('keyup', (e) => { 
             const searchTerm = e.target.value.toLowerCase(); 
-            const filtered = liveStudentsData.filter(student => (student.Name || "").toLowerCase().includes(searchTerm) || (student["Student ID"] || student["Roll No"] || "").toLowerCase().includes(searchTerm)); 
+            const filtered = liveStudentsData.filter(student => 
+                (student.Name || "").toLowerCase().includes(searchTerm) || 
+                (student["Student ID"] || student["Roll No"] || "").toLowerCase().includes(searchTerm) ||
+                (student["Aadhaar Number"] || student.Aadhaar || "").toLowerCase().includes(searchTerm) ||
+                (student["PEN Number"] || student.PEN || "").toLowerCase().includes(searchTerm)
+            ); 
             renderDatabaseTable(filtered); 
         });
         
-        document.getElementById('manual-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
-        document.getElementById('manual-tc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { transferCertBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
-        document.getElementById('manual-doc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { manualDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+        document.getElementById('manual-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
+        document.getElementById('manual-tc-file')?.addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { transferCertBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+        document.getElementById('manual-doc-file')?.addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { manualDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
 
-        document.getElementById('manual-student-form').addEventListener('submit', async (e) => { 
+        document.getElementById('manual-student-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
-            
+            const submitBtn = document.getElementById('manual-submit-btn');
+            submitBtn.disabled = true; submitBtn.innerText = "Saving...";
+
+            const studentId = document.getElementById('manual-id').value; 
             const aadharVal = document.getElementById('manual-aadhar').value;
             const classVal = document.getElementById('manual-class').value;
             const penVal = document.getElementById('manual-pen').value;
@@ -1161,6 +1203,7 @@
             // Validation: PEN required from Class 2 onwards
             const reqPenClasses = ['Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
             if(reqPenClasses.includes(classVal) && !penVal) {
+                submitBtn.disabled = false; submitBtn.innerText = "Save Student Record";
                 return alert("PEN Number is mandatory for Class 2 and above.");
             }
 
@@ -1169,11 +1212,11 @@
                 const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
                 const aadharSnaps = await getDocs(aadharQuery);
                 if(!aadharSnaps.empty) {
+                    submitBtn.disabled = false; submitBtn.innerText = "Save Student Record";
                     return alert("Submission Blocked: A student with this identifier is already enrolled in the branch system!");
                 }
             } catch(e) { console.error("Validation error", e); }
-
-            const studentId = document.getElementById('manual-id').value; 
+            
             try { 
                 const safeDocId = makeSafeId(studentId);
                 await setDoc(doc(db, "cvsk_students", safeDocId), { 
@@ -1201,29 +1244,35 @@
                     "Address": document.getElementById('manual-address').value, 
                     "Transfer Certificate Data": transferCertBase64,
                     "Document": manualDocBase64,
-                    "VerificationStatus": "Pending", // Sent as Pending for Super Admin Approval
+                    "VerificationStatus": "Pending", 
                     "Status": "Active", 
                     "Photo": compressedPhotoBase64 
                 }, { merge: true }); 
+                await logAction("Branch Admin", "ENROLLED STUDENT", studentId, "Added new student record (Pending Verification).");
                 alert(`Student Enrolled Successfully! Record is sent to Super Admin for Verification.`); 
                 document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; transferCertBase64 = ""; manualDocBase64 = "";
                 document.getElementById('manual-tc-group').style.display = 'none';
-            } catch(e) { alert("Error adding student."); }
+            } catch(e) { alert("Error adding student."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Save Student Record"; }
         });
         
-        document.getElementById('edit-stu-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editStuPhotoBase64 = base64; document.getElementById('edit-stu-photo-preview').src = base64; }); } });
-        document.getElementById('edit-stu-doc-file').addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { editDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
+        document.getElementById('edit-stu-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editStuPhotoBase64 = base64; document.getElementById('edit-stu-photo-preview').src = base64; }); } });
+        document.getElementById('edit-stu-doc-file')?.addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { editDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
 
-        document.getElementById('edit-student-form').addEventListener('submit', async (e) => { 
+        document.getElementById('edit-student-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
+            const submitBtn = document.getElementById('edit-student-save-btn');
+            submitBtn.disabled = true; submitBtn.innerText = "Updating...";
+
             const docId = document.getElementById('edit-stu-doc-id').value; 
             const aadharVal = document.getElementById('edit-stu-aadhar').value;
             const classVal = document.getElementById('edit-stu-class').value;
             const penVal = document.getElementById('edit-stu-pen').value;
+            const stuIdStr = document.getElementById('edit-stu-id').value;
 
             // Validation: PEN required from Class 2 onwards
             const reqPenClasses = ['Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
             if(reqPenClasses.includes(classVal) && !penVal) {
+                submitBtn.disabled = false; submitBtn.innerText = "Update Student Database";
                 return alert("PEN Number is mandatory for Class 2 and above.");
             }
 
@@ -1236,6 +1285,7 @@
                     if(docSnap.id !== docId) isDuplicate = true;
                 });
                 if(isDuplicate) {
+                    submitBtn.disabled = false; submitBtn.innerText = "Update Student Database";
                     return alert("Update Blocked: Another student already exists with this identifier!");
                 }
             } catch(e) {}
@@ -1269,18 +1319,24 @@
                 if(editDocBase64) payload.Document = editDocBase64;
 
                 await setDoc(doc(db, "cvsk_students", docId), payload, { merge: true }); 
+                await logAction("Branch Admin", "EDITED STUDENT", stuIdStr, `Updated student profile.`);
                 alert("Student updated successfully!"); document.getElementById('edit-student-modal').style.display = 'none'; document.getElementById('refresh-db-btn').click(); 
-            } catch (err) { alert("Error updating student."); } 
+            } catch (err) { alert("Error updating student."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Update Student Database"; }
         });
 
         // Manual TC Generation Form
-        document.getElementById('tc-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); const studentId = document.getElementById('tc-student-id').value; 
+        document.getElementById('tc-form')?.addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true; submitBtn.innerText = "Processing...";
+
+            const studentId = document.getElementById('tc-student-id').value; 
             const safeDocId = makeSafeId(studentId);
             const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); 
             if (docSnap.exists()) { 
                 const student = docSnap.data();
                 await setDoc(doc(db, "cvsk_students", safeDocId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true }); 
+                await logAction("Branch Admin", "TRANSFERRED STUDENT", studentId, "Generated TC and marked transferred out.");
                 
                 const { jsPDF } = window.jspdf; const pdf = new jsPDF();
                 if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
@@ -1313,53 +1369,62 @@
                 pdf.save(`TC_${studentId}.pdf`); 
                 alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
             } else { alert("Student not found in Branch database."); }
+            submitBtn.disabled = false; submitBtn.innerText = "Mark Transferred & Generate TC";
         });
 
-        document.querySelector('.upload-form').addEventListener('submit', async (e) => { 
+        document.querySelector('.upload-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); const file = document.getElementById('student-file').files[0]; if (!file) return; 
+            const submitBtn = document.getElementById('upload-bulk-btn');
+            submitBtn.disabled = true; submitBtn.innerText = "Uploading...";
+            
             const reader = new FileReader(); 
             reader.onload = async function(event) { 
-                const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); 
-                const batch = writeBatch(db); 
-                jsonData.forEach((row, index) => { 
-                    const rawId = String(row["Roll No"] || row["Student ID"] || "");
-                    const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; 
-                    batch.set(doc(db, "cvsk_students", docId), { ...row, Status: "Active", VerificationStatus: "Pending" }, { merge: true }); 
-                }); 
-                await batch.commit(); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); 
+                try {
+                    const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); 
+                    const batch = writeBatch(db); 
+                    jsonData.forEach((row, index) => { 
+                        const rawId = String(row["Roll No"] || row["Student ID"] || "");
+                        const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; 
+                        batch.set(doc(db, "cvsk_students", docId), { ...row, Status: "Active", VerificationStatus: "Pending" }, { merge: true }); 
+                    }); 
+                    await batch.commit(); 
+                    await logAction("Branch Admin", "BULK UPLOAD", "Multiple Students", `Uploaded batch of ${jsonData.length} records. Pending Verification.`);
+                    alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); 
+                } catch(err) { alert("Error uploading file."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Upload to Database"; }
             }; reader.readAsArrayBuffer(file); 
         });
 
         // --- 4. STAFF DATABASE MODULE ---
         let liveTeachersData = []; let tchPhotoBase64 = ""; let editTchPhotoBase64 = "";
 
-        const tchForm = document.getElementById('teacher-form');
-        document.getElementById('tch-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { tchPhotoBase64 = base64; document.getElementById('tch-photo-preview').src = base64; document.getElementById('tch-photo-preview').style.display = 'block'; }); } });
+        document.getElementById('tch-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { tchPhotoBase64 = base64; document.getElementById('tch-photo-preview').src = base64; document.getElementById('tch-photo-preview').style.display = 'block'; }); } });
         
-        tchForm.addEventListener('submit', async (e) => { 
+        document.getElementById('teacher-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             const btn = document.getElementById('save-teacher-btn');
-            btn.innerText = "Saving Record to Database...";
-            const tchId = document.getElementById('tch-id').value; 
+            btn.disabled = true; btn.innerText = "Saving Record to Database...";
+            
+            const tchId = document.getElementById('tch-id').value.trim(); 
             const safeDocId = makeSafeId(tchId);
 
             try { 
                 await setDoc(doc(db, "cvsk_staff", safeDocId), { 
-                    TeacherID: tchId, Name: document.getElementById('tch-name').value, FatherName: document.getElementById('tch-father').value, Department: document.getElementById('tch-dept').value, DateOfJoining: document.getElementById('tch-doj').value, BloodGroup: document.getElementById('tch-blood').value, Phone: document.getElementById('tch-phone').value, Address: document.getElementById('tch-address').value, Photo: tchPhotoBase64, PAN: document.getElementById('tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('tch-acc-no').value, IFSC: document.getElementById('tch-ifsc').value.toUpperCase(), BankName: document.getElementById('tch-bank').value
+                    TeacherID: tchId, Name: document.getElementById('tch-name').value.trim(), FatherName: document.getElementById('tch-father').value.trim(), Department: document.getElementById('tch-dept').value, DateOfJoining: document.getElementById('tch-doj').value.trim(), BloodGroup: document.getElementById('tch-blood').value.trim(), Phone: document.getElementById('tch-phone').value.trim(), Address: document.getElementById('tch-address').value.trim(), Photo: tchPhotoBase64, PAN: document.getElementById('tch-pan').value.toUpperCase().trim(), AccountNumber: document.getElementById('tch-acc-no').value.trim(), IFSC: document.getElementById('tch-ifsc').value.toUpperCase().trim(), BankName: document.getElementById('tch-bank').value.trim()
                 }); 
+                await logAction("Branch Admin", "ADDED STAFF", tchId, `Added new branch staff.`);
                 alert("Staff Record Saved!"); 
-                tchForm.reset(); document.getElementById('tch-photo-preview').style.display = 'none'; tchPhotoBase64 = ""; 
+                document.getElementById('teacher-form').reset(); document.getElementById('tch-photo-preview').style.display = 'none'; tchPhotoBase64 = ""; 
                 document.getElementById('refresh-tch-btn').click(); 
             } catch (err) { alert("Error saving staff record."); console.error(err); } 
-            finally { btn.innerText = "Save Staff Record"; }
+            finally { btn.disabled = false; btn.innerText = "Save Staff Record"; }
         });
 
-        document.querySelector('.nav-link[data-target="section-teachers"]').addEventListener('click', () => {
-            document.getElementById('refresh-tch-btn').click();
+        document.querySelector('.nav-link[data-target="section-teachers"]')?.addEventListener('click', () => {
+            setTimeout(() => document.getElementById('refresh-tch-btn')?.click(), 50);
         });
 
-        document.getElementById('refresh-tch-btn').addEventListener('click', async (e) => {
-            const btn = e.target; btn.innerText = "Loading Database...";
+        document.getElementById('refresh-tch-btn')?.addEventListener('click', async (e) => {
+            const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading Database...";
             const tchTable = document.getElementById('tch-table-body');
             
             try {
@@ -1391,14 +1456,14 @@
                     <td>
                         <button class="action-btn btn-blue view-tch-btn" data-index="${index}">👁️ View</button>
                         <button class="action-btn btn-green edit-tch-btn" data-index="${index}">Edit</button> 
-                        <button class="action-btn btn-red delete-tch-btn" data-id="${t.docId}">Delete</button>
+                        <button class="action-btn btn-red delete-tch-btn" data-id="${t.docId}" data-name="${name}">Delete</button>
                     </td>`;
                     tchTable.appendChild(tr);
                 });
 
                 document.querySelectorAll('.view-tch-btn').forEach(viewBtn => {
                     viewBtn.addEventListener('click', (ev) => {
-                        const tch = validTeachers[ev.target.getAttribute('data-index')];
+                        const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
                         const body = document.getElementById('view-teacher-body');
                         
                         body.innerHTML = `
@@ -1424,39 +1489,59 @@
                     });
                 });
 
-                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { delBtn.addEventListener('click', async (ev) => { if(confirm("Permanently delete this record?")) { await deleteDoc(doc(db, "cvsk_staff", ev.target.getAttribute('data-id'))); document.getElementById('refresh-tch-btn').click(); } }); });
+                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { 
+                    delBtn.addEventListener('click', async (ev) => { 
+                        const button = ev.currentTarget;
+                        if(button.disabled) return;
+                        const targetName = button.getAttribute('data-name');
+                        if(confirm(`Permanently delete staff ${targetName}?`)) { 
+                            button.disabled = true; button.innerText = "Deleting...";
+                            try {
+                                await deleteDoc(doc(db, "cvsk_staff", button.getAttribute('data-id'))); 
+                                await logAction("Branch Admin", "DELETED STAFF", targetName, `Deleted staff from branch.`);
+                                document.getElementById('refresh-tch-btn').click(); 
+                            } catch(err) { alert("Error deleting."); button.disabled = false; button.innerText = "Delete"; }
+                        } 
+                    }); 
+                });
+                
                 document.querySelectorAll('.edit-tch-btn').forEach(editBtn => {
                     editBtn.addEventListener('click', (ev) => {
-                        const tch = validTeachers[ev.target.getAttribute('data-index')];
-                        document.getElementById('edit-tch-doc-id').value = tch.docId; document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || ''; document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; document.getElementById('edit-tch-bank').value = tch.BankName || '';
+                        const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
+                        document.getElementById('edit-tch-doc-id').value = tch.docId; 
+                        document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || 'Teaching Staff'; document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; document.getElementById('edit-tch-bank').value = tch.BankName || '';
                         editTchPhotoBase64 = tch.Photo || tch.photo || ""; document.getElementById('edit-tch-photo-preview-edit').src = editTchPhotoBase64 || 'https://via.placeholder.com/150'; document.getElementById('edit-teacher-modal').style.display = 'flex';
                     });
                 });
             } catch (error) { 
                 console.error("Staff Fetch Error:", error);
                 tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red; padding: 20px;">Database Error: ${error.message}</td></tr>`;
-            } finally { btn.innerText = "🔄 Refresh Staff DB"; }
+            } finally { btn.disabled = false; btn.innerText = "🔄 Refresh Staff DB"; }
         });
 
-        document.getElementById('edit-tch-photo').addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editTchPhotoBase64 = base64; document.getElementById('edit-tch-photo-preview-edit').src = base64; }); } });
-        document.getElementById('edit-teacher-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); const docId = document.getElementById('edit-tch-doc-id').value; const btn = e.target.querySelector('button[type="submit"]'); btn.innerText = "Updating...";
+        document.getElementById('edit-tch-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editTchPhotoBase64 = base64; document.getElementById('edit-tch-photo-preview-edit').src = base64; }); } });
+        document.getElementById('edit-teacher-form')?.addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const docId = document.getElementById('edit-tch-doc-id').value; 
+            const btn = document.getElementById('edit-teacher-save-btn'); 
+            btn.disabled = true; btn.innerText = "Updating...";
             try { 
-                await setDoc(doc(db, "cvsk_staff", docId), { Name: document.getElementById('edit-tch-name').value, FatherName: document.getElementById('edit-tch-father').value, Department: document.getElementById('edit-tch-dept').value, DateOfJoining: document.getElementById('edit-tch-doj').value, BloodGroup: document.getElementById('edit-tch-blood').value, Phone: document.getElementById('edit-tch-phone').value, Address: document.getElementById('edit-tch-address').value, Photo: editTchPhotoBase64, PAN: document.getElementById('edit-tch-pan').value.toUpperCase(), AccountNumber: document.getElementById('edit-tch-acc-no').value, IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase(), BankName: document.getElementById('edit-tch-bank').value }, { merge: true }); 
+                await setDoc(doc(db, "cvsk_staff", docId), { TeacherID: document.getElementById('edit-tch-id-field').value, Name: document.getElementById('edit-tch-name').value.trim(), FatherName: document.getElementById('edit-tch-father').value.trim(), Department: document.getElementById('edit-tch-dept').value, DateOfJoining: document.getElementById('edit-tch-doj').value.trim(), BloodGroup: document.getElementById('edit-tch-blood').value.trim(), Phone: document.getElementById('edit-tch-phone').value.trim(), Address: document.getElementById('edit-tch-address').value.trim(), Photo: editTchPhotoBase64, PAN: document.getElementById('edit-tch-pan').value.toUpperCase().trim(), AccountNumber: document.getElementById('edit-tch-acc-no').value.trim(), IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase().trim(), BankName: document.getElementById('edit-tch-bank').value.trim() }, { merge: true }); 
+                await logAction("Branch Admin", "EDITED STAFF", document.getElementById('edit-tch-name').value, `Updated branch staff profile.`);
                 alert("Staff record successfully updated!"); document.getElementById('edit-teacher-modal').style.display = 'none'; document.getElementById('refresh-tch-btn').click(); 
-            } catch (err) { alert("Error updating record."); console.error(err); } finally { btn.innerText = "Update Staff Database"; }
+            } catch (err) { alert("Error updating record: " + err.message); } finally { btn.disabled = false; btn.innerText = "Update Staff Database"; }
         });
 
         // --- 5. EXPORT DATABASE MODULE ---
-        document.getElementById('export-excel-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, docId, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "CVSK_Student_Database.xlsx"); });
-        document.getElementById('export-pdf-btn').addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Student_Database.pdf"); });
+        document.getElementById('export-excel-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, docId, campus, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "CVSK_Student_Database.xlsx"); });
+        document.getElementById('export-pdf-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId" && k !== "campus") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Student_Database.pdf"); });
         
-        document.getElementById('export-tch-excel-btn').addEventListener('click', async () => { 
+        document.getElementById('export-tch-excel-btn')?.addEventListener('click', async () => { 
             const qSnaps = await getDocs(collection(db, "cvsk_staff")); let tData = []; 
             qSnaps.forEach(d => { const dt = d.data(); delete dt.Photo; delete dt.photo; tData.push(dt); });
             const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(tData), "Staff"); XLSX.writeFile(workbook, "CVSK_Staff_Database.xlsx"); 
         });
-        document.getElementById('export-tch-pdf-btn').addEventListener('click', async () => { 
+        document.getElementById('export-tch-pdf-btn')?.addEventListener('click', async () => { 
             const qSnaps = await getDocs(collection(db, "cvsk_staff")); let tData = []; qSnaps.forEach(d => tData.push(d.data()));
             const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; 
             tData.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "photo") headers.push(k); })); 
@@ -1465,197 +1550,99 @@
         });
 
         // --- 6. NOTICES & MATERIALS MODULE ---
-        document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', async () => { try { const querySnapshot = await getDocs(collection(db, "cvsk_notices")); const notices = []; querySnapshot.forEach((docSnap) => { notices.push({ id: docSnap.id, ...docSnap.data() }); }); notices.sort((a, b) => b.timestamp - a.timestamp); const tbody = document.getElementById('notice-table-body'); tbody.innerHTML = ""; if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No active notices.</td></tr>`; return; } notices.forEach(notice => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="action-btn btn-red delete-notice" data-id="${notice.id}">Delete</button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-notice').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "cvsk_notices", e.target.getAttribute('data-id'))); document.querySelector('.nav-link[data-target="section-notices"]').click(); } }); }); } catch (error) {} });
-        document.getElementById('notice-form').addEventListener('submit', async (e) => { e.preventDefault(); await setDoc(doc(db, "cvsk_notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); });
-        document.getElementById('admin-material-form').addEventListener('submit', async (e) => { e.preventDefault(); await setDoc(doc(db, "cvsk_materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Branch Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); });
+        document.querySelector('.nav-link[data-target="section-notices"]')?.addEventListener('click', async () => { try { const querySnapshot = await getDocs(collection(db, "cvsk_notices")); const notices = []; querySnapshot.forEach((docSnap) => { notices.push({ id: docSnap.id, ...docSnap.data() }); }); notices.sort((a, b) => b.timestamp - a.timestamp); const tbody = document.getElementById('notice-table-body'); tbody.innerHTML = ""; if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No active notices.</td></tr>`; return; } notices.forEach(notice => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="action-btn btn-red delete-notice" data-id="${notice.id}">Delete</button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-notice').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "cvsk_notices", e.currentTarget.getAttribute('data-id'))); document.querySelector('.nav-link[data-target="section-notices"]').click(); } }); }); } catch (error) {} });
+        document.getElementById('notice-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('notice-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "cvsk_notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Notice"; } });
+        document.getElementById('admin-material-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('admin-mat-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "cvsk_materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Branch Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Document"; } });
         
         // --- 7. EXAM RESULTS & ADMIT CARDS MODULE ---
         const termSelect = document.getElementById('res-exam-name'); const classSelect = document.getElementById('res-class'); const coCurricularSection = document.getElementById('co-curricular-section'); const markInputs = document.querySelectorAll('.acad-mark'); const rStudentIdInput = document.getElementById('res-student-id'); const rStudentNameInput = document.getElementById('res-student-name');
         let currentMaxPerSubject = 100; let activeSubjectCount = 8;
-        rStudentIdInput.addEventListener('blur', async () => { 
-            const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; } 
-            rStudentNameInput.value = "Searching..."; 
-            try { 
-                const safeDocId = makeSafeId(studentId);
-                const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); 
-                if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } 
-            } catch (error) { rStudentNameInput.value = "Error."; } 
-        });
-        function updateFormRules() { const term = termSelect.value; const stuClass = classSelect.value; if(term === 'Annual Examination') { coCurricularSection.style.display = 'block'; } else { coCurricularSection.style.display = 'none'; document.getElementById('g-dance').value = ""; document.getElementById('g-music').value = ""; document.getElementById('g-art').value = ""; } ['grp-hin', 'grp-san', 'grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'none'; document.getElementById(id.replace('grp', 'm')).required = false; document.getElementById(id.replace('grp', 'm')).value = ""; }); if(stuClass) { const hasHindi = ['Class 3', 'Class 4']; const hasSanskrit = ['Class 7', 'Class 8']; const hasHistoryGeo = ['Class 3', 'Class 4', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10']; activeSubjectCount = 4; if(hasHindi.includes(stuClass)) { document.getElementById('grp-hin').style.display = 'block'; document.getElementById('m-hin').required = true; activeSubjectCount++; } if(hasSanskrit.includes(stuClass)) { document.getElementById('grp-san').style.display = 'block'; document.getElementById('m-san').required = true; activeSubjectCount++; } if(hasHistoryGeo.includes(stuClass)) { ['grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'block'; document.getElementById(id.replace('grp', 'm')).required = true; }); activeSubjectCount += 2; } const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass); if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30; else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40; else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80; markInputs.forEach(input => { input.max = currentMaxPerSubject; input.placeholder = `Max: ${currentMaxPerSubject}`; }); } }
-        termSelect.addEventListener('change', updateFormRules); classSelect.addEventListener('change', updateFormRules);
-        document.getElementById('manual-result-form').addEventListener('submit', async (e) => { 
-            e.preventDefault(); document.getElementById('res-submit-btn').innerText = "Saving..."; 
+        rStudentIdInput?.addEventListener('blur', async () => { const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; } rStudentNameInput.value = "Searching..."; try { const safeDocId = makeSafeId(studentId); const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } } catch (error) { rStudentNameInput.value = "Error."; } });
+        function updateFormRules() { if(!termSelect || !classSelect) return; const term = termSelect.value; const stuClass = classSelect.value; if(term === 'Annual Examination') { coCurricularSection.style.display = 'block'; } else { coCurricularSection.style.display = 'none'; document.getElementById('g-dance').value = ""; document.getElementById('g-music').value = ""; document.getElementById('g-art').value = ""; } ['grp-hin', 'grp-san', 'grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'none'; document.getElementById(id.replace('grp', 'm')).required = false; document.getElementById(id.replace('grp', 'm')).value = ""; }); if(stuClass) { const hasHindi = ['Class 3', 'Class 4']; const hasSanskrit = ['Class 7', 'Class 8']; const hasHistoryGeo = ['Class 3', 'Class 4', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10']; activeSubjectCount = 4; if(hasHindi.includes(stuClass)) { document.getElementById('grp-hin').style.display = 'block'; document.getElementById('m-hin').required = true; activeSubjectCount++; } if(hasSanskrit.includes(stuClass)) { document.getElementById('grp-san').style.display = 'block'; document.getElementById('m-san').required = true; activeSubjectCount++; } if(hasHistoryGeo.includes(stuClass)) { ['grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'block'; document.getElementById(id.replace('grp', 'm')).required = true; }); activeSubjectCount += 2; } const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass); if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30; else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40; else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80; markInputs.forEach(input => { input.max = currentMaxPerSubject; input.placeholder = `Max: ${currentMaxPerSubject}`; }); } }
+        termSelect?.addEventListener('change', updateFormRules); classSelect?.addEventListener('change', updateFormRules);
+        document.getElementById('manual-result-form')?.addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const submitBtn = document.getElementById('res-submit-btn');
+            submitBtn.disabled = true; submitBtn.innerText = "Saving..."; 
             const studentId = document.getElementById('res-student-id').value; const term = termSelect.value; 
             const docId = `${makeSafeId(studentId)}_${makeSafeId(term)}`; 
             const marks = {}; if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value); if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value); if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value); if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value); if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value); if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value); if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value); if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value); let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0); let totalPossible = currentMaxPerSubject * activeSubjectCount; let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%"; const grades = {}; if(term === 'Annual Examination') { grades["Dance"] = document.getElementById('g-dance').value; grades["Music"] = document.getElementById('g-music').value; grades["Art_and_Craft"] = document.getElementById('g-art').value; } 
-            try { await setDoc(doc(db, "cvsk_results", docId), { "Student ID": studentId, "Student Name": document.getElementById('res-student-name').value, "Class": classSelect.value, "Exam Term": term, "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible, "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Branch Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true }); alert(`Success!`); document.getElementById('manual-result-form').reset(); rStudentNameInput.value=""; updateFormRules(); loadLiveResults(); } catch (error) { alert("Error"); } finally { document.getElementById('res-submit-btn').innerText = "Save Report Card"; } 
+            try { await setDoc(doc(db, "cvsk_results", docId), { "Student ID": studentId, "Student Name": document.getElementById('res-student-name').value, "Class": classSelect.value, "Exam Term": term, "Academic Marks": marks, "Total Marks": totalObtained, "Max Marks": totalPossible, "Percentage": percentage, "CoCurricular Grades": grades, "Uploaded By": "Branch Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true }); alert(`Success!`); document.getElementById('manual-result-form').reset(); rStudentNameInput.value=""; updateFormRules(); loadLiveResults(); } catch (error) { alert("Error"); } finally { submitBtn.disabled = false; submitBtn.innerText = "Save Report Card"; } 
         });
 
         let liveResultsData = []; let currentlyDisplayedResults = []; const resTableBody = document.getElementById('res-table-body');
         async function loadLiveResults() { try { const querySnapshot = await getDocs(collection(db, "cvsk_results")); liveResultsData = []; querySnapshot.forEach((docSnap) => { const d = docSnap.data(); if(d["Student ID"] && d.Class) liveResultsData.push({ id: docSnap.id, ...d }); }); currentlyDisplayedResults = [...liveResultsData]; renderResultsTableResults(currentlyDisplayedResults); } catch (error) {} }
-        function renderResultsTableResults(results) { resTableBody.innerHTML = ""; if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; } results.forEach((res, index) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><strong>${res["Student ID"] || 'N/A'}</strong></td><td>${res["Class"] || 'N/A'}</td><td>${res["Exam Term"] || 'N/A'}</td><td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td><td>${res["Percentage"] || '0%'}</td><td><button class="action-btn btn-blue view-res" data-index="${index}">👁️ View</button><button class="action-btn btn-green print-res" data-index="${index}">Print</button><button class="action-btn btn-red delete-res" data-id="${res.id}">Delete</button></td>`; resTableBody.appendChild(tr); }); document.querySelectorAll('.delete-res').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Permanently delete this report card?")) { await deleteDoc(doc(db, "cvsk_results", e.target.getAttribute('data-id'))); loadLiveResults(); } }); }); document.querySelectorAll('.print-res').forEach(btn => { btn.addEventListener('click', (e) => { generateReportCardPDF([currentlyDisplayedResults[e.target.getAttribute('data-index')]], `ReportCard_${currentlyDisplayedResults[e.target.getAttribute('data-index')]["Student ID"]}.pdf`); }); }); document.querySelectorAll('.view-res').forEach(btn => { btn.addEventListener('click', (e) => { const res = currentlyDisplayedResults[e.target.getAttribute('data-index')]; const modalBody = document.getElementById('modal-body'); let html = `<strong>Student:</strong> ${res["Student Name"] || res["Student ID"]}<br><strong>Class:</strong> ${res["Class"]}<br><strong>Term:</strong> ${res["Exam Term"]}<hr style="margin:10px 0;">`; html += `<table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Marks</th></tr>`; for(const [sub, mark] of Object.entries(res["Academic Marks"] || {})) { html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace('_',' ')}</td><td style="border:1px solid #ccc; padding:5px;">${mark}</td></tr>`; } html += `</table>`; if(res["CoCurricular Grades"] && Object.keys(res["CoCurricular Grades"]).length > 0) { html += `<h4 style="margin-top:15px; color:#FF671F;">Co-Curricular Grades</h4><table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Grade</th></tr>`; for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace(/_/g,' ')}</td><td style="border:1px solid #ccc; padding:5px;">${grade}</td></tr>`; } html += `</table>`; } modalBody.innerHTML = html; document.getElementById('marks-modal').style.display = 'flex'; }); }); }
-        document.getElementById('refresh-results-btn').addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input').addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTableResults(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]').addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `CVSK_Bulk_ReportCards_${Date.now()}.pdf`); });
-        document.getElementById('export-results-btn').addEventListener('click', () => { if(currentlyDisplayedResults.length === 0) return alert("No results to export!"); const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; }); const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `CVSK_Master_Results_${Date.now()}.xlsx`); });
+        function renderResultsTableResults(results) { if(!resTableBody) return; resTableBody.innerHTML = ""; if (results.length === 0) { resTableBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px;">No results found.</td></tr>`; return; } results.forEach((res, index) => { const tr = document.createElement('tr'); tr.innerHTML = `<td><strong>${res["Student ID"] || 'N/A'}</strong></td><td>${res["Class"] || 'N/A'}</td><td>${res["Exam Term"] || 'N/A'}</td><td>${res["Total Marks"] || '0'} / ${res["Max Marks"] || '0'}</td><td>${res["Percentage"] || '0%'}</td><td><button class="action-btn btn-blue view-res" data-index="${index}">👁️ View</button><button class="action-btn btn-green print-res" data-index="${index}">Print</button><button class="action-btn btn-red delete-res" data-id="${res.id}">Delete</button></td>`; resTableBody.appendChild(tr); }); document.querySelectorAll('.delete-res').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Permanently delete this report card?")) { await deleteDoc(doc(db, "cvsk_results", e.currentTarget.getAttribute('data-id'))); loadLiveResults(); } }); }); document.querySelectorAll('.print-res').forEach(btn => { btn.addEventListener('click', (e) => { generateReportCardPDF([currentlyDisplayedResults[e.currentTarget.getAttribute('data-index')]], `ReportCard_${currentlyDisplayedResults[e.currentTarget.getAttribute('data-index')]["Student ID"]}.pdf`); }); }); document.querySelectorAll('.view-res').forEach(btn => { btn.addEventListener('click', (e) => { const res = currentlyDisplayedResults[e.currentTarget.getAttribute('data-index')]; const modalBody = document.getElementById('modal-body'); let html = `<strong>Student:</strong> ${res["Student Name"] || res["Student ID"]}<br><strong>Class:</strong> ${res["Class"]}<br><strong>Term:</strong> ${res["Exam Term"]}<hr style="margin:10px 0;">`; html += `<table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Marks</th></tr>`; for(const [sub, mark] of Object.entries(res["Academic Marks"] || {})) { html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace('_',' ')}</td><td style="border:1px solid #ccc; padding:5px;">${mark}</td></tr>`; } html += `</table>`; if(res["CoCurricular Grades"] && Object.keys(res["CoCurricular Grades"]).length > 0) { html += `<h4 style="margin-top:15px; color:#FF671F;">Co-Curricular Grades</h4><table style="width:100%; border-collapse:collapse;"><tr><th style="border:1px solid #ccc; padding:5px; text-align:left;">Subject</th><th style="border:1px solid #ccc; padding:5px; text-align:left;">Grade</th></tr>`; for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) html += `<tr><td style="border:1px solid #ccc; padding:5px;">${sub.replace(/_/g,' ')}</td><td style="border:1px solid #ccc; padding:5px;">${grade}</td></tr>`; } html += `</table>`; } modalBody.innerHTML = html; document.getElementById('marks-modal').style.display = 'flex'; }); }); }
+        
+        document.getElementById('bulk-result-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('results-file').files[0]; if (!file) return; const submitBtn = document.getElementById('res-bulk-submit'); submitBtn.disabled = true; submitBtn.innerText = "Uploading..."; const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); const batch = writeBatch(db); jsonData.forEach((row) => { if(row["Student ID"] && row["Term"]) { const docId = `${makeSafeId(row["Student ID"])}_${makeSafeId(row["Term"])}`; batch.set(doc(db, "cvsk_results", docId), { ...row, "Uploaded By": "Branch Admin", "Publish Date": new Date().toLocaleDateString() }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded bulk results.`); document.getElementById('bulk-result-form').reset(); loadLiveResults(); } catch (error) { alert("Error processing file."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Upload Bulk Results"; } }; reader.readAsArrayBuffer(file); });
+
+        document.getElementById('refresh-results-btn')?.addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input')?.addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTableResults(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]')?.addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn')?.addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `CVSK_Bulk_ReportCards_${Date.now()}.pdf`); });
+        document.getElementById('export-results-btn')?.addEventListener('click', () => { if(currentlyDisplayedResults.length === 0) return alert("No results to export!"); const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; }); const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `CVSK_Master_Results_${Date.now()}.xlsx`); });
 
         function generateReportCardPDF(resultsArray, fileName) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); resultsArray.forEach((result, index) => { if (index > 0) doc.addPage(); doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0); doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; } finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); }); doc.save(fileName); }
 
         // --- ADMIT CARD ENGINE ---
         const schClass = document.getElementById('sch-class'); const schTerm = document.getElementById('sch-term'); const schSubjectsContainer = document.getElementById('sch-subjects-container');
-        function updateScheduleSubjects() { const cls = schClass.value; const term = schTerm.value; schSubjectsContainer.innerHTML = ""; if(!cls || !term) return; const subjects = ['English', 'Bengali', 'Mathematics', 'EVS_Science']; if(['Class 3', 'Class 4'].includes(cls)) subjects.push('Hindi', 'History', 'Geography'); if(['Class 6'].includes(cls)) subjects.push('History', 'Geography'); if(['Class 7', 'Class 8', 'Class 9', 'Class 10'].includes(cls)) subjects.push('Sanskrit', 'History', 'Geography'); if(term === 'Annual Examination') { subjects.push('Dance', 'Music', 'Art_and_Craft'); } subjects.forEach(sub => { schSubjectsContainer.innerHTML += `<div class="input-group"><label>${sub.replace(/_/g, ' ')} Date & Time</label><input type="text" class="sch-date-input" data-subject="${sub}" placeholder="e.g., 12/04/2026, 10:00 AM" required></div>`; }); }
-        schClass.addEventListener('change', updateScheduleSubjects); schTerm.addEventListener('change', updateScheduleSubjects);
-        document.getElementById('schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const cls = document.getElementById('sch-class').value; const term = document.getElementById('sch-term').value; const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = {}; document.querySelectorAll('.sch-date-input').forEach(input => { scheduleData[input.getAttribute('data-subject')] = input.value; }); try { await setDoc(doc(db, "cvsk_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }); alert(`Exam Schedule for ${cls} - ${term} saved!`); } catch (err) { alert("Error saving schedule."); } });
-        document.getElementById('bulk-schedule-form').addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('sch-file').files[0]; if (!file) return alert("Select an Excel/CSV file."); const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); if (jsonData.length === 0) return alert("File is empty."); const batch = writeBatch(db); jsonData.forEach((row) => { const cls = row["Class"]; const term = row["Term"]; if(cls && term) { const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = { ...row }; delete scheduleData["Class"]; delete scheduleData["Term"]; batch.set(doc(db, "cvsk_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded schedules from CSV.`); document.getElementById('bulk-schedule-form').reset(); } catch (error) { alert("Error processing file. Ensure headers are correct."); } }; reader.readAsArrayBuffer(file); });
+        function updateScheduleSubjects() { if(!schClass || !schTerm) return; const cls = schClass.value; const term = schTerm.value; schSubjectsContainer.innerHTML = ""; if(!cls || !term) return; const subjects = ['English', 'Bengali', 'Mathematics', 'EVS_Science']; if(['Class 3', 'Class 4'].includes(cls)) subjects.push('Hindi', 'History', 'Geography'); if(['Class 6'].includes(cls)) subjects.push('History', 'Geography'); if(['Class 7', 'Class 8', 'Class 9', 'Class 10'].includes(cls)) subjects.push('Sanskrit', 'History', 'Geography'); if(term === 'Annual Examination') { subjects.push('Dance', 'Music', 'Art_and_Craft'); } subjects.forEach(sub => { schSubjectsContainer.innerHTML += `<div class="input-group"><label>${sub.replace(/_/g, ' ')} Date & Time</label><input type="text" class="sch-date-input" data-subject="${sub}" placeholder="e.g., 12/04/2026, 10:00 AM" required></div>`; }); }
+        schClass?.addEventListener('change', updateScheduleSubjects); schTerm?.addEventListener('change', updateScheduleSubjects);
+        document.getElementById('schedule-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('sch-submit-btn'); btn.disabled = true; btn.innerText = "Saving..."; const cls = document.getElementById('sch-class').value; const term = document.getElementById('sch-term').value; const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = {}; document.querySelectorAll('.sch-date-input').forEach(input => { scheduleData[input.getAttribute('data-subject')] = input.value; }); try { await setDoc(doc(db, "cvsk_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }); alert(`Exam Schedule for ${cls} - ${term} saved!`); } catch (err) { alert("Error saving schedule."); } finally { btn.disabled = false; btn.innerText = "Save Schedule"; } });
+        document.getElementById('bulk-schedule-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const file = document.getElementById('sch-file').files[0]; if (!file) return alert("Select an Excel/CSV file."); const btn = document.getElementById('sch-bulk-submit'); btn.disabled = true; btn.innerText = "Uploading..."; const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); if (jsonData.length === 0) return alert("File is empty."); const batch = writeBatch(db); jsonData.forEach((row) => { const cls = row["Class"]; const term = row["Term"]; if(cls && term) { const docId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const scheduleData = { ...row }; delete scheduleData["Class"]; delete scheduleData["Term"]; batch.set(doc(db, "cvsk_schedules", docId), { Class: cls, Term: term, Schedule: scheduleData }, { merge: true }); } }); await batch.commit(); alert(`Successfully uploaded schedules from CSV.`); document.getElementById('bulk-schedule-form').reset(); } catch (error) { alert("Error processing file. Ensure headers are correct."); } finally { btn.disabled = false; btn.innerText = "Upload Schedule Database"; } }; reader.readAsArrayBuffer(file); });
 
         const admitGenType = document.getElementById('admit-gen-type'); const admitTargetContainer = document.getElementById('admit-target-container'); const admitTargetLabel = document.getElementById('admit-target-label'); const admitTargetVal = document.getElementById('admit-target-val'); const admitTargetClass = document.getElementById('admit-target-class');
-        admitGenType.addEventListener('change', () => { 
-            if(admitGenType.value === 'all') { 
-                admitTargetContainer.style.display = 'none'; admitTargetVal.required = false; admitTargetClass.required = false;
-            } else if(admitGenType.value === 'class') { 
-                admitTargetContainer.style.display = 'block'; admitTargetLabel.innerText = "Select Class";
-                admitTargetVal.style.display = 'none'; admitTargetVal.required = false;
-                admitTargetClass.style.display = 'block'; admitTargetClass.required = true;
-            } else {
-                admitTargetContainer.style.display = 'block'; admitTargetLabel.innerText = "Student ID";
-                admitTargetVal.style.display = 'block'; admitTargetVal.required = true;
-                admitTargetClass.style.display = 'none'; admitTargetClass.required = false;
-            }
+        admitGenType?.addEventListener('change', () => { 
+            if(admitGenType.value === 'all') { admitTargetContainer.style.display = 'none'; admitTargetVal.required = false; admitTargetClass.required = false; } else if(admitGenType.value === 'class') { admitTargetContainer.style.display = 'block'; admitTargetLabel.innerText = "Select Class"; admitTargetVal.style.display = 'none'; admitTargetVal.required = false; admitTargetClass.style.display = 'block'; admitTargetClass.required = true; } else { admitTargetContainer.style.display = 'block'; admitTargetLabel.innerText = "Student ID"; admitTargetVal.style.display = 'block'; admitTargetVal.required = true; admitTargetClass.style.display = 'none'; admitTargetClass.required = false; }
         });
 
-        // Admit Card Live Preview
-        document.getElementById('admit-preview-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('admit-preview-btn'); btn.innerText = "Generating Preview...";
-            const genType = admitGenType.value; 
-            const targetVal = genType === 'class' ? admitTargetClass.value : admitTargetVal.value.trim(); 
-            const term = document.getElementById('admit-gen-term').value;
+        document.getElementById('admit-preview-btn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('admit-preview-btn'); btn.disabled = true; btn.innerText = "Generating Preview...";
+            const genType = admitGenType.value; const targetVal = genType === 'class' ? admitTargetClass.value : admitTargetVal.value.trim(); const term = document.getElementById('admit-gen-term').value;
             try {
                 let targetStudents = [];
                 if(genType === 'single') { const snap = await getDoc(doc(db, "cvsk_students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
                 else if(genType === 'class') { const q = query(collection(db, "cvsk_students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } 
                 else { const snaps = await getDocs(collection(db, "cvsk_students")); snaps.forEach(d => targetStudents.push(d.data())); }
-                
-                if(targetStudents.length === 0) { alert("No valid students found for preview."); btn.innerText = "👁️ Preview Sample Admit Card"; return; }
-                
-                const schSnaps = await getDocs(collection(db, "cvsk_schedules")); 
-                const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
-                
-                const student = targetStudents[0]; 
-                const cls = student.Class; const schId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; 
-                const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
-
+                if(targetStudents.length === 0) { alert("No valid students found for preview."); return; }
+                const schSnaps = await getDocs(collection(db, "cvsk_schedules")); const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
+                const student = targetStudents[0]; const cls = student.Class; const schId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
                 let tableHtml = "";
                 if(studentSchedule) {
-                    tableHtml = `<table style="width:100%; border-collapse:collapse; margin-top:5px; text-align:left;">
-                        <thead><tr><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Subject</th><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Date & Time</th></tr></thead><tbody style="font-size:10px;">`;
-                    for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableHtml += `<tr><td style="border:1px solid #ccc; padding:4px;">${sub.replace(/_/g, ' ')}</td><td style="border:1px solid #ccc; padding:4px;">${dateStr}</td></tr>`; }
-                    tableHtml += `</tbody></table>`;
+                    tableHtml = `<table style="width:100%; border-collapse:collapse; margin-top:5px; text-align:left;"><thead><tr><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Subject</th><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Date & Time</th></tr></thead><tbody style="font-size:10px;">`;
+                    for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableHtml += `<tr><td style="border:1px solid #ccc; padding:4px;">${sub.replace(/_/g, ' ')}</td><td style="border:1px solid #ccc; padding:4px;">${dateStr}</td></tr>`; } tableHtml += `</tbody></table>`;
                 } else { tableHtml = `<p style="color:red; margin-top:10px; font-size:10px; font-weight:bold; text-align:center;">Exam schedule not published for ${cls} yet.</p>`; }
-
-                const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="height:40px; object-fit:contain;">` : '';
-                const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:25px; object-fit:contain;">` : '<div style="height:25px;"></div>';
-
+                const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="height:40px; object-fit:contain;">` : ''; const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:25px; object-fit:contain;">` : '<div style="height:25px;"></div>';
                 const previewCard = document.getElementById('admit-preview-card');
-                previewCard.innerHTML = `
-                    <div style="display:flex; justify-content:center; align-items:center; gap:15px; margin-bottom:5px;">
-                        ${logoHtml}
-                        <div style="text-align: center;">
-                            <h2 style="color: #003366; margin: 0; font-size: 20px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</h2>
-                            <p style="color: #555; margin: 2px 0 0 0; font-size: 10px;">Branch Campus Registration</p>
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-bottom: 10px;">
-                        <h3 style="color: #FF671F; margin: 0; font-size: 14px;">ADMIT CARD - ${term.toUpperCase()}</h3>
-                    </div>
-                    <hr style="border: 0; border-top: 2px solid #003366; margin-bottom: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                        <div style="font-size: 11px; line-height: 1.6; color: #333;">
-                            <div><strong>Name:</strong> ${student.Name || 'N/A'}</div>
-                            <div style="display:flex; gap:30px;">
-                                <div><strong>Student ID:</strong> ${student["Student ID"] || 'N/A'}</div>
-                                <div><strong>Roll No:</strong> ${student["Roll No"] || 'N/A'}</div>
-                            </div>
-                            <div><strong>Class:</strong> ${student.Class || 'N/A'}</div>
-                            <div><strong>Father's Name:</strong> ${student["Father's Name"] || 'N/A'}</div>
-                        </div>
-                        <div style="width: 70px; height: 90px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #999; font-size: 10px; border-radius: 4px; overflow:hidden;">
-                            ${student.Photo ? `<img src="${student.Photo}" style="width:100%; height:100%; object-fit:cover;">` : 'Photo'}
-                        </div>
-                    </div>
-                    <div style="display: flex; gap: 15px; align-items: flex-end;">
-                        <div style="flex:1;">${tableHtml}</div>
-                        <div style="width:120px; text-align:center; font-size:10px; font-weight:bold; color:#003366;">
-                            ${signHtml}
-                            <div style="border-top:1px solid #003366; padding-top:3px; margin-top:2px;">Principal Signature</div>
-                        </div>
-                    </div>
-                    `;
+                previewCard.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; gap:15px; margin-bottom:5px;">${logoHtml}<div style="text-align: center;"><h2 style="color: #003366; margin: 0; font-size: 20px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</h2><p style="color: #555; margin: 2px 0 0 0; font-size: 10px;">Branch Campus Registration</p></div></div><div style="text-align: center; margin-bottom: 10px;"><h3 style="color: #FF671F; margin: 0; font-size: 14px;">ADMIT CARD - ${term.toUpperCase()}</h3></div><hr style="border: 0; border-top: 2px solid #003366; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: flex-start;"><div style="font-size: 11px; line-height: 1.6; color: #333;"><div><strong>Name:</strong> ${student.Name || 'N/A'}</div><div style="display:flex; gap:30px;"><div><strong>Student ID:</strong> ${student["Student ID"] || 'N/A'}</div><div><strong>Roll No:</strong> ${student["Roll No"] || 'N/A'}</div></div><div><strong>Class:</strong> ${student.Class || 'N/A'}</div><div><strong>Father's Name:</strong> ${student["Father's Name"] || 'N/A'}</div></div><div style="width: 70px; height: 90px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #999; font-size: 10px; border-radius: 4px; overflow:hidden;">${student.Photo ? `<img src="${student.Photo}" style="width:100%; height:100%; object-fit:cover;">` : 'Photo'}</div></div><div style="display: flex; gap: 15px; align-items: flex-end;"><div style="flex:1;">${tableHtml}</div><div style="width:120px; text-align:center; font-size:10px; font-weight:bold; color:#003366;">${signHtml}<div style="border-top:1px solid #003366; padding-top:3px; margin-top:2px;">Principal Signature</div></div></div>`;
                 document.getElementById('admit-preview-placeholder').style.display = 'none'; previewCard.style.display = 'block';
-            } catch(err) { alert("Error fetching preview data."); } finally { btn.innerText = "👁️ Preview Sample Admit Card"; }
+            } catch(err) { alert("Error fetching preview data."); } finally { btn.disabled = false; btn.innerText = "👁️ Preview Sample Admit Card"; }
         });
 
-        // 3-PER-PAGE ADMIT CARD PDF DOWNLOAD
-        document.getElementById('admit-print-form').addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('admit-gen-btn'); btn.innerText = "Generating PDF..."; 
-            const genType = admitGenType.value; 
-            const targetVal = genType === 'class' ? admitTargetClass.value : admitTargetVal.value.trim(); 
-            const term = document.getElementById('admit-gen-term').value;
+        document.getElementById('admit-print-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault(); const btn = document.getElementById('admit-gen-btn'); btn.disabled = true; btn.innerText = "Generating PDF..."; 
+            const genType = admitGenType.value; const targetVal = genType === 'class' ? admitTargetClass.value : admitTargetVal.value.trim(); const term = document.getElementById('admit-gen-term').value;
             try {
                 let targetStudents = []; 
                 if(genType === 'single') { const snap = await getDoc(doc(db, "cvsk_students", makeSafeId(targetVal))); if(snap.exists()) targetStudents.push(snap.data()); } 
                 else if(genType === 'class') { const q = query(collection(db, "cvsk_students"), where("Class", "==", targetVal)); const snaps = await getDocs(q); snaps.forEach(d => targetStudents.push(d.data())); } 
                 else { const snaps = await getDocs(collection(db, "cvsk_students")); snaps.forEach(d => targetStudents.push(d.data())); }
-                
-                if(targetStudents.length === 0) { alert("No students found."); btn.innerText = "📥 Download Admit Card PDF(s)"; return; }
-                
+                if(targetStudents.length === 0) { alert("No students found."); btn.disabled = false; btn.innerText = "📥 Download Admit Card PDF(s)"; return; }
                 const schSnaps = await getDocs(collection(db, "cvsk_schedules")); const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
-                const { jsPDF } = window.jspdf; const docPdf = new jsPDF();
-                
-                const cardWidth = 190; const cardHeight = 92; const startX = 10; const spacing = 5.25;
-
+                const { jsPDF } = window.jspdf; const docPdf = new jsPDF(); const cardWidth = 190; const cardHeight = 92; const startX = 10; const spacing = 5.25;
                 targetStudents.forEach((student, index) => {
                     const cls = student.Class; const schId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
-                    
-                    const pageIndex = index % 3;
-                    if (index > 0 && pageIndex === 0) docPdf.addPage();
-                    
-                    const currentY = spacing + (pageIndex * (cardHeight + spacing));
-                    
+                    const pageIndex = index % 3; if (index > 0 && pageIndex === 0) docPdf.addPage(); const currentY = spacing + (pageIndex * (cardHeight + spacing));
                     docPdf.setLineWidth(0.2); docPdf.rect(startX, currentY, cardWidth, cardHeight);
                     if(globalAssets.logo) { docPdf.addImage(globalAssets.logo, 'PNG', startX + 5, currentY + 3, 16, 16); }
-                    
                     docPdf.setFontSize(16); docPdf.setTextColor(0, 51, 102); docPdf.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, currentY + 9, null, null, "center");
                     docPdf.setFontSize(9); docPdf.setTextColor(50, 50, 50); docPdf.text("Branch Campus Registration", 105, currentY + 14, null, null, "center");
                     docPdf.setFontSize(12); docPdf.setTextColor(255, 103, 31); docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, currentY + 21, null, null, "center");
                     docPdf.setLineWidth(0.5); docPdf.line(startX + 5, currentY + 24, startX + cardWidth - 5, currentY + 24);
-                    
-                    docPdf.setFontSize(10); docPdf.setTextColor(0, 0, 0);
-                    docPdf.text(`Name: ${student.Name || 'N/A'}`, startX + 5, currentY + 31);
-                    docPdf.text(`Student ID: ${student["Student ID"] || 'N/A'}`, startX + 5, currentY + 38);
-                    docPdf.text(`Roll No: ${student["Roll No"] || 'N/A'}`, startX + 65, currentY + 38);
-                    docPdf.text(`Class: ${student.Class || 'N/A'}`, startX + 115, currentY + 38);
-                    docPdf.text(`Father's Name: ${student["Father's Name"] || 'N/A'}`, startX + 5, currentY + 45);
-                    
+                    docPdf.setFontSize(10); docPdf.setTextColor(0, 0, 0); docPdf.text(`Name: ${student.Name || 'N/A'}`, startX + 5, currentY + 31); docPdf.text(`Student ID: ${student["Student ID"] || 'N/A'}`, startX + 5, currentY + 38); docPdf.text(`Roll No: ${student["Roll No"] || 'N/A'}`, startX + 65, currentY + 38); docPdf.text(`Class: ${student.Class || 'N/A'}`, startX + 115, currentY + 38); docPdf.text(`Father's Name: ${student["Father's Name"] || 'N/A'}`, startX + 5, currentY + 45);
                     docPdf.setLineWidth(0.2); docPdf.rect(startX + 155, currentY + 27, 28, 33);
-                    if(student.Photo) { docPdf.addImage(student.Photo, 'JPEG', startX + 155, currentY + 27, 28, 33); } 
-                    else { docPdf.setFontSize(8); docPdf.setTextColor(150, 150, 150); docPdf.text("Photo", startX + 160, currentY + 45); }
-                    docPdf.setTextColor(0, 0, 0);
-                    
-                    if(studentSchedule) {
-                        let tableData = []; for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableData.push([sub.replace(/_/g, ' '), dateStr]); }
-                        docPdf.autoTable({
-                            startY: currentY + 49, head: [['Subject', 'Date & Time']], body: tableData, theme: 'grid', 
-                            styles: { fontSize: 8, padding: 1, minCellHeight: 6 }, headStyles: { fillColor: [0, 51, 102] }, 
-                            margin: { left: startX + 5 }, tableWidth: 135
-                        });
-                    } else {
-                        docPdf.setTextColor(255, 0, 0); docPdf.text("Exam schedule not published for this class yet.", startX + 5, currentY + 60); docPdf.setTextColor(0, 0, 0);
-                    }
-
-                    if(globalAssets.prinSign) { docPdf.addImage(globalAssets.prinSign, 'PNG', startX + 150, currentY + 74, 30, 10); }
-                    docPdf.setFontSize(9); docPdf.setFont(undefined, 'bold');
-                    docPdf.line(startX + 145, currentY + 85, startX + 185, currentY + 85);
-                    docPdf.text("Principal", startX + 155, currentY + 89);
+                    if(student.Photo) { docPdf.addImage(student.Photo, 'JPEG', startX + 155, currentY + 27, 28, 33); } else { docPdf.setFontSize(8); docPdf.setTextColor(150, 150, 150); docPdf.text("Photo", startX + 160, currentY + 45); } docPdf.setTextColor(0, 0, 0);
+                    if(studentSchedule) { let tableData = []; for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableData.push([sub.replace(/_/g, ' '), dateStr]); } docPdf.autoTable({ startY: currentY + 49, head: [['Subject', 'Date & Time']], body: tableData, theme: 'grid', styles: { fontSize: 8, padding: 1, minCellHeight: 6 }, headStyles: { fillColor: [0, 51, 102] }, margin: { left: startX + 5 }, tableWidth: 135 }); } else { docPdf.setTextColor(255, 0, 0); docPdf.text("Exam schedule not published for this class yet.", startX + 5, currentY + 60); docPdf.setTextColor(0, 0, 0); }
+                    if(globalAssets.prinSign) { docPdf.addImage(globalAssets.prinSign, 'PNG', startX + 150, currentY + 74, 30, 10); } docPdf.setFontSize(9); docPdf.setFont(undefined, 'bold'); docPdf.line(startX + 145, currentY + 85, startX + 185, currentY + 85); docPdf.text("Principal", startX + 155, currentY + 89);
                 }); docPdf.save(`CVSK_Admit_Cards_${term.replace(/\s+/g, '_')}.pdf`);
-            } catch (err) { alert("Error generating PDF: " + err.message); } finally { btn.innerText = "📥 Download Admit Card PDF(s)"; }
+            } catch (err) { alert("Error generating PDF: " + err.message); } finally { btn.disabled = false; btn.innerText = "📥 Download Admit Card PDF(s)"; }
         });
 
         // --- 8. ID CARD GENERATOR ENGINE ---
@@ -1664,154 +1651,58 @@
         const previewBack = document.getElementById('preview-back');
         let activeCardData = null;
 
-        cardTypeSelect.addEventListener('change', () => {
-            if(cardTypeSelect.value === 'student') {
-                document.getElementById('student-fields-group').style.display = 'block'; document.getElementById('teacher-fields-group').style.display = 'none';
-                previewFront.style.width = "324px"; previewFront.style.height = "204px"; previewBack.style.width = "324px"; previewBack.style.height = "204px";
-            } else {
-                document.getElementById('student-fields-group').style.display = 'none'; document.getElementById('teacher-fields-group').style.display = 'block';
-                previewFront.style.width = "204px"; previewFront.style.height = "324px"; previewBack.style.width = "204px"; previewBack.style.height = "324px";
-            }
+        cardTypeSelect?.addEventListener('change', () => {
+            if(cardTypeSelect.value === 'student') { document.getElementById('student-fields-group').style.display = 'block'; document.getElementById('teacher-fields-group').style.display = 'none'; previewFront.style.width = "324px"; previewFront.style.height = "204px"; previewBack.style.width = "324px"; previewBack.style.height = "204px"; } 
+            else { document.getElementById('student-fields-group').style.display = 'none'; document.getElementById('teacher-fields-group').style.display = 'block'; previewFront.style.width = "204px"; previewFront.style.height = "324px"; previewBack.style.width = "204px"; previewBack.style.height = "324px"; }
         });
 
-        const idStuIdInput = document.getElementById('id-stu-id');
-        idStuIdInput.addEventListener('blur', async () => { const idVal = idStuIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_students", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Student: ${docSnap.data().Name}`); } else { alert("Student not found."); } } catch(err) {} });
-
-        const idTchIdInput = document.getElementById('id-tch-id-fetch');
-        idTchIdInput.addEventListener('blur', async () => { const idVal = idTchIdInput.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
+        document.getElementById('id-stu-id')?.addEventListener('blur', async (e) => { const idVal = e.target.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_students", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Student: ${docSnap.data().Name}`); } else { alert("Student not found."); } } catch(err) {} });
+        document.getElementById('id-tch-id-fetch')?.addEventListener('blur', async (e) => { const idVal = e.target.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
 
         function renderCardHTML(dataObj, type) {
             const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
             const sealHtml = globalAssets.seal ? `<img src="${globalAssets.seal}" style="width:35px; height:35px; object-fit:contain; opacity:0.8;">` : ``;
-
-            // Smart Signature Logic
-            const isExecutive = type === 'teacher' && (dataObj.dept === 'Principal' || dataObj.dept === 'Manager');
+            const isExecutive = type === 'teacher' && (dataObj.dept === 'Principal' || dataObj.dept === 'Manager' || dataObj.dept === 'Super Admin' || dataObj.dept === 'Admin');
             const signSrc = isExecutive ? globalAssets.secSign : globalAssets.prinSign;
             const signTitle = isExecutive ? "Secretary" : "Principal";
             const signHtml = signSrc ? `<img src="${signSrc}" style="height:15px; max-width:60px; display:block; margin:0 auto;">` : `<div style="height:15px;"></div>`;
-
             let fHtml = "", bHtml = "", qText = "";
 
             if(type === 'student') {
-                fHtml = `
-                    <div style="display:flex; height:100%; position:relative; background:#fff;">
-                        <div style="background:#003366; width:35%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; border-right: 4px solid #FF671F; box-sizing:border-box;">
-                            <img src="${dataObj.photo}" style="width:70px; height:85px; border:2px solid white; border-radius:4px; object-fit:cover; z-index:2;">
-                        </div>
-                        <div style="width:65%; padding:10px 15px; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;">
-                            <div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">
-                                ${logoHtml}
-                                <div><div style="font-weight:bold; color:#003366; font-size:9.5px; line-height:1;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</div><div style="font-size:6px; color:#FF671F; font-weight:bold; margin-top:1px;">STUDENT IDENTITY CARD</div></div>
-                            </div>
-                            <div style="font-size:8px; display:flex; flex-direction:column; gap:2px; margin-top:5px; color:#003366;">
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">NAME</span> <b>${dataObj.title}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">ID NO</span> <b>${dataObj.id}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">CLASS</span> <b>${dataObj.class}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">FATHER</span> <b>${dataObj.father}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">PHONE</span> <b>${dataObj.phone}</b></div>
-                                <div style="line-height:1.1;"><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px; vertical-align:top;">ADDRESS</span> <span style="display:inline-block; width:110px; word-wrap:break-word;">${dataObj.address}</span></div>
-                            </div>
-                            <div style="position:absolute; bottom:10px; right:15px; text-align:center;">${signHtml}<div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">Principal</div></div>
-                        </div>
-                    </div>`;
-
-                bHtml = `
-                    <div style="display:flex; width:100%; height:100%; box-sizing:border-box;">
-                        <div style="width:65%; background:white; padding:15px; display:flex; flex-direction:column; position:relative;">
-                            <strong style="color:#FF671F; font-size:9px;">INSTRUCTIONS:</strong><br>
-                            <span style="font-size:7px; line-height:1.4; color:#333;">
-                                1. Carry this card at all times.<br>
-                                2. Report loss to the Principal.<br>
-                                3. Duplicate card fee: Rs. 100/-.<br>
-                                4. This card is non-transferable.
-                            </span>
-                            <div style="margin-top:10px; text-align:left;">${sealHtml}</div>
-                            <div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3;">
-                                <strong style="color:#FF671F;">If found, please return to:</strong><br>
-                                Chandidas Vivekananda Siksha Kendram<br>
-                                Branch Campus Bolpur
-                            </div>
-                        </div>
-                        <div style="width:35%; background:#003366; border-left:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                            <div class="qr-render-box" id="live-qr-code"></div>
-                            <div style="font-size:6px; color:white; margin-top:4px; font-weight:bold;">SCAN PROFILE</div>
-                        </div>
-                    </div>`;
+                fHtml = `<div style="display:flex; height:100%; position:relative; background:#fff;"><div style="background:#003366; width:35%; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; border-right: 4px solid #FF671F; box-sizing:border-box;"><img src="${dataObj.photo}" style="width:70px; height:85px; border:2px solid white; border-radius:4px; object-fit:cover; z-index:2;"></div><div style="width:65%; padding:10px 15px; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;"><div style="display:flex; align-items:center; gap:6px; margin-bottom:5px;">${logoHtml}<div><div style="font-weight:bold; color:#003366; font-size:9.5px; line-height:1;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</div><div style="font-size:6px; color:#FF671F; font-weight:bold; margin-top:1px;">STUDENT IDENTITY CARD</div></div></div><div style="font-size:8px; display:flex; flex-direction:column; gap:2px; margin-top:5px; color:#003366;"><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">NAME</span> <b>${dataObj.title}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">ID NO</span> <b>${dataObj.id}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">CLASS</span> <b>${dataObj.class}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">FATHER</span> <b>${dataObj.father}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">PHONE</span> <b>${dataObj.phone}</b></div><div style="line-height:1.1;"><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px; vertical-align:top;">ADDRESS</span> <span style="display:inline-block; width:110px; word-wrap:break-word;">${dataObj.address}</span></div></div><div style="position:absolute; bottom:10px; right:15px; text-align:center;">${signHtml}<div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">Principal</div></div></div></div>`;
+                bHtml = `<div style="display:flex; width:100%; height:100%; box-sizing:border-box;"><div style="width:65%; background:white; padding:15px; display:flex; flex-direction:column; position:relative;"><strong style="color:#FF671F; font-size:9px;">INSTRUCTIONS:</strong><br><span style="font-size:7px; line-height:1.4; color:#333;">1. Carry this card at all times.<br>2. Report loss to the Principal.<br>3. Duplicate card fee: Rs. 100/-.<br>4. This card is non-transferable.</span><div style="margin-top:10px; text-align:left;">${sealHtml}</div><div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3;"><strong style="color:#FF671F;">If found, please return to:</strong><br>Chandidas Vivekananda Siksha Kendram<br>Branch Campus Bolpur</div></div><div style="width:35%; background:#003366; border-left:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;"><div class="qr-render-box" id="live-qr-code"></div><div style="font-size:6px; color:white; margin-top:4px; font-weight:bold;">SCAN PROFILE</div></div></div>`;
                 qText = `Name: ${dataObj.title}\nID: ${dataObj.id}\nClass: ${dataObj.class}\nDOB: ${dataObj.dob}\nPhone: ${dataObj.phone}\nAddress: ${dataObj.address}`;
-                
             } else {
-                fHtml = `
-                    <div style="height:100%; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;">
-                        <div style="background:#003366; padding:10px 5px; text-align:center; border-bottom:3px solid #FF671F; display:flex; flex-direction:column; align-items:center;">
-                            ${logoHtml}
-                            <div style="color:white; font-size:9.5px; font-weight:bold; margin-top:2px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</div>
-                            <div style="color:#d0e1f9; font-size:7px;">STAFF IDENTITY CARD</div>
-                        </div>
-                        <div style="display:flex; flex-direction:column; align-items:center; padding:15px 10px; flex:1;">
-                            <img src="${dataObj.photo}" style="width:65px; height:75px; border:2px solid #FF671F; border-radius:6px; object-fit:cover; margin-bottom:8px;">
-                            <div style="font-size:12px; font-weight:bold; color:#003366; text-transform:uppercase; text-align:center; line-height:1.1; margin-bottom:10px;">${dataObj.name}</div>
-                            <div style="font-size:8px; width:100%; display:flex; flex-direction:column; gap:3px; color:#003366; padding:0 5px;">
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">EMP ID</span> <b>${dataObj.id}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">FATHER</span> <b>${dataObj.father}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">DEPT</span> <b>${dataObj.dept}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">DOJ</span> <b>${dataObj.doj}</b></div>
-                                <div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">BLOOD</span> <b style="color:#E63946;">${dataObj.blood}</b></div>
-                            </div>
-                        </div>
-                        <div style="position:absolute; bottom:25px; right:15px; text-align:center;">${signHtml}<div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">${signTitle}</div></div>
-                        <div style="background:#FF671F; height:20px; width:100%; position:absolute; bottom:0;"></div>
-                    </div>`;
-
-                bHtml = `
-                    <div style="display:flex; flex-direction:column; width:100%; height:100%; box-sizing:border-box;">
-                        <div style="height:65%; background:white; padding:15px; display:flex; flex-direction:column; position:relative;">
-                            <strong style="color:#FF671F; font-size:9px;">INSTRUCTIONS:</strong><br>
-                            <span style="font-size:7px; line-height:1.4; color:#333;">
-                                1. Wear this badge at all times.<br>
-                                2. Report loss to administration.<br>
-                                3. This card is non-transferable.
-                            </span>
-                            <div style="margin-top:10px; text-align:center;">${sealHtml}</div>
-                            <div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3; text-align:center;">
-                                <strong style="color:#FF671F;">If found, please return to:</strong><br>
-                                Chandidas Vivekananda Siksha Kendram<br>
-                                Branch Campus Bolpur
-                            </div>
-                        </div>
-                        <div style="height:35%; background:#003366; border-top:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                            <div class="qr-render-box" id="live-qr-code"></div>
-                            <div style="font-size:6px; color:white; margin-top:4px; font-weight:bold;">SCAN PROFILE</div>
-                        </div>
-                    </div>`;
+                fHtml = `<div style="height:100%; display:flex; flex-direction:column; background:#fff; position:relative; box-sizing:border-box;"><div style="background:#003366; padding:10px 5px; text-align:center; border-bottom:3px solid #FF671F; display:flex; flex-direction:column; align-items:center;">${logoHtml}<div style="color:white; font-size:9.5px; font-weight:bold; margin-top:2px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</div><div style="color:#d0e1f9; font-size:7px;">STAFF IDENTITY CARD</div></div><div style="display:flex; flex-direction:column; align-items:center; padding:15px 10px; flex:1;"><img src="${dataObj.photo}" style="width:65px; height:75px; border:2px solid #FF671F; border-radius:6px; object-fit:cover; margin-bottom:8px;"><div style="font-size:12px; font-weight:bold; color:#003366; text-transform:uppercase; text-align:center; line-height:1.1; margin-bottom:10px;">${dataObj.name}</div><div style="font-size:8px; width:100%; display:flex; flex-direction:column; gap:3px; color:#003366; padding:0 5px;"><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">EMP ID</span> <b>${dataObj.id}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">FATHER</span> <b>${dataObj.father}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">DEPT</span> <b>${dataObj.dept}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">DOJ</span> <b>${dataObj.doj}</b></div><div><span style="color:#FF671F; font-weight:bold; display:inline-block; width:45px;">BLOOD</span> <b style="color:#E63946;">${dataObj.blood}</b></div></div></div><div style="position:absolute; bottom:25px; right:15px; text-align:center;">${signHtml}<div style="border-top:1px solid #003366; font-size:6px; color:#003366; padding-top:2px; margin-top:2px;">${signTitle}</div></div><div style="background:#FF671F; height:20px; width:100%; position:absolute; bottom:0;"></div></div>`;
+                bHtml = `<div style="display:flex; flex-direction:column; width:100%; height:100%; box-sizing:border-box;"><div style="height:65%; background:white; padding:15px; display:flex; flex-direction:column; position:relative;"><strong style="color:#FF671F; font-size:9px;">INSTRUCTIONS:</strong><br><span style="font-size:7px; line-height:1.4; color:#333;">1. Wear this badge at all times.<br>2. Report loss to administration.<br>3. This card is non-transferable.</span><div style="margin-top:10px; text-align:center;">${sealHtml}</div><div style="margin-top:auto; border-top:1px solid #eee; padding-top:5px; font-size:6.5px; color:#003366; line-height:1.3; text-align:center;"><strong style="color:#FF671F;">If found, please return to:</strong><br>Chandidas Vivekananda Siksha Kendram<br>Branch Campus Bolpur</div></div><div style="height:35%; background:#003366; border-top:4px solid #FF671F; display:flex; flex-direction:column; align-items:center; justify-content:center;"><div class="qr-render-box" id="live-qr-code"></div><div style="font-size:6px; color:white; margin-top:4px; font-weight:bold;">SCAN PROFILE</div></div></div>`;
                 qText = `Name: ${dataObj.name}\nID: ${dataObj.id}\nDept: ${dataObj.dept}\nBlood: ${dataObj.blood}\nDOJ: ${dataObj.doj}`;
             }
-
-            previewFront.innerHTML = fHtml;
-            previewBack.innerHTML = bHtml;
+            previewFront.innerHTML = fHtml; previewBack.innerHTML = bHtml;
             new QRCode(document.getElementById("live-qr-code"), { text: qText, width: 400, height: 400, colorDark: "#003366", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.L });
         }
 
-        document.getElementById('preview-card-btn').addEventListener('click', async () => {
-            const type = cardTypeSelect.value; const previewBtn = document.getElementById('preview-card-btn'); previewBtn.innerText = "Fetching Record...";
+        document.getElementById('preview-card-btn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('preview-card-btn'); btn.disabled = true; btn.innerText = "Fetching...";
+            const type = cardTypeSelect.value; 
             if(type === 'student') {
                 const stuId = document.getElementById('id-stu-id').value.trim();
-                if(!stuId) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Student ID."); }
+                if(!stuId) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Student ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "cvsk_students", makeSafeId(stuId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
-                if(!data) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Student ID not found in database!"); }
+                if(!data) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Student ID not found in database!"); }
                 activeCardData = { type: 'student', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', dob: data.DOB || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85' };
             } else {
                 const tchId = document.getElementById('id-tch-id-fetch').value.trim();
-                if(!tchId) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Staff ID."); }
+                if(!tchId) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Staff ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(tchId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
-                if(!data) { previewBtn.innerText = "Generate Preview & QR Code"; return alert("Staff ID not found in database!"); }
+                if(!data) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Staff ID not found in database!"); }
                 activeCardData = { type: 'teacher', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85' };
             }
-            renderCardHTML(activeCardData, type); previewBtn.innerText = "Generate Preview & QR Code";
+            renderCardHTML(activeCardData, type); btn.disabled = false; btn.innerText = "Generate Preview & QR Code";
         });
 
-        document.getElementById('download-id-pdf').addEventListener('click', async () => {
+        document.getElementById('download-id-pdf')?.addEventListener('click', async () => {
             if(!activeCardData) return alert("Please generate a card preview first!");
-            const btn = document.getElementById('download-id-pdf'); btn.innerText = "Generating PDF (Please wait)...";
+            const btn = document.getElementById('download-id-pdf'); btn.disabled = true; btn.innerText = "Generating PDF (Please wait)...";
             try {
                 const wMm = Number(document.getElementById('card-width').value); const hMm = Number(document.getElementById('card-height').value); const isLandscape = wMm > hMm;
                 const frontCanvas = await html2canvas(document.getElementById('preview-front'), { scale: 5, useCORS: true, backgroundColor: "#ffffff" });
@@ -1819,62 +1710,37 @@
                 const { jsPDF } = window.jspdf; const pdf = new jsPDF({ orientation: isLandscape ? 'l' : 'p', unit: 'mm', format: [wMm, hMm] });
                 pdf.addImage(frontCanvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, wMm, hMm); pdf.addPage(); pdf.addImage(backCanvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, wMm, hMm);
                 pdf.save(`ID_Card_${activeCardData.id || activeCardData.title || activeCardData.name}.pdf`);
-            } catch(err) { alert("Error generating PDF."); } finally { btn.innerText = "📥 Download Printable ID Card PDF"; }
+            } catch(err) { alert("Error generating PDF."); } finally { btn.disabled = false; btn.innerText = "📥 Download Printable ID Card PDF"; }
         });
 
-        document.getElementById('bulk-id-btn').addEventListener('click', async () => {
+        document.getElementById('bulk-id-btn')?.addEventListener('click', async () => {
             const btn = document.getElementById('bulk-id-btn'); const targetType = document.getElementById('bulk-id-target').value; const targetClass = document.getElementById('bulk-id-class').value;
-            btn.innerText = "Scanning Database...";
-            let targets = []; let isStudent = true;
+            btn.disabled = true; btn.innerText = "Scanning Database..."; let targets = []; let isStudent = true;
             try {
                 if(targetType === 'class' || targetType === 'all-students') {
                     const qSnaps = await getDocs(collection(db, "cvsk_students"));
-                    qSnaps.forEach(docSnap => { 
-                        const d = docSnap.data(); 
-                        if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") {
-                            if(targetType === 'all-students' || d.Class === targetClass) { targets.push({ type: 'student', title: d.Name, id: d["Student ID"] || d["Roll No"], class: d.Class, dob: d.DOB, father: d["Father's Name"], address: d.Address, phone: d.Phone, photo: d.Photo }); }
-                        }
-                    });
+                    qSnaps.forEach(docSnap => { const d = docSnap.data(); if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") { if(targetType === 'all-students' || d.Class === targetClass) { targets.push({ type: 'student', title: d.Name, id: d["Student ID"] || d["Roll No"], class: d.Class, dob: d.DOB, father: d["Father's Name"], address: d.Address, phone: d.Phone, photo: d.Photo }); } } });
                 } else {
                     isStudent = false; const qSnaps = await getDocs(collection(db, "cvsk_staff"));
-                    qSnaps.forEach(docSnap => { 
-                        const d = docSnap.data();
-                        const name = d.Name || d.name;
-                        if(name && String(name).trim() !== "") { targets.push({ type: 'teacher', id: d.TeacherID || d.id || docSnap.id, name: name, father: d.FatherName || d.father, dept: d.Department || d.dept, doj: d.DateOfJoining || d.doj, blood: d.BloodGroup || d.blood, phone: d.Phone || d.phone, photo: d.Photo || d.photo }); }
-                    });
+                    qSnaps.forEach(docSnap => { const d = docSnap.data(); const name = d.Name || d.name; if(name && String(name).trim() !== "") { targets.push({ type: 'teacher', id: d.TeacherID || d.id || docSnap.id, name: name, father: d.FatherName || d.father, dept: d.Department || d.dept, doj: d.DateOfJoining || d.doj, blood: d.BloodGroup || d.blood, phone: d.Phone || d.phone, photo: d.Photo || d.photo }); } });
                 }
-
-                if(targets.length === 0) { btn.innerText = "📄 Generate Bulk ID PDF"; return alert("No valid records found for this selection."); }
-                
+                if(targets.length === 0) { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; return alert("No valid records found for this selection."); }
                 let errors = [];
-                targets.forEach(t => {
-                    let missing = [];
-                    if(isStudent) { if(!t.photo) missing.push("Photo"); if(!t.address) missing.push("Address"); if(!t.phone) missing.push("Phone"); if(!t.father) missing.push("Father's Name"); if(missing.length > 0) errors.push(`- ${t.title} (${t.id}): Missing ${missing.join(', ')}`); } 
-                    else { if(!t.photo) missing.push("Photo"); if(!t.blood) missing.push("Blood Group"); if(!t.phone) missing.push("Phone Number"); if(!t.doj) missing.push("Date of Joining"); if(missing.length > 0) errors.push(`- ${t.name} (${t.id}): Missing ${missing.join(', ')}`); }
-                });
-
-                if(errors.length > 0) { btn.innerText = "📄 Generate Bulk ID PDF"; return alert("ERROR: Cannot generate bulk IDs due to missing data.\n\nPlease fix these profiles first:\n" + errors.slice(0, 10).join('\n') + (errors.length > 10 ? '\n...and more' : '')); }
-
+                targets.forEach(t => { let missing = []; if(isStudent) { if(!t.photo) missing.push("Photo"); if(!t.address) missing.push("Address"); if(!t.phone) missing.push("Phone"); if(!t.father) missing.push("Father's Name"); if(missing.length > 0) errors.push(`- ${t.title} (${t.id}): Missing ${missing.join(', ')}`); } else { if(!t.photo) missing.push("Photo"); if(!t.blood) missing.push("Blood Group"); if(!t.phone) missing.push("Phone Number"); if(!t.doj) missing.push("Date of Joining"); if(missing.length > 0) errors.push(`- ${t.name} (${t.id}): Missing ${missing.join(', ')}`); } });
+                if(errors.length > 0) { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; return alert("ERROR: Cannot generate bulk IDs due to missing data.\n\nPlease fix these profiles first:\n" + errors.slice(0, 10).join('\n') + (errors.length > 10 ? '\n...and more' : '')); }
                 const wMm = Number(document.getElementById('card-width').value); const hMm = Number(document.getElementById('card-height').value); const isLandscape = wMm > hMm;
                 previewFront.style.width = isStudent ? "324px" : "204px"; previewFront.style.height = isStudent ? "204px" : "324px"; previewBack.style.width = isStudent ? "324px" : "204px"; previewBack.style.height = isStudent ? "204px" : "324px";
-
                 const { jsPDF } = window.jspdf; let pdf = null;
-
                 for(let i=0; i<targets.length; i++) {
-                    btn.innerText = `Rendering Card ${i+1} of ${targets.length}...`;
-                    renderCardHTML(targets[i], targets[i].type);
-                    await new Promise(r => setTimeout(r, 100));
-                    const frontCanvas = await html2canvas(document.getElementById('preview-front'), { scale: 5, useCORS: true, backgroundColor: "#ffffff" });
-                    const backCanvas = await html2canvas(document.getElementById('preview-back'), { scale: 5, useCORS: true, backgroundColor: "#ffffff" });
-                    
+                    btn.innerText = `Rendering Card ${i+1} of ${targets.length}...`; renderCardHTML(targets[i], targets[i].type); await new Promise(r => setTimeout(r, 100));
+                    const frontCanvas = await html2canvas(document.getElementById('preview-front'), { scale: 5, useCORS: true, backgroundColor: "#ffffff" }); const backCanvas = await html2canvas(document.getElementById('preview-back'), { scale: 5, useCORS: true, backgroundColor: "#ffffff" });
                     if(!pdf) { pdf = new jsPDF({ orientation: isLandscape ? 'l' : 'p', unit: 'mm', format: [wMm, hMm] }); } else { pdf.addPage(); }
                     pdf.addImage(frontCanvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, wMm, hMm); pdf.addPage(); pdf.addImage(backCanvas.toDataURL('image/jpeg', 1.0), 'JPEG', 0, 0, wMm, hMm);
                 }
-
                 btn.innerText = "Saving PDF..."; pdf.save(`CVSK_Bulk_IDs_${targetType}_${Date.now()}.pdf`);
-            } catch(err) { alert("An error occurred during bulk generation."); console.error(err); } finally { btn.innerText = "📄 Generate Bulk ID PDF"; previewFront.innerHTML = ""; previewBack.innerHTML = ""; }
+            } catch(err) { alert("An error occurred during bulk generation."); console.error(err); } finally { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; previewFront.innerHTML = ""; previewBack.innerHTML = ""; }
         });
-        document.getElementById('bulk-id-target').addEventListener('change', (e) => { document.getElementById('bulk-id-class-container').style.display = (e.target.value === 'class') ? 'block' : 'none'; });
+        document.getElementById('bulk-id-target')?.addEventListener('change', (e) => { document.getElementById('bulk-id-class-container').style.display = (e.target.value === 'class') ? 'block' : 'none'; });
     </script>
 </body>
 </html>
