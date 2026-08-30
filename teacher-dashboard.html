@@ -3,75 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher Dashboard | VMI</title>
+    <title>Staff Portal | VMI Network</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- STRICT PAGE GUARD -->
+    <script>
+        const userSession = JSON.parse(localStorage.getItem('vmi_user'));
+        if (!userSession) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <style>
         .db-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .db-table th, .db-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         .db-table th { background-color: #003366; color: white; position: sticky; top: 0; }
         .db-table tr:nth-child(even) { background-color: #f4f7f6; }
+        .db-table tr:hover { background-color: #e9ecef; }
+        .db-thumbnail { width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 1px solid #ccc; }
+        .action-btn { border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin: 2px; color: white; transition: all 0.3s ease; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-blue { background-color: #007BFF; } .btn-blue:hover:not(:disabled) { background-color: #0056b3; }
+        .btn-green { background-color: #217346; } .btn-green:hover:not(:disabled) { background-color: #1e6b3e; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
         .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .info-box { background: #f4f7f6; border-left: 4px solid #003366; padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; color: #333; }
+        
+        .profile-header { display: flex; align-items: center; gap: 20px; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #FF671F; }
+        .profile-details h2 { margin: 0 0 5px 0; color: #003366; }
+        .profile-details p { margin: 2px 0; color: #666; font-size: 0.9rem; }
     </style>
 </head>
 <body class="admin-bg">
     <header class="admin-header">
-        <div class="logo"><img src="logo.jpg" alt="VMI Logo"><h2>VMI Faculty Portal</h2></div>
-        <div class="admin-profile"><span>Welcome, Faculty Member</span><a href="index.html" class="logout-btn">Log Out</a></div>
+        <div class="logo">
+            <img src="logo.jpg" alt="Logo" id="header-logo" onerror="this.src='https://via.placeholder.com/50/003366/FFFFFF?text=Logo'">
+            <div style="display:flex; flex-direction:column;">
+                <h2 id="header-title">Staff Portal</h2>
+                <span style="font-size: 0.8rem; color:#f4f7f6;" id="header-subtitle">Loading Campus...</span>
+            </div>
+        </div>
+        <div class="admin-profile">
+            <span id="welcome-text">Welcome, Staff</span>
+            <a href="#" class="logout-btn" onclick="localStorage.removeItem('vmi_user'); window.location.href='login.html';">Log Out</a>
+        </div>
     </header>
 
     <div class="admin-layout">
         <aside class="admin-sidebar">
             <ul class="admin-nav">
-                <li><a href="#" class="nav-link active" data-target="section-materials">📚 Study Materials</a></li>
-                <li><a href="#" class="nav-link" data-target="section-results">📊 Manage Exam Results</a></li>
+                <li><a href="#" class="nav-link active" data-target="section-profile">👤 My Profile</a></li>
+                <li><a href="#" class="nav-link" data-target="section-students">🎓 Student Directory</a></li>
+                <li><a href="#" class="nav-link" data-target="section-materials">📚 Publish Materials</a></li>
+                <li><a href="#" class="nav-link" data-target="section-results">📊 Upload Exam Marks</a></li>
+                <li><a href="#" class="nav-link" data-target="section-notices">📢 School Notices</a></li>
             </ul>
         </aside>
 
         <main class="admin-content">
-            <!-- Study Materials -->
-            <div id="section-materials" class="admin-section active">
+            
+            <!-- SECTION 1: My Profile -->
+            <div id="section-profile" class="admin-section active">
+                <div class="profile-header">
+                    <img src="https://via.placeholder.com/100" alt="Profile" class="profile-img" id="my-photo">
+                    <div class="profile-details">
+                        <h2 id="my-name">Loading Profile...</h2>
+                        <p><strong>Staff ID:</strong> <span id="my-id">...</span></p>
+                        <p><strong>Department:</strong> <span id="my-dept">...</span></p>
+                        <p><strong>Phone:</strong> <span id="my-phone">...</span></p>
+                    </div>
+                </div>
                 <div class="dashboard-card">
-                    <h3>Publish Study Materials & Syllabus</h3>
-                    <form class="admin-form" id="material-form">
-                        <div class="input-group"><label>Document Title</label><input type="text" id="mat-title" required></div>
+                    <h4 class="section-divider" style="margin-top: 0;">Personal Details</h4>
+                    <div class="marks-grid">
+                        <div class="input-group"><label>Father's Name</label><input type="text" id="my-father" readonly style="background:#eee;"></div>
+                        <div class="input-group"><label>Date of Joining</label><input type="text" id="my-doj" readonly style="background:#eee;"></div>
+                        <div class="input-group"><label>Blood Group</label><input type="text" id="my-blood" readonly style="background:#eee;"></div>
+                        <div class="input-group"><label>PAN Number</label><input type="text" id="my-pan" readonly style="background:#eee;"></div>
+                    </div>
+                    <div class="input-group"><label>Residential Address</label><textarea id="my-address" rows="2" readonly style="background:#eee;"></textarea></div>
+                    <p style="font-size: 0.8rem; color: #E63946; margin-top: 10px;">* To request changes to your profile, please contact the campus administrator.</p>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Student Directory -->
+            <div id="section-students" class="admin-section">
+                <div class="dashboard-card" style="max-width: 100%;">
+                    <h3>🎓 Student Directory</h3>
+                    <div class="info-box">Search for verified active students in your campus to find roll numbers, IDs, and parent contact information.</div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                        <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Directory</button>
+                        <input type="text" id="db-search-input" placeholder="Search Name, ID, or Class..." style="padding: 10px 12px; width: 300px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <table class="db-table">
+                            <thead><tr><th>Photo</th><th>ID / Roll</th><th>Name</th><th>Class</th><th>Father's Name</th><th>Phone</th></tr></thead>
+                            <tbody id="db-table-body"><tr><td colspan="6" style="text-align: center; padding: 20px;">Click "Refresh Directory" to load...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Publish Materials -->
+            <div id="section-materials" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>📚 Publish Study Materials & Syllabus</h3>
+                    <div class="info-box">Upload a Google Drive link containing study materials, notes, or syllabus. It will be immediately available on the Student Portal.</div>
+                    <form class="admin-form" id="teacher-material-form">
+                        <div class="input-group"><label>Document Title / Topic</label><input type="text" id="mat-title" placeholder="e.g. Chapter 4 - Light (Science Notes)" required></div>
                         <div style="display: flex; gap: 15px;">
-                            <div class="input-group" style="flex: 1;"><label>Target Class</label><select id="mat-class" required><option value="All">All Classes</option><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option></select></div>
-                            <div class="input-group" style="flex: 1;"><label>Category</label><select id="mat-category" required><option>Study Material</option><option>Syllabus</option></select></div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Target Class</label>
+                                <select id="mat-class" required>
+                                    <option value="All">All Classes</option><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                                </select>
+                            </div>
+                            <div class="input-group" style="flex: 1;">
+                                <label>Category</label>
+                                <select id="mat-category" required><option>Study Material</option><option>Syllabus</option></select>
+                            </div>
                         </div>
-                        <div class="input-group"><label>Drive Link</label><input type="url" id="mat-link" required></div>
-                        <button type="submit" class="admin-submit-btn" id="mat-submit-btn">Publish Document</button>
+                        <div class="input-group"><label>Document Link (Google Drive / PDF Link)</label><input type="url" id="mat-link" placeholder="Paste link here..." required></div>
+                        <button type="submit" class="admin-submit-btn" id="mat-submit-btn">Publish to Students</button>
                     </form>
                 </div>
             </div>
 
-            <!-- Exam Results -->
+            <!-- SECTION 4: Exam Results -->
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
-                    <h3>Upload Examination Results</h3>
+                    <h3>📊 Upload Student Exam Marks</h3>
+                    <div class="info-box">Upload marks for students in your campus. Ensure the Student ID is correct, as this will directly map to their secure report card.</div>
                     
-                    <h4 class="section-divider">1. Add Report Card (Manual)</h4>
-                    <form class="admin-form" id="manual-result-form">
-                        <!-- ROW 1: ID and Name -->
+                    <form class="admin-form" id="teacher-result-form">
                         <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                            <div class="input-group" style="flex: 1;">
-                                <label>Student ID (Roll No)</label>
-                                <input type="text" id="res-student-id" placeholder="Enter ID & press Tab" required>
-                            </div>
-                            <div class="input-group" style="flex: 2;">
-                                <label>Student Name</label>
-                                <input type="text" id="res-student-name" placeholder="Auto-filled from database" readonly style="background-color: #e9ecef; cursor: not-allowed; color: #003366; font-weight: bold;">
-                            </div>
+                            <div class="input-group" style="flex: 1;"><label>Student ID</label><input type="text" id="res-student-id" placeholder="Enter ID & press Tab" required></div>
+                            <div class="input-group" style="flex: 2;"><label>Student Name</label><input type="text" id="res-student-name" placeholder="Auto-filled from database" readonly style="background-color: #e9ecef; cursor: not-allowed; color: #003366; font-weight: bold;"></div>
                         </div>
-
-                        <!-- ROW 2: Class and Term -->
                         <div style="display: flex; gap: 15px;">
                             <div class="input-group" style="flex: 1;">
                                 <label>Student Class</label>
                                 <select id="res-class" required>
                                     <option value="" disabled selected>-- Select Class --</option>
                                     <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
-                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option>
+                                    <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
                                 </select>
                             </div>
                             <div class="input-group" style="flex: 1;">
@@ -83,19 +160,17 @@
                             </div>
                         </div>
 
-                        <h5 style="margin-top: 10px; color: #FF671F;">Academic Subjects (Dynamic Max Marks based on Scheme)</h5>
+                        <h5 style="margin-top: 10px; color: #FF671F;">Academic Subjects (Dynamic Max Marks)</h5>
                         <div class="marks-grid">
-                            <div class="input-group" id="grp-eng"><label>English</label><input type="number" step="0.5" class="acad-mark" id="m-eng" placeholder="Marks" required></div>
-                            <div class="input-group" id="grp-ben"><label>Bengali</label><input type="number" step="0.5" class="acad-mark" id="m-ben" placeholder="Marks" required></div>
-                            <div class="input-group" id="grp-hin" style="display:none;"><label>Hindi</label><input type="number" step="0.5" class="acad-mark" id="m-hin" placeholder="Marks"></div>
-                            <div class="input-group" id="grp-san" style="display:none;"><label>Sanskrit</label><input type="number" step="0.5" class="acad-mark" id="m-san" placeholder="Marks"></div>
-                            <div class="input-group" id="grp-mat"><label>Mathematics</label><input type="number" step="0.5" class="acad-mark" id="m-mat" placeholder="Marks" required></div>
-                            <div class="input-group" id="grp-evs"><label>EVS / Science</label><input type="number" step="0.5" class="acad-mark" id="m-evs" placeholder="Marks" required></div>
-                            <div class="input-group" id="grp-his" style="display:none;"><label>History</label><input type="number" step="0.5" class="acad-mark" id="m-his" placeholder="Marks"></div>
-                            <div class="input-group" id="grp-geo" style="display:none;"><label>Geography</label><input type="number" step="0.5" class="acad-mark" id="m-geo" placeholder="Marks"></div>
+                            <div class="input-group" id="grp-eng"><label>English</label><input type="number" step="0.5" class="acad-mark" id="m-eng" required></div>
+                            <div class="input-group" id="grp-ben"><label>Bengali</label><input type="number" step="0.5" class="acad-mark" id="m-ben" required></div>
+                            <div class="input-group" id="grp-hin" style="display:none;"><label>Hindi</label><input type="number" step="0.5" class="acad-mark" id="m-hin"></div>
+                            <div class="input-group" id="grp-san" style="display:none;"><label>Sanskrit</label><input type="number" step="0.5" class="acad-mark" id="m-san"></div>
+                            <div class="input-group" id="grp-mat"><label>Mathematics</label><input type="number" step="0.5" class="acad-mark" id="m-mat" required></div>
+                            <div class="input-group" id="grp-evs"><label>EVS / Science</label><input type="number" step="0.5" class="acad-mark" id="m-evs" required></div>
+                            <div class="input-group" id="grp-his" style="display:none;"><label>History</label><input type="number" step="0.5" class="acad-mark" id="m-his"></div>
+                            <div class="input-group" id="grp-geo" style="display:none;"><label>Geography</label><input type="number" step="0.5" class="acad-mark" id="m-geo"></div>
                         </div>
-
-                        <!-- Co-curricular subjects hidden entirely until Annual is selected -->
                         <div id="co-curricular-section" style="display: none;">
                             <h5 style="margin-top: 10px; color: #FF671F;">Co-Curricular Grades (Annual Exam Only)</h5>
                             <div class="marks-grid">
@@ -104,20 +179,32 @@
                                 <div class="input-group"><label>Art & Craft</label><select id="g-art"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
                             </div>
                         </div>
-
-                        <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Report Card</button>
-                    </form>
-
-                    <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
-                    <form class="admin-form" id="bulk-result-form">
-                        <div class="file-drop-zone" style="padding: 20px;"><label for="results-file" class="browse-btn">Select Results CSV/Excel</label><input type="file" id="results-file" accept=".csv, .xlsx" hidden></div>
-                        <button type="submit" class="admin-submit-btn">Upload Bulk Results</button>
+                        <button type="submit" class="admin-submit-btn btn-green" id="res-submit-btn">Save Grades to Database</button>
                     </form>
                 </div>
             </div>
+
+            <!-- SECTION 5: School Notices -->
+            <div id="section-notices" class="admin-section">
+                <div class="dashboard-card">
+                    <h3>📢 Live School Notices</h3>
+                    <div class="info-box">Important updates from Administration.</div>
+                    <div style="max-height: 400px; overflow-y: auto; border: 1px solid #eee; margin-top: 15px;">
+                        <table class="db-table">
+                            <thead><tr><th style="width: 25%;">Publish Date</th><th>Notice Title</th></tr></thead>
+                            <tbody id="notice-table-body"><tr><td colspan="2" style="text-align: center; padding: 20px;">Loading notices...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <footer style="text-align: center; padding: 20px; margin-top: 40px; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd;">
+                &copy; 2026 Vivekananda Mission Institute Network. All Rights Reserved.
+            </footer>
         </main>
     </div>
 
+    <!-- UI Scripts for Tabs -->
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
@@ -127,220 +214,287 @@
                 navLinks.forEach(nav => nav.classList.remove('active'));
                 sections.forEach(section => section.classList.remove('active'));
                 this.classList.add('active');
-                document.getElementById(this.getAttribute('data-target')).classList.add('active');
+                const target = this.getAttribute('data-target');
+                document.getElementById(target).classList.add('active');
+                
+                // Triggers
+                if(target === 'section-students') {
+                    document.getElementById('refresh-db-btn').click();
+                }
             });
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
     <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, writeBatch, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
-            authDomain: "vmi-portal.firebaseapp.com",
-            projectId: "vmi-portal",
-            storageBucket: "vmi-portal.firebasestorage.app",
-            messagingSenderId: "215224119153",
-            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
+            authDomain: "vmi-portal.firebaseapp.com", 
+            projectId: "vmi-portal", 
+            storageBucket: "vmi-portal.firebasestorage.app", 
+            messagingSenderId: "215224119153", 
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- Materials ---
-        document.getElementById('material-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            await setDoc(doc(db, "materials", `doc_${Date.now()}`), {
-                title: document.getElementById('mat-title').value, class: document.getElementById('mat-class').value, category: document.getElementById('mat-category').value, link: document.getElementById('mat-link').value, publishedBy: "Faculty", date: new Date().toLocaleDateString(), timestamp: Date.now()
-            });
-            alert(`Document Published!`); document.getElementById('material-form').reset();
-        });
+        // --- SMART ROUTING BASED ON SESSION ---
+        // userSession was defined at the top of the file.
+        const campus = userSession.campus; // 'main' or 'branch'
+        
+        // Define exact collection names based on the teacher's campus
+        const DB_COLLECTIONS = {
+            staff: campus === 'main' ? 'teachers' : 'cvsk_staff',
+            students: campus === 'main' ? 'students' : 'cvsk_students',
+            materials: campus === 'main' ? 'materials' : 'cvsk_materials',
+            results: campus === 'main' ? 'results' : 'cvsk_results',
+            notices: campus === 'main' ? 'notices' : 'cvsk_notices'
+        };
 
-        // --- REPORT CARD ENGINE ---
-        const termSelect = document.getElementById('res-exam-name');
-        const classSelect = document.getElementById('res-class');
-        const coCurricularSection = document.getElementById('co-curricular-section');
-        const markInputs = document.querySelectorAll('.acad-mark');
-        const studentIdInput = document.getElementById('res-student-id');
-        const studentNameInput = document.getElementById('res-student-name');
-        let currentMaxPerSubject = 100;
-        let activeSubjectCount = 8;
+        // Utility
+        function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
 
-        // Auto-fetch student name on ID input blur
-        studentIdInput.addEventListener('blur', async () => {
-            const studentId = studentIdInput.value.trim();
-            if (!studentId) { studentNameInput.value = ""; return; }
-            
-            studentNameInput.value = "Searching Database...";
-            
+        // --- 1. INITIALIZE DASHBOARD UI ---
+        document.getElementById('welcome-text').innerText = `Welcome, ${userSession.name}`;
+        
+        if(campus === 'main') {
+            document.getElementById('header-title').innerText = "VMI Staff Portal";
+            document.getElementById('header-subtitle').innerText = "Main Campus - Muluk";
+        } else {
+            document.getElementById('header-title').innerText = "CVSK Staff Portal";
+            document.getElementById('header-subtitle').innerText = "Branch Campus";
+        }
+
+        // --- 2. LOAD MY PROFILE ---
+        async function loadMyProfile() {
             try {
-                const docSnap = await getDoc(doc(db, "students", studentId));
+                // The TeacherID string is stored in userSession.id. Because doc IDs map to safe IDs:
+                const safeDocId = makeSafeId(userSession.id);
+                const docSnap = await getDoc(doc(db, DB_COLLECTIONS.staff, safeDocId));
+                
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-                    studentNameInput.value = data.Name || "Name Missing";
-                    
-                    // Auto-select class
-                    if(data.Class) {
-                        classSelect.value = data.Class;
-                        updateFormRules();
-                    }
-                } else {
-                    studentNameInput.value = "Not Found - Check ID";
+                    document.getElementById('my-photo').src = data.Photo || 'https://via.placeholder.com/100';
+                    document.getElementById('my-name').innerText = data.Name || data.name || 'N/A';
+                    document.getElementById('my-id').innerText = data.TeacherID || data.id || 'N/A';
+                    document.getElementById('my-dept').innerText = data.Department || data.dept || 'N/A';
+                    document.getElementById('my-phone').innerText = data.Phone || 'N/A';
+                    document.getElementById('my-father').value = data.FatherName || data.father || 'N/A';
+                    document.getElementById('my-doj').value = data.DateOfJoining || data.doj || 'N/A';
+                    document.getElementById('my-blood').value = data.BloodGroup || data.blood || 'N/A';
+                    document.getElementById('my-pan').value = data.PAN || 'N/A';
+                    document.getElementById('my-address').value = data.Address || 'N/A';
                 }
-            } catch (error) {
-                studentNameInput.value = "Database connection error.";
-            }
-        });
-
-        function updateFormRules() {
-            const term = termSelect.value;
-            const stuClass = classSelect.value;
-            
-            // 1. Show Co-curricular ONLY for Annual Exam
-            if(term === 'Annual Examination') {
-                coCurricularSection.style.display = 'block';
-            } else {
-                coCurricularSection.style.display = 'none';
-                document.getElementById('g-dance').value = "";
-                document.getElementById('g-music').value = "";
-                document.getElementById('g-art').value = "";
-            }
-
-            // 2. Dynamic Subject Displays Based on Class
-            ['grp-hin', 'grp-san', 'grp-his', 'grp-geo'].forEach(id => {
-                document.getElementById(id).style.display = 'none';
-                document.getElementById(id.replace('grp', 'm')).required = false;
-                document.getElementById(id.replace('grp', 'm')).value = "";
-            });
-            
-            if(stuClass) {
-                const hasHindi = ['Class 3', 'Class 4'];
-                const hasSanskrit = ['Class 7', 'Class 8'];
-                const hasHistoryGeo = ['Class 3', 'Class 4', 'Class 6', 'Class 7', 'Class 8'];
-
-                activeSubjectCount = 4; // Base: Eng, Ben, Mat, Evs
-
-                if(hasHindi.includes(stuClass)) { document.getElementById('grp-hin').style.display = 'block'; document.getElementById('m-hin').required = true; activeSubjectCount++; }
-                if(hasSanskrit.includes(stuClass)) { document.getElementById('grp-san').style.display = 'block'; document.getElementById('m-san').required = true; activeSubjectCount++; }
-                if(hasHistoryGeo.includes(stuClass)) { 
-                    ['grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'block'; document.getElementById(id.replace('grp', 'm')).required = true; });
-                    activeSubjectCount += 2; 
-                }
-
-                // Calculate max marks
-                const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass);
-                
-                if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30;
-                else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40;
-                else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80;
-
-                markInputs.forEach(input => {
-                    input.max = currentMaxPerSubject;
-                    input.placeholder = `Max: ${currentMaxPerSubject}`;
-                });
-            }
+            } catch(e) { console.error("Profile load failed:", e); }
         }
-        termSelect.addEventListener('change', updateFormRules);
-        classSelect.addEventListener('change', updateFormRules);
+        loadMyProfile();
 
-        // Manual Result Submit
-        const manualResultForm = document.getElementById('manual-result-form');
-        const resSubmitBtn = document.getElementById('res-submit-btn');
-
-        manualResultForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            resSubmitBtn.innerText = "Saving to Database...";
-
-            const studentId = document.getElementById('res-student-id').value;
-            const term = termSelect.value;
-            const docId = `${studentId}_${term}`.replace(/\s+/g, '_');
-
-            // Collect active marks
-            const marks = {};
-            if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value);
-            if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value);
-            if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value);
-            if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value);
-            if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value);
-            if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value);
-            if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value);
-            if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value);
-
-            let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0);
-            let totalPossible = currentMaxPerSubject * activeSubjectCount;
-            let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%";
-
-            const grades = {};
-            if(term === 'Annual Examination') {
-                grades["Dance"] = document.getElementById('g-dance').value;
-                grades["Music"] = document.getElementById('g-music').value;
-                grades["Art_and_Craft"] = document.getElementById('g-art').value;
-            }
-
+        // --- 3. LOAD STUDENT DIRECTORY ---
+        let liveStudentsData = [];
+        document.getElementById('refresh-db-btn').addEventListener('click', async (e) => {
+            const btn = e.currentTarget;
+            btn.disabled = true; btn.innerText = "Loading Directory...";
+            const tbody = document.getElementById('db-table-body');
             try {
-                await setDoc(doc(db, "results", docId), {
-                    "Student ID": studentId,
-                    "Student Name": document.getElementById('res-student-name').value, // Saving Name now!
-                    "Class": classSelect.value,
-                    "Exam Term": term,
-                    "Academic Marks": marks,
-                    "Total Marks": totalObtained,
-                    "Max Marks": totalPossible,
-                    "Percentage": percentage,
-                    "CoCurricular Grades": grades,
-                    "Uploaded By": "Faculty",
-                    "Publish Date": new Date().toLocaleDateString()
-                }, { merge: true });
-
-                alert(`Success! Report Card saved for ${studentId}.`);
-                manualResultForm.reset();
-                coCurricularSection.style.display = 'none';
+                const querySnapshot = await getDocs(collection(db, DB_COLLECTIONS.students));
+                liveStudentsData = [];
+                querySnapshot.forEach((docSnap) => { 
+                    const data = docSnap.data();
+                    // Only fetch Active and Verified students for the teacher directory
+                    if(data.Status !== 'Transferred Out' && data.VerificationStatus === 'Verified') {
+                        liveStudentsData.push(data); 
+                    }
+                });
+                renderStudentTable(liveStudentsData);
             } catch (error) {
-                alert("Error saving: " + error.message);
+                tbody.innerHTML = `<tr><td colspan="6" align="center" style="color:red;">Error loading directory.</td></tr>`;
             } finally {
-                resSubmitBtn.innerText = "Save Report Card";
+                btn.disabled = false; btn.innerText = "🔄 Refresh Directory";
             }
         });
 
-        // Bulk Upload
-        const bulkResultForm = document.getElementById('bulk-result-form');
-        const resultsFileInput = document.getElementById('results-file');
-        bulkResultForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const file = resultsFileInput.files[0];
-            if (!file) return alert("Select an Excel/CSV file.");
-            
-            const reader = new FileReader();
-            reader.onload = async function(event) {
-                try {
-                    const data = new Uint8Array(event.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-                    
-                    if (jsonData.length === 0) return alert("File is empty.");
-                    document.querySelector('#bulk-result-form .admin-submit-btn').innerText = `Saving ${jsonData.length} marks...`;
+        function renderStudentTable(students) {
+            const tbody = document.getElementById('db-table-body');
+            tbody.innerHTML = "";
+            if(students.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" align="center">No active students found.</td></tr>`; return;
+            }
+            students.forEach(s => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${s.Photo || 'https://via.placeholder.com/40'}" class="db-thumbnail"></td>
+                    <td><strong>${s["Student ID"] || 'N/A'}</strong><br><span style="font-size:0.75rem; color:#666;">Roll: ${s["Roll No"] || 'N/A'}</span></td>
+                    <td>${s.Name || 'N/A'}</td>
+                    <td>${s.Class || 'N/A'}</td>
+                    <td>${s["Father's Name"] || 'N/A'}</td>
+                    <td><a href="tel:${s.Phone}" style="color:#007BFF; text-decoration:none;">📞 ${s.Phone || 'N/A'}</a></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
-                    const batch = writeBatch(db);
-                    jsonData.forEach((row) => {
-                        const studentId = row["Student ID"]; const term = row["Exam Term"]; const stuClass = row["Class"];
-                        if(studentId && term && stuClass) {
-                            const resultId = `${studentId}_${term}`.replace(/\s+/g, '_');
-                            batch.set(doc(db, "results", resultId), { 
-                                ...row, "Uploaded By": "Faculty", "Publish Date": new Date().toLocaleDateString() 
-                            }, { merge: true });
-                        }
-                    });
-                    
-                    await batch.commit();
-                    alert(`Successfully uploaded ${jsonData.length} records.`);
-                    bulkResultForm.reset();
-                } catch (error) { alert("Error processing file."); } 
-                finally { document.querySelector('#bulk-result-form .admin-submit-btn').innerText = "Upload Bulk Results"; }
-            };
-            reader.readAsArrayBuffer(file);
+        document.getElementById('db-search-input').addEventListener('keyup', (e) => {
+            const st = e.target.value.toLowerCase().trim();
+            const filtered = liveStudentsData.filter(s => 
+                (s.Name || "").toLowerCase().includes(st) || 
+                (s["Student ID"] || "").toLowerCase().includes(st) ||
+                (s.Class || "").toLowerCase().includes(st)
+            );
+            renderStudentTable(filtered);
         });
+
+        // --- 4. PUBLISH MATERIALS ---
+        document.getElementById('teacher-material-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const btn = document.getElementById('mat-submit-btn'); 
+            btn.disabled = true; btn.innerText = "Publishing..."; 
+            try { 
+                await setDoc(doc(db, DB_COLLECTIONS.materials, `doc_${Date.now()}`), { 
+                    title: document.getElementById('mat-title').value.trim(), 
+                    class: document.getElementById('mat-class').value, 
+                    category: document.getElementById('mat-category').value, 
+                    link: document.getElementById('mat-link').value.trim(), 
+                    publishedBy: userSession.name, // Auto-tag who posted it!
+                    date: new Date().toLocaleDateString(), 
+                    timestamp: Date.now() 
+                }); 
+                alert(`Document Successfully Published to Students!`); 
+                document.getElementById('teacher-material-form').reset(); 
+            } catch(err) {
+                alert("Error publishing document.");
+            } finally { 
+                btn.disabled = false; btn.innerText = "Publish to Students"; 
+            } 
+        });
+
+        // --- 5. UPLOAD EXAM RESULTS ---
+        const termSelect = document.getElementById('res-exam-name'); 
+        const classSelect = document.getElementById('res-class'); 
+        const coCurricularSection = document.getElementById('co-curricular-section'); 
+        const markInputs = document.querySelectorAll('.acad-mark'); 
+        const rStudentIdInput = document.getElementById('res-student-id'); 
+        const rStudentNameInput = document.getElementById('res-student-name');
+        
+        let currentMaxPerSubject = 100; let activeSubjectCount = 8;
+        
+        // Auto-Fetch Student Name
+        rStudentIdInput.addEventListener('blur', async () => { 
+            const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; } 
+            rStudentNameInput.value = "Searching..."; 
+            try { 
+                const safeDocId = makeSafeId(studentId); 
+                const docSnap = await getDoc(doc(db, DB_COLLECTIONS.students, safeDocId)); 
+                if (docSnap.exists()) { 
+                    const data = docSnap.data(); 
+                    rStudentNameInput.value = data.Name || "Name Missing"; 
+                    if(data.Class) { classSelect.value = data.Class; updateFormRules(); } 
+                } else { 
+                    rStudentNameInput.value = "Not Found - Check ID"; 
+                } 
+            } catch (error) { rStudentNameInput.value = "Error."; } 
+        });
+
+        function updateFormRules() { 
+            if(!termSelect || !classSelect) return; 
+            const term = termSelect.value; const stuClass = classSelect.value; 
+            if(term === 'Annual Examination') { coCurricularSection.style.display = 'block'; } else { coCurricularSection.style.display = 'none'; document.getElementById('g-dance').value = ""; document.getElementById('g-music').value = ""; document.getElementById('g-art').value = ""; } 
+            ['grp-hin', 'grp-san', 'grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'none'; document.getElementById(id.replace('grp', 'm')).required = false; document.getElementById(id.replace('grp', 'm')).value = ""; }); 
+            if(stuClass) { 
+                const hasHindi = ['Class 3', 'Class 4']; const hasSanskrit = ['Class 7', 'Class 8']; const hasHistoryGeo = ['Class 3', 'Class 4', 'Class 6', 'Class 7', 'Class 8', 'Class 9', 'Class 10']; 
+                activeSubjectCount = 4; 
+                if(hasHindi.includes(stuClass)) { document.getElementById('grp-hin').style.display = 'block'; document.getElementById('m-hin').required = true; activeSubjectCount++; } 
+                if(hasSanskrit.includes(stuClass)) { document.getElementById('grp-san').style.display = 'block'; document.getElementById('m-san').required = true; activeSubjectCount++; } 
+                if(hasHistoryGeo.includes(stuClass)) { ['grp-his', 'grp-geo'].forEach(id => { document.getElementById(id).style.display = 'block'; document.getElementById(id.replace('grp', 'm')).required = true; }); activeSubjectCount += 2; } 
+                const isJunior = ['LKG', 'U.K.G', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'].includes(stuClass); 
+                if (term === '1st Summative') currentMaxPerSubject = isJunior ? 20 : 30; else if (term === '2nd Summative') currentMaxPerSubject = isJunior ? 30 : 40; else if (term === 'Annual Examination') currentMaxPerSubject = isJunior ? 50 : 80; 
+                markInputs.forEach(input => { input.max = currentMaxPerSubject; input.placeholder = `Max: ${currentMaxPerSubject}`; }); 
+            } 
+        }
+        termSelect.addEventListener('change', updateFormRules); classSelect.addEventListener('change', updateFormRules);
+        
+        document.getElementById('teacher-result-form').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const submitBtn = document.getElementById('res-submit-btn');
+            submitBtn.disabled = true; submitBtn.innerText = "Saving Grades..."; 
+            
+            const studentId = document.getElementById('res-student-id').value; const term = termSelect.value; 
+            const docId = `${makeSafeId(studentId)}_${makeSafeId(term)}`; 
+            const marks = {}; 
+            
+            if(document.getElementById('m-eng').value) marks["English"] = Number(document.getElementById('m-eng').value); 
+            if(document.getElementById('m-ben').value) marks["Bengali"] = Number(document.getElementById('m-ben').value); 
+            if(document.getElementById('m-mat').value) marks["Mathematics"] = Number(document.getElementById('m-mat').value); 
+            if(document.getElementById('m-evs').value) marks["EVS_Science"] = Number(document.getElementById('m-evs').value); 
+            if(document.getElementById('m-hin').value) marks["Hindi"] = Number(document.getElementById('m-hin').value); 
+            if(document.getElementById('m-san').value) marks["Sanskrit"] = Number(document.getElementById('m-san').value); 
+            if(document.getElementById('m-his').value) marks["History"] = Number(document.getElementById('m-his').value); 
+            if(document.getElementById('m-geo').value) marks["Geography"] = Number(document.getElementById('m-geo').value); 
+            
+            let totalObtained = Object.values(marks).reduce((sum, mark) => sum + mark, 0); 
+            let totalPossible = currentMaxPerSubject * activeSubjectCount; 
+            let percentage = ((totalObtained / totalPossible) * 100).toFixed(2) + "%"; 
+            
+            const grades = {}; 
+            if(term === 'Annual Examination') { 
+                grades["Dance"] = document.getElementById('g-dance').value; 
+                grades["Music"] = document.getElementById('g-music').value; 
+                grades["Art_and_Craft"] = document.getElementById('g-art').value; 
+            } 
+            
+            try { 
+                await setDoc(doc(db, DB_COLLECTIONS.results, docId), { 
+                    "Student ID": studentId, 
+                    "Student Name": document.getElementById('res-student-name').value, 
+                    "Class": classSelect.value, 
+                    "Exam Term": term, 
+                    "Academic Marks": marks, 
+                    "Total Marks": totalObtained, 
+                    "Max Marks": totalPossible, 
+                    "Percentage": percentage, 
+                    "CoCurricular Grades": grades, 
+                    "Uploaded By": userSession.name, // Log the teacher's name
+                    "Publish Date": new Date().toLocaleDateString() 
+                }, { merge: true }); 
+                
+                alert(`Grades Submitted Successfully!`); 
+                document.getElementById('teacher-result-form').reset(); 
+                rStudentNameInput.value=""; 
+                updateFormRules(); 
+            } catch (error) { 
+                alert("Error submitting grades."); 
+            } finally { 
+                submitBtn.disabled = false; submitBtn.innerText = "Save Grades to Database"; 
+            } 
+        });
+
+        // --- 6. LOAD NOTICES ---
+        async function loadNotices() { 
+            const tbody = document.getElementById('notice-table-body');
+            try { 
+                const querySnapshot = await getDocs(collection(db, DB_COLLECTIONS.notices)); 
+                const notices = []; 
+                querySnapshot.forEach((docSnap) => { notices.push({ id: docSnap.id, ...docSnap.data() }); }); 
+                notices.sort((a, b) => b.timestamp - a.timestamp); 
+                
+                tbody.innerHTML = ""; 
+                if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="2" style="text-align: center;">No active notices at this time.</td></tr>`; return; } 
+                
+                notices.forEach(notice => { 
+                    const tr = document.createElement('tr'); 
+                    tr.innerHTML = `<td style="color:#666; font-weight:bold;">${notice.date}</td><td><strong style="color:#003366; font-size:1.1rem; display:block;">${notice.title}</strong><p style="margin:5px 0 0 0; font-size:0.9rem; color:#444;">${notice.content}</p></td>`; 
+                    tbody.appendChild(tr); 
+                }); 
+            } catch (error) {
+                tbody.innerHTML = `<tr><td colspan="2" style="text-align: center; color:red;">Failed to load notices.</td></tr>`; 
+            } 
+        }
+        
+        // Auto-load notices when the tab is clicked
+        document.querySelector('.nav-link[data-target="section-notices"]').addEventListener('click', loadNotices);
+
     </script>
 </body>
 </html>

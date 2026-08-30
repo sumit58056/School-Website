@@ -108,9 +108,8 @@
                     } else if (sessionData.role === 'Admin') {
                         window.location.href = 'cvsk-admin.html';
                     } else {
-                        alert(`Welcome ${sessionData.name}! The standard Teacher portal is currently under construction.`);
-                        btn.disabled = false;
-                        btn.innerText = "Secure Login";
+                        // NEW ROUTING: Send all standard staff to the new dashboard
+                        window.location.href = 'teacher-dashboard.html';
                     }
                 } else {
                     errorMsg.style.display = 'block';
