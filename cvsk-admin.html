@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CVSK Admin Dashboard | Branch Portal</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- STRICT PAGE GUARD: Allows only logged-in Admins or Super Admins -->
+    <script>
+        const userSession = JSON.parse(localStorage.getItem('vmi_user'));
+        if (!userSession || (userSession.role !== 'Super Admin' && userSession.role !== 'Admin')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <style>
         .db-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .db-table th, .db-table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
@@ -33,6 +42,7 @@
         .asset-preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
         
         .info-box { background: #f4f7f6; border-left: 4px solid #003366; padding: 10px 15px; margin-bottom: 15px; font-size: 0.85rem; color: #333; }
+        .info-box strong { color: #003366; }
         .status-verified { color: #217346; font-weight: bold; }
         .status-pending { color: #E63946; font-weight: bold; }
     </style>
@@ -48,7 +58,7 @@
         </div>
         <div class="admin-profile">
             <span>Welcome, Branch Administrator</span>
-            <a href="login.html" class="logout-btn">Log Out</a>
+            <a href="#" class="logout-btn" onclick="localStorage.removeItem('vmi_user'); window.location.href='login.html';">Log Out</a>
         </div>
     </header>
 
@@ -76,7 +86,7 @@
                 <div class="dashboard-card">
                     <h3>Bulk Upload Student Details (Branch DB)</h3>
                     <div class="info-box">
-                        <strong>Upload Instructions:</strong> Upload a `.xlsx` or `.csv` file. Your file must have these exact headers:<br>
+                        <strong>Upload Instructions:</strong> Upload a `.xlsx` or `.csv` file. Headers must include:<br>
                         <em>Student ID, Roll No, Aadhaar Number, PEN Number, UDISE Number, Name, Class, DOB, Blood Group, Religion, Caste, CWSN, Height, Weight, Father's Name, Mother's Name, Father Qual, Mother Qual, Phone, Address</em>
                     </div>
                     <form class="upload-form" action="#" method="POST">
@@ -189,7 +199,7 @@
                     <h3>Live Student Database</h3>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                         <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Data</button>
-                        <input type="text" id="db-search-input" placeholder="Search Active Students by Name or ID..." style="padding: 10px; width: 300px;">
+                        <input type="text" id="db-search-input" placeholder="Search Active Students by Name, ID, Aadhaar..." style="padding: 10px; width: 320px;">
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
@@ -215,8 +225,6 @@
                                 <label>Department / Role</label>
                                 <select id="tch-dept" required>
                                     <option value="" disabled selected>-- Select Role --</option>
-                                    <option value="Super Admin">Super Admin</option>
-                                    <option value="Admin">Admin</option>
                                     <option value="Manager">Manager</option>
                                     <option value="Principal">Principal</option>
                                     <option value="Teaching Staff">Teaching Staff</option>
@@ -230,6 +238,7 @@
                             <div class="input-group"><label>Phone Number</label><input type="text" id="tch-phone" required></div>
                             <div class="input-group"><label>Blood Group</label><input type="text" id="tch-blood" required></div>
                             <div class="input-group"><label>PAN Number</label><input type="text" id="tch-pan" style="text-transform: uppercase;" required></div>
+                            <div class="input-group"><label>Login Password</label><input type="text" id="tch-password" placeholder="Create login password" required></div>
                         </div>
                         
                         <h5 style="margin-top: 15px; color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Bank Details</h5>
@@ -244,9 +253,9 @@
                     </form>
                     
                     <h4 class="section-divider">Live Staff Database</h4>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <button id="refresh-tch-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh Staff DB</button>
-                        <input type="text" id="tch-search-input" placeholder="Search Staff by Name, ID, PAN..." style="padding: 8px 12px; width: 250px; border: 1px solid #ccc; border-radius: 4px;">
+                        <input type="text" id="tch-search-input" placeholder="Search Staff by Name, ID, PAN..." style="padding: 8px 12px; width: 280px; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="db-table">
@@ -490,7 +499,7 @@
             <div id="section-id-cards" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>Professional PVC ID Card Generator</h3>
-                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate, preview, and download custom PVC ID cards for students and staff. <strong style="color:#E63946;">Note: Logos and Seals are managed in the 'Global Settings' tab.</strong></p>
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">Generate, preview, and download custom PVC ID cards for students and staff.</p>
 
                     <h4 class="section-divider">1. Card Settings & Dimensions (PVC Printer Scaling)</h4>
                     <div style="display: flex; gap: 15px; margin-bottom: 25px;">
@@ -633,7 +642,7 @@
         </div>
     </div>
 
-    <!-- Edit Student Modal (Includes Super Admin Read-Only Fields) -->
+    <!-- Edit Student Modal -->
     <div id="edit-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 700px;">
             <button class="modal-close" onclick="document.getElementById('edit-student-modal').style.display='none'">&times;</button>
@@ -727,8 +736,6 @@
                     <div class="input-group">
                         <label>Department / Role</label>
                         <select id="edit-tch-dept" required>
-                            <option value="Super Admin">Super Admin</option>
-                            <option value="Admin">Admin</option>
                             <option value="Manager">Manager</option>
                             <option value="Principal">Principal</option>
                             <option value="Teaching Staff">Teaching Staff</option>
@@ -742,6 +749,7 @@
                     <div class="input-group"><label>Phone Number</label><input type="text" id="edit-tch-phone" required></div>
                     <div class="input-group"><label>Blood Group</label><input type="text" id="edit-tch-blood" required></div>
                     <div class="input-group"><label>PAN Number</label><input type="text" id="edit-tch-pan" style="text-transform: uppercase;" required></div>
+                    <div class="input-group"><label>Login Password</label><input type="text" id="edit-tch-password" placeholder="Update password" required></div>
                 </div>
                 
                 <h5 style="margin-top: 15px; color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Bank Details</h5>
@@ -783,9 +791,7 @@
         document.getElementById('tch-dept')?.addEventListener('change', (e) => {
             const val = e.target.value;
             const idInput = document.getElementById('tch-id');
-            if(val === 'Super Admin') idInput.placeholder = 'e.g. CVSK/SADM/001';
-            else if(val === 'Admin') idInput.placeholder = 'e.g. CVSK/ADM/001';
-            else if(val === 'Manager') idInput.placeholder = 'e.g. CVSK/MGR/001';
+            if(val === 'Manager') idInput.placeholder = 'e.g. CVSK/MGR/001';
             else if(val === 'Principal') idInput.placeholder = 'e.g. CVSK/PRC/001';
             else idInput.placeholder = 'e.g. CVSK/STF/001';
         });
@@ -1114,6 +1120,8 @@
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
                                 <div style="background:#ffe5e5; padding:8px; border-radius:4px; border:1px solid #E63946;"><strong style="color:#E63946;">Transfer Date:</strong> <br>${student.TransferDate || 'N/A'}</div>
                             </div>
@@ -1169,7 +1177,6 @@
             try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { btn.disabled = false; btn.innerText = "🔄 Refresh Data"; } 
         });
         
-        // Ensure the TC tab also syncs the DB
         document.getElementById('refresh-tc-btn')?.addEventListener('click', async (e) => {
             const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading..."; 
             try { liveStudentsData = await fetchAllStudents(); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { btn.disabled = false; btn.innerText = "🔄 Sync Transfer Data"; } 
@@ -1327,7 +1334,7 @@
         // Manual TC Generation Form
         document.getElementById('tc-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
-            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const submitBtn = document.getElementById('tc-submit-btn');
             submitBtn.disabled = true; submitBtn.innerText = "Processing...";
 
             const studentId = document.getElementById('tc-student-id').value; 
@@ -1406,31 +1413,54 @@
             
             const tchId = document.getElementById('tch-id').value.trim(); 
             const safeDocId = makeSafeId(tchId);
+            const selectedRole = document.getElementById('tch-dept').value;
+
+            // Security check: Block unauthorized role elevations
+            if (selectedRole === 'Super Admin' || selectedRole === 'Admin') {
+                alert("SECURITY VIOLATION: Branch administrators cannot assign Administrative roles.");
+                btn.disabled = false; btn.innerText = "Save Staff Record";
+                return;
+            }
 
             try { 
                 await setDoc(doc(db, "cvsk_staff", safeDocId), { 
-                    TeacherID: tchId, Name: document.getElementById('tch-name').value.trim(), FatherName: document.getElementById('tch-father').value.trim(), Department: document.getElementById('tch-dept').value, DateOfJoining: document.getElementById('tch-doj').value.trim(), BloodGroup: document.getElementById('tch-blood').value.trim(), Phone: document.getElementById('tch-phone').value.trim(), Address: document.getElementById('tch-address').value.trim(), Photo: tchPhotoBase64, PAN: document.getElementById('tch-pan').value.toUpperCase().trim(), AccountNumber: document.getElementById('tch-acc-no').value.trim(), IFSC: document.getElementById('tch-ifsc').value.toUpperCase().trim(), BankName: document.getElementById('tch-bank').value.trim()
+                    TeacherID: tchId, 
+                    Name: document.getElementById('tch-name').value.trim(), 
+                    FatherName: document.getElementById('tch-father').value.trim(), 
+                    Department: selectedRole, 
+                    DateOfJoining: document.getElementById('tch-doj').value.trim(), 
+                    BloodGroup: document.getElementById('tch-blood').value.trim(), 
+                    Phone: document.getElementById('tch-phone').value.trim(), 
+                    Address: document.getElementById('tch-address').value.trim(), 
+                    Photo: tchPhotoBase64, 
+                    PAN: document.getElementById('tch-pan').value.toUpperCase().trim(), 
+                    Password: document.getElementById('tch-password').value.trim(), 
+                    AccountNumber: document.getElementById('tch-acc-no').value.trim(), 
+                    IFSC: document.getElementById('tch-ifsc').value.toUpperCase().trim(), 
+                    BankName: document.getElementById('tch-bank').value.trim()
                 }); 
                 await logAction("Branch Admin", "ADDED STAFF", tchId, `Added new branch staff.`);
-                alert("Staff Record Saved!"); 
-                document.getElementById('teacher-form').reset(); document.getElementById('tch-photo-preview').style.display = 'none'; tchPhotoBase64 = ""; 
-                document.getElementById('refresh-tch-btn').click(); 
+                alert("Staff Record Saved Successfully!"); 
+                document.getElementById('teacher-form').reset(); 
+                document.getElementById('tch-photo-preview').style.display = 'none'; 
+                tchPhotoBase64 = ""; 
+                loadStaffData(); 
             } catch (err) { alert("Error saving staff record."); console.error(err); } 
             finally { btn.disabled = false; btn.innerText = "Save Staff Record"; }
         });
 
-        document.querySelector('.nav-link[data-target="section-teachers"]')?.addEventListener('click', () => {
-            setTimeout(() => document.getElementById('refresh-tch-btn')?.click(), 50);
-        });
-
-        document.getElementById('refresh-tch-btn')?.addEventListener('click', async (e) => {
-            const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading Database...";
+        async function loadStaffData() {
+            const btn = document.getElementById('refresh-tch-btn');
             const tchTable = document.getElementById('tch-table-body');
+            if(!tchTable) return;
+            
+            if(btn) { btn.disabled = true; btn.innerText = "Loading Database..."; }
+            tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">Fetching records...</td></tr>`;
             
             try {
                 const querySnapshot = await getDocs(collection(db, "cvsk_staff"));
                 liveTeachersData = [];
-                querySnapshot.forEach((docSnap) => { liveTeachersData.push({ docId: docSnap.id, ...docSnap.data() }); });
+                querySnapshot.forEach((docSnap) => { liveTeachersData.push({ docId: docSnap.id, campus: 'branch', ...docSnap.data() }); });
                 
                 const validTeachers = liveTeachersData.filter(t => {
                     const name = t.Name || t.name || t["Teacher Name"];
@@ -1442,81 +1472,122 @@
                     return; 
                 }
                 
-                tchTable.innerHTML = "";
-                validTeachers.forEach((t, index) => {
-                    const photoSrc = t.Photo || t.photo || 'https://via.placeholder.com/40';
-                    const tid = t.TeacherID || t.id || t.docId || 'N/A';
-                    const name = t.Name || t.name || t["Teacher Name"] || 'N/A';
-                    const dept = t.Department || t.dept || 'N/A';
-                    const phone = t.Phone || t.phone || 'N/A';
-                    const pan = t.PAN || t.pan || 'N/A';
-
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${tid}</strong></td><td>${name}</td><td>${dept}</td><td>${phone}</td><td>${pan}</td>
-                    <td>
-                        <button class="action-btn btn-blue view-tch-btn" data-index="${index}">👁️ View</button>
-                        <button class="action-btn btn-green edit-tch-btn" data-index="${index}">Edit</button> 
-                        <button class="action-btn btn-red delete-tch-btn" data-id="${t.docId}" data-name="${name}">Delete</button>
-                    </td>`;
-                    tchTable.appendChild(tr);
-                });
-
-                document.querySelectorAll('.view-tch-btn').forEach(viewBtn => {
-                    viewBtn.addEventListener('click', (ev) => {
-                        const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
-                        const body = document.getElementById('view-teacher-body');
-                        
-                        body.innerHTML = `
-                            <div style="text-align:center; margin-bottom:15px;">
-                                <img src="${tch.Photo || tch.photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #003366;">
-                            </div>
-                            <table style="width:100%; border-collapse: collapse;">
-                                <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Staff ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.TeacherID || tch.id || 'N/A'}</td></tr>
-                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Name || tch.name || 'N/A'}</td></tr>
-                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.FatherName || tch.father || 'N/A'}</td></tr>
-                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Department:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Department || tch.dept || 'N/A'}</td></tr>
-                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Joining:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.DateOfJoining || tch.doj || 'N/A'}</td></tr>
-                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Blood Group:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.BloodGroup || tch.blood || 'N/A'}</td></tr>
-                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Phone:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Phone || tch.phone || 'N/A'}</td></tr>
-                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">PAN:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.PAN || tch.pan || 'N/A'}</td></tr>
-                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Account No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.AccountNumber || 'N/A'}</td></tr>
-                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">IFSC Code:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.IFSC || 'N/A'}</td></tr>
-                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Bank Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.BankName || 'N/A'}</td></tr>
-                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Address || tch.address || 'N/A'}</td></tr>
-                            </table>
-                        `;
-                        document.getElementById('view-teacher-modal').style.display = 'flex';
-                    });
-                });
-
-                document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { 
-                    delBtn.addEventListener('click', async (ev) => { 
-                        const button = ev.currentTarget;
-                        if(button.disabled) return;
-                        const targetName = button.getAttribute('data-name');
-                        if(confirm(`Permanently delete staff ${targetName}?`)) { 
-                            button.disabled = true; button.innerText = "Deleting...";
-                            try {
-                                await deleteDoc(doc(db, "cvsk_staff", button.getAttribute('data-id'))); 
-                                await logAction("Branch Admin", "DELETED STAFF", targetName, `Deleted staff from branch.`);
-                                document.getElementById('refresh-tch-btn').click(); 
-                            } catch(err) { alert("Error deleting."); button.disabled = false; button.innerText = "Delete"; }
-                        } 
-                    }); 
-                });
-                
-                document.querySelectorAll('.edit-tch-btn').forEach(editBtn => {
-                    editBtn.addEventListener('click', (ev) => {
-                        const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
-                        document.getElementById('edit-tch-doc-id').value = tch.docId; 
-                        document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || 'Teaching Staff'; document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; document.getElementById('edit-tch-bank').value = tch.BankName || '';
-                        editTchPhotoBase64 = tch.Photo || tch.photo || ""; document.getElementById('edit-tch-photo-preview-edit').src = editTchPhotoBase64 || 'https://via.placeholder.com/150'; document.getElementById('edit-teacher-modal').style.display = 'flex';
-                    });
-                });
+                renderStaffTable(validTeachers);
             } catch (error) { 
                 console.error("Staff Fetch Error:", error);
                 tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; color: red; padding: 20px;">Database Error: ${error.message}</td></tr>`;
-            } finally { btn.disabled = false; btn.innerText = "🔄 Refresh Staff DB"; }
+            } finally { 
+                if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Staff DB"; }
+            }
+        }
+
+        function renderStaffTable(teachersList) {
+            const tchTable = document.getElementById('tch-table-body');
+            tchTable.innerHTML = "";
+            teachersList.forEach((t, index) => {
+                const photoSrc = t.Photo || t.photo || 'https://via.placeholder.com/40';
+                const tid = t.TeacherID || t.id || t.docId || 'N/A';
+                const name = t.Name || t.name || t["Teacher Name"] || 'N/A';
+                const dept = t.Department || t.dept || 'N/A';
+                const phone = t.Phone || t.phone || 'N/A';
+                const pan = t.PAN || t.pan || 'N/A';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${tid}</strong></td><td>${name}</td><td>${dept}</td><td>${phone}</td><td>${pan}</td>
+                <td>
+                    <button class="action-btn btn-blue view-tch-btn" data-index="${index}">👁️ View</button>
+                    <button class="action-btn btn-green edit-tch-btn" data-index="${index}">Edit</button> 
+                    <button class="action-btn btn-red delete-tch-btn" data-id="${t.docId}" data-name="${name}">Delete</button>
+                </td>`;
+                tchTable.appendChild(tr);
+            });
+            attachStaffActionEvents(teachersList);
+        }
+
+        function attachStaffActionEvents(validTeachers) {
+            document.querySelectorAll('.view-tch-btn').forEach(viewBtn => {
+                viewBtn.addEventListener('click', (ev) => {
+                    const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
+                    const body = document.getElementById('view-teacher-body');
+                    
+                    body.innerHTML = `
+                        <div style="text-align:center; margin-bottom:15px;">
+                            <img src="${tch.Photo || tch.photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #003366;">
+                        </div>
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Staff ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.TeacherID || tch.id || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Name || tch.name || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.FatherName || tch.father || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Department:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Department || tch.dept || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Joining:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.DateOfJoining || tch.doj || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Blood Group:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.BloodGroup || tch.blood || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Phone:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Phone || tch.phone || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">PAN:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.PAN || tch.pan || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Account No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.AccountNumber || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">IFSC Code:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.IFSC || 'N/A'}</td></tr>
+                            <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Bank Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.BankName || 'N/A'}</td></tr>
+                            <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Address || tch.address || 'N/A'}</td></tr>
+                        </table>
+                    `;
+                    document.getElementById('view-teacher-modal').style.display = 'flex';
+                });
+            });
+
+            document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { 
+                delBtn.addEventListener('click', async (ev) => { 
+                    const button = ev.currentTarget;
+                    if(button.disabled) return;
+                    const targetName = button.getAttribute('data-name');
+                    if(confirm(`Permanently delete staff ${targetName}?`)) { 
+                        button.disabled = true; button.innerText = "Deleting...";
+                        try {
+                            await deleteDoc(doc(db, "cvsk_staff", button.getAttribute('data-id'))); 
+                            await logAction("Branch Admin", "DELETED STAFF", targetName, `Deleted staff from branch.`);
+                            loadStaffData();
+                        } catch(err) { alert("Error deleting."); button.disabled = false; button.innerText = "Delete"; }
+                    } 
+                }); 
+            });
+            
+            document.querySelectorAll('.edit-tch-btn').forEach(editBtn => {
+                editBtn.addEventListener('click', (ev) => {
+                    const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
+                    document.getElementById('edit-tch-doc-id').value = tch.docId; 
+                    document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; 
+                    document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; 
+                    document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; 
+                    document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || 'Teaching Staff'; 
+                    document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; 
+                    document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; 
+                    document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; 
+                    document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; 
+                    document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; 
+                    document.getElementById('edit-tch-password').value = tch.Password || ''; 
+                    document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; 
+                    document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; 
+                    document.getElementById('edit-tch-bank').value = tch.BankName || '';
+                    editTchPhotoBase64 = tch.Photo || tch.photo || ""; 
+                    document.getElementById('edit-tch-photo-preview-edit').src = editTchPhotoBase64 || 'https://via.placeholder.com/150'; 
+                    document.getElementById('edit-teacher-modal').style.display = 'flex';
+                });
+            });
+        }
+
+        document.getElementById('refresh-tch-btn')?.addEventListener('click', loadStaffData);
+        document.querySelector('.nav-link[data-target="section-teachers"]')?.addEventListener('click', () => {
+            setTimeout(loadStaffData, 50);
+        });
+
+        document.getElementById('tch-search-input')?.addEventListener('keyup', (e) => {
+            const st = e.target.value.toLowerCase().trim();
+            const filtered = liveTeachersData.filter(t => {
+                const name = (t.Name || t.name || t["Teacher Name"] || "").toLowerCase();
+                const tid = (t.TeacherID || t.id || t.docId || "").toLowerCase();
+                const pan = (t.PAN || t.pan || "").toLowerCase();
+                const dept = (t.Department || t.dept || "").toLowerCase();
+                return name.includes(st) || tid.includes(st) || pan.includes(st) || dept.includes(st);
+            });
+            renderStaffTable(filtered);
         });
 
         document.getElementById('edit-tch-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editTchPhotoBase64 = base64; document.getElementById('edit-tch-photo-preview-edit').src = base64; }); } });
@@ -1525,16 +1596,42 @@
             const docId = document.getElementById('edit-tch-doc-id').value; 
             const btn = document.getElementById('edit-teacher-save-btn'); 
             btn.disabled = true; btn.innerText = "Updating...";
+
+            const selectedRole = document.getElementById('edit-tch-dept').value;
+            if (selectedRole === 'Super Admin' || selectedRole === 'Admin') {
+                alert("SECURITY VIOLATION: Branch administrators cannot assign Administrative roles.");
+                btn.disabled = false; btn.innerText = "Update Staff Database";
+                return;
+            }
+
             try { 
-                await setDoc(doc(db, "cvsk_staff", docId), { TeacherID: document.getElementById('edit-tch-id-field').value, Name: document.getElementById('edit-tch-name').value.trim(), FatherName: document.getElementById('edit-tch-father').value.trim(), Department: document.getElementById('edit-tch-dept').value, DateOfJoining: document.getElementById('edit-tch-doj').value.trim(), BloodGroup: document.getElementById('edit-tch-blood').value.trim(), Phone: document.getElementById('edit-tch-phone').value.trim(), Address: document.getElementById('edit-tch-address').value.trim(), Photo: editTchPhotoBase64, PAN: document.getElementById('edit-tch-pan').value.toUpperCase().trim(), AccountNumber: document.getElementById('edit-tch-acc-no').value.trim(), IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase().trim(), BankName: document.getElementById('edit-tch-bank').value.trim() }, { merge: true }); 
+                await setDoc(doc(db, "cvsk_staff", docId), { 
+                    TeacherID: document.getElementById('edit-tch-id-field').value, 
+                    Name: document.getElementById('edit-tch-name').value.trim(), 
+                    FatherName: document.getElementById('edit-tch-father').value.trim(), 
+                    Department: selectedRole, 
+                    DateOfJoining: document.getElementById('edit-tch-doj').value.trim(), 
+                    BloodGroup: document.getElementById('edit-tch-blood').value.trim(), 
+                    Phone: document.getElementById('edit-tch-phone').value.trim(), 
+                    Address: document.getElementById('edit-tch-address').value.trim(), 
+                    Photo: editTchPhotoBase64, 
+                    PAN: document.getElementById('edit-tch-pan').value.toUpperCase().trim(), 
+                    Password: document.getElementById('edit-tch-password').value.trim(),
+                    AccountNumber: document.getElementById('edit-tch-acc-no').value.trim(), 
+                    IFSC: document.getElementById('edit-tch-ifsc').value.toUpperCase().trim(), 
+                    BankName: document.getElementById('edit-tch-bank').value.trim() 
+                }, { merge: true }); 
                 await logAction("Branch Admin", "EDITED STAFF", document.getElementById('edit-tch-name').value, `Updated branch staff profile.`);
-                alert("Staff record successfully updated!"); document.getElementById('edit-teacher-modal').style.display = 'none'; document.getElementById('refresh-tch-btn').click(); 
-            } catch (err) { alert("Error updating record: " + err.message); } finally { btn.disabled = false; btn.innerText = "Update Staff Database"; }
+                alert("Staff record successfully updated!"); 
+                document.getElementById('edit-teacher-modal').style.display = 'none'; 
+                loadStaffData(); 
+            } catch (err) { alert("Error updating record."); } 
+            finally { btn.disabled = false; btn.innerText = "Update Staff Database"; }
         });
 
         // --- 5. EXPORT DATABASE MODULE ---
-        document.getElementById('export-excel-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, docId, campus, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "CVSK_Student_Database.xlsx"); });
-        document.getElementById('export-pdf-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId" && k !== "campus") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Student_Database.pdf"); });
+        document.getElementById('export-excel-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, docId, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "CVSK_Student_Database.xlsx"); });
+        document.getElementById('export-pdf-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Student_Database.pdf"); });
         
         document.getElementById('export-tch-excel-btn')?.addEventListener('click', async () => { 
             const qSnaps = await getDocs(collection(db, "cvsk_staff")); let tData = []; 
@@ -1636,7 +1733,8 @@
                     docPdf.setFontSize(9); docPdf.setTextColor(50, 50, 50); docPdf.text("Branch Campus Registration", 105, currentY + 14, null, null, "center");
                     docPdf.setFontSize(12); docPdf.setTextColor(255, 103, 31); docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, currentY + 21, null, null, "center");
                     docPdf.setLineWidth(0.5); docPdf.line(startX + 5, currentY + 24, startX + cardWidth - 5, currentY + 24);
-                    docPdf.setFontSize(10); docPdf.setTextColor(0, 0, 0); docPdf.text(`Name: ${student.Name || 'N/A'}`, startX + 5, currentY + 31); docPdf.text(`Student ID: ${student["Student ID"] || 'N/A'}`, startX + 5, currentY + 38); docPdf.text(`Roll No: ${student["Roll No"] || 'N/A'}`, startX + 65, currentY + 38); docPdf.text(`Class: ${student.Class || 'N/A'}`, startX + 115, currentY + 38); docPdf.text(`Father's Name: ${student["Father's Name"] || 'N/A'}`, startX + 5, currentY + 45);
+                    docPdf.setFontSize(10); docPdf.setTextColor(0, 0, 0);
+                    docPdf.text(`Name: ${student.Name || 'N/A'}`, startX + 5, currentY + 31); docPdf.text(`Student ID: ${student["Student ID"] || 'N/A'}`, startX + 5, currentY + 38); docPdf.text(`Roll No: ${student["Roll No"] || 'N/A'}`, startX + 65, currentY + 38); docPdf.text(`Class: ${student.Class || 'N/A'}`, startX + 115, currentY + 38); docPdf.text(`Father's Name: ${student["Father's Name"] || 'N/A'}`, startX + 5, currentY + 45);
                     docPdf.setLineWidth(0.2); docPdf.rect(startX + 155, currentY + 27, 28, 33);
                     if(student.Photo) { docPdf.addImage(student.Photo, 'JPEG', startX + 155, currentY + 27, 28, 33); } else { docPdf.setFontSize(8); docPdf.setTextColor(150, 150, 150); docPdf.text("Photo", startX + 160, currentY + 45); } docPdf.setTextColor(0, 0, 0);
                     if(studentSchedule) { let tableData = []; for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableData.push([sub.replace(/_/g, ' '), dateStr]); } docPdf.autoTable({ startY: currentY + 49, head: [['Subject', 'Date & Time']], body: tableData, theme: 'grid', styles: { fontSize: 8, padding: 1, minCellHeight: 6 }, headStyles: { fillColor: [0, 51, 102] }, margin: { left: startX + 5 }, tableWidth: 135 }); } else { docPdf.setTextColor(255, 0, 0); docPdf.text("Exam schedule not published for this class yet.", startX + 5, currentY + 60); docPdf.setTextColor(0, 0, 0); }

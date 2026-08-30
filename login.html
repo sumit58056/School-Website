@@ -3,174 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal Portal Login | VMI Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Secure Login | VMI Network</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { 
-            background: linear-gradient(135deg, #003366 0%, #001a33 100%); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            height: 100vh; 
-            color: #333;
-        }
-        .login-container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 450px;
-            border-radius: 12px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        .login-header {
-            background: #f8f9fa;
-            padding: 30px 20px 20px 20px;
-            text-align: center;
-            border-bottom: 3px solid #FF671F;
-        }
-        .login-header img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 2px solid #003366;
-            margin-bottom: 15px;
-        }
-        .login-header h2 { color: #003366; font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; }
-        .login-header p { color: #666; font-size: 0.9rem; }
-        
-        .login-body { padding: 30px; }
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #003366; margin-bottom: 8px; }
-        .input-group select, .input-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-            background-color: #fdfdfd;
-        }
-        .input-group select:focus, .input-group input:focus {
-            outline: none;
-            border-color: #FF671F;
-            box-shadow: 0 0 0 3px rgba(255, 103, 31, 0.1);
-        }
-        
-        .login-btn {
-            width: 100%;
-            background: #FF671F;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-        }
-        .login-btn:hover { background: #e05514; }
-        .login-footer {
-            text-align: center;
-            padding: 15px;
-            font-size: 0.8rem;
-            color: #888;
-            background: #f4f7f6;
-            border-top: 1px solid #eee;
-        }
-        #error-msg {
-            color: #E63946;
-            font-size: 0.85rem;
-            text-align: center;
-            margin-bottom: 15px;
-            font-weight: 600;
-            display: none;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-top: 5px solid #FF671F; }
+        .logo-container { margin-bottom: 20px; }
+        .logo-container img { width: 80px; height: 80px; object-fit: contain; background: #003366; border-radius: 50%; padding: 5px; }
+        .login-card h2 { color: #003366; margin: 10px 0 5px 0; }
+        .login-card p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+        .btn-login { width: 100%; padding: 12px; background-color: #003366; color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover:not(:disabled) { background-color: #002244; }
+        .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
+        .error-msg { color: #E63946; font-size: 0.85rem; margin-bottom: 15px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-header">
-            <img src="logo.jpg" alt="Network Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=NET'">
-            <h2>Network Portal Login</h2>
-            <p>Select your campus and role to continue</p>
+    <div class="login-card">
+        <div class="logo-container">
+            <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=VMI'">
         </div>
-        
-        <div class="login-body">
-            <p id="error-msg"></p>
-            <form id="universal-login-form">
-                
-                <div class="input-group">
-                    <label>🏫 Select Campus</label>
-                    <select id="school-select" required>
-                        <option value="" disabled selected>-- Choose your School --</option>
-                        <option value="vmi_main">Vivekananda Mission Institute</option>
-                        <option value="cvsk">Chandidas Vivekananda Siksha Kendram (Mission)</option>
-                    </select>
-                </div>
+        <h2>Staff Portal Login</h2>
+        <p>Vivekananda Mission Institute Network</p>
 
-                <div class="input-group">
-                    <label>👤 Select Role</label>
-                    <select id="role-select" required>
-                        <option value="" disabled selected>-- Choose your Role --</option>
-                        <option value="admin">Administrator</option>
-                        <option value="teacher">Teacher / Staff</option>
-                        <option value="student">Student / Parent</option>
-                    </select>
-                </div>
+        <div id="error-message" class="error-msg">Invalid ID or Password.</div>
 
-                <div class="input-group">
-                    <label>User ID</label>
-                    <input type="text" id="user-id" placeholder="Enter your ID" required>
-                </div>
-
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="user-pass" placeholder="Enter your Password" required>
-                </div>
-
-                <button type="submit" class="login-btn">Secure Login</button>
-            </form>
-        </div>
-
-        <div class="login-footer">
-            &copy; 2026 Educational Network. All Rights Reserved. <br>
-            <span style="font-size: 0.7rem; margin-top: 5px; display: block;">Contact Support: prodhanaacharya2025@gmail.com</span>
-        </div>
+        <form id="login-form">
+            <div class="input-group">
+                <label>Staff ID</label>
+                <input type="text" id="login-id" placeholder="e.g., VMI/SADM/001" required>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn-login" id="login-btn">Secure Login</button>
+        </form>
     </div>
 
-    <script>
-        document.getElementById('universal-login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const school = document.getElementById('school-select').value;
-            const role = document.getElementById('role-select').value;
-            const userId = document.getElementById('user-id').value;
-            const pass = document.getElementById('user-pass').value;
-            const errorMsg = document.getElementById('error-msg');
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
+            authDomain: "vmi-portal.firebaseapp.com", 
+            projectId: "vmi-portal", 
+            storageBucket: "vmi-portal.firebasestorage.app", 
+            messagingSenderId: "215224119153", 
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('login-btn');
+            const errorMsg = document.getElementById('error-message');
+            const staffId = document.getElementById('login-id').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            btn.disabled = true;
+            btn.innerText = "Authenticating...";
             errorMsg.style.display = 'none';
 
-            // Routing Logic
-            if (school === 'vmi_main') {
-                if (role === 'admin') {
-                    window.location.href = "admin-dashboard.html";
+            try {
+                let userRecord = null;
+                let userCampus = null;
+
+                // 1. Search Main Campus DB
+                const mainQuery = query(collection(db, "teachers"), where("TeacherID", "==", staffId), where("Password", "==", password));
+                const mainSnaps = await getDocs(mainQuery);
+                if (!mainSnaps.empty) {
+                    userRecord = mainSnaps.docs[0].data();
+                    userCampus = "main";
                 } else {
-                    errorMsg.innerText = "Main Campus Teacher/Student Portals are currently under construction.";
-                    errorMsg.style.display = 'block';
+                    // 2. Search Branch Campus DB if not found in Main
+                    const branchQuery = query(collection(db, "cvsk_staff"), where("TeacherID", "==", staffId), where("Password", "==", password));
+                    const branchSnaps = await getDocs(branchQuery);
+                    if (!branchSnaps.empty) {
+                        userRecord = branchSnaps.docs[0].data();
+                        userCampus = "branch";
+                    }
                 }
-            } else if (school === 'cvsk') {
-                if (role === 'admin') {
-                    window.location.href = "cvsk-admin.html";
+
+                if (userRecord) {
+                    const sessionData = {
+                        id: userRecord.TeacherID,
+                        name: userRecord.Name,
+                        role: userRecord.Department,
+                        campus: userCampus
+                    };
+                    
+                    // Securely store session
+                    localStorage.setItem('vmi_user', JSON.stringify(sessionData));
+
+                    // Role Enforcement Routing
+                    if (sessionData.role === 'Super Admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else if (sessionData.role === 'Admin') {
+                        window.location.href = 'cvsk-admin.html';
+                    } else {
+                        alert(`Welcome ${sessionData.name}! The standard Teacher portal is currently under construction.`);
+                        btn.disabled = false;
+                        btn.innerText = "Secure Login";
+                    }
                 } else {
-                    errorMsg.innerText = "CVSK Teacher/Student Portals are currently under construction.";
                     errorMsg.style.display = 'block';
+                    btn.disabled = false;
+                    btn.innerText = "Secure Login";
                 }
+            } catch (error) {
+                console.error(error);
+                errorMsg.innerText = "Network Error. Please try again.";
+                errorMsg.style.display = 'block';
+                btn.disabled = false;
+                btn.innerText = "Secure Login";
             }
         });
     </script>
