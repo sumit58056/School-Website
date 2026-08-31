@@ -3,194 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vivekananda Mission Institute | Official Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Vivekananda Mission Institute Network</title>
+    <style>
+        /* --- GLOBAL STYLES & SAFFRON THEME --- */
+        :root { 
+            --saffron-dark: #d84315; 
+            --saffron-main: #f4511e; 
+            --saffron-light: #ffccbc;
+            --gold-accent: #ffb300;
+            --navy-text: #002244;
+            --bg-light: #fffdfa; 
+            --text-main: #333; 
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--bg-light); color: var(--text-main); overflow-x: hidden; }
+        a { text-decoration: none; }
+        
+        /* --- NAVIGATION BAR --- */
+        .navbar { background-color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(216, 67, 21, 0.15); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--saffron-main); }
+        .nav-brand { display: flex; align-items: center; gap: 15px; }
+        .nav-brand img { width: 65px; height: 65px; object-fit: contain; border-radius: 50%; border: 2px solid var(--saffron-main); padding: 2px; }
+        .nav-brand-text h1 { margin: 0; font-size: 1.6rem; color: var(--saffron-dark); text-transform: uppercase; letter-spacing: 1px; }
+        .nav-brand-text p { margin: 2px 0 0 0; font-size: 0.9rem; color: var(--navy-text); font-weight: bold; }
+        
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-link { color: var(--navy-text); font-weight: bold; font-size: 0.95rem; transition: 0.3s; text-transform: uppercase; }
+        .nav-link:hover { color: var(--saffron-main); }
+        .btn-nav-login { background-color: var(--saffron-main); color: white; padding: 10px 22px; border-radius: 6px; font-weight: bold; transition: 0.3s; border: 2px solid var(--saffron-main); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .btn-nav-login:hover { background-color: white; color: var(--saffron-dark); }
+
+        /* --- HERO SECTION --- */
+        .hero { background: linear-gradient(135deg, var(--saffron-dark) 0%, var(--saffron-main) 100%); color: white; padding: 90px 20px; text-align: center; position: relative; border-bottom: 8px solid var(--gold-accent); }
+        /* Add a subtle mandala/pattern overlay to the hero background */
+        .hero::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1; z-index: 1; }
+        .hero-content { position: relative; z-index: 2; }
+        .hero h2 { font-size: 3rem; margin: 0 0 15px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero p { font-size: 1.25rem; max-width: 800px; margin: 0 auto 30px auto; color: #fff; line-height: 1.6; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        
+        .btn-primary { background-color: white; color: var(--saffron-dark); padding: 15px 35px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid white; }
+        .btn-primary:hover { background-color: transparent; color: white; transform: translateY(-3px); }
+        .btn-secondary { background-color: var(--navy-text); color: white; border: 2px solid var(--navy-text); padding: 15px 35px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .btn-secondary:hover { background-color: white; color: var(--navy-text); transform: translateY(-3px); }
+
+        /* --- GOVT INITIATIVES STRIP --- */
+        .initiatives-strip { background: white; padding: 25px 20px; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; border-bottom: 2px solid #eee; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .initiative-item { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--navy-text); font-size: 1.1rem; }
+        .initiative-icon { background: var(--saffron-light); color: var(--saffron-dark); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1.2rem; }
+
+        /* --- SECTION HEADERS --- */
+        .section-header { text-align: center; margin: 50px 0 30px 0; }
+        .section-header h2 { color: var(--saffron-dark); font-size: 2.2rem; margin: 0; display: inline-block; position: relative; }
+        .section-header h2::after { content: ""; position: absolute; width: 60%; height: 3px; background: var(--gold-accent); bottom: -10px; left: 20%; border-radius: 2px; }
+
+        /* --- PRINCIPAL's DESK --- */
+        .principals-desk { max-width: 1000px; margin: 0 auto 50px auto; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(216, 67, 21, 0.1); display: flex; overflow: hidden; border: 1px solid var(--saffron-light); }
+        .desk-img { width: 350px; background: url('https://via.placeholder.com/400x500/d84315/ffffff?text=Principal+Photo') center/cover; }
+        .desk-content { padding: 40px; flex: 1; }
+        .desk-content h3 { color: var(--saffron-dark); font-size: 1.8rem; margin: 0 0 15px 0; }
+        .desk-content p { font-size: 1.05rem; line-height: 1.8; color: #555; text-align: justify; font-style: italic; }
+        .desk-sign { margin-top: 20px; font-weight: bold; color: var(--navy-text); font-size: 1.2rem; }
+        .desk-designation { color: var(--saffron-main); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; }
+
+        /* --- QUICK ACCESS CARDS --- */
+        .quick-access { max-width: 1200px; margin: 0 auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .card { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; border-bottom: 5px solid var(--saffron-main); transition: 0.3s; }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(216, 67, 21, 0.2); }
+        .card-icon { font-size: 3.5rem; margin-bottom: 15px; display: block; }
+        .card h3 { color: var(--navy-text); margin: 0 0 10px 0; font-size: 1.4rem; }
+        .card p { color: #666; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
+        .card-btn { display: inline-block; background: var(--saffron-light); color: var(--saffron-dark); padding: 12px 20px; border-radius: 30px; font-weight: bold; transition: 0.3s; width: 90%; box-sizing: border-box; text-transform: uppercase; font-size: 0.85rem; }
+        .card-btn:hover { background: var(--saffron-main); color: white; }
+
+        /* --- PHOTO GALLERY --- */
+        .gallery-container { max-width: 1200px; margin: 0 auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .gallery-item { height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 15px 10px 10px 10px; font-weight: bold; font-size: 0.9rem; text-align: center; opacity: 0; transition: 0.3s; }
+        .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+        /* --- CAMPUS SECTION --- */
+        .campuses { padding: 20px 20px 60px 20px; max-width: 1000px; margin: 0 auto; }
+        .campus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .campus-card { background: white; border: 1px solid var(--saffron-light); padding: 30px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.05); text-align: left; position: relative; overflow: hidden; }
+        .campus-card::before { content: ""; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--saffron-main); }
+        .campus-card h3 { color: var(--navy-text); margin: 0 0 10px 0; font-size: 1.4rem; }
+        .campus-card p { color: #555; margin: 0 0 8px 0; font-size: 1rem; }
+
+        /* --- FOOTER --- */
+        footer { background: var(--navy-text); color: white; text-align: center; padding: 30px 20px; border-top: 5px solid var(--saffron-main); }
+        footer p { margin: 5px 0; font-size: 0.95rem; color: #d0e1f9; }
+        
+        @media (max-width: 900px) {
+            .principals-desk { flex-direction: column; }
+            .desk-img { width: 100%; height: 300px; }
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; gap: 15px; text-align: center; padding: 15px; }
+            .nav-brand { flex-direction: column; gap: 5px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+            .initiatives-strip { flex-direction: column; align-items: center; gap: 15px; }
+            .campus-grid { grid-template-columns: 1fr; }
+            .hero h2 { font-size: 2.2rem; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Scrolling Alert Bar -->
-    <div class="top-alert">
-        <marquee behavior="scroll" direction="left" scrollamount="5">
-            🚨 Urgent: Updated Weekly Routines for LKG through Class 8 are now live in the Academics Portal! | Admissions for the 2026-2027 Academic Year are now Open. 🚨
-        </marquee>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/65/d84315/FFFFFF?text=VMI'">
+            <div class="nav-brand-text">
+                <h1>Vivekananda Mission</h1>
+                <p>Institute Network</p>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="online-admission.html" class="nav-link">Admissions</a>
+            <a href="student-portal.html" class="nav-link">Student Portal</a>
+            <a href="login.html" class="btn-nav-login">Staff Login</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Awakening the Spirit of Knowledge</h2>
+            <p>Welcome to the official network of Vivekananda Mission Institute and Chandidas Vivekananda Siksha Kendram. Rooted in traditional Indian values and empowered by modern educational frameworks.</p>
+            <div class="hero-buttons">
+                <a href="online-admission.html" class="btn-primary">📝 Apply Online Now</a>
+                <a href="student-portal.html" class="btn-secondary">🎓 Student Portal</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- GOVT INITIATIVES ALIGNMENT -->
+    <div class="initiatives-strip">
+        <div class="initiative-item">
+            <div class="initiative-icon">🇮🇳</div>
+            Govt. of India Guidelines
+        </div>
+        <div class="initiative-item">
+            <div class="initiative-icon">📖</div>
+            Aligned with NEP 2020
+        </div>
+        <div class="initiative-item">
+            <div class="initiative-icon">🪷</div>
+            Indian Knowledge Systems (IKS)
+        </div>
+        <div class="initiative-item">
+            <div class="initiative-icon">🏫</div>
+            PM SHRI Standards
+        </div>
     </div>
 
-    <header>
-        <div class="logo">
-            <a href="#home"><img src="logo.jpg" alt="Vivekananda Mission Institute Logo"></a>
-        </div>
-       <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                
-                <li class="dropdown">
-                    <a href="#">About VMI ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="#">Principal's Desk</a></li>
-                        <li><a href="faculty.html">Faculty</a></li>
-                        <li><a href="#">Facilities</a></li>
-                        <li><a href="#">Achievements</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#">Academics & Life ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="academics.html">Academic Routines</a></li>
-                        <li><a href="#">Photo Gallery</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#">Student & Parent Hub ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Student Corner</a></li>
-                        <li><a href="#">Examination Results</a></li>
-                        <li><a href="#">Parents Corner</a></li>
-                        <li><a href="downloads.html">Downloads (Forms & Syllabus)</a></li>
-                    </ul>
-                </li>
-
-                <li><a href="index.html#notice-board">Notices</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                
-                <!-- New Login Button -->
-                <li class="nav-login"><a href="login.html">🔒 Login</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section id="home" class="hero">
-        <div class="hero-seal">
-            <img src="logo.jpg" alt="Ornate School Seal">
-        </div>
-        <div class="hero-content">
-            <h2>Welcome to Vivekananda Mission Institute</h2>
-            
-            <!-- New NEP 2020 and IKS Badge & Description -->
-            <div class="nep-iks-badge">Aligned with NEP 2020 & IKS (Govt. of India)</div>
-            <p class="hero-tagline">Educate · Enlighten · Innovate</p>
-            <p class="hero-description">
-                We proudly implement the <strong>National Education Policy (NEP) 2020</strong> frameworks alongside the rich traditions of the <strong>Indian Knowledge Systems (IKS)</strong>. Our curriculum offers a holistic, multidisciplinary approach that nurtures 21st-century analytical skills while deeply rooting our students in India's cultural, scientific, and intellectual heritage.
-            </p>
-            
-            <a href="#quick-links" class="cta-button" style="text-decoration: none; display: inline-block;">Explore Our School</a>
+    <!-- PRINCIPAL'S DESK -->
+    <div class="section-header">
+        <h2>From the Principal's Desk</h2>
+    </div>
+    <section class="principals-desk">
+        <div class="desk-img"></div>
+        <div class="desk-content">
+            <h3>"Education is the manifestation of the perfection already in man."</h3>
+            <p>At Vivekananda Mission, we believe in nurturing not just the intellect, but the character of our students. In strict alignment with the <strong>National Education Policy (NEP) 2020</strong>, our curriculum seamlessly blends modern scientific inquiry with the profound wisdom of <strong>Indian Knowledge Systems (IKS)</strong>.</p>
+            <p>Our infrastructure and pedagogical approaches are evolving to meet the visionary standards set by the <strong>PM SHRI schools</strong> initiative. We strive to create holistic, well-rounded citizens who are globally competent yet deeply connected to their cultural roots and ethical values.</p>
+            <div class="desk-sign">Principal's Name</div>
+            <div class="desk-designation">Principal, VMI Network</div>
         </div>
     </section>
 
-    <!-- Interactive Quick Links -->
-    <section id="quick-links" class="quick-links">
-        <div class="link-grid">
-            <a href="academics.html" class="link-card">
-                <div class="icon">📚</div>
-                <h3>Academic Routines</h3>
-                <p>View the updated weekly schedules for LKG to Class 8.</p>
-            </a>
-            <a href="#contact" class="link-card">
-                <div class="icon">🎓</div>
-                <h3>Admissions</h3>
-                <p>Learn about our enrollment process and requirements.</p>
-            </a>
-            <a href="#contact" class="link-card">
-                <div class="icon">📞</div>
-                <h3>Contact Us</h3>
-                <p>Get in touch with the administration office.</p>
-            </a>
+    <!-- QUICK ACCESS CARDS -->
+    <div class="section-header" style="margin-top: 20px;">
+        <h2>Campus Portals</h2>
+    </div>
+    <section class="quick-access">
+        
+        <!-- Student Login -->
+        <div class="card">
+            <span class="card-icon">🎓</span>
+            <h3>Student Dashboard</h3>
+            <p>Securely access digital report cards, download admit cards, and review classroom study materials and syllabus.</p>
+            <a href="student-portal.html" class="card-btn">Login to Portal</a>
+        </div>
+
+        <!-- Online Admission -->
+        <div class="card">
+            <span class="card-icon">💻</span>
+            <h3>Online Admissions</h3>
+            <p>Submit your application instantly. Generate your official admission tracking number and reserve your seat.</p>
+            <a href="online-admission.html" class="card-btn" style="background:var(--saffron-dark); color:white;">Start Application</a>
+        </div>
+
+        <!-- Offline Admission -->
+        <div class="card">
+            <span class="card-icon">🖨️</span>
+            <h3>Offline Form</h3>
+            <p>Download our official A4 printable admission form. Fill it out and submit the physical copy to our campus offices.</p>
+            <a href="admission-form.html" target="_blank" class="card-btn">Download PDF</a>
+        </div>
+
+        <!-- Staff Login -->
+        <div class="card">
+            <span class="card-icon">👨‍🏫</span>
+            <h3>Staff & Admin Portal</h3>
+            <p>Exclusive management gateway for teaching staff and network administrators to maintain the school database.</p>
+            <a href="login.html" class="card-btn">Staff Access</a>
+        </div>
+
+    </section>
+
+    <!-- PHOTO GALLERY -->
+    <div class="section-header">
+        <h2>Campus Gallery</h2>
+    </div>
+    <section class="gallery-container">
+        <!-- Replace the src with actual school images later -->
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=600" alt="School Event">
+            <div class="gallery-overlay">Cultural Events</div>
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=600" alt="Classroom">
+            <div class="gallery-overlay">NEP 2020 Smart Classrooms</div>
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=600" alt="Library">
+            <div class="gallery-overlay">Library & Research</div>
+        </div>
+        <div class="gallery-item">
+            <img src="https://images.unsplash.com/photo-1546410531-ee4cb47b53eb?auto=format&fit=crop&q=80&w=600" alt="Sports">
+            <div class="gallery-overlay">Sports & Holistic Development</div>
         </div>
     </section>
 
-    <!-- Split Section: Principal's Message & Notice Board -->
-    <section class="content-split">
-        <div class="principal-message">
-            <h2>From the Principal's Desk</h2>
-            <div class="message-box">
-                <p>"Welcome to Vivekananda Mission Institute. Our goal is to foster an environment where students not only excel academically but also grow physically and morally. With our newly structured routines and dedicated faculty, we are committed to providing a holistic education for every child."</p>
-                <h4>- Principal, VMI</h4>
+    <!-- CAMPUSES INFO -->
+    <div class="section-header">
+        <h2>Our Network Locations</h2>
+    </div>
+    <section class="campuses">
+        <div class="campus-grid">
+            <div class="campus-card">
+                <h3>🏛️ Main Campus</h3>
+                <p><strong>Vivekananda Mission Institute</strong></p>
+                <p>📍 Muluk, Bolpur, Birbhum, West Bengal - 731204</p>
+                <p>📞 Phone: Office Contact Details Here</p>
             </div>
-        </div>
-
-        <div id="notice-board" class="notices-side">
-            <h2>Notice Board</h2>
-            <div class="notice-card">
-                <h3>Updated Weekly Routine</h3>
-                <p>New academic routines have been posted. Please note the updated Social Studies (SST) timings.</p>
-                <span class="date">July 24, 2026</span>
-            </div>
-            <div class="notice-card">
-                <h3>Friday Afternoon Schedule</h3>
-                <p>A reminder that the last two periods on Fridays are now dedicated to physical activities and games.</p>
-                <span class="date">July 22, 2026</span>
-            </div>
-            <div class="notice-card">
-                <h3>Classroom Allocations</h3>
-                <p>Class 1 and Class 2 are assigned to separate rooms in the primary wing.</p>
-                <span class="date">July 20, 2026</span>
+            <div class="campus-card">
+                <h3>🏫 Branch Campus</h3>
+                <p><strong>Chandidas Vivekananda Siksha Kendram</strong></p>
+                <p>📍 Mission Branch, Bolpur, West Bengal</p>
+                <p>📞 Phone: Office Contact Details Here</p>
             </div>
         </div>
     </section>
 
-    <footer id="contact">
-        <div class="footer-container">
-            <img src="logo.jpg" class="footer-logo" alt="Small Seal">
-            <div class="footer-text">
-                <p>&copy; 2026 Vivekananda Mission Institute. All rights reserved.</p>
-                <p>Muluk, Bolpur, Birbhum | Contact: info@vivekanandamission.edu</p>
-            </div>
-        </div>
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Vivekananda Mission Institute Network. All Rights Reserved.</p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Aligned with Govt. of India Ministry of Education guidelines.</p>
     </footer>
-    <!-- Firebase SDK Integration -->
-    <script type="module">
-        // 1. Import Firebase functions via CDN for static HTML
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // 2. Your specific Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o",
-            authDomain: "vmi-portal.firebaseapp.com",
-            projectId: "vmi-portal",
-            storageBucket: "vmi-portal.firebasestorage.app",
-            messagingSenderId: "215224119153",
-            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0"
-        };
-
-        // 3. Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // 4. Handle the Login Form Submission
-        const loginForm = document.querySelector('.login-form');
-        const submitBtn = document.querySelector('.login-submit-btn');
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); 
-            
-            const originalBtnText = submitBtn.innerText;
-            submitBtn.innerText = "Authenticating...";
-            submitBtn.style.backgroundColor = "#555";
-
-            const role = document.getElementById('role').value;
-            const email = document.getElementById('userid').value; 
-            const password = document.getElementById('password').value;
-
-            if (role !== 'admin') {
-                alert("Currently, only Administrator logins are active.");
-                submitBtn.innerText = originalBtnText;
-                submitBtn.style.backgroundColor = "#003366";
-                return;
-            }
-
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    alert("Login Successful! Redirecting to dashboard...");
-                    window.location.href = "admin-dashboard.html";
-                })
-                .catch((error) => {
-                    alert("Login Failed: " + error.message);
-                    submitBtn.innerText = originalBtnText;
-                    submitBtn.style.backgroundColor = "#003366";
-                });
-        });
-    </script>
 </body>
 </html>

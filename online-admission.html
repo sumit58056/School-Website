@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Admission Portal | VMI Network</title>
+    <style>
+        /* --- WEB INTERFACE STYLES --- */
+        :root { --primary: #003366; --secondary: #FF671F; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 0; }
+        
+        .portal-header { background: var(--primary); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--secondary); }
+        .portal-header h1 { margin: 0; font-size: 1.8rem; }
+        .portal-header p { margin: 5px 0 0 0; opacity: 0.9; }
+
+        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
+        .form-card { background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; }
+        
+        .form-status-bar { display: flex; justify-content: space-between; align-items: center; background: #eef4fc; border: 2px solid var(--primary); padding: 15px; border-radius: 6px; margin-bottom: 25px; font-weight: bold; color: var(--primary); }
+        
+        /* Updated: Sleek, inline form number display */
+        .form-number-display { font-size: 0.95rem; color: #999; background: white; padding: 4px 10px; border-radius: 4px; border: 1px dashed #ccc; font-weight: bold; font-style: italic; }
+
+        h3.section-title { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 8px; margin-top: 30px; }
+        
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 15px; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 0.85rem; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .input-group input, .input-group select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--secondary); box-shadow: 0 0 5px rgba(255,103,31,0.3); }
+
+        .btn-submit { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; font-size: 1.1rem; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; margin-top: 20px; }
+        .btn-submit:hover:not(:disabled) { background: #002244; }
+        .btn-submit:disabled { background: #999; cursor: not-allowed; }
+        .btn-download-blank { background: transparent; color: var(--primary); border: 2px solid var(--primary); padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 0.9rem; }
+        .btn-download-blank:hover { background: var(--primary); color: white; }
+
+        /* --- PAYMENT MODAL STYLES --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .payment-card { background: white; padding: 30px; border-radius: 8px; width: 100%; max-width: 500px; text-align: center; position: relative; border-top: 6px solid var(--secondary); }
+        .qr-box { background: #f9f9f9; padding: 15px; border: 2px dashed #ccc; border-radius: 8px; margin: 15px auto; width: 200px; height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .qr-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .btn-final-pay { background: var(--secondary); color: white; border: none; padding: 12px; width: 100%; font-size: 1.1rem; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; margin-top: 15px; }
+        .btn-final-pay:hover:not(:disabled) { background: #e55a15; }
+        .btn-cancel { background: none; border: none; color: #666; text-decoration: underline; margin-top: 15px; cursor: pointer; font-size: 0.9rem; }
+
+        /* --- SUCCESS SCREEN STYLES --- */
+        #success-screen { display: none; text-align: center; padding: 40px; background: white; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: 30px auto; max-width: 600px; border-top: 5px solid #217346; }
+        .btn-download-filled { background: var(--secondary); color: white; border: none; padding: 15px 30px; font-size: 1.1rem; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 20px; }
+
+        /* --- A4 PRINT TEMPLATE STYLES (Hidden on Web) --- */
+        #print-template { display: none; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            body { background: white; padding: 0; margin: 0; }
+            #print-template, #print-template * { visibility: visible; }
+            
+            #print-template { display: block; position: absolute; left: 0; top: 0; width: 210mm; min-height: 297mm; padding: 10mm; box-sizing: border-box; background: white; color: black; font-family: 'Segoe UI', sans-serif; }
+            
+            .p-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #003366; padding-bottom: 10px; margin-bottom: 10px; }
+            .p-logo-box { width: 70px; height: 70px; margin-right: 15px; flex-shrink: 0; }
+            .p-logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+            .p-title { text-align: left; flex: 1; }
+            .p-title h1 { margin: 0; color: #003366; font-size: 1.4rem; text-transform: uppercase; }
+            .p-title p { margin: 3px 0 0 0; font-size: 0.85rem; font-weight: bold; }
+            
+            .p-form-no-box { border: 2px solid #E63946; padding: 6px 12px; color: #E63946; font-weight: bold; font-size: 1rem; border-radius: 4px; background: white; white-space: nowrap; margin-top: 5px; }
+            .p-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60%; opacity: 0.08; z-index: -1; pointer-events: none; }
+            
+            .p-office { border: 2px solid #003366; padding: 10px; margin-bottom: 10px; background-color: #f9f9f9; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; gap: 15px; align-items: stretch; }
+            .p-office-content { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+            .p-office-title { font-weight: bold; text-align: center; margin-bottom: 8px; text-decoration: underline; font-size: 0.9rem; }
+            .p-photo-box { width: 33mm; border: 2px dashed #666; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 0.75rem; color: #666; background: white; flex-shrink: 0; min-height: 40mm; }
+            
+            .p-section { background-color: #003366; color: white; padding: 4px 8px; font-size: 0.95rem; font-weight: bold; margin: 8px 0 6px 0; text-transform: uppercase; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            .p-row { display: flex; gap: 15px; margin-bottom: 6px; } 
+            .p-col { flex: 1; display: flex; flex-direction: column; }
+            .p-col-2 { flex: 2; }
+            
+            .p-label { font-size: 0.75rem; font-weight: bold; margin-bottom: 1px; color: #333; }
+            .p-val { border-bottom: 1px dashed #333; padding: 1px 0; font-size: 0.9rem; min-height: 15px; color: #000; font-weight: 500; text-transform: uppercase; }
+            
+            .p-sig-row { display: flex; justify-content: space-between; margin-top: 20px; }
+            .p-sig-line { border-top: 1px solid #000; width: 180px; text-align: center; padding-top: 5px; font-weight: bold; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="portal-header">
+        <h1>Vivekananda Mission Institute Network</h1>
+        <p>Official Online Admission Portal</p>
+    </header>
+
+    <div class="container" id="main-container">
+        
+        <div class="form-status-bar">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size:0.95rem; color:#333; text-transform: uppercase;">Application Number:</span>
+                <span class="form-number-display" id="display-form-no">[ Pending ]</span>
+            </div>
+            <button class="btn-download-blank" onclick="downloadBlankForm()" id="blank-form-btn">📥 Download Blank Form</button>
+        </div>
+
+        <form class="form-card" id="online-admission-form">
+            <p style="color: #E63946; font-size: 0.9rem; font-weight: bold; text-align:center; margin-top:0;">* Please select your campus before filling the form.</p>
+            
+            <div class="input-group" style="background: #fff3cd; padding: 15px; border-left: 5px solid #ffb300; border-radius: 4px; margin-bottom: 20px;">
+                <label style="color: #856404; font-size: 1rem;">Select Target Campus <span style="color:red;">*</span></label>
+                <select id="w-campus" required style="border: 2px solid #ffb300; font-weight: bold;">
+                    <option value="" disabled selected>-- Select School Campus --</option>
+                    <option value="main">Main Campus - VMI (Muluk)</option>
+                    <option value="branch">Branch Campus - CVSK (Mission Branch)</option>
+                </select>
+            </div>
+
+            <h3 class="section-title">1. Enrollment Details</h3>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Admission Type</label>
+                    <select id="w-adm-type" required>
+                        <option value="" disabled selected>Select Type</option>
+                        <option value="New Admission">New Admission</option>
+                        <option value="Transfer In">Transfer In</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Applying For Class</label>
+                    <select id="w-class" required>
+                        <option value="" disabled selected>Select Class</option>
+                        <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                        <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Aadhaar Number (12 Digits)</label>
+                    <input type="text" id="w-aadhaar" required pattern="[0-9]{12}" placeholder="e.g. 123456789012" title="Must be exactly 12 digits">
+                </div>
+                <div class="input-group">
+                    <label>PEN Number</label>
+                    <input type="text" id="w-pen" placeholder="(Enter N/A if strictly not applicable)" required>
+                </div>
+            </div>
+
+            <h3 class="section-title">2. Student Information</h3>
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label>Student's Full Name</label>
+                <input type="text" id="w-name" required placeholder="Enter full name">
+            </div>
+            <div class="grid-2">
+                <div class="input-group"><label>Date of Birth</label><input type="date" id="w-dob" required></div>
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select id="w-gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option>Male</option><option>Female</option>
+                    </select>
+                </div>
+            </div>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Blood Group</label>
+                    <select id="w-blood" required>
+                        <option value="" disabled selected>Select</option>
+                        <option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                    </select>
+                </div>
+                <div class="input-group"><label>Religion</label><input type="text" id="w-religion" required placeholder="e.g. Hinduism"></div>
+            </div>
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Caste Category</label>
+                    <select id="w-caste" required>
+                        <option value="" disabled selected>Select Category</option>
+                        <option>General</option><option>SC</option><option>ST</option><option>OBC</option><option>Other</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>CWSN (Child with Special Needs)</label>
+                    <select id="w-cwsn" required><option value="No">No</option><option value="Yes">Yes</option></select>
+                </div>
+            </div>
+
+            <h3 class="section-title">3. Parent & Contact Details</h3>
+            <div class="grid-2">
+                <div class="input-group"><label>Father's Name</label><input type="text" id="w-father" required></div>
+                <div class="input-group"><label>Father's Qualification</label><input type="text" id="w-f-qual" required></div>
+            </div>
+            <div class="grid-2">
+                <div class="input-group"><label>Mother's Name</label><input type="text" id="w-mother" required></div>
+                <div class="input-group"><label>Mother's Qualification</label><input type="text" id="w-m-qual" required></div>
+            </div>
+            <div class="input-group" style="margin-bottom: 15px;"><label>WhatsApp / Primary Contact Number</label><input type="text" id="w-phone" required pattern="[0-9]{10}" placeholder="10 Digit Mobile Number" title="10 digit number"></div>
+            <div class="input-group"><label>Full Residential Address (With PIN Code)</label><input type="text" id="w-address" required placeholder="Street, City, PIN"></div>
+
+            <h3 class="section-title">4. Mandatory Document Acknowledgment</h3>
+            <div style="background: #eef4fc; padding: 15px; border-left: 5px solid var(--primary); font-size: 0.9rem; margin-bottom: 20px;">
+                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                    <input type="checkbox" required style="width:20px; height:20px;">
+                    <b>I acknowledge that I must bring physical copies of the Student's Aadhaar, Birth Certificate, Parent's ID, and Passport Photos to the campus to finalize this admission.</b>
+                </label>
+            </div>
+
+            <button type="submit" class="btn-submit" id="initiate-submit-btn">Proceed to Payment (₹100)</button>
+        </form>
+    </div>
+
+    <div id="payment-modal" class="modal-overlay">
+        <div class="payment-card">
+            <h2 style="color: var(--primary); margin-top: 0;">Online Application Fee</h2>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 10px;">Please scan the QR code below to pay the mandatory ₹100 processing fee.</p>
+            
+            <div class="qr-box">
+                <img id="payment-qr-img" src="https://via.placeholder.com/200?text=Loading+QR..." alt="Payment QR">
+            </div>
+
+            <form id="final-payment-form">
+                <div class="input-group" style="text-align: left;">
+                    <label>Transaction ID / UPI Ref No. <span style="color:red;">*</span></label>
+                    <input type="text" id="pay-txn-id" placeholder="Enter 12-digit UPI Ref No." required>
+                </div>
+                <div class="input-group" style="text-align: left;">
+                    <label>Upload Payment Screenshot <span style="color:red;">*</span></label>
+                    <input type="file" id="pay-screenshot" accept="image/*" required style="border: 1px dashed #ccc; padding: 5px;">
+                </div>
+                <button type="submit" class="btn-final-pay" id="final-submit-btn">Verify & Complete Submission</button>
+            </form>
+            <button class="btn-cancel" onclick="document.getElementById('payment-modal').style.display='none'">Cancel and return to form</button>
+        </div>
+    </div>
+
+    <div id="success-screen">
+        <h1 style="color: #217346; margin-bottom: 10px;">✅ Application Submitted!</h1>
+        <p>Your online application and payment details have been securely saved.</p>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 30px;">Your Official Form Number is: <strong id="success-form-no" style="color:#003366; font-size: 1.2rem;"></strong></p>
+        
+        <div style="background:#f9f9f9; padding:15px; border:1px solid #ddd; text-align:left; font-size:0.85rem; margin-bottom:20px;">
+            <strong style="color:var(--primary);">Next Steps:</strong><br><br>
+            1. Download and print your filled application form below.<br>
+            2. Sign the printed document at the bottom.<br>
+            3. Visit the school campus with the printed form and mandatory document photocopies.<br>
+            4. Admission is confirmed only after physical document verification and payment approval by the administration.
+        </div>
+
+        <button class="btn-download-filled" onclick="window.print()">🖨️ Download / Print Filled Form</button>
+    </div>
+
+    <div id="print-template">
+        <img src="logo.jpg" alt="" class="p-watermark" onerror="this.style.display='none'">
+        
+        <div class="p-header">
+            <div class="p-logo-box"><img src="logo.jpg" alt="VMI Logo" onerror="this.style.display='none'"></div>
+            <div class="p-title">
+                <h1 id="p-school-name">VIVEKANANDA MISSION INSTITUTE</h1>
+                <p id="p-school-address">Muluk, Bolpur, Birbhum, W.B. - 731204</p>
+                <h3 style="margin: 8px 0 0 0; text-decoration: underline;">APPLICATION FOR ADMISSION</h3>
+            </div>
+            <div class="p-form-no-box" id="p-top-form-no">Form No: TBD</div>
+        </div>
+
+        <div class="p-office">
+            <div class="p-office-content">
+                <div class="p-office-title">FOR OFFICE USE ONLY</div>
+                <div class="p-row">
+                    <div class="p-col"><div class="p-label">Date of Admission:</div><div class="p-val"></div></div>
+                    <div class="p-col"><div class="p-label">Class Assigned:</div><div class="p-val"></div></div>
+                </div>
+                <div class="p-row" style="margin-bottom: 0;">
+                    <div class="p-col"><div class="p-label">DISE Class:</div><div class="p-val"></div></div>
+                    <div class="p-col"><div class="p-label">DISE Section:</div><div class="p-val"></div></div>
+                    <div class="p-col"><div class="p-label">DISE Roll No:</div><div class="p-val"></div></div>
+                </div>
+            </div>
+            <div class="p-photo-box">Paste Recent<br>Passport Size<br>Photograph Here</div>
+        </div>
+
+        <div class="p-section">1. Enrollment Details</div>
+        <div class="p-row">
+            <div class="p-col"><div class="p-label">Admission Type:</div><div class="p-val" id="p-adm-type"></div></div>
+            <div class="p-col"><div class="p-label">Applying For Class:</div><div class="p-val" id="p-class"></div></div>
+        </div>
+        <div class="p-row">
+            <div class="p-col-2"><div class="p-label">Aadhaar Number (12 Digits - Mandatory):</div><div class="p-val" id="p-aadhaar"></div></div>
+            <div class="p-col"><div class="p-label">PEN Number:</div><div class="p-val" id="p-pen"></div></div>
+        </div>
+
+        <div class="p-section">2. Student Information</div>
+        <div class="p-row">
+            <div class="p-col-2"><div class="p-label">Student's Full Name:</div><div class="p-val" id="p-name"></div></div>
+            <div class="p-col"><div class="p-label">Date of Birth:</div><div class="p-val" id="p-dob"></div></div>
+        </div>
+        <div class="p-row">
+            <div class="p-col"><div class="p-label">Gender:</div><div class="p-val" id="p-gender"></div></div>
+            <div class="p-col"><div class="p-label">Blood Group:</div><div class="p-val" id="p-blood"></div></div>
+            <div class="p-col"><div class="p-label">Religion:</div><div class="p-val" id="p-religion"></div></div>
+        </div>
+        <div class="p-row">
+            <div class="p-col"><div class="p-label">Caste Category:</div><div class="p-val" id="p-caste"></div></div>
+            <div class="p-col"><div class="p-label">CWSN (Special Needs):</div><div class="p-val" id="p-cwsn"></div></div>
+        </div>
+
+        <div class="p-section">3. Parent & Contact Details</div>
+        <div class="p-row">
+            <div class="p-col-2"><div class="p-label">Father's Name:</div><div class="p-val" id="p-father"></div></div>
+            <div class="p-col"><div class="p-label">Father's Qualification:</div><div class="p-val" id="p-f-qual"></div></div>
+        </div>
+        <div class="p-row">
+            <div class="p-col-2"><div class="p-label">Mother's Name:</div><div class="p-val" id="p-mother"></div></div>
+            <div class="p-col"><div class="p-label">Mother's Qualification:</div><div class="p-val" id="p-m-qual"></div></div>
+        </div>
+        <div class="p-row">
+            <div class="p-col-2"><div class="p-label">WhatsApp / Primary Contact Number:</div><div class="p-val" id="p-phone"></div></div>
+        </div>
+        <div class="p-row">
+            <div class="p-col"><div class="p-label">Full Residential Address (With PIN Code):</div><div class="p-val" id="p-address" style="min-height:30px; text-transform: none;"></div></div>
+        </div>
+
+        <div class="p-section">4. Mandatory Document Checklist</div>
+        <div style="font-size:0.8rem; line-height:1.6; margin-left: 10px;">
+            [  ] Copy of Student's Aadhaar Card <strong>(Mandatory)</strong><br>
+            [  ] Copy of Birth Certificate <strong>(Mandatory)</strong><br>
+            [  ] Copy of Parent's Aadhaar / Voter ID <strong>(Mandatory)</strong><br>
+            [  ] Original Transfer Certificate <strong>(Mandatory for Transfer Ins)</strong><br>
+            [  ] Caste Certificate <strong>(Mandatory if SC/ST/OBC)</strong><br>
+            [  ] 2 Passport Size Photographs <strong>(Mandatory)</strong>
+        </div>
+
+        <div class="p-section" style="background:transparent; color:#000; border-bottom:2px solid #000; margin-top:15px; padding:0;">Declaration by Parent / Guardian</div>
+        <div style="font-size:0.8rem; line-height:1.4; margin-top:5px; text-align:justify;">
+            I hereby declare that the information provided in this form is true and correct to the best of my knowledge and belief. I understand that any false information may result in the cancellation of admission. I agree to abide by the rules and regulations of the Institute and ensure that my ward will conform to the disciplinary standards set by the school administration.
+        </div>
+
+        <div class="p-sig-row">
+            <div>
+                <p style="margin: 0 0 5px 0; font-size: 0.9rem;"><strong>Date:</strong> ____________________</p>
+                <p style="margin: 0; font-size: 0.9rem;"><strong>Place:</strong> ___________________</p>
+            </div>
+            <div class="p-sig-line">Signature of Parent / Guardian</div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
+            authDomain: "vmi-portal.firebaseapp.com", 
+            projectId: "vmi-portal", 
+            storageBucket: "vmi-portal.firebasestorage.app", 
+            messagingSenderId: "215224119153", 
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let activeFormNumber = null;
+        let paymentQRBase64 = "";
+        let paymentScreenshotBase64 = "";
+
+        // 1. Fetch Global Settings (Specifically Payment QR) on load
+        async function fetchPaymentQR() {
+            try {
+                const snap = await getDoc(doc(db, "settings", "global_assets"));
+                if (snap.exists() && snap.data().paymentQR) {
+                    paymentQRBase64 = snap.data().paymentQR;
+                    document.getElementById('payment-qr-img').src = paymentQRBase64;
+                } else {
+                    document.getElementById('payment-qr-img').alt = "Payment QR Not Configured by Admin";
+                }
+            } catch(e) { console.error("Error loading QR", e); }
+        }
+        window.addEventListener('DOMContentLoaded', fetchPaymentQR);
+
+        // Image Compressor for Payment Proof
+        document.getElementById('pay-screenshot').addEventListener('change', function(e) {
+            if(this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        let width = img.width; let height = img.height; const MAX = 600;
+                        if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } 
+                        else { if (height > MAX) { width *= MAX / height; height = MAX; } }
+                        const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; 
+                        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                        paymentScreenshotBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                    }; img.src = event.target.result;
+                }; reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // 2. Secure Transaction Form Number Generator
+        async function generateSecureFormNumber(campusCode) {
+            const year = new Date().getFullYear();
+            const counterRef = doc(db, "settings", "admission_counter");
+            
+            try {
+                const newNum = await runTransaction(db, async (transaction) => {
+                    const sfDoc = await transaction.get(counterRef);
+                    if (!sfDoc.exists()) {
+                        transaction.set(counterRef, { year: year, vmi_count: 1, cvsk_count: 1 });
+                        return 1;
+                    }
+                    
+                    let data = sfDoc.data();
+                    let currentYear = data.year || year;
+                    let vmiCount = data.vmi_count || 0;
+                    let cvskCount = data.cvsk_count || 0;
+                    
+                    if (currentYear !== year) {
+                        vmiCount = 0; cvskCount = 0; // Reset for new year
+                    }
+                    
+                    let nextNum = 1;
+                    if (campusCode === 'main') {
+                        nextNum = vmiCount + 1;
+                        transaction.update(counterRef, { year: year, vmi_count: nextNum });
+                    } else {
+                        nextNum = cvskCount + 1;
+                        transaction.update(counterRef, { year: year, cvsk_count: nextNum });
+                    }
+                    return nextNum;
+                });
+                
+                const prefix = campusCode === 'main' ? 'VMI' : 'CVSK';
+                return `${prefix}/${year}/${String(newNum).padStart(4, '0')}`;
+            } catch (e) {
+                console.error("Transaction failed: ", e);
+                // Fallback Math Random
+                const prefix = campusCode === 'main' ? 'VMI' : 'CVSK';
+                return `${prefix}/${year}/F${Math.floor(Math.random()*9000)+1000}`;
+            }
+        }
+
+        // Setup Print Formatting based on Campus
+        function formatPrintTemplate(campusCode, formNum) {
+            document.getElementById('p-top-form-no').innerText = `Form No: ${formNum}`;
+            if(campusCode === 'main') {
+                document.getElementById('p-school-name').innerText = "VIVEKANANDA MISSION INSTITUTE";
+                document.getElementById('p-school-address').innerText = "Muluk, Bolpur, Birbhum, W.B. - 731204";
+            } else {
+                document.getElementById('p-school-name').innerText = "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
+                document.getElementById('p-school-address').innerText = "Mission Branch, Bolpur, W.B.";
+            }
+        }
+
+        // 3. Download Blank Form Flow
+        window.downloadBlankForm = async function() {
+            const campusCode = document.getElementById('w-campus').value;
+            if(!campusCode) {
+                alert("Please select a Target Campus first to download the correct form.");
+                document.getElementById('w-campus').focus();
+                return;
+            }
+            
+            const btn = document.getElementById('blank-form-btn');
+            btn.disabled = true; btn.innerText = "Generating ID...";
+            
+            // Only generate if we haven't already generated one in this session
+            if(!activeFormNumber) {
+                activeFormNumber = await generateSecureFormNumber(campusCode);
+                document.getElementById('display-form-no').innerText = activeFormNumber;
+                document.getElementById('display-form-no').style.color = "var(--primary)";
+                document.getElementById('display-form-no').style.fontStyle = "normal";
+            }
+
+            formatPrintTemplate(campusCode, activeFormNumber);
+            
+            // Clear out print values just in case they were filled on the screen
+            document.querySelectorAll('.p-val').forEach(el => el.innerText = "");
+            
+            window.print();
+            btn.disabled = false; btn.innerText = "📥 Download Blank Form";
+        };
+
+        // 4. Form Submission Flow - Step 1: Validate and Show Payment Modal
+        document.getElementById('online-admission-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Show payment modal overlay
+            document.getElementById('payment-modal').style.display = 'flex';
+        });
+
+        // 5. Form Submission Flow - Step 2: Final Submit
+        document.getElementById('final-payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(!paymentScreenshotBase64) return alert("Please wait for the image to finish processing.");
+
+            const btn = document.getElementById('final-submit-btn');
+            btn.disabled = true; btn.innerText = "Processing Final Application...";
+
+            const campusCode = document.getElementById('w-campus').value;
+            const txnId = document.getElementById('pay-txn-id').value.trim();
+
+            // Generate Number ONLY at final step to prevent wasted IDs on abandoned forms
+            if(!activeFormNumber) {
+                activeFormNumber = await generateSecureFormNumber(campusCode);
+                document.getElementById('display-form-no').innerText = activeFormNumber;
+                document.getElementById('display-form-no').style.color = "var(--primary)";
+                document.getElementById('display-form-no').style.fontStyle = "normal";
+            }
+
+            // Gather Data
+            const payload = {
+                FormNumber: activeFormNumber,
+                Campus: campusCode,
+                SubmissionDate: new Date().toLocaleDateString(),
+                TransactionID: txnId,
+                PaymentProof: paymentScreenshotBase64,
+                AdmissionType: document.getElementById('w-adm-type').value,
+                Class: document.getElementById('w-class').value,
+                Aadhaar: document.getElementById('w-aadhaar').value,
+                PEN: document.getElementById('w-pen').value,
+                Name: document.getElementById('w-name').value,
+                DOB: document.getElementById('w-dob').value,
+                Gender: document.getElementById('w-gender').value,
+                BloodGroup: document.getElementById('w-blood').value,
+                Religion: document.getElementById('w-religion').value,
+                Caste: document.getElementById('w-caste').value,
+                CWSN: document.getElementById('w-cwsn').value,
+                FatherName: document.getElementById('w-father').value,
+                FatherQual: document.getElementById('w-f-qual').value,
+                MotherName: document.getElementById('w-mother').value,
+                MotherQual: document.getElementById('w-m-qual').value,
+                Phone: document.getElementById('w-phone').value,
+                Address: document.getElementById('w-address').value,
+                Status: "Payment Verification Pending",
+                timestamp: Date.now()
+            };
+
+            try {
+                // Save to Firebase under online_admissions
+                const docId = String(activeFormNumber).replace(/\//g, '_');
+                await setDoc(doc(db, "online_admissions", docId), payload);
+
+                // Populate the A4 Template for download
+                formatPrintTemplate(campusCode, activeFormNumber);
+                document.getElementById('p-adm-type').innerText = payload.AdmissionType;
+                document.getElementById('p-class').innerText = payload.Class;
+                document.getElementById('p-aadhaar').innerText = payload.Aadhaar;
+                document.getElementById('p-pen').innerText = payload.PEN;
+                document.getElementById('p-name').innerText = payload.Name;
+                document.getElementById('p-dob').innerText = payload.DOB;
+                document.getElementById('p-gender').innerText = payload.Gender;
+                document.getElementById('p-blood').innerText = payload.BloodGroup;
+                document.getElementById('p-religion').innerText = payload.Religion;
+                document.getElementById('p-caste').innerText = payload.Caste;
+                document.getElementById('p-cwsn').innerText = payload.CWSN;
+                document.getElementById('p-father').innerText = payload.FatherName;
+                document.getElementById('p-f-qual').innerText = payload.FatherQual;
+                document.getElementById('p-mother').innerText = payload.MotherName;
+                document.getElementById('p-m-qual').innerText = payload.MotherQual;
+                document.getElementById('p-phone').innerText = payload.Phone;
+                document.getElementById('p-address').innerText = payload.Address;
+
+                // Hide Modal and Form, Show Success Screen
+                document.getElementById('payment-modal').style.display = 'none';
+                document.getElementById('main-container').style.display = 'none';
+                document.getElementById('success-form-no').innerText = activeFormNumber;
+                document.getElementById('success-screen').style.display = 'block';
+
+            } catch(err) {
+                alert("Error submitting application. Please check your network and try again.");
+                btn.disabled = false; btn.innerText = "Verify & Complete Submission";
+            }
+        });
+    </script>
+</body>
+</html>

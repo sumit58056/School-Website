@@ -76,6 +76,7 @@
                 <li><a href="#" class="nav-link" data-target="section-results">📊 Exam Results</a></li>
                 <li><a href="#" class="nav-link" data-target="section-admit">🎫 Admit Cards</a></li>
                 <li><a href="#" class="nav-link" data-target="section-id-cards">🪪 ID Card Generator</a></li>
+                <li><a href="#" class="nav-link" data-target="section-gallery" style="background-color: #002244; border-left: 4px solid #217346;">📸 Manage Gallery</a></li>
                 <li><a href="#" class="nav-link" data-target="section-send-main" style="background-color: #002244; border-left: 4px solid #FF671F;">📤 Send Docs to Main</a></li>
             </ul>
         </aside>
@@ -261,6 +262,45 @@
                         <table class="db-table">
                             <thead><tr><th>Photo</th><th>ID</th><th>Name</th><th>Role</th><th>Phone</th><th>PAN</th><th>Actions</th></tr></thead>
                             <tbody id="tch-table-body"><tr><td colspan="7" style="text-align: center; padding: 20px;">Click Refresh to load...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: Photo Gallery Upload -->
+            <div id="section-gallery" class="admin-section">
+                <div class="dashboard-card" style="max-width: 900px;">
+                    <h3>📸 Upload Event Photos to Website Gallery</h3>
+                    <div class="info-box">
+                        Photos uploaded here will be displayed publicly on the Home Page. Images are automatically compressed to ensure fast loading times.
+                    </div>
+                    <form class="admin-form" id="gallery-form">
+                        <div class="input-group" style="text-align: center; margin-bottom: 25px;">
+                            <img id="gallery-photo-preview" src="https://via.placeholder.com/400x250?text=Event+Photo" alt="Preview" style="width: 100%; max-width: 400px; height: 250px; object-fit: cover; border-radius: 8px; border: 2px solid #ccc; display: block; margin: 0 auto 10px auto;">
+                            <label for="gallery-photo" class="browse-btn" style="cursor: pointer; padding: 8px 15px; background: #FF671F; color: white; border-radius: 5px;">📷 Select Event Photo</label>
+                            <input type="file" id="gallery-photo" accept="image/*" required hidden>
+                        </div>
+                        <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div class="input-group">
+                                <label>Event Title / Caption</label>
+                                <input type="text" id="gallery-caption" placeholder="e.g., Annual Sports Day 2026" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Event Date</label>
+                                <input type="date" id="gallery-date" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="admin-submit-btn btn-green" id="gallery-submit-btn">Publish to Home Page</button>
+                    </form>
+
+                    <h4 class="section-divider">Live Website Gallery</h4>
+                    <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
+                        <button id="refresh-gallery-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh Gallery</button>
+                    </div>
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <table class="db-table">
+                            <thead><tr><th>Photo</th><th>Caption</th><th>Date</th><th>Actions</th></tr></thead>
+                            <tbody id="gallery-table-body"><tr><td colspan="4" style="text-align: center; padding: 20px;">Click Refresh to load gallery...</td></tr></tbody>
                         </table>
                     </div>
                 </div>
@@ -485,7 +525,6 @@
                         </div>
                     </form>
 
-                    <!-- LIVE ADMIT CARD PREVIEW -->
                     <h4 class="section-divider">3. Live Admit Card Preview (Actual Size Layout)</h4>
                     <div id="admit-preview-area" style="background: #fdfdfd; padding: 20px; border: 1px dashed #ccc; border-radius: 6px; display: flex; justify-content: center; overflow-x: auto;">
                         <p id="admit-preview-placeholder" style="color: #999; text-align: center; width: 100%;">Select parameters above and click "Preview Sample" to see how the Admit Card will look.</p>
@@ -559,55 +598,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 12: GLOBAL SETTINGS -->
-            <div id="section-settings" class="admin-section">
-                <div class="dashboard-card" style="max-width: 900px;">
-                    <h3>⚙️ Global Settings & Official Assets</h3>
-                    <div class="info-box">
-                        <strong>Upload Instructions:</strong> Upload PNG format images with a <strong>transparent background</strong> for the cleanest results on ID Cards and Admit Cards. High-resolution files are automatically compressed to safely fit within database limits.
-                    </div>
-                    
-                    <form class="admin-form" id="global-settings-form">
-                        <div class="settings-grid">
-                            <div class="input-group">
-                                <label>Branch Logo</label>
-                                <input type="file" id="set-logo" accept="image/*">
-                                <div class="asset-preview"><img id="prev-set-logo" src="" alt="None"></div>
-                            </div>
-                            <div class="input-group">
-                                <label>Branch Round Seal</label>
-                                <input type="file" id="set-seal" accept="image/*">
-                                <div class="asset-preview"><img id="prev-set-seal" src="" alt="None"></div>
-                            </div>
-                            <div class="input-group">
-                                <label>M.C. Seal</label>
-                                <input type="file" id="set-mc-seal" accept="image/*">
-                                <div class="asset-preview"><img id="prev-set-mc-seal" src="" alt="None"></div>
-                            </div>
-                        </div>
-                        <div class="settings-grid">
-                            <div class="input-group">
-                                <label>Principal Signature</label>
-                                <input type="file" id="set-sign-prin" accept="image/*">
-                                <div class="asset-preview"><img id="prev-set-sign-prin" src="" alt="None"></div>
-                            </div>
-                            <div class="input-group">
-                                <label>Manager Signature</label>
-                                <input type="file" id="set-sign-mgr" accept="image/*">
-                                <div class="asset-preview"><img id="prev-set-sign-mgr" src="" alt="None"></div>
-                            </div>
-                            <div class="input-group">
-                                <label>Secretary Signature</label>
-                                <input type="file" id="set-sign-sec" accept="image/*">
-                                <div class="asset-preview"><img id="prev-set-sign-sec" src="" alt="None"></div>
-                            </div>
-                        </div>
-                        <button type="submit" class="admin-submit-btn btn-blue" id="save-settings-btn" style="margin-top: 10px;">Save Branch Assets</button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Footer placed INSIDE main for scrolling stability -->
             <footer style="text-align: center; padding: 20px; margin-top: 40px; font-size: 0.85rem; color: #666; border-top: 1px solid #ddd;">
                 &copy; 2026 Vivekananda Mission Institute. All Rights Reserved.
             </footer>
@@ -685,7 +675,6 @@
                     </div>
                 </div>
 
-                <!-- DISE Fields Locked as Read-Only for Branch Level -->
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">DISE Details (Super Admin Access Only)</h5>
                 <div class="marks-grid">
                     <div class="input-group"><label>DISE Class</label><input type="text" id="edit-stu-dise-class" placeholder="Super Admin Access Only" readonly style="background:#eee; cursor:not-allowed;"></div>
@@ -728,10 +717,7 @@
             <form id="edit-teacher-form" class="admin-form">
                 <input type="hidden" id="edit-tch-doc-id">
                 <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;">
-                    <img id="edit-tch-photo-preview-edit" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;">
-                    <label for="edit-tch-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label>
-                    <input type="file" id="edit-tch-photo" accept="image/*" hidden>
-                </div>
+                    <img id="edit-tch-photo-preview-edit" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;"><label for="edit-tch-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label><input type="file" id="edit-tch-photo" accept="image/*" hidden></div>
                 <div class="marks-grid">
                     <div class="input-group">
                         <label>Department / Role</label>
@@ -784,6 +770,8 @@
                     document.getElementById('refresh-db-btn')?.click();
                 } else if(target === 'section-transferred') {
                     document.getElementById('refresh-tc-btn')?.click();
+                } else if(target === 'section-gallery') {
+                    document.getElementById('refresh-gallery-btn')?.click();
                 }
             });
         });
@@ -796,14 +784,12 @@
             else idInput.placeholder = 'e.g. CVSK/STF/001';
         });
 
-        // Dynamic Transfer Certificate Field
         document.getElementById('manual-admission-type')?.addEventListener('change', (e) => {
             const tcGroup = document.getElementById('manual-tc-group');
             if (e.target.value === 'Transfer In') { tcGroup.style.display = 'block'; } 
             else { tcGroup.style.display = 'none'; document.getElementById('manual-tc-file').value = ""; }
         });
 
-        // Main Campus Mailto Form
         document.getElementById('send-main-form')?.addEventListener('submit', (e) => {
             e.preventDefault();
             const subject = encodeURIComponent(document.getElementById('send-subject').value);
@@ -834,23 +820,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- 1. GLOBAL HELPERS & IMAGE COMPRESSION ---
         let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "" };
         
         function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
-
-        function resizeAssetKeepRatio(file, callback) {
-            const reader = new FileReader(); 
-            reader.onload = function(event) {
-                const img = new Image(); 
-                img.onload = function() {
-                    const MAX = 400; let width = img.width; let height = img.height;
-                    if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } else { if (height > MAX) { width *= MAX / height; height = MAX; } }
-                    const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/png', 0.8));
-                }; img.src = event.target.result;
-            }; reader.readAsDataURL(file);
-        }
 
         function resizeAndConvertImage(file, callback) {
             const reader = new FileReader(); 
@@ -883,37 +855,10 @@
                 const snap = await getDoc(doc(db, "settings", "cvsk_assets")); 
                 if (snap.exists()) { 
                     globalAssets = { ...globalAssets, ...snap.data() }; 
-                    document.getElementById('prev-set-logo').src = globalAssets.logo || ""; 
-                    document.getElementById('prev-set-seal').src = globalAssets.seal || ""; 
-                    document.getElementById('prev-set-mc-seal').src = globalAssets.mcSeal || ""; 
-                    document.getElementById('prev-set-sign-prin').src = globalAssets.prinSign || ""; 
-                    document.getElementById('prev-set-sign-mgr').src = globalAssets.mgrSign || ""; 
-                    document.getElementById('prev-set-sign-sec').src = globalAssets.secSign || ""; 
                 } 
             } catch(e) { console.error("Error loading settings", e); }
         } 
         loadGlobalSettings();
-
-        const assetMap = { 'set-logo':'logo', 'set-seal':'seal', 'set-mc-seal':'mcSeal', 'set-sign-prin':'prinSign', 'set-sign-mgr':'mgrSign', 'set-sign-sec':'secSign' };
-        for(const [inputId, key] of Object.entries(assetMap)) { 
-            document.getElementById(inputId)?.addEventListener('change', function(e) { 
-                if(this.files[0]) { 
-                    resizeAssetKeepRatio(this.files[0], (base64) => { 
-                        globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; 
-                    }); 
-                } 
-            }); 
-        }
-        document.getElementById('global-settings-form')?.addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
-            const btn = document.getElementById('save-settings-btn');
-            btn.disabled = true; btn.innerText = "Saving...";
-            try { 
-                await setDoc(doc(db, "settings", "cvsk_assets"), globalAssets, {merge: true}); 
-                alert("Global Assets Saved Successfully!"); 
-            } catch(err) { alert("Failed to save assets: " + err.message); }
-            finally { btn.disabled = false; btn.innerText = "Save Branch Assets"; }
-        });
 
         // AUDIT LOGGING
         async function logAction(userRole, action, target, details) {
@@ -930,7 +875,101 @@
             } catch(e) { console.error("Audit log failed", e); }
         }
 
-        // --- 3. STUDENT DATABASE MODULE ---
+        // --- NEW: PHOTO GALLERY UPLOAD MODULE ---
+        let galleryPhotoBase64 = "";
+        document.getElementById('gallery-photo')?.addEventListener('change', function(e) { 
+            if(this.files[0]) { 
+                const reader = new FileReader(); 
+                reader.onload = function(event) { 
+                    const img = new Image(); 
+                    img.onload = function() { 
+                        let width = img.width; let height = img.height; const MAX = 800; // Larger max dimension for gallery
+                        if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } 
+                        else { if (height > MAX) { width *= MAX / height; height = MAX; } } 
+                        const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; 
+                        const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); 
+                        galleryPhotoBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                        document.getElementById('gallery-photo-preview').src = galleryPhotoBase64; 
+                    }; img.src = event.target.result; 
+                }; reader.readAsDataURL(this.files[0]);
+            } 
+        });
+
+        document.getElementById('gallery-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if(!galleryPhotoBase64) return alert("Please select an event photo first.");
+            const btn = document.getElementById('gallery-submit-btn');
+            btn.disabled = true; btn.innerText = "Publishing...";
+            try {
+                const docId = `img_${Date.now()}`;
+                await setDoc(doc(db, "gallery", docId), {
+                    caption: document.getElementById('gallery-caption').value.trim(),
+                    date: document.getElementById('gallery-date').value,
+                    photo: galleryPhotoBase64,
+                    timestamp: Date.now()
+                });
+                await logAction("Branch Admin", "ADDED GALLERY PHOTO", document.getElementById('gallery-caption').value, "Published photo to home page gallery.");
+                alert("Photo successfully published to the Home Page gallery!");
+                document.getElementById('gallery-form').reset();
+                document.getElementById('gallery-photo-preview').src = "https://via.placeholder.com/400x250?text=Event+Photo";
+                galleryPhotoBase64 = "";
+                loadGallery();
+            } catch (error) {
+                alert("Error publishing photo.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Publish to Home Page";
+            }
+        });
+
+        async function loadGallery() {
+            const tbody = document.getElementById('gallery-table-body');
+            const btn = document.getElementById('refresh-gallery-btn');
+            if(!tbody) return;
+            if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
+            try {
+                const qSnap = await getDocs(collection(db, "gallery"));
+                let photos = [];
+                qSnap.forEach(d => photos.push({ id: d.id, ...d.data() }));
+                photos.sort((a,b) => b.timestamp - a.timestamp);
+                
+                tbody.innerHTML = "";
+                if(photos.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">No photos published in the gallery.</td></tr>`;
+                    return;
+                }
+                photos.forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><img src="${p.photo}" style="width: 80px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;"></td>
+                        <td><strong>${p.caption}</strong></td>
+                        <td>${p.date}</td>
+                        <td><button class="action-btn btn-red delete-gallery-btn" data-id="${p.id}" data-caption="${p.caption}">Delete</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.delete-gallery-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        const cap = e.currentTarget.getAttribute('data-caption');
+                        if (confirm(`Are you sure you want to delete "${cap}" from the public gallery?`)) {
+                            e.currentTarget.disabled = true;
+                            await deleteDoc(doc(db, "gallery", id));
+                            await logAction("Branch Admin", "DELETED GALLERY PHOTO", cap, "Removed from home page.");
+                            loadGallery();
+                        }
+                    });
+                });
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color:red;">Error loading gallery.</td></tr>`;
+            } finally {
+                if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Gallery"; }
+            }
+        }
+        document.getElementById('refresh-gallery-btn')?.addEventListener('click', loadGallery);
+        document.querySelector('.nav-link[data-target="section-gallery"]')?.addEventListener('click', () => setTimeout(loadGallery, 50));
+
+        // --- STUDENT DATABASE MODULE ---
         let liveStudentsData = []; let editStuPhotoBase64 = ""; let compressedPhotoBase64 = ""; 
         let transferCertBase64 = ""; let manualDocBase64 = ""; let editDocBase64 = "";
         let currentActiveStudents = []; let currentTransferredStudents = [];
@@ -951,7 +990,6 @@
             currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out');
             currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
 
-            // Render Active Students
             if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in branch database.</td></tr>`; }
             else {
                 currentActiveStudents.forEach((student, index) => {
@@ -973,7 +1011,6 @@
                 });
             }
 
-            // Render Transferred Students
             if (currentTransferredStudents.length === 0) { tcTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No transferred students found in branch database.</td></tr>`; }
             else {
                 currentTransferredStudents.forEach((student, index) => {
@@ -987,7 +1024,6 @@
                 });
             }
 
-            // Bind Actions for Active Students
             document.querySelectorAll('.view-stu-btn').forEach(btn => {
                 btn.addEventListener('click', (ev) => {
                     const student = currentActiveStudents[ev.currentTarget.getAttribute('data-index')];
@@ -1092,7 +1128,6 @@
                 });
             });
 
-            // Bind Actions for Transferred Students
             document.querySelectorAll('.view-tc-stu-btn').forEach(btn => {
                 btn.addEventListener('click', (ev) => {
                     const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')];
@@ -1207,14 +1242,12 @@
             const classVal = document.getElementById('manual-class').value;
             const penVal = document.getElementById('manual-pen').value;
 
-            // Validation: PEN required from Class 2 onwards
             const reqPenClasses = ['Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
             if(reqPenClasses.includes(classVal) && !penVal) {
                 submitBtn.disabled = false; submitBtn.innerText = "Save Student Record";
                 return alert("PEN Number is mandatory for Class 2 and above.");
             }
 
-            // Validation: Duplicate Check
             try {
                 const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
                 const aadharSnaps = await getDocs(aadharQuery);
@@ -1276,14 +1309,12 @@
             const penVal = document.getElementById('edit-stu-pen').value;
             const stuIdStr = document.getElementById('edit-stu-id').value;
 
-            // Validation: PEN required from Class 2 onwards
             const reqPenClasses = ['Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8','Class 9','Class 10'];
             if(reqPenClasses.includes(classVal) && !penVal) {
                 submitBtn.disabled = false; submitBtn.innerText = "Update Student Database";
                 return alert("PEN Number is mandatory for Class 2 and above.");
             }
 
-            // Validation: Duplicate Check (Exclude self)
             try {
                 const aadharQuery = query(collection(db, "cvsk_students"), where("Aadhaar Number", "==", aadharVal));
                 const aadharSnaps = await getDocs(aadharQuery);
@@ -1331,7 +1362,6 @@
             } catch (err) { alert("Error updating student."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Update Student Database"; }
         });
 
-        // Manual TC Generation Form
         document.getElementById('tc-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); 
             const submitBtn = document.getElementById('tc-submit-btn');
@@ -1401,7 +1431,7 @@
             }; reader.readAsArrayBuffer(file); 
         });
 
-        // --- 4. STAFF DATABASE MODULE ---
+        // --- STAFF DATABASE MODULE ---
         let liveTeachersData = []; let tchPhotoBase64 = ""; let editTchPhotoBase64 = "";
 
         document.getElementById('tch-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { tchPhotoBase64 = base64; document.getElementById('tch-photo-preview').src = base64; document.getElementById('tch-photo-preview').style.display = 'block'; }); } });
@@ -1415,7 +1445,6 @@
             const safeDocId = makeSafeId(tchId);
             const selectedRole = document.getElementById('tch-dept').value;
 
-            // Security check: Block unauthorized role elevations
             if (selectedRole === 'Super Admin' || selectedRole === 'Admin') {
                 alert("SECURITY VIOLATION: Branch administrators cannot assign Administrative roles.");
                 btn.disabled = false; btn.innerText = "Save Staff Record";
@@ -1629,7 +1658,7 @@
             finally { btn.disabled = false; btn.innerText = "Update Staff Database"; }
         });
 
-        // --- 5. EXPORT DATABASE MODULE ---
+        // --- EXPORT DATABASE MODULE ---
         document.getElementById('export-excel-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const cleanStudents = students.map(({ Photo, docId, ...rest }) => rest); const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(cleanStudents), "Students"); XLSX.writeFile(workbook, "CVSK_Student_Database.xlsx"); });
         document.getElementById('export-pdf-btn')?.addEventListener('click', async () => { const students = await fetchAllStudents(); const { jsPDF } = window.jspdf; const doc = new jsPDF('landscape'); let headers = []; students.forEach(s => Object.keys(s).forEach(k => { if (!headers.includes(k) && k !== "Photo" && k !== "docId") headers.push(k); })); const tableData = students.map(s => headers.map(h => s[h] ? String(s[h]) : "")); doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Student_Database.pdf"); });
         
@@ -1646,12 +1675,12 @@
             doc.autoTable({ head: [headers], body: tableData }); doc.save("CVSK_Staff_Database.pdf"); 
         });
 
-        // --- 6. NOTICES & MATERIALS MODULE ---
+        // --- NOTICES & MATERIALS MODULE ---
         document.querySelector('.nav-link[data-target="section-notices"]')?.addEventListener('click', async () => { try { const querySnapshot = await getDocs(collection(db, "cvsk_notices")); const notices = []; querySnapshot.forEach((docSnap) => { notices.push({ id: docSnap.id, ...docSnap.data() }); }); notices.sort((a, b) => b.timestamp - a.timestamp); const tbody = document.getElementById('notice-table-body'); tbody.innerHTML = ""; if (notices.length === 0) { tbody.innerHTML = `<tr><td colspan="3" style="text-align: center;">No active notices.</td></tr>`; return; } notices.forEach(notice => { const tr = document.createElement('tr'); tr.innerHTML = `<td>${notice.date}</td><td><strong>${notice.title}</strong></td><td><button class="action-btn btn-red delete-notice" data-id="${notice.id}">Delete</button></td>`; tbody.appendChild(tr); }); document.querySelectorAll('.delete-notice').forEach(btn => { btn.addEventListener('click', async (e) => { if(confirm("Delete this notice?")) { await deleteDoc(doc(db, "cvsk_notices", e.currentTarget.getAttribute('data-id'))); document.querySelector('.nav-link[data-target="section-notices"]').click(); } }); }); } catch (error) {} });
         document.getElementById('notice-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('notice-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "cvsk_notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Notice"; } });
         document.getElementById('admin-material-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('admin-mat-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "cvsk_materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Branch Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Document"; } });
         
-        // --- 7. EXAM RESULTS & ADMIT CARDS MODULE ---
+        // --- EXAM RESULTS & ADMIT CARDS MODULE ---
         const termSelect = document.getElementById('res-exam-name'); const classSelect = document.getElementById('res-class'); const coCurricularSection = document.getElementById('co-curricular-section'); const markInputs = document.querySelectorAll('.acad-mark'); const rStudentIdInput = document.getElementById('res-student-id'); const rStudentNameInput = document.getElementById('res-student-name');
         let currentMaxPerSubject = 100; let activeSubjectCount = 8;
         rStudentIdInput?.addEventListener('blur', async () => { const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; } rStudentNameInput.value = "Searching..."; try { const safeDocId = makeSafeId(studentId); const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } } catch (error) { rStudentNameInput.value = "Error."; } });
@@ -1743,7 +1772,7 @@
             } catch (err) { alert("Error generating PDF: " + err.message); } finally { btn.disabled = false; btn.innerText = "📥 Download Admit Card PDF(s)"; }
         });
 
-        // --- 8. ID CARD GENERATOR ENGINE ---
+        // --- ID CARD GENERATOR ENGINE ---
         const cardTypeSelect = document.getElementById('id-card-type');
         const previewFront = document.getElementById('preview-front');
         const previewBack = document.getElementById('preview-back');

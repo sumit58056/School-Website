@@ -48,6 +48,21 @@
             padding: 15mm;
             box-sizing: border-box;
             color: #000;
+            position: relative; /* Required for the watermark */
+            z-index: 1; /* Establishes stacking context */
+            overflow: hidden; /* Prevents watermark from breaking layout */
+        }
+
+        /* Watermark Styling */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%; /* Occupies 60% of the page width */
+            opacity: 0.08; /* Extremely faint so text is readable */
+            z-index: -1; /* Pushes it securely behind all text and inputs */
+            pointer-events: none; /* Prevents clicking on it */
         }
 
         /* Header Layout */
@@ -121,7 +136,7 @@
             border: 2px solid #003366;
             padding: 10px;
             margin-bottom: 20px;
-            background-color: #f9f9f9;
+            background-color: rgba(249, 249, 249, 0.8);
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
         }
@@ -164,7 +179,7 @@
             padding: 5px 0;
             font-size: 1rem;
             font-family: inherit;
-            background: transparent;
+            background: transparent; /* Ensures watermark shows through */
             outline: none;
             width: 100%;
         }
@@ -233,10 +248,13 @@
     <!-- A4 Paper Container -->
     <div class="a4-page">
         
+        <!-- Faint Background Watermark -->
+        <img src="logo.jpg" alt="" class="watermark" onerror="this.style.display='none'">
+
         <!-- Header -->
         <div class="form-header">
             <div class="logo-box">
-                <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=Logo'">
+                <img src="logo.jpg" alt="VMI Logo" onerror="this.style.display='none'">
             </div>
             <div class="school-title">
                 <h1>Vivekananda Mission Institute</h1>
@@ -341,17 +359,17 @@
         </div>
 
         <!-- Required Documents Checklist -->
-        <div class="section-title">4. Document Checklist (Please attach copies)</div>
+        <div class="section-title">4. Document Checklist (All Applicable Documents are MANDATORY)</div>
         <div class="grid-row" style="margin-top: 10px;">
             <div class="grid-col checkbox-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                <label class="checkbox-item"><input type="checkbox"> Copy of Student's Aadhaar Card (Mandatory)</label>
-                <label class="checkbox-item"><input type="checkbox"> Copy of Birth Certificate</label>
-                <label class="checkbox-item"><input type="checkbox"> Copy of Parent's Aadhaar / Voter ID</label>
+                <label class="checkbox-item"><input type="checkbox"> Copy of Student's Aadhaar Card <strong>(Mandatory)</strong></label>
+                <label class="checkbox-item"><input type="checkbox"> Copy of Birth Certificate <strong>(Mandatory)</strong></label>
+                <label class="checkbox-item"><input type="checkbox"> Copy of Parent's Aadhaar / Voter ID <strong>(Mandatory)</strong></label>
             </div>
             <div class="grid-col checkbox-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-                <label class="checkbox-item"><input type="checkbox"> Original Transfer Certificate (For Transfer Ins)</label>
-                <label class="checkbox-item"><input type="checkbox"> Caste Certificate (If applicable)</label>
-                <label class="checkbox-item"><input type="checkbox"> 2 Passport Size Photographs</label>
+                <label class="checkbox-item"><input type="checkbox"> Original Transfer Certificate <strong>(Mandatory for Transfer Ins)</strong></label>
+                <label class="checkbox-item"><input type="checkbox"> Caste Certificate <strong>(Mandatory if SC/ST/OBC)</strong></label>
+                <label class="checkbox-item"><input type="checkbox"> 2 Passport Size Photographs <strong>(Mandatory)</strong></label>
             </div>
         </div>
 

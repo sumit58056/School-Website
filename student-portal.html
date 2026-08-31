@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal | VMI Network</title>
+    <style>
+        /* --- GLOBAL STYLES --- */
+        :root { --primary: #003366; --secondary: #FF671F; --bg: #f4f7f6; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 0; }
+        
+        /* --- LOGIN OVERLAY --- */
+        #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 2000; }
+        .login-card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-top: 5px solid var(--secondary); }
+        .logo-container img { width: 80px; height: 80px; object-fit: contain; background: var(--primary); border-radius: 50%; padding: 5px; margin-bottom: 15px; }
+        .login-card h2 { color: var(--primary); margin: 0 0 5px 0; }
+        .login-card p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 0.85rem; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+        .btn-login { width: 100%; padding: 12px; background-color: var(--primary); color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover:not(:disabled) { background-color: #002244; }
+        .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
+        .error-msg { color: #E63946; font-size: 0.85rem; margin-bottom: 15px; display: none; font-weight: bold; }
+
+        /* --- DASHBOARD LAYOUT --- */
+        #dashboard-ui { display: none; }
+        .portal-header { background: var(--primary); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--secondary); }
+        .header-brand { display: flex; align-items: center; gap: 15px; }
+        .header-brand img { width: 50px; height: 50px; border-radius: 50%; background: white; padding: 2px; }
+        .header-brand h2 { margin: 0; font-size: 1.4rem; }
+        .header-brand p { margin: 2px 0 0 0; font-size: 0.8rem; color: #d0e1f9; }
+        .logout-btn { background: #E63946; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+
+        .portal-layout { display: flex; max-width: 1200px; margin: 30px auto; gap: 30px; padding: 0 20px; }
+        
+        /* Sidebar Navigation */
+        .portal-nav { width: 250px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; height: fit-content; }
+        .nav-item { display: block; padding: 15px 20px; color: #333; text-decoration: none; font-weight: bold; border-bottom: 1px solid #eee; transition: 0.3s; }
+        .nav-item:hover { background: #f9f9f9; padding-left: 25px; color: var(--secondary); }
+        .nav-item.active { background: var(--primary); color: white; border-left: 4px solid var(--secondary); }
+
+        /* Content Area */
+        .portal-content { flex: 1; }
+        .portal-section { display: none; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .portal-section.active { display: block; }
+        .section-title { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; }
+
+        /* Profile Grid */
+        .profile-banner { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
+        .profile-banner img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); }
+        .profile-banner h2 { margin: 0 0 5px 0; color: var(--secondary); }
+        .profile-banner p { margin: 0; color: #555; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .info-card { background: #fdfdfd; padding: 15px; border-radius: 6px; border-left: 4px solid var(--primary); }
+        .info-card label { display: block; font-size: 0.8rem; color: #666; margin-bottom: 3px; }
+        .info-card span { font-weight: bold; color: #333; font-size: 1.05rem; }
+
+        /* Tables & Lists */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.95rem; }
+        .data-table th, .data-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .data-table th { background-color: var(--primary); color: white; }
+        .data-table tr:nth-child(even) { background-color: #f9f9f9; }
+        
+        .btn-action { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; }
+        .btn-action:hover { background: #e55a15; }
+
+        .notice-card { border-left: 4px solid var(--secondary); padding: 15px; background: #fdfdfd; margin-bottom: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .notice-date { font-size: 0.8rem; color: #999; font-weight: bold; }
+        .notice-title { font-size: 1.1rem; color: var(--primary); margin: 5px 0; }
+        .notice-content { font-size: 0.95rem; color: #444; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-overlay">
+        <div class="login-card">
+            <div class="logo-container">
+                <img src="logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=VMI'">
+            </div>
+            <h2>Student Portal</h2>
+            <p>Access your academic profile & results</p>
+
+            <div id="error-message" class="error-msg">Invalid ID or Date of Birth.</div>
+
+            <form id="student-login-form">
+                <div class="input-group">
+                    <label>Student ID or Roll No.</label>
+                    <input type="text" id="login-id" placeholder="e.g. VMI/26/0001" required>
+                </div>
+                <div class="input-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="login-dob" required>
+                </div>
+                <button type="submit" class="btn-login" id="login-btn">Access Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard-ui">
+        <header class="portal-header">
+            <div class="header-brand">
+                <img src="logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/50/003366/FFFFFF?text=VMI'">
+                <div>
+                    <h2>Student Dashboard</h2>
+                    <p id="header-campus">Vivekananda Mission Institute Network</p>
+                </div>
+            </div>
+            <a href="#" class="logout-btn" onclick="logout()">Log Out</a>
+        </header>
+
+        <div class="portal-layout">
+            <!-- Sidebar -->
+            <nav class="portal-nav">
+                <a href="#" class="nav-item active" data-target="sec-profile">👤 My Profile</a>
+                <a href="#" class="nav-item" data-target="sec-results">📊 Exam Results</a>
+                <a href="#" class="nav-item" data-target="sec-materials">📚 Study Materials</a>
+                <a href="#" class="nav-item" data-target="sec-notices">📢 School Notices</a>
+            </nav>
+
+            <!-- Content Area -->
+            <main class="portal-content">
+                
+                <!-- Profile Section -->
+                <div id="sec-profile" class="portal-section active">
+                    <h2 class="section-title">Academic Profile</h2>
+                    
+                    <div class="profile-banner">
+                        <img src="https://via.placeholder.com/100" id="prof-photo" alt="Photo">
+                        <div>
+                            <h2 id="prof-name">Loading...</h2>
+                            <p><strong>Student ID:</strong> <span id="prof-id">...</span></p>
+                            <p><strong>Class:</strong> <span id="prof-class" style="color:var(--primary); font-weight:bold;">...</span></p>
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-card"><label>Date of Birth</label><span id="prof-dob">...</span></div>
+                        <div class="info-card"><label>Blood Group</label><span id="prof-blood">...</span></div>
+                        <div class="info-card"><label>Father's Name</label><span id="prof-father">...</span></div>
+                        <div class="info-card"><label>Mother's Name</label><span id="prof-mother">...</span></div>
+                        <div class="info-card"><label>Registered Phone</label><span id="prof-phone">...</span></div>
+                        <div class="info-card"><label>Aadhaar Number</label><span id="prof-aadhaar">...</span></div>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="sec-results" class="portal-section">
+                    <h2 class="section-title">Examination Results</h2>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Download your official digital report cards below.</p>
+                    <table class="data-table">
+                        <thead><tr><th>Exam Term</th><th>Publish Date</th><th>Marks Obtained</th><th>Percentage</th><th>Report Card</th></tr></thead>
+                        <tbody id="results-tbody"><tr><td colspan="5" style="text-align:center;">Loading results...</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Materials Section -->
+                <div id="sec-materials" class="portal-section">
+                    <h2 class="section-title">Study Materials & Syllabus</h2>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Files uploaded by your teachers for <strong id="mat-class-label">your class</strong>.</p>
+                    <table class="data-table">
+                        <thead><tr><th>Date</th><th>Category</th><th>Topic / Title</th><th>Action</th></tr></thead>
+                        <tbody id="materials-tbody"><tr><td colspan="4" style="text-align:center;">Loading materials...</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Notices Section -->
+                <div id="sec-notices" class="portal-section">
+                    <h2 class="section-title">Notice Board</h2>
+                    <div id="notices-container"><p style="text-align:center; color:#999;">Loading notices...</p></div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- UI Interactions -->
+    <script>
+        // Sidebar Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.portal-section');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                navItems.forEach(nav => nav.classList.remove('active'));
+                sections.forEach(sec => sec.classList.remove('active'));
+                
+                item.classList.add('active');
+                document.getElementById(item.getAttribute('data-target')).classList.add('active');
+            });
+        });
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem('student_auth');
+            window.location.reload();
+        }
+    </script>
+
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Firebase Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, where, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
+            authDomain: "vmi-portal.firebaseapp.com", 
+            projectId: "vmi-portal", 
+            storageBucket: "vmi-portal.firebasestorage.app", 
+            messagingSenderId: "215224119153", 
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let activeStudent = null;
+        let activeCampus = null;
+        let schoolAssets = {}; // For PDF Logo/Signatures
+
+        // Check if already logged in this session
+        const storedSession = sessionStorage.getItem('student_auth');
+        if (storedSession) {
+            const data = JSON.parse(storedSession);
+            activeStudent = data.student;
+            activeCampus = data.campus;
+            initializeDashboard();
+        }
+
+        // Login Handler
+        document.getElementById('student-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('login-btn');
+            const errorMsg = document.getElementById('error-message');
+            
+            const stuId = document.getElementById('login-id').value.trim();
+            const dob = document.getElementById('login-dob').value;
+
+            btn.disabled = true; btn.innerText = "Searching Records...";
+            errorMsg.style.display = 'none';
+
+            try {
+                let foundStudent = null;
+                let foundCampus = null;
+
+                // 1. Search Main Campus
+                let q = query(collection(db, "students"), where("Student ID", "==", stuId), where("DOB", "==", dob));
+                let snaps = await getDocs(q);
+                
+                // Try Roll No if Student ID fails
+                if(snaps.empty) {
+                    q = query(collection(db, "students"), where("Roll No", "==", stuId), where("DOB", "==", dob));
+                    snaps = await getDocs(q);
+                }
+
+                if (!snaps.empty) {
+                    foundStudent = snaps.docs[0].data();
+                    foundCampus = "main";
+                } else {
+                    // 2. Search Branch Campus
+                    q = query(collection(db, "cvsk_students"), where("Student ID", "==", stuId), where("DOB", "==", dob));
+                    snaps = await getDocs(q);
+                    
+                    if(snaps.empty) {
+                        q = query(collection(db, "cvsk_students"), where("Roll No", "==", stuId), where("DOB", "==", dob));
+                        snaps = await getDocs(q);
+                    }
+
+                    if (!snaps.empty) {
+                        foundStudent = snaps.docs[0].data();
+                        foundCampus = "branch";
+                    }
+                }
+
+                if (foundStudent) {
+                    activeStudent = foundStudent;
+                    activeCampus = foundCampus;
+                    // Save securely to SessionStorage (erased when browser closes)
+                    sessionStorage.setItem('student_auth', JSON.stringify({ student: foundStudent, campus: foundCampus }));
+                    initializeDashboard();
+                } else {
+                    errorMsg.style.display = 'block';
+                    btn.disabled = false; btn.innerText = "Access Dashboard";
+                }
+
+            } catch (err) {
+                console.error(err);
+                errorMsg.innerText = "Network error. Please try again.";
+                errorMsg.style.display = 'block';
+                btn.disabled = false; btn.innerText = "Access Dashboard";
+            }
+        });
+
+        // Dashboard Initialization
+        async function initializeDashboard() {
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('dashboard-ui').style.display = 'block';
+
+            // Set Header Campus Name
+            document.getElementById('header-campus').innerText = activeCampus === 'main' ? "Main Campus - Muluk" : "Branch Campus - Bolpur";
+
+            // Load Profile Data
+            document.getElementById('prof-photo').src = activeStudent.Photo || 'https://via.placeholder.com/100';
+            document.getElementById('prof-name').innerText = activeStudent.Name || 'N/A';
+            document.getElementById('prof-id').innerText = activeStudent["Student ID"] || activeStudent["Roll No"] || 'N/A';
+            document.getElementById('prof-class').innerText = activeStudent.Class || 'N/A';
+            document.getElementById('prof-dob').innerText = activeStudent.DOB || 'N/A';
+            document.getElementById('prof-blood').innerText = activeStudent["Blood Group"] || 'N/A';
+            document.getElementById('prof-father').innerText = activeStudent["Father's Name"] || 'N/A';
+            document.getElementById('prof-mother').innerText = activeStudent["Mother's Name"] || 'N/A';
+            document.getElementById('prof-phone').innerText = activeStudent.Phone || 'N/A';
+            document.getElementById('prof-aadhaar').innerText = activeStudent["Aadhaar Number"] || activeStudent.Aadhaar || 'N/A';
+            document.getElementById('mat-class-label').innerText = activeStudent.Class || 'your class';
+
+            // Fetch Settings/Logos for PDF generation
+            const settingsCol = activeCampus === 'main' ? 'global_assets' : 'cvsk_assets';
+            try { 
+                const sSnap = await getDoc(doc(db, "settings", settingsCol)); 
+                if(sSnap.exists()) schoolAssets = sSnap.data(); 
+            } catch(e) {}
+
+            // Load Dynamic Data
+            loadResults();
+            loadMaterials();
+            loadNotices();
+        }
+
+        // Load Results
+        let myResultsData = [];
+        async function loadResults() {
+            const tbody = document.getElementById('results-tbody');
+            const col = activeCampus === 'main' ? 'results' : 'cvsk_results';
+            try {
+                const q = query(collection(db, col), where("Student ID", "==", activeStudent["Student ID"] || activeStudent["Roll No"]));
+                const snaps = await getDocs(q);
+                myResultsData = [];
+                snaps.forEach(doc => myResultsData.push(doc.data()));
+
+                tbody.innerHTML = "";
+                if(myResultsData.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No exam results published yet.</td></tr>`;
+                    return;
+                }
+
+                myResultsData.forEach((res, index) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><strong>${res["Exam Term"]}</strong></td>
+                        <td>${res["Publish Date"] || 'N/A'}</td>
+                        <td>${res["Total Marks"]} / ${res["Max Marks"]}</td>
+                        <td><strong style="color:var(--primary);">${res["Percentage"]}</strong></td>
+                        <td><button class="btn-action generate-pdf-btn" data-index="${index}">📥 Download PDF</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.generate-pdf-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const resultData = myResultsData[e.target.getAttribute('data-index')];
+                        generateReportCardPDF(resultData);
+                    });
+                });
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Error loading results.</td></tr>`; }
+        }
+
+        // Load Materials
+        async function loadMaterials() {
+            const tbody = document.getElementById('materials-tbody');
+            const col = activeCampus === 'main' ? 'materials' : 'cvsk_materials';
+            try {
+                // Fetch materials tagged for "All" or the student's specific class
+                const qClass = query(collection(db, col), where("class", "==", activeStudent.Class));
+                const qAll = query(collection(db, col), where("class", "==", "All"));
+                
+                const [snapsClass, snapsAll] = await Promise.all([getDocs(qClass), getDocs(qAll)]);
+                let materials = [];
+                snapsClass.forEach(doc => materials.push(doc.data()));
+                snapsAll.forEach(doc => materials.push(doc.data()));
+
+                materials.sort((a,b) => b.timestamp - a.timestamp);
+
+                tbody.innerHTML = "";
+                if(materials.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No materials uploaded for your class yet.</td></tr>`;
+                    return;
+                }
+
+                materials.forEach(mat => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${mat.date}</td>
+                        <td><span style="background:#eef4fc; color:var(--primary); padding:3px 8px; border-radius:12px; font-size:0.8rem; font-weight:bold;">${mat.category}</span></td>
+                        <td><strong>${mat.title}</strong></td>
+                        <td><a href="${mat.link}" target="_blank" class="btn-action">🔗 Open Link</a></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Error loading materials.</td></tr>`; }
+        }
+
+        // Load Notices
+        async function loadNotices() {
+            const container = document.getElementById('notices-container');
+            const col = activeCampus === 'main' ? 'notices' : 'cvsk_notices';
+            try {
+                const snaps = await getDocs(collection(db, col));
+                let notices = [];
+                snaps.forEach(doc => notices.push(doc.data()));
+                notices.sort((a,b) => b.timestamp - a.timestamp);
+
+                container.innerHTML = "";
+                if(notices.length === 0) {
+                    container.innerHTML = `<p style="text-align:center; color:#999;">No active notices at this time.</p>`;
+                    return;
+                }
+
+                notices.forEach(notice => {
+                    container.innerHTML += `
+                        <div class="notice-card">
+                            <div class="notice-date">${notice.date}</div>
+                            <h3 class="notice-title">${notice.title}</h3>
+                            <p class="notice-content">${notice.content}</p>
+                        </div>
+                    `;
+                });
+            } catch(e) { container.innerHTML = `<p style="text-align:center; color:red;">Error loading notices.</p>`; }
+        }
+
+        // PDF Generation Function
+        function generateReportCardPDF(result) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const schoolName = activeCampus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
+            
+            if(schoolAssets.logo) { doc.addImage(schoolAssets.logo, 'PNG', 20, 15, 20, 20); }
+            doc.setFontSize(20); doc.setTextColor(0, 51, 102); doc.text(schoolName, 105, 25, null, null, "center");
+            doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center");
+            
+            doc.setFontSize(11); doc.setTextColor(0, 0, 0);
+            doc.text(`Student Name: ${result["Student Name"] || activeStudent.Name}`, 20, 50);
+            doc.text(`Student ID: ${result["Student ID"]}`, 140, 50);
+            doc.text(`Class: ${result["Class"]}`, 20, 60);
+            doc.text(`Term: ${result["Exam Term"]}`, 140, 60);
+            
+            doc.setLineWidth(0.5); doc.line(20, 65, 190, 65);
+            
+            let startY = 75;
+            const academicMarks = result["Academic Marks"] || {};
+            doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY);
+            
+            let academicData = [];
+            for (const [subject, mark] of Object.entries(academicMarks)) {
+                academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]);
+            }
+            
+            doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } });
+            
+            let finalY = doc.lastAutoTable.finalY + 15;
+            doc.setFontSize(12); doc.setTextColor(0, 0, 0);
+            doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY);
+            doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY);
+            
+            finalY += 15;
+            if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) {
+                doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY);
+                let coData = [];
+                for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) {
+                    if(grade) coData.push([sub.replace(/_/g, ' '), grade]);
+                }
+                doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } });
+                finalY = doc.lastAutoTable.finalY + 15;
+            }
+            
+            finalY = Math.max(finalY + 20, 250);
+            if(schoolAssets.prinSign) { doc.addImage(schoolAssets.prinSign, 'PNG', 145, finalY - 15, 30, 10); }
+            doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10);
+            doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10);
+            
+            doc.save(`ReportCard_${result["Exam Term"].replace(/\s+/g, '_')}_${result["Student ID"]}.pdf`);
+        }
+    </script>
+</body>
+</html>
