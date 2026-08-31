@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Admission Form | VMI Network</title>
+    <style>
+        /* --- WEB PREVIEW STYLES --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #525659; /* Standard PDF viewer background */
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .print-btn-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .print-btn {
+            background-color: #FF671F;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+
+        .print-btn:hover {
+            background-color: #e55a15;
+        }
+
+        /* --- A4 PAPER STYLES --- */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            padding: 15mm;
+            box-sizing: border-box;
+            color: #000;
+        }
+
+        /* Header Layout */
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo-box {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .school-title {
+            text-align: center;
+            flex: 1;
+        }
+
+        .school-title h1 {
+            margin: 0;
+            color: #003366;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+        }
+
+        .school-title p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .photo-box {
+            width: 35mm;
+            height: 45mm;
+            border: 2px dashed #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Section Styling */
+        .section-title {
+            background-color: #003366;
+            color: white;
+            padding: 5px 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            text-transform: uppercase;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .office-use {
+            border: 2px solid #003366;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .office-use-title {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 10px;
+            text-decoration: underline;
+        }
+
+        /* Form Grids */
+        .grid-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .grid-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .grid-col-2 {
+            flex: 2;
+        }
+
+        /* Input Styling for Print & Web */
+        label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 2px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="date"], input[type="number"], select {
+            border: none;
+            border-bottom: 1px dashed #333;
+            padding: 5px 0;
+            font-size: 1rem;
+            font-family: inherit;
+            background: transparent;
+            outline: none;
+            width: 100%;
+        }
+
+        /* For the checkboxes */
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            height: 100%;
+            padding-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            border: 1px solid #000;
+        }
+
+        /* Declaration Section */
+        .declaration {
+            font-size: 0.8rem;
+            line-height: 1.5;
+            margin-top: 15px;
+            text-align: justify;
+        }
+
+        .signature-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .sig-line {
+            border-top: 1px solid #000;
+            width: 200px;
+            text-align: center;
+            padding-top: 5px;
+            font-weight: bold;
+            font-size: 0.85rem;
+        }
+
+        /* --- PRINT CSS: Activated only when hitting Ctrl+P --- */
+        @media print {
+            body { background: white; padding: 0; }
+            .a4-page { box-shadow: none; margin: 0; padding: 10mm; width: 100%; }
+            .no-print { display: none !important; }
+            input::placeholder { color: transparent; } /* Hides placeholders on print */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Print Button -->
+    <div class="print-btn-container no-print">
+        <button class="print-btn" onclick="window.print()">🖨️ Print Form</button>
+    </div>
+
+    <!-- A4 Paper Container -->
+    <div class="a4-page">
+        
+        <!-- Header -->
+        <div class="form-header">
+            <div class="logo-box">
+                <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=Logo'">
+            </div>
+            <div class="school-title">
+                <h1>Vivekananda Mission Institute</h1>
+                <p>Muluk, Bolpur, Birbhum, W.B. - 731204</p>
+                <h3 style="margin: 10px 0 0 0; text-decoration: underline;">APPLICATION FOR ADMISSION</h3>
+            </div>
+            <div class="photo-box">Paste Recent<br>Passport Size<br>Photograph Here</div>
+        </div>
+
+        <!-- Section: Office Use Only -->
+        <div class="office-use">
+            <div class="office-use-title">FOR OFFICE USE ONLY</div>
+            <div class="grid-row">
+                <div class="grid-col"><label>Admission No:</label><input type="text"></div>
+                <div class="grid-col"><label>Date of Admission:</label><input type="text"></div>
+                <div class="grid-col"><label>Class Assigned:</label><input type="text"></div>
+            </div>
+            <div class="grid-row">
+                <div class="grid-col"><label>DISE Class:</label><input type="text"></div>
+                <div class="grid-col"><label>DISE Section:</label><input type="text"></div>
+                <div class="grid-col"><label>DISE Roll No:</label><input type="text"></div>
+            </div>
+        </div>
+
+        <!-- Admission Details -->
+        <div class="section-title">1. Enrollment Details</div>
+        <div class="grid-row">
+            <div class="grid-col-2">
+                <label>Admission Type</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox"> New Admission</label>
+                    <label class="checkbox-item"><input type="checkbox"> Transfer In</label>
+                </div>
+            </div>
+            <div class="grid-col"><label>Applying For Class</label><input type="text" placeholder="e.g., Class 1"></div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col-2"><label>Aadhaar Number (12 Digits - Mandatory)</label><input type="text" placeholder="XXXX - XXXX - XXXX"></div>
+            <div class="grid-col"><label>PEN Number</label><input type="text" placeholder="(Mandatory for Class 2+)"></div>
+            <div class="grid-col"><label>UDISE Number</label><input type="text"></div>
+        </div>
+
+        <!-- Student Demographics -->
+        <div class="section-title">2. Student Information</div>
+        <div class="grid-row">
+            <div class="grid-col-2"><label>Student's Full Name (In Block Letters)</label><input type="text"></div>
+            <div class="grid-col"><label>Date of Birth</label><input type="text" placeholder="DD / MM / YYYY"></div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col">
+                <label>Gender</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox"> Male</label>
+                    <label class="checkbox-item"><input type="checkbox"> Female</label>
+                </div>
+            </div>
+            <div class="grid-col"><label>Blood Group</label><input type="text"></div>
+            <div class="grid-col"><label>Religion</label><input type="text"></div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col">
+                <label>Caste Category</label>
+                <div class="checkbox-group" style="gap: 10px;">
+                    <label class="checkbox-item"><input type="checkbox"> GEN</label>
+                    <label class="checkbox-item"><input type="checkbox"> SC</label>
+                    <label class="checkbox-item"><input type="checkbox"> ST</label>
+                    <label class="checkbox-item"><input type="checkbox"> OBC</label>
+                </div>
+            </div>
+            <div class="grid-col">
+                <label>CWSN (Child with Special Needs)</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item"><input type="checkbox"> No</label>
+                    <label class="checkbox-item"><input type="checkbox"> Yes</label>
+                </div>
+            </div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col"><label>Height (in cm)</label><input type="text"></div>
+            <div class="grid-col"><label>Weight (in kg)</label><input type="text"></div>
+        </div>
+
+        <!-- Parent & Contact Details -->
+        <div class="section-title">3. Parent & Contact Details</div>
+        <div class="grid-row">
+            <div class="grid-col-2"><label>Father's Name (In Block Letters)</label><input type="text"></div>
+            <div class="grid-col"><label>Father's Educational Qualification</label><input type="text"></div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col-2"><label>Mother's Name (In Block Letters)</label><input type="text"></div>
+            <div class="grid-col"><label>Mother's Educational Qualification</label><input type="text"></div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col"><label>WhatsApp / Primary Contact Number</label><input type="text"></div>
+            <div class="grid-col"><label>Alternative Contact Number</label><input type="text"></div>
+        </div>
+        <div class="grid-row">
+            <div class="grid-col"><label>Full Residential Address (With PIN Code)</label>
+                <input type="text" style="margin-bottom: 5px;">
+                <input type="text">
+            </div>
+        </div>
+
+        <!-- Required Documents Checklist -->
+        <div class="section-title">4. Document Checklist (Please attach copies)</div>
+        <div class="grid-row" style="margin-top: 10px;">
+            <div class="grid-col checkbox-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <label class="checkbox-item"><input type="checkbox"> Copy of Student's Aadhaar Card (Mandatory)</label>
+                <label class="checkbox-item"><input type="checkbox"> Copy of Birth Certificate</label>
+                <label class="checkbox-item"><input type="checkbox"> Copy of Parent's Aadhaar / Voter ID</label>
+            </div>
+            <div class="grid-col checkbox-group" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <label class="checkbox-item"><input type="checkbox"> Original Transfer Certificate (For Transfer Ins)</label>
+                <label class="checkbox-item"><input type="checkbox"> Caste Certificate (If applicable)</label>
+                <label class="checkbox-item"><input type="checkbox"> 2 Passport Size Photographs</label>
+            </div>
+        </div>
+
+        <!-- Declaration -->
+        <div class="section-title" style="background: transparent; color: #000; border-bottom: 2px solid #000; margin-top: 25px; padding: 0;">Declaration by Parent / Guardian</div>
+        <div class="declaration">
+            I hereby declare that the information provided in this form is true and correct to the best of my knowledge and belief. I understand that any false information may result in the cancellation of admission. I agree to abide by the rules and regulations of the Institute and ensure that my ward will conform to the disciplinary standards set by the school administration.
+        </div>
+
+        <!-- Signatures -->
+        <div class="signature-row">
+            <div>
+                <p style="margin: 0 0 5px 0; font-size: 0.9rem;"><strong>Date:</strong> ____________________</p>
+                <p style="margin: 0; font-size: 0.9rem;"><strong>Place:</strong> ___________________</p>
+            </div>
+            <div class="sig-line">
+                Signature of Parent / Guardian
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
