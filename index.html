@@ -5,58 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vivekananda Mission Institute Network</title>
     <style>
-        /* --- GLOBAL STYLES & SAFFRON THEME --- */
-        :root { 
-            --saffron-dark: #d84315; 
-            --saffron-main: #f4511e; 
-            --saffron-light: #ffccbc;
-            --gold-accent: #ffb300;
-            --navy-text: #002244;
-            --bg-light: #fffdfa; 
-            --text-main: #333; 
-        }
+        :root { --saffron-dark: #d84315; --saffron-main: #f4511e; --saffron-light: #ffccbc; --gold-accent: #ffb300; --navy-text: #002244; --bg-light: #fffdfa; --text-main: #333; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background-color: var(--bg-light); color: var(--text-main); overflow-x: hidden; }
         a { text-decoration: none; }
-        
-        /* --- NAVIGATION BAR --- */
         .navbar { background-color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(216, 67, 21, 0.15); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--saffron-main); }
         .nav-brand { display: flex; align-items: center; gap: 15px; }
         .nav-brand img { width: 65px; height: 65px; object-fit: contain; border-radius: 50%; border: 2px solid var(--saffron-main); padding: 2px; }
         .nav-brand-text h1 { margin: 0; font-size: 1.6rem; color: var(--saffron-dark); text-transform: uppercase; letter-spacing: 1px; }
         .nav-brand-text p { margin: 2px 0 0 0; font-size: 0.9rem; color: var(--navy-text); font-weight: bold; }
-        
         .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-link { color: var(--navy-text); font-weight: bold; font-size: 0.95rem; transition: 0.3s; text-transform: uppercase; }
         .nav-link:hover { color: var(--saffron-main); }
         .btn-nav-login { background-color: var(--saffron-main); color: white; padding: 10px 22px; border-radius: 6px; font-weight: bold; transition: 0.3s; border: 2px solid var(--saffron-main); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .btn-nav-login:hover { background-color: white; color: var(--saffron-dark); }
-
-        /* --- HERO SECTION --- */
         .hero { background: linear-gradient(135deg, var(--saffron-dark) 0%, var(--saffron-main) 100%); color: white; padding: 90px 20px; text-align: center; position: relative; border-bottom: 8px solid var(--gold-accent); }
         .hero::before { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('https://www.transparenttextures.com/patterns/cubes.png'); opacity: 0.1; z-index: 1; }
         .hero-content { position: relative; z-index: 2; }
         .hero h2 { font-size: 3rem; margin: 0 0 15px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .hero p { font-size: 1.25rem; max-width: 800px; margin: 0 auto 30px auto; color: #fff; line-height: 1.6; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
         .hero-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        
         .btn-primary { background-color: white; color: var(--saffron-dark); padding: 15px 35px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border: 2px solid white; display: inline-block; }
         .btn-primary:hover:not(.disabled) { background-color: transparent; color: white; transform: translateY(-3px); }
         .btn-secondary { background-color: var(--navy-text); color: white; border: 2px solid var(--navy-text); padding: 15px 35px; border-radius: 30px; font-weight: bold; font-size: 1.1rem; transition: 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: inline-block;}
         .btn-secondary:hover { background-color: white; color: var(--navy-text); transform: translateY(-3px); }
-
         .disabled { opacity: 0.6; cursor: not-allowed !important; pointer-events: none; }
-
-        /* --- GOVT INITIATIVES STRIP --- */
         .initiatives-strip { background: white; padding: 25px 20px; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; border-bottom: 2px solid #eee; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .initiative-item { display: flex; align-items: center; gap: 10px; font-weight: bold; color: var(--navy-text); font-size: 1.1rem; }
         .initiative-icon { background: var(--saffron-light); color: var(--saffron-dark); width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 1.2rem; }
-
-        /* --- SECTION HEADERS --- */
         .section-header { text-align: center; margin: 50px 0 30px 0; }
         .section-header h2 { color: var(--saffron-dark); font-size: 2.2rem; margin: 0; display: inline-block; position: relative; }
         .section-header h2::after { content: ""; position: absolute; width: 60%; height: 3px; background: var(--gold-accent); bottom: -10px; left: 20%; border-radius: 2px; }
-
-        /* --- PRINCIPAL's DESK --- */
         .principals-desk { max-width: 1000px; margin: 0 auto 50px auto; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(216, 67, 21, 0.1); display: flex; overflow: hidden; border: 1px solid var(--saffron-light); }
         .desk-img { width: 350px; background: url('https://via.placeholder.com/400x500/d84315/ffffff?text=Principal+Photo') center/cover; }
         .desk-content { padding: 40px; flex: 1; }
@@ -64,8 +42,6 @@
         .desk-content p { font-size: 1.05rem; line-height: 1.8; color: #555; text-align: justify; font-style: italic; }
         .desk-sign { margin-top: 20px; font-weight: bold; color: var(--navy-text); font-size: 1.2rem; }
         .desk-designation { color: var(--saffron-main); font-size: 0.9rem; font-weight: bold; text-transform: uppercase; }
-
-        /* --- QUICK ACCESS CARDS --- */
         .quick-access { max-width: 1200px; margin: 0 auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
         .card { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); text-align: center; border-bottom: 5px solid var(--saffron-main); transition: 0.3s; }
         .card:hover { transform: translateY(-8px); box-shadow: 0 12px 25px rgba(216, 67, 21, 0.2); }
@@ -74,44 +50,26 @@
         .card p { color: #666; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.5; }
         .card-btn { display: inline-block; background: var(--saffron-light); color: var(--saffron-dark); padding: 12px 20px; border-radius: 30px; font-weight: bold; transition: 0.3s; width: 90%; box-sizing: border-box; text-transform: uppercase; font-size: 0.85rem; border: 2px solid transparent; }
         .card-btn:hover:not(.disabled) { background: var(--saffron-main); color: white; }
-
-        /* --- PHOTO GALLERY --- */
         .gallery-container { max-width: 1200px; margin: 0 auto 60px auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
         .gallery-item { height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .gallery-item:hover img { transform: scale(1.1); }
         .gallery-overlay { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 15px 10px 10px 10px; font-weight: bold; font-size: 0.9rem; text-align: center; opacity: 0; transition: 0.3s; }
         .gallery-item:hover .gallery-overlay { opacity: 1; }
-
-        /* --- CAMPUS SECTION --- */
         .campuses { padding: 20px 20px 60px 20px; max-width: 1000px; margin: 0 auto; }
         .campus-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
         .campus-card { background: white; border: 1px solid var(--saffron-light); padding: 30px; border-radius: 12px; box-shadow: 0 6px 15px rgba(0,0,0,0.05); text-align: left; position: relative; overflow: hidden; }
         .campus-card::before { content: ""; position: absolute; top: 0; left: 0; width: 5px; height: 100%; background: var(--saffron-main); }
         .campus-card h3 { color: var(--navy-text); margin: 0 0 10px 0; font-size: 1.4rem; }
         .campus-card p { color: #555; margin: 0 0 8px 0; font-size: 1rem; }
-
-        /* --- FOOTER --- */
         footer { background: var(--navy-text); color: white; text-align: center; padding: 30px 20px; border-top: 5px solid var(--saffron-main); }
         footer p { margin: 5px 0; font-size: 0.95rem; color: #d0e1f9; }
-        
-        @media (max-width: 900px) {
-            .principals-desk { flex-direction: column; }
-            .desk-img { width: 100%; height: 300px; }
-        }
-        @media (max-width: 768px) {
-            .navbar { flex-direction: column; gap: 15px; text-align: center; padding: 15px; }
-            .nav-brand { flex-direction: column; gap: 5px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; }
-            .initiatives-strip { flex-direction: column; align-items: center; gap: 15px; }
-            .campus-grid { grid-template-columns: 1fr; }
-            .hero h2 { font-size: 2.2rem; }
-        }
+        @media (max-width: 900px) { .principals-desk { flex-direction: column; } .desk-img { width: 100%; height: 300px; } }
+        @media (max-width: 768px) { .navbar { flex-direction: column; gap: 15px; text-align: center; padding: 15px; } .nav-brand { flex-direction: column; gap: 5px; } .nav-links { flex-wrap: wrap; justify-content: center; } .initiatives-strip { flex-direction: column; align-items: center; gap: 15px; } .campus-grid { grid-template-columns: 1fr; } .hero h2 { font-size: 2.2rem; } }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION -->
     <nav class="navbar">
         <div class="nav-brand">
             <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/65/d84315/FFFFFF?text=VMI'">
@@ -128,7 +86,6 @@
         </div>
     </nav>
 
-    <!-- HERO SECTION -->
     <section class="hero">
         <div class="hero-content">
             <h2>Awakening the Spirit of Knowledge</h2>
@@ -140,30 +97,14 @@
         </div>
     </section>
 
-    <!-- GOVT INITIATIVES ALIGNMENT -->
     <div class="initiatives-strip">
-        <div class="initiative-item">
-            <div class="initiative-icon">🇮🇳</div>
-            Govt. of India Guidelines
-        </div>
-        <div class="initiative-item">
-            <div class="initiative-icon">📖</div>
-            Aligned with NEP 2020
-        </div>
-        <div class="initiative-item">
-            <div class="initiative-icon">🪷</div>
-            Indian Knowledge Systems (IKS)
-        </div>
-        <div class="initiative-item">
-            <div class="initiative-icon">🏫</div>
-            PM SHRI Standards
-        </div>
+        <div class="initiative-item"><div class="initiative-icon">🇮🇳</div> Govt. of India Guidelines</div>
+        <div class="initiative-item"><div class="initiative-icon">📖</div> Aligned with NEP 2020</div>
+        <div class="initiative-item"><div class="initiative-icon">🪷</div> Indian Knowledge Systems (IKS)</div>
+        <div class="initiative-item"><div class="initiative-icon">🏫</div> PM SHRI Standards</div>
     </div>
 
-    <!-- PRINCIPAL'S DESK -->
-    <div class="section-header">
-        <h2>From the Principal's Desk</h2>
-    </div>
+    <div class="section-header"><h2>From the Principal's Desk</h2></div>
     <section class="principals-desk">
         <div class="desk-img"></div>
         <div class="desk-content">
@@ -175,58 +116,40 @@
         </div>
     </section>
 
-    <!-- QUICK ACCESS CARDS -->
-    <div class="section-header" style="margin-top: 20px;">
-        <h2>Campus Portals</h2>
-    </div>
+    <div class="section-header" style="margin-top: 20px;"><h2>Campus Portals</h2></div>
     <section class="quick-access">
-        
-        <!-- Student Login -->
         <div class="card">
             <span class="card-icon">🎓</span>
             <h3>Student Dashboard</h3>
             <p>Securely access digital report cards, download admit cards, and review classroom study materials and syllabus.</p>
             <a href="student-portal.html" class="card-btn">Login to Portal</a>
         </div>
-
-        <!-- Online Admission -->
         <div class="card">
             <span class="card-icon">💻</span>
             <h3>Online Admissions</h3>
             <p>Submit your application instantly. Generate your official admission tracking number and reserve your seat.</p>
             <a href="online-admission.html" class="card-btn" style="background:var(--saffron-dark); color:white;" id="btn-card-apply">Start Application</a>
         </div>
-
-        <!-- Offline Form -->
         <div class="card">
             <span class="card-icon">🖨️</span>
             <h3>Offline Form</h3>
             <p>Download our official A4 printable admission form. Fill it out and submit the physical copy to our campus offices.</p>
             <a href="online-admission.html" class="card-btn" id="btn-card-download">Download PDF</a>
         </div>
-
-        <!-- Staff Login -->
         <div class="card">
             <span class="card-icon">👨‍🏫</span>
             <h3>Staff & Admin Portal</h3>
             <p>Exclusive management gateway for teaching staff and network administrators to maintain the school database.</p>
             <a href="login.html" class="card-btn">Staff Access</a>
         </div>
-
     </section>
 
-    <!-- PHOTO GALLERY -->
-    <div class="section-header">
-        <h2>Campus Gallery</h2>
-    </div>
+    <div class="section-header"><h2>Campus Gallery</h2></div>
     <section class="gallery-container" id="public-gallery-grid">
         <p style="text-align:center; color:#999; grid-column: 1 / -1;">Loading gallery...</p>
     </section>
 
-    <!-- CAMPUSES INFO -->
-    <div class="section-header">
-        <h2>Our Network Locations</h2>
-    </div>
+    <div class="section-header"><h2>Our Network Locations</h2></div>
     <section class="campuses">
         <div class="campus-grid">
             <div class="campus-card">
@@ -244,13 +167,11 @@
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
         <p>&copy; 2026 Vivekananda Mission Institute Network. All Rights Reserved.</p>
         <p style="font-size: 0.8rem; opacity: 0.7;">Aligned with Govt. of India Ministry of Education guidelines.</p>
     </footer>
 
-    <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -266,23 +187,17 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fetch Portal Controls (Admissions Active / Forms Active)
         async function fetchPortalControls() {
             try {
                 const snap = await getDoc(doc(db, "settings", "global_assets"));
                 if (snap.exists()) {
                     const data = snap.data();
-                    
-                    // If admissions are turned off
                     if (data.admissionsActive === false) {
                         const heroBtn = document.getElementById('btn-hero-apply');
                         if(heroBtn) { heroBtn.innerText = "⛔ Admissions Closed"; heroBtn.classList.add('disabled'); heroBtn.href = "#"; }
-                        
                         const cardBtn = document.getElementById('btn-card-apply');
                         if(cardBtn) { cardBtn.innerText = "⛔ Admissions Closed"; cardBtn.classList.add('disabled'); cardBtn.href = "#"; cardBtn.style.background = "#999"; }
                     }
-
-                    // If offline form downloads are turned off
                     if (data.formsActive === false) {
                         const dlBtn = document.getElementById('btn-card-download');
                         if(dlBtn) { dlBtn.innerText = "⛔ Downloads Disabled"; dlBtn.classList.add('disabled'); dlBtn.href = "#"; dlBtn.style.background = "#eee"; dlBtn.style.color = "#999"; }
@@ -291,40 +206,24 @@
             } catch(e) { console.error("Error checking portal status.", e); }
         }
 
-        // Fetch the Photo Gallery
         async function loadPublicGallery() {
             const container = document.getElementById('public-gallery-grid');
             try {
                 const qSnap = await getDocs(collection(db, "gallery"));
                 let photos = [];
                 qSnap.forEach(d => photos.push(d.data()));
-                photos.sort((a,b) => b.timestamp - a.timestamp); // Newest first
-
+                photos.sort((a,b) => b.timestamp - a.timestamp);
                 container.innerHTML = "";
-                if(photos.length === 0) {
-                    container.innerHTML = `<p style="text-align:center; color:#999; grid-column: 1 / -1;">Gallery is currently empty.</p>`;
-                    return;
-                }
-
+                if(photos.length === 0) { container.innerHTML = `<p style="text-align:center; color:#999; grid-column: 1 / -1;">Gallery is currently empty.</p>`; return; }
                 photos.forEach(p => {
-                    const item = document.createElement('div');
-                    item.className = 'gallery-item';
-                    item.innerHTML = `
-                        <img src="${p.photo}" alt="${p.caption}">
-                        <div class="gallery-overlay">${p.caption} <br><span style="font-size:0.75rem; font-weight:normal;">${p.date}</span></div>
-                    `;
+                    const item = document.createElement('div'); item.className = 'gallery-item';
+                    item.innerHTML = `<img src="${p.photo}" alt="${p.caption}"><div class="gallery-overlay">${p.caption} <br><span style="font-size:0.75rem; font-weight:normal;">${p.date}</span></div>`;
                     container.appendChild(item);
                 });
-            } catch(e) {
-                console.error("Gallery Error:", e);
-                container.innerHTML = `<p style="text-align:center; color:red; grid-column: 1 / -1;">Error loading gallery.</p>`;
-            }
+            } catch(e) { container.innerHTML = `<p style="text-align:center; color:red; grid-column: 1 / -1;">Error loading gallery.</p>`; }
         }
         
-        window.addEventListener('DOMContentLoaded', () => {
-            fetchPortalControls();
-            loadPublicGallery();
-        });
+        window.addEventListener('DOMContentLoaded', () => { fetchPortalControls(); loadPublicGallery(); });
     </script>
 </body>
 </html>

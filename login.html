@@ -22,6 +22,8 @@
 </head>
 <body>
 
+    <a href="index.html" style="position: absolute; top: 20px; left: 20px; color: #003366; text-decoration: none; font-weight: bold; background: white; padding: 10px 15px; border-radius: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid #ccc; font-size: 0.9rem; transition: 0.3s;" onmouseover="this.style.background='#003366'; this.style.color='white';" onmouseout="this.style.background='white'; this.style.color='#003366';">🔙 Return to Website</a>
+
     <div class="login-card">
         <div class="logo-container">
             <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/80/003366/FFFFFF?text=VMI'">
@@ -44,7 +46,6 @@
         </form>
     </div>
 
-    <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -67,61 +68,31 @@
             const staffId = document.getElementById('login-id').value.trim();
             const password = document.getElementById('login-password').value.trim();
 
-            btn.disabled = true;
-            btn.innerText = "Authenticating...";
-            errorMsg.style.display = 'none';
+            btn.disabled = true; btn.innerText = "Authenticating..."; errorMsg.style.display = 'none';
 
             try {
-                let userRecord = null;
-                let userCampus = null;
+                let userRecord = null; let userCampus = null;
 
-                // 1. Search Main Campus DB
                 const mainQuery = query(collection(db, "teachers"), where("TeacherID", "==", staffId), where("Password", "==", password));
                 const mainSnaps = await getDocs(mainQuery);
-                if (!mainSnaps.empty) {
-                    userRecord = mainSnaps.docs[0].data();
-                    userCampus = "main";
-                } else {
-                    // 2. Search Branch Campus DB if not found in Main
+                if (!mainSnaps.empty) { userRecord = mainSnaps.docs[0].data(); userCampus = "main"; } 
+                else {
                     const branchQuery = query(collection(db, "cvsk_staff"), where("TeacherID", "==", staffId), where("Password", "==", password));
                     const branchSnaps = await getDocs(branchQuery);
-                    if (!branchSnaps.empty) {
-                        userRecord = branchSnaps.docs[0].data();
-                        userCampus = "branch";
-                    }
+                    if (!branchSnaps.empty) { userRecord = branchSnaps.docs[0].data(); userCampus = "branch"; }
                 }
 
                 if (userRecord) {
-                    const sessionData = {
-                        id: userRecord.TeacherID,
-                        name: userRecord.Name,
-                        role: userRecord.Department,
-                        campus: userCampus
-                    };
-                    
-                    // Securely store session
+                    const sessionData = { id: userRecord.TeacherID, name: userRecord.Name, role: userRecord.Department, campus: userCampus };
                     localStorage.setItem('vmi_user', JSON.stringify(sessionData));
-
-                    // Role Enforcement Routing
-                    if (sessionData.role === 'Super Admin') {
-                        window.location.href = 'admin-dashboard.html';
-                    } else if (sessionData.role === 'Admin') {
-                        window.location.href = 'cvsk-admin.html';
-                    } else {
-                        // NEW ROUTING: Send all standard staff to the new dashboard
-                        window.location.href = 'teacher-dashboard.html';
-                    }
+                    if (sessionData.role === 'Super Admin') { window.location.href = 'admin-dashboard.html'; } 
+                    else if (sessionData.role === 'Admin') { window.location.href = 'cvsk-admin.html'; } 
+                    else { window.location.href = 'teacher-dashboard.html'; }
                 } else {
-                    errorMsg.style.display = 'block';
-                    btn.disabled = false;
-                    btn.innerText = "Secure Login";
+                    errorMsg.style.display = 'block'; btn.disabled = false; btn.innerText = "Secure Login";
                 }
             } catch (error) {
-                console.error(error);
-                errorMsg.innerText = "Network Error. Please try again.";
-                errorMsg.style.display = 'block';
-                btn.disabled = false;
-                btn.innerText = "Secure Login";
+                console.error(error); errorMsg.innerText = "Network Error. Please try again."; errorMsg.style.display = 'block'; btn.disabled = false; btn.innerText = "Secure Login";
             }
         });
     </script>
