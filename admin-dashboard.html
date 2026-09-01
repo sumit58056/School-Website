@@ -46,7 +46,8 @@
         .badge-main { background: #003366; color: white; }
         .badge-branch { background: #FF671F; color: white; }
         .status-verified { color: #217346; font-weight: bold; }
-        .status-pending { color: #E63946; font-weight: bold; }
+        .status-pending { color: #ff9800; font-weight: bold; }
+        .status-rejected { color: #E63946; font-weight: bold; }
 
         #global-pending-alert { display: none; background-color: #fff3cd; color: #856404; padding: 15px 20px; border-left: 5px solid #ffc107; border-radius: 6px; margin-bottom: 25px; align-items: center; justify-content: space-between; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
     </style>
@@ -90,6 +91,7 @@
         </aside>
 
         <main class="admin-content">
+            <!-- GLOBAL PENDING NOTIFICATION -->
             <div id="global-pending-alert">
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="font-size: 1.5rem;">🔔</span>
@@ -98,6 +100,7 @@
                 <button id="view-pending-btn" class="admin-submit-btn btn-purple" style="width: auto; padding: 8px 15px; margin: 0; font-size: 0.85rem;">View Pending Records</button>
             </div>
 
+            <!-- SECTION 0: Universal Search -->
             <div id="section-universal-search" class="admin-section active">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>🌐 Cross-Campus Universal Search</h3>
@@ -115,6 +118,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Online Admissions Tracker -->
             <div id="section-online-adm" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>💻 Track Online Applications</h3>
@@ -131,6 +135,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Audit Logs -->
             <div id="section-audit" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>📜 Network Audit & Activity Logs</h3>
@@ -148,6 +153,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 1: Upload Student Data -->
             <div id="section-upload" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Bulk Upload Student Details (Main Campus)</h3>
@@ -158,6 +164,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 2: Add Student -->
             <div id="section-add-student" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Enroll / Transfer In Student (Main Campus)</h3>
@@ -229,6 +236,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 3: Transferred Students -->
             <div id="section-transferred" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Transferred Students Hub</h3>
@@ -252,6 +260,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 4: View Live Database -->
             <div id="section-view-db" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Network Student Database</h3>
@@ -275,10 +284,10 @@
                 </div>
             </div>
 
+            <!-- SECTION 5: Manage Staff -->
             <div id="section-teachers" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Add / Manage Network Staff</h3>
-
                     <form class="admin-form" id="teacher-form">
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;">
                             <img id="tch-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;"><br>
@@ -345,6 +354,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Study Materials -->
             <div id="section-materials" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish Study Materials & Syllabus</h3>
@@ -360,6 +370,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Export Database -->
             <div id="section-export" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Export Databases</h3>
@@ -374,6 +385,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Notices -->
             <div id="section-notices" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish a New Notice</h3>
@@ -392,6 +404,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Exam Results -->
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Manage Examination Results (Main Campus)</h3>
@@ -436,6 +449,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Admit Cards -->
             <div id="section-admit" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Generate Admit Cards (Main Campus)</h3>
@@ -471,6 +485,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: ID Cards -->
             <div id="section-id-cards" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>Professional PVC ID Card Generator</h3>
@@ -499,6 +514,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Photo Gallery Upload -->
             <div id="section-gallery" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>📸 Upload Event Photos to Website Gallery</h3>
@@ -531,11 +547,13 @@
                 </div>
             </div>
 
+            <!-- SECTION: Settings -->
             <div id="section-settings" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>⚙️ Global Settings & Official Assets</h3>
                     <form class="admin-form" id="global-settings-form">
                         
+                        <!-- PORTAL CONTROLS -->
                         <h4 class="section-divider" style="margin-top: 10px;">Admission Portal Controls</h4>
                         <div class="settings-grid" style="grid-template-columns: 1fr 1fr; background: #eef4fc; padding: 15px; border-radius: 6px; border: 1px solid #003366;">
                             <div class="input-group">
@@ -586,6 +604,7 @@
         </main>
     </div>
 
+    <!-- Modals -->
     <div id="marks-modal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="document.getElementById('marks-modal').style.display='none'">&times;</button><h3 id="modal-title" style="color: #003366; margin-bottom: 15px;">Student Marks Details</h3><div id="modal-body" style="font-size: 0.95rem; line-height: 1.6;"></div></div></div>
     
     <div id="view-student-modal" class="modal-overlay">
@@ -614,11 +633,34 @@
                         </select>
                     </div>
                     <button id="enroll-online-btn" class="admin-submit-btn btn-green" style="margin: 0; padding: 12px 20px; height: 100%;">✅ Verify Payment & Enroll</button>
+                    <!-- NEW REJECT BUTTON -->
+                    <button id="reject-online-btn" class="admin-submit-btn btn-red" style="margin: 0; padding: 12px 20px; height: 100%; width: auto;">❌ Reject Application</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- NEW REJECT MODAL -->
+    <div id="reject-modal" class="modal-overlay">
+        <div class="modal-content" style="width: 450px;">
+            <button class="modal-close" onclick="document.getElementById('reject-modal').style.display='none'">&times;</button>
+            <h3 style="color: #E63946; margin-bottom: 15px; border-bottom: 2px solid #E63946; padding-bottom: 5px;">❌ Reject Application / Entry</h3>
+            <form id="reject-form" class="admin-form">
+                <input type="hidden" id="reject-doc-id">
+                <input type="hidden" id="reject-col-name">
+                <input type="hidden" id="reject-stu-id">
+                <input type="hidden" id="reject-campus">
+                <div class="input-group">
+                    <label>Reason for Rejection <span style="color:red;">*</span></label>
+                    <textarea id="reject-reason" rows="4" required placeholder="e.g. Invalid payment screenshot, blurred document..."></textarea>
+                </div>
+                <div class="info-box">This reason will be officially recorded and a notification will be pushed to the branch admins.</div>
+                <button type="submit" class="admin-submit-btn btn-red" id="submit-reject-btn">Confirm Rejection</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Student Modal -->
     <div id="edit-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 700px;">
             <button class="modal-close" onclick="document.getElementById('edit-student-modal').style.display='none'">&times;</button>
@@ -629,7 +671,7 @@
                 <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;"><img id="edit-stu-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;"><label for="edit-stu-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label><input type="file" id="edit-stu-photo" accept="image/*" hidden></div>
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 10px; grid-column: span 2;">Academic Info</h5>
                 <div class="marks-grid">
-                    <div class="input-group"><label>Verification Status</label><select id="edit-stu-verification" style="font-weight:bold; color:#003366; background:#eef4fc;"><option>Pending</option><option>Verified</option></select></div>
+                    <div class="input-group"><label>Verification Status</label><select id="edit-stu-verification" style="font-weight:bold; color:#003366; background:#eef4fc;"><option>Pending</option><option>Verified</option><option>Rejected</option></select></div>
                     <div class="input-group"><label>Admission Type</label><select id="edit-stu-admission-type" required><option>New Admission</option><option>Transfer In</option><option>Existing Student</option></select></div>
                     <div class="input-group"><label>Student ID</label><input type="text" id="edit-stu-id" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Roll No.</label><input type="text" id="edit-stu-roll"></div>
@@ -688,6 +730,7 @@
         </div>
     </div>
 
+    <!-- Edit Teacher Modal -->
     <div id="edit-teacher-modal" class="modal-overlay">
         <div class="modal-content" style="width: 600px;">
             <button class="modal-close" onclick="document.getElementById('edit-teacher-modal').style.display='none'">&times;</button>
@@ -729,6 +772,7 @@
         </div>
     </div>
 
+    <!-- Password Reset Modal -->
     <div id="reset-password-modal" class="modal-overlay">
         <div class="modal-content" style="width: 400px;">
             <button class="modal-close" onclick="document.getElementById('reset-password-modal').style.display='none'">&times;</button>
@@ -742,11 +786,15 @@
                     <label>New Authentication Password</label>
                     <input type="text" id="new-password-input" placeholder="Type new secure password..." required style="padding: 12px; font-size:1rem; border: 2px solid #003366;">
                 </div>
+                <div class="info-box" style="margin-top: 10px; font-size: 0.75rem;">
+                    Warning: Changing this password will immediately revoke access using the old password.
+                </div>
                 <button type="submit" class="admin-submit-btn btn-purple" id="reset-pass-submit-btn" style="margin-top: 10px;">Update Authentication</button>
             </form>
         </div>
     </div>
 
+    <!-- Script Section -->
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
@@ -787,10 +835,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
+    <!-- Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = { 
             apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
@@ -802,6 +850,22 @@
         };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        // --- AUDIT LOGGING ENGINE ---
+        async function logAction(userRole, action, target, details) {
+            try { 
+                const logDoc = doc(collection(db, "audit_logs")); 
+                await setDoc(logDoc, { 
+                    timestamp: Date.now(), 
+                    dateString: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }), 
+                    user: userRole, 
+                    action: action, 
+                    target: target, 
+                    details: details 
+                }); 
+            } catch(e) { 
+                console.error("Audit log failed", e); 
+            }
+        }
 
         let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "", admissionsActive: true, formsActive: true };
         
@@ -903,19 +967,101 @@
         document.getElementById('refresh-gallery-btn')?.addEventListener('click', loadGallery);
         document.querySelector('.nav-link[data-target="section-gallery"]')?.addEventListener('click', () => setTimeout(loadGallery, 50));
 
-        let currentOnlineAdmissions = [];
-        async function loadOnlineAdmissions() {
-            const tbody = document.getElementById('online-adm-table-body'); const btn = document.getElementById('refresh-online-btn');
-            if(!tbody) return; if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
+        // --- NEW: REJECTION ENGINE ---
+        document.getElementById('reject-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-reject-btn');
+            btn.disabled = true; btn.innerText = "Rejecting...";
+            
+            const docId = document.getElementById('reject-doc-id').value;
+            const colName = document.getElementById('reject-col-name').value;
+            const stuId = document.getElementById('reject-stu-id').value;
+            const campus = document.getElementById('reject-campus').value;
+            const reason = document.getElementById('reject-reason').value.trim();
+
             try {
-                const qSnap = await getDocs(collection(db, "online_admissions")); currentOnlineAdmissions = []; qSnap.forEach(d => currentOnlineAdmissions.push({ docId: d.id, ...d.data() })); currentOnlineAdmissions.sort((a,b) => b.timestamp - a.timestamp);
+                if (colName === 'online_admissions') {
+                    await setDoc(doc(db, colName, docId), { Status: "Rejected", RejectionReason: reason }, { merge: true });
+                } else {
+                    await setDoc(doc(db, colName, docId), { VerificationStatus: "Rejected", RejectionReason: reason }, { merge: true });
+                }
+                
+                await setDoc(doc(collection(db, "notifications")), {
+                    timestamp: Date.now(),
+                    date: new Date().toLocaleDateString(),
+                    title: `Entry Rejected: ${stuId}`,
+                    message: `Super Admin rejected entry ${stuId}. Reason: ${reason}`,
+                    campus: campus,
+                    read: false
+                });
+
+                await logAction("Super Admin", "REJECTED ENTRY", stuId, `Rejected due to: ${reason}`);
+                
+                alert("Entry successfully rejected and branch admins have been notified.");
+                document.getElementById('reject-modal').style.display = 'none';
+                
+                if(colName === 'online_admissions') {
+                    loadOnlineAdmissions();
+                } else {
+                    checkPendingNotifications();
+                    if(document.getElementById('section-view-db').classList.contains('active')) {
+                        document.getElementById('refresh-db-btn').click();
+                    } else if(document.getElementById('section-universal-search').classList.contains('active')) {
+                        document.getElementById('uni-search-btn').click();
+                    }
+                }
+            } catch(err) {
+                alert("Error rejecting entry: " + err.message);
+            } finally {
+                btn.disabled = false; btn.innerText = "Confirm Rejection";
+            }
+        });
+
+
+        // --- ONLINE ADMISSIONS TRACKER ---
+        let currentOnlineAdmissions = [];
+        
+        async function loadOnlineAdmissions() {
+            const tbody = document.getElementById('online-adm-table-body');
+            const btn = document.getElementById('refresh-online-btn');
+            if(!tbody) return;
+            if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
+            try {
+                const qSnap = await getDocs(collection(db, "online_admissions"));
+                currentOnlineAdmissions = [];
+                qSnap.forEach(d => currentOnlineAdmissions.push({ docId: d.id, ...d.data() }));
+                
+                currentOnlineAdmissions.sort((a,b) => b.timestamp - a.timestamp);
+                
                 tbody.innerHTML = "";
-                if(currentOnlineAdmissions.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No online applications found.</td></tr>`; return; }
+                if(currentOnlineAdmissions.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No online applications found.</td></tr>`;
+                    return;
+                }
                 currentOnlineAdmissions.forEach((app, index) => {
-                    const tr = document.createElement('tr'); const isEnrolled = app.Status === "Verified & Enrolled"; const statusColor = isEnrolled ? "green" : "#E63946";
+                    const tr = document.createElement('tr');
+                    let statusColor = "#E63946";
+                    if (app.Status === "Verified & Enrolled") statusColor = "green";
+                    if (app.Status === "Rejected") statusColor = "red";
+                    
                     let actionBtns = `<button class="action-btn btn-blue view-online-btn" data-index="${index}">👁️ Review Form</button>`;
-                    if(isEnrolled) { actionBtns += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;">🔒 Enrolled</button>`; } else { actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`; }
-                    tr.innerHTML = `<td><strong>${app.FormNumber}</strong></td><td>${app.SubmissionDate}</td><td>${app.Name}</td><td>${app.Class}</td><td>${app.Phone}</td><td><span style="color:${statusColor}; font-weight:bold;">${app.Status}</span></td><td>${actionBtns}</td>`;
+                    if(app.Status === "Verified & Enrolled") {
+                        actionBtns += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;">🔒 Enrolled</button>`;
+                    } else if (app.Status === "Rejected") {
+                        actionBtns += `<button class="action-btn" style="background:#E63946; cursor:not-allowed;">⛔ Rejected</button>`;
+                    } else {
+                        actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td><strong>${app.FormNumber}</strong></td>
+                        <td>${app.SubmissionDate}</td>
+                        <td>${app.Name}</td>
+                        <td>${app.Class}</td>
+                        <td>${app.Phone}</td>
+                        <td><span style="color:${statusColor}; font-weight:bold;">${app.Status}</span></td>
+                        <td>${actionBtns}</td>
+                    `;
                     tbody.appendChild(tr);
                 });
 
@@ -923,10 +1069,22 @@
                     btn.addEventListener('click', (e) => {
                         const app = currentOnlineAdmissions[e.currentTarget.getAttribute('data-index')];
                         const body = document.getElementById('view-online-body');
+                        
                         let proofHtml = `<p style="color:red; font-size:0.85rem;">No payment uploaded.</p>`;
-                        if(app.PaymentProof) { proofHtml = `<div><strong>Transaction ID:</strong> <span style="color:#FF671F;">${app.TransactionID}</span></div><img src="${app.PaymentProof}" style="width:100%; max-width:300px; border:1px solid #ccc; margin-top:10px; border-radius:4px;">`; }
+                        if(app.PaymentProof) {
+                            proofHtml = `
+                                <div><strong>Transaction ID:</strong> <span style="color:#FF671F;">${app.TransactionID}</span></div>
+                                <img src="${app.PaymentProof}" style="width:100%; max-width:300px; border:1px solid #ccc; margin-top:10px; border-radius:4px;">
+                            `;
+                        }
+                        
+                        let rejectNoticeHtml = "";
+                        if (app.Status === "Rejected" && app.RejectionReason) {
+                            rejectNoticeHtml = `<div style="background:#ffe5e5; padding:10px; border-left:4px solid red; margin-bottom:15px; font-size:0.85rem;"><strong>Rejection Reason:</strong> ${app.RejectionReason}</div>`;
+                        }
 
                         body.innerHTML = `
+                            ${rejectNoticeHtml}
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; margin-bottom: 20px;">
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Form No:</strong> <br>${app.FormNumber}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Date:</strong> <br>${app.SubmissionDate}</div>
@@ -947,42 +1105,128 @@
                         `;
 
                         const enrollBtn = document.getElementById('enroll-online-btn');
-                        if(app.Status === "Verified & Enrolled") { enrollBtn.style.display = 'none'; } 
-                        else {
+                        const rejectActionBtn = document.getElementById('reject-online-btn');
+                        
+                        if(app.Status === "Verified & Enrolled" || app.Status === "Rejected") {
+                            enrollBtn.style.display = 'none';
+                            rejectActionBtn.style.display = 'none';
+                        } else {
                             enrollBtn.style.display = 'block';
+                            rejectActionBtn.style.display = 'block';
+                            
+                            rejectActionBtn.onclick = function() {
+                                document.getElementById('reject-doc-id').value = app.docId;
+                                document.getElementById('reject-col-name').value = 'online_admissions';
+                                document.getElementById('reject-stu-id').value = app.FormNumber;
+                                document.getElementById('reject-campus').value = app.Campus; // main or branch
+                                document.getElementById('reject-reason').value = '';
+                                document.getElementById('view-online-modal').style.display = 'none';
+                                document.getElementById('reject-modal').style.display = 'flex';
+                            };
+
                             enrollBtn.onclick = async function() {
-                                const targetCampus = document.getElementById('online-target-campus').value; const colName = targetCampus === 'main' ? 'students' : 'cvsk_students';
+                                const targetCampus = document.getElementById('online-target-campus').value;
+                                const colName = targetCampus === 'main' ? 'students' : 'cvsk_students';
+                                
                                 if(confirm(`Confirm payment is valid and enroll ${app.Name} into ${targetCampus === 'main' ? 'Main' : 'Branch'} Campus?`)) {
                                     enrollBtn.disabled = true; enrollBtn.innerText = "Enrolling...";
                                     try {
-                                        const newStudentPayload = { "Admission Type": app.AdmissionType, "Date of Admission": new Date().toLocaleDateString(), "Student ID": app.FormNumber, "Aadhaar Number": app.Aadhaar, "PEN Number": app.PEN, "Name": app.Name, "DOB": app.DOB, "Gender": app.Gender, "Blood Group": app.BloodGroup, "Religion": app.Religion, "Caste": app.Caste, "CWSN": app.CWSN, "Class": app.Class, "Father's Name": app.FatherName, "Father Qualification": app.FatherQual, "FatherOcc": app.FatherOcc || "", "Mother's Name": app.MotherName, "Mother Qualification": app.MotherQual, "MotherOcc": app.MotherOcc || "", "Income": app.Income || "", "Phone": app.Phone, "Address": app.Address, "VerificationStatus": "Verified", "Status": "Active", "Photo": app.Photo || "" };
+                                        const newStudentPayload = {
+                                            "Admission Type": app.AdmissionType,
+                                            "Date of Admission": new Date().toLocaleDateString(),
+                                            "Student ID": app.FormNumber, 
+                                            "Aadhaar Number": app.Aadhaar,
+                                            "PEN Number": app.PEN,
+                                            "Name": app.Name,
+                                            "DOB": app.DOB,
+                                            "Gender": app.Gender,
+                                            "Blood Group": app.BloodGroup,
+                                            "Religion": app.Religion,
+                                            "Caste": app.Caste,
+                                            "CWSN": app.CWSN,
+                                            "Class": app.Class,
+                                            "Height": app.Height || "",
+                                            "Weight": app.Weight || "",
+                                            "Father's Name": app.FatherName,
+                                            "Father Qualification": app.FatherQual,
+                                            "FatherOcc": app.FatherOcc || "",
+                                            "Mother's Name": app.MotherName,
+                                            "Mother Qualification": app.MotherQual,
+                                            "MotherOcc": app.MotherOcc || "",
+                                            "Income": app.Income || "",
+                                            "Phone": app.Phone,
+                                            "Address": app.Address,
+                                            "VerificationStatus": "Verified",
+                                            "Status": "Active",
+                                            "Photo": app.Photo || ""
+                                        };
+
                                         await setDoc(doc(db, colName, makeSafeId(app.FormNumber)), newStudentPayload);
                                         await setDoc(doc(db, "online_admissions", app.docId), { Status: "Verified & Enrolled" }, { merge: true });
+                                        
                                         await logAction("Super Admin", "ENROLLED ONLINE APPLICANT", app.FormNumber, `Verified payment and moved to ${targetCampus} database.`);
-                                        alert("Student successfully verified and enrolled!"); document.getElementById('view-online-modal').style.display = 'none'; loadOnlineAdmissions();
-                                    } catch(err) { alert("Error enrolling student."); } finally { enrollBtn.disabled = false; enrollBtn.innerText = "✅ Verify Payment & Enroll"; }
+                                        
+                                        alert("Student successfully verified and enrolled!");
+                                        document.getElementById('view-online-modal').style.display = 'none';
+                                        loadOnlineAdmissions();
+                                    } catch(err) {
+                                        alert("Error enrolling student.");
+                                    } finally {
+                                        enrollBtn.disabled = false; enrollBtn.innerText = "✅ Verify Payment & Enroll";
+                                    }
                                 }
                             };
                         }
+
                         document.getElementById('view-online-modal').style.display = 'flex';
                     });
                 });
 
-                document.querySelectorAll('.del-online-btn').forEach(delBtn => { delBtn.addEventListener('click', async (e) => { const id = e.currentTarget.getAttribute('data-id'); const name = e.currentTarget.getAttribute('data-name'); const pass = prompt(`Enter Master Password to delete application for ${name}:`); if (pass === "SuperAdmin123!") { e.currentTarget.disabled = true; await deleteDoc(doc(db, "online_admissions", id)); loadOnlineAdmissions(); } else if(pass !== null) { alert("❌ Incorrect Password."); } }); });
-            } catch(e) { tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color:red;">Error loading applications.</td></tr>`; } finally { if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Applications"; } }
+                document.querySelectorAll('.del-online-btn').forEach(delBtn => {
+                    delBtn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.getAttribute('data-id');
+                        const name = e.currentTarget.getAttribute('data-name');
+                        const pass = prompt(`Enter Master Password to delete application for ${name}:`);
+                        if (pass === "SuperAdmin123!") {
+                            e.currentTarget.disabled = true;
+                            await deleteDoc(doc(db, "online_admissions", id));
+                            loadOnlineAdmissions();
+                        } else if(pass !== null) { alert("❌ Incorrect Password."); }
+                    });
+                });
+
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color:red;">Error loading applications.</td></tr>`;
+            } finally {
+                if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Applications"; }
+            }
         }
         document.getElementById('refresh-online-btn')?.addEventListener('click', loadOnlineAdmissions);
         document.querySelector('.nav-link[data-target="section-online-adm"]')?.addEventListener('click', () => setTimeout(loadOnlineAdmissions, 50));
 
+        // --- PASSWORD RESET SUBMISSION ENGINE ---
         document.getElementById('reset-password-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault(); const btn = document.getElementById('reset-pass-submit-btn'); btn.disabled = true; btn.innerText = "Updating Auth...";
-            const docId = document.getElementById('reset-pass-doc-id').value; const colName = document.getElementById('reset-pass-collection').value; const targetId = document.getElementById('reset-pass-target-id').value; const newPassword = document.getElementById('new-password-input').value.trim();
-            try { await setDoc(doc(db, colName, docId), { Password: newPassword }, { merge: true }); await logAction("Super Admin", "RESET PASSWORD", targetId, `Overwrote password credentials in ${colName}.`); alert("Authentication credentials instantly updated!"); document.getElementById('reset-password-modal').style.display = 'none'; } catch(err) { alert("Error updating password: " + err.message); } finally { btn.disabled = false; btn.innerText = "Update Authentication"; }
+            e.preventDefault();
+            const btn = document.getElementById('reset-pass-submit-btn');
+            btn.disabled = true; btn.innerText = "Updating Auth...";
+            
+            const docId = document.getElementById('reset-pass-doc-id').value;
+            const colName = document.getElementById('reset-pass-collection').value;
+            const targetId = document.getElementById('reset-pass-target-id').value;
+            const newPassword = document.getElementById('new-password-input').value.trim();
+
+            try {
+                await setDoc(doc(db, colName, docId), { Password: newPassword }, { merge: true });
+                await logAction("Super Admin", "RESET PASSWORD", targetId, `Overwrote password credentials in ${colName}.`);
+                alert("Authentication credentials instantly updated!");
+                document.getElementById('reset-password-modal').style.display = 'none';
+            } catch(err) {
+                alert("Error updating password: " + err.message);
+            } finally {
+                btn.disabled = false; btn.innerText = "Update Authentication";
+            }
         });
 
-        async function logAction(userRole, action, target, details) {
-            try { const logDoc = doc(collection(db, "audit_logs")); await setDoc(logDoc, { timestamp: Date.now(), dateString: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }), user: userRole, action: action, target: target, details: details }); } catch(e) { console.error("Audit log failed", e); }
-        }
 
         let liveAuditLogs = [];
         document.getElementById('refresh-audit-btn')?.addEventListener('click', async (e) => {
@@ -992,7 +1236,7 @@
                 tbody.innerHTML = "";
                 if(liveAuditLogs.length === 0) { tbody.innerHTML = `<tr><td colspan="6" align="center">No logs found in the database.</td></tr>`; return; }
                 liveAuditLogs.forEach(log => {
-                    let actionColor = "#007BFF"; if(log.action.includes('DELETE')) actionColor = "#E63946"; if(log.action.includes('VERIFY') || log.action.includes('ENROLL')) actionColor = "#217346";
+                    let actionColor = "#007BFF"; if(log.action.includes('DELETE') || log.action.includes('REJECT')) actionColor = "#E63946"; if(log.action.includes('VERIFY') || log.action.includes('ENROLL')) actionColor = "#217346";
                     tbody.innerHTML += `<tr><td style="font-size: 0.8rem;">${log.dateString}</td><td><strong>${log.user}</strong></td><td><span style="color:${actionColor}; font-weight:bold;">${log.action}</span></td><td>${log.target}</td><td style="font-size: 0.8rem;">${log.details}</td><td><button class="action-btn btn-red delete-log-btn" data-id="${log.docId}">Delete</button></td></tr>`;
                 }); attachAuditDeleteEvents();
             } catch(err) { tbody.innerHTML = `<tr><td colspan="6" align="center" style="color:red;">Error loading audit logs.</td></tr>`; } finally { btn.disabled = false; btn.innerText = "🔄 Refresh Audit Logs"; }
@@ -1001,7 +1245,7 @@
         document.getElementById('audit-search-input')?.addEventListener('keyup', (e) => {
             const st = e.target.value.toLowerCase(); const filtered = liveAuditLogs.filter(log => (log.target || "").toLowerCase().includes(st) || (log.action || "").toLowerCase().includes(st)); const tbody = document.getElementById('audit-table-body'); tbody.innerHTML = "";
             if(filtered.length === 0) { tbody.innerHTML = `<tr><td colspan="6" align="center">No logs match your search.</td></tr>`; return; }
-            filtered.forEach(log => { let actionColor = "#007BFF"; if(log.action.includes('DELETE')) actionColor = "#E63946"; if(log.action.includes('VERIFY') || log.action.includes('ENROLL')) actionColor = "#217346"; tbody.innerHTML += `<tr><td style="font-size: 0.8rem;">${log.dateString}</td><td><strong>${log.user}</strong></td><td><span style="color:${actionColor}; font-weight:bold;">${log.action}</span></td><td>${log.target}</td><td style="font-size: 0.8rem;">${log.details}</td><td><button class="action-btn btn-red delete-log-btn" data-id="${log.docId}">Delete</button></td></tr>`; }); attachAuditDeleteEvents();
+            filtered.forEach(log => { let actionColor = "#007BFF"; if(log.action.includes('DELETE') || log.action.includes('REJECT')) actionColor = "#E63946"; if(log.action.includes('VERIFY') || log.action.includes('ENROLL')) actionColor = "#217346"; tbody.innerHTML += `<tr><td style="font-size: 0.8rem;">${log.dateString}</td><td><strong>${log.user}</strong></td><td><span style="color:${actionColor}; font-weight:bold;">${log.action}</span></td><td>${log.target}</td><td style="font-size: 0.8rem;">${log.details}</td><td><button class="action-btn btn-red delete-log-btn" data-id="${log.docId}">Delete</button></td></tr>`; }); attachAuditDeleteEvents();
         });
 
         function attachAuditDeleteEvents() {
@@ -1049,7 +1293,10 @@
                 if(filtered.length === 0) { tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px; color: red;">No student found across any campus matching "${term}".</td></tr>`; return; }
                 tableBody.innerHTML = ""; currentUniversalResults = filtered;
                 filtered.forEach((s, index) => {
-                    const tr = document.createElement('tr'); const badge = s.campus === 'main' ? `<span class="campus-badge badge-main">Main (VMI)</span>` : `<span class="campus-badge badge-branch">Branch (CVSK)</span>`; const photoSrc = s.Photo || 'https://via.placeholder.com/40'; const isPending = s.VerificationStatus === 'Pending'; const verifClass = isPending ? 'status-pending' : 'status-verified';
+                    const tr = document.createElement('tr'); const badge = s.campus === 'main' ? `<span class="campus-badge badge-main">Main (VMI)</span>` : `<span class="campus-badge badge-branch">Branch (CVSK)</span>`; const photoSrc = s.Photo || 'https://via.placeholder.com/40'; const isPending = s.VerificationStatus === 'Pending'; const isRejected = s.VerificationStatus === 'Rejected';
+                    let verifClass = 'status-verified';
+                    if (isPending) verifClass = 'status-pending';
+                    if (isRejected) verifClass = 'status-rejected';
                     
                     let actionBtns = `
                         <button class="action-btn btn-blue view-uni-btn" data-index="${index}">👁️ View</button>
@@ -1057,7 +1304,10 @@
                         <button class="action-btn btn-purple reset-pass-uni-btn" data-id="${s.docId}" data-campus="${s.campus}" data-name="${s.Name}" data-studentid="${s["Student ID"]}">🔑</button>
                         <button class="action-btn btn-red delete-uni-btn" data-id="${s.docId}" data-campus="${s.campus}" data-name="${s.Name}" data-studentid="${s["Student ID"]}">Delete</button>
                     `;
-                    if(isPending) { actionBtns = `<button class="action-btn btn-purple verify-quick-btn" data-id="${s.docId}" data-campus="${s.campus}" data-studentid="${s["Student ID"]}">✅ Verify</button>` + actionBtns; }
+                    if(isPending) { 
+                        actionBtns = `<button class="action-btn btn-purple verify-quick-btn" data-id="${s.docId}" data-campus="${s.campus}" data-studentid="${s["Student ID"]}">✅ Verify</button>
+                        <button class="action-btn btn-red reject-quick-btn" data-id="${s.docId}" data-campus="${s.campus}" data-studentid="${s["Student ID"]}">❌ Reject</button>` + actionBtns; 
+                    }
                     tr.innerHTML = `<td>${badge}</td><td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${s["Student ID"]}</strong><br><span style="font-size:0.75rem; color:#666;">Roll: ${s["Roll No"] || 'N/A'}</span></td><td>${s.Name}</td><td>${s.Class || 'N/A'}</td><td>${s["Aadhaar Number"] || s.Aadhaar || 'N/A'}</td><td><span class="${verifClass}">${s.VerificationStatus || 'Verified'}</span></td><td><span style="font-weight:bold; color:${s.Status === 'Transferred Out' ? '#E63946' : 'green'};">${s.Status || 'Active'}</span></td><td>${actionBtns}</td>`; tableBody.appendChild(tr);
                 });
 
@@ -1070,6 +1320,21 @@
                 });
 
                 document.querySelectorAll('.verify-quick-btn').forEach(verifyBtn => { verifyBtn.addEventListener('click', async (ev) => { const button = ev.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; if(confirm("Approve and Verify this student record?")) { button.disabled = true; button.innerText = "Verifying..."; try { await setDoc(doc(db, colName, docId), { VerificationStatus: "Verified" }, { merge: true }); await logAction("Super Admin", "VERIFIED STUDENT", stId, `Verified enrollment for ${campus} campus.`); checkPendingNotifications(); document.getElementById('uni-search-btn').click(); } catch(e) { alert("Error verifying."); button.innerText = "✅ Verify"; button.disabled = false; } } }); });
+                
+                document.querySelectorAll('.reject-quick-btn').forEach(rejectBtn => {
+                    rejectBtn.addEventListener('click', (ev) => {
+                        const button = ev.currentTarget;
+                        const docId = button.getAttribute('data-id');
+                        const campus = button.getAttribute('data-campus');
+                        document.getElementById('reject-doc-id').value = docId;
+                        document.getElementById('reject-col-name').value = campus === 'main' ? 'students' : 'cvsk_students';
+                        document.getElementById('reject-stu-id').value = button.getAttribute('data-studentid');
+                        document.getElementById('reject-campus').value = campus;
+                        document.getElementById('reject-reason').value = '';
+                        document.getElementById('reject-modal').style.display = 'flex';
+                    });
+                });
+
                 document.querySelectorAll('.delete-uni-btn').forEach(delBtn => { delBtn.addEventListener('click', async (e) => { const button = e.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const name = button.getAttribute('data-name'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; const pass = prompt(`CRITICAL WARNING: Enter Master Password to permanently delete ${name} (${stId}) from ${campus}:`); if(pass === "SuperAdmin123!") { button.disabled = true; button.innerText = "Deleting..."; try { await deleteDoc(doc(db, colName, docId)); await logAction("Super Admin", "DELETED STUDENT", `${name} (${stId})`, `Deleted from ${campus} campus database.`); document.getElementById('uni-search-btn').click(); } catch(err) { alert("Error deleting."); button.innerText = "Delete"; button.disabled = false; } } else if(pass !== null) { alert("❌ Incorrect Password."); } }); });
                 
                 document.querySelectorAll('.view-uni-btn').forEach(viewBtn => { viewBtn.addEventListener('click', (ev) => { 
@@ -1079,7 +1344,14 @@
                     if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; 
                     if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; 
                     if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; 
+                    
+                    let rejectNoticeHtml = "";
+                    if (student.VerificationStatus === "Rejected" && student.RejectionReason) {
+                        rejectNoticeHtml = `<div style="background:#ffe5e5; padding:10px; border-left:4px solid red; margin-bottom:15px; font-size:0.85rem;"><strong>Rejection Reason:</strong> ${student.RejectionReason}</div>`;
+                    }
+
                     body.innerHTML = `
+                    ${rejectNoticeHtml}
                     <div style="display:flex; gap: 20px; align-items: flex-start;">
                         <div style="text-align:center; width: 130px;">
                             <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
@@ -1169,7 +1441,11 @@
 
             if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in selected campus.</td></tr>`; }
             else { currentActiveStudents.forEach((student, index) => {
-                const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40'; const isPending = student.VerificationStatus === 'Pending'; const verifClass = isPending ? 'status-pending' : 'status-verified';
+                const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40'; const isPending = student.VerificationStatus === 'Pending'; const isRejected = student.VerificationStatus === 'Rejected'; 
+                let verifClass = 'status-verified';
+                if (isPending) verifClass = 'status-pending';
+                if (isRejected) verifClass = 'status-rejected';
+
                 let actionBtns = `
                     <button class="action-btn btn-blue view-stu-btn" data-index="${index}">👁️ View</button>
                     <button class="action-btn btn-green edit-stu-btn" data-index="${index}">Edit</button>
@@ -1177,7 +1453,11 @@
                     <button class="action-btn btn-red transfer-stu-btn" data-index="${index}">Transfer</button>
                     <button class="action-btn btn-red delete-stu-btn" data-id="${student.docId}" data-campus="${student.campus}" data-name="${student.Name}" data-studentid="${student["Student ID"]}">Delete</button>
                 `;
-                if(isPending) { actionBtns = `<button class="action-btn btn-purple verify-quick-btn" data-id="${student.docId}" data-campus="${student.campus}" data-studentid="${student["Student ID"]}">✅ Verify</button>` + actionBtns; }
+                
+                if(isPending) { 
+                    actionBtns = `<button class="action-btn btn-purple verify-quick-btn" data-id="${student.docId}" data-campus="${student.campus}" data-studentid="${student["Student ID"]}">✅ Verify</button>
+                    <button class="action-btn btn-red reject-quick-btn" data-id="${student.docId}" data-campus="${student.campus}" data-studentid="${student["Student ID"]}">❌ Reject</button>` + actionBtns; 
+                }
                 tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong></td><td>${student["Roll No"] || 'N/A'}</td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td><span class="${verifClass}">${student.VerificationStatus || 'Verified'}</span></td><td><span style="color: green; font-weight: bold;">Active</span></td><td>${actionBtns}</td>`; dbTableBody.appendChild(tr);
             }); }
 
@@ -1195,7 +1475,24 @@
                 });
             });
 
+            // Quick Verify
             document.querySelectorAll('.verify-quick-btn').forEach(btn => { btn.addEventListener('click', async (ev) => { const button = ev.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; if(confirm("Approve and Verify this student record?")) { button.disabled = true; button.innerText = "Verifying..."; try { await setDoc(doc(db, colName, docId), { VerificationStatus: "Verified" }, { merge: true }); await logAction("Super Admin", "VERIFIED STUDENT", stId, `Verified enrollment for ${campus} campus.`); checkPendingNotifications(); document.getElementById('refresh-db-btn').click(); } catch(e) { alert("Error verifying."); button.disabled = false; button.innerText = "✅ Verify"; } } }); });
+            
+            // Quick Reject
+            document.querySelectorAll('.reject-quick-btn').forEach(rejectBtn => {
+                rejectBtn.addEventListener('click', (ev) => {
+                    const button = ev.currentTarget;
+                    const docId = button.getAttribute('data-id');
+                    const campus = button.getAttribute('data-campus');
+                    document.getElementById('reject-doc-id').value = docId;
+                    document.getElementById('reject-col-name').value = campus === 'main' ? 'students' : 'cvsk_students';
+                    document.getElementById('reject-stu-id').value = button.getAttribute('data-studentid');
+                    document.getElementById('reject-campus').value = campus;
+                    document.getElementById('reject-reason').value = '';
+                    document.getElementById('reject-modal').style.display = 'flex';
+                });
+            });
+
             document.querySelectorAll('.delete-stu-btn').forEach(delBtn => { delBtn.addEventListener('click', async (e) => { const button = e.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const name = button.getAttribute('data-name'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; const pass = prompt(`CRITICAL WARNING: Enter Master Password to permanently delete ${name} (${stId}) from ${campus}:`); if(pass === "SuperAdmin123!") { button.disabled = true; button.innerText = "Deleting..."; try { await deleteDoc(doc(db, colName, docId)); await logAction("Super Admin", "DELETED STUDENT", `${name} (${stId})`, `Deleted from ${campus} campus database.`); document.getElementById('refresh-db-btn').click(); } catch(err) { alert("Error deleting student."); button.disabled = false; button.innerText = "Delete"; } } else if(pass !== null) { alert("❌ Incorrect Password."); } }); });
             
             document.querySelectorAll('.view-stu-btn').forEach(btn => { btn.addEventListener('click', (ev) => { 
@@ -1205,7 +1502,14 @@
                 if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; 
                 if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; 
                 if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; 
+                
+                let rejectNoticeHtml = "";
+                if (student.VerificationStatus === "Rejected" && student.RejectionReason) {
+                    rejectNoticeHtml = `<div style="background:#ffe5e5; padding:10px; border-left:4px solid red; margin-bottom:15px; font-size:0.85rem;"><strong>Rejection Reason:</strong> ${student.RejectionReason}</div>`;
+                }
+
                 body.innerHTML = `
+                ${rejectNoticeHtml}
                 <div style="display:flex; gap: 20px; align-items: flex-start;">
                     <div style="text-align:center; width: 130px;">
                         <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
@@ -1448,6 +1752,9 @@
             const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); const batch = writeBatch(db); jsonData.forEach((row, index) => { const rawId = String(row["Roll No"] || row["Student ID"] || ""); const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; batch.set(doc(db, "students", docId), { ...row, Status: "Active", VerificationStatus: "Verified" }, { merge: true }); }); await batch.commit(); await logAction("Super Admin", "BULK UPLOAD", "Multiple Students", `Uploaded batch of ${jsonData.length} records to Main Campus.`); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); } catch(err) { alert("Error uploading file."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Upload to Database"; } }; reader.readAsArrayBuffer(file); 
         });
 
+        // --- 4. STAFF DATABASE MODULE ---
+        let liveTeachersData = []; let tchPhotoBase64 = ""; let editTchPhotoBase64 = "";
+
         document.getElementById('tch-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { tchPhotoBase64 = base64; document.getElementById('tch-photo-preview').src = base64; document.getElementById('tch-photo-preview').style.display = 'block'; }); } });
         
         document.getElementById('teacher-form')?.addEventListener('submit', async (e) => { 
@@ -1485,7 +1792,14 @@
         }
 
         function attachStaffActionEvents(validTeachers) {
-            document.querySelectorAll('.reset-pass-tch-btn').forEach(btn => { btn.addEventListener('click', (ev) => { const tch = validTeachers[ev.currentTarget.getAttribute('data-index')]; const colName = tch.campus === 'main' ? 'teachers' : 'cvsk_staff'; window.openResetModal(tch.docId, colName, tch.Name || tch.name, tch.TeacherID || tch.id); }); });
+            document.querySelectorAll('.reset-pass-tch-btn').forEach(btn => {
+                btn.addEventListener('click', (ev) => {
+                    const tch = validTeachers[ev.currentTarget.getAttribute('data-index')];
+                    const colName = tch.campus === 'main' ? 'teachers' : 'cvsk_staff';
+                    window.openResetModal(tch.docId, colName, tch.Name || tch.name, tch.TeacherID || tch.id);
+                });
+            });
+
             document.querySelectorAll('.view-tch-btn').forEach(viewBtn => { viewBtn.addEventListener('click', (ev) => { const tch = validTeachers[ev.currentTarget.getAttribute('data-index')]; const body = document.getElementById('view-teacher-body'); body.innerHTML = `<div style="text-align:center; margin-bottom:15px;"><img src="${tch.Photo || tch.photo || 'https://via.placeholder.com/100'}" style="width:100px; height:100px; object-fit:cover; border-radius:50%; border:3px solid #003366;"><div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px; display:inline-block;">Campus: ${tch.campus === 'main' ? 'VMI' : 'CVSK'}</div></div><table style="width:100%; border-collapse: collapse;"><tr><td style="padding:6px; font-weight:bold; width:40%; border-bottom:1px solid #eee;">Staff ID:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.TeacherID || tch.id || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Name || tch.name || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.FatherName || tch.father || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Department:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Department || tch.dept || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Date of Joining:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.DateOfJoining || tch.doj || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Blood Group:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.BloodGroup || tch.blood || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Phone:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Phone || tch.phone || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">PAN:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.PAN || tch.pan || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Account No:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.AccountNumber || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">IFSC Code:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.IFSC || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Bank Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.BankName || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${tch.Address || tch.address || 'N/A'}</td></tr></table>`; document.getElementById('view-teacher-modal').style.display = 'flex'; }); });
             document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { delBtn.addEventListener('click', async (ev) => { const button = ev.currentTarget; if(button.disabled) return; const campus = button.getAttribute('data-campus') || document.getElementById('staff-campus-select').value; const targetCol = campus === 'main' ? 'teachers' : 'cvsk_staff'; const targetName = button.getAttribute('data-name'); const pass = prompt(`CRITICAL WARNING: Enter Master Password to permanently delete staff ${targetName}:`); if(pass === "SuperAdmin123!") { button.disabled = true; button.innerText = "Deleting..."; try { await deleteDoc(doc(db, targetCol, button.getAttribute('data-id'))); await logAction("Super Admin", "DELETED STAFF", targetName, `Deleted from ${campus} campus.`); loadStaffData(); } catch(err) { alert("Error deleting staff: " + err.message); button.disabled = false; button.innerText = "Delete"; } } else if (pass !== null) { alert("❌ Incorrect Password."); } }); });
             document.querySelectorAll('.edit-tch-btn').forEach(editBtn => { editBtn.addEventListener('click', (ev) => { const tch = validTeachers[ev.currentTarget.getAttribute('data-index')]; document.getElementById('edit-tch-doc-id').value = tch.docId; document.getElementById('edit-tch-campus').value = tch.campus; document.getElementById('edit-tch-id-field').value = tch.TeacherID || tch.id || ''; document.getElementById('edit-tch-name').value = tch.Name || tch.name || ''; document.getElementById('edit-tch-father').value = tch.FatherName || tch.father || ''; document.getElementById('edit-tch-dept').value = tch.Department || tch.dept || 'Teaching Staff'; document.getElementById('edit-tch-doj').value = tch.DateOfJoining || tch.doj || ''; document.getElementById('edit-tch-blood').value = tch.BloodGroup || tch.blood || ''; document.getElementById('edit-tch-phone').value = tch.Phone || tch.phone || ''; document.getElementById('edit-tch-address').value = tch.Address || tch.address || ''; document.getElementById('edit-tch-pan').value = tch.PAN || tch.pan || ''; document.getElementById('edit-tch-password').value = tch.Password || ''; document.getElementById('edit-tch-acc-no').value = tch.AccountNumber || ''; document.getElementById('edit-tch-ifsc').value = tch.IFSC || ''; document.getElementById('edit-tch-bank').value = tch.BankName || ''; editTchPhotoBase64 = tch.Photo || tch.photo || ""; document.getElementById('edit-tch-photo-preview-edit').src = editTchPhotoBase64 || 'https://via.placeholder.com/150'; document.getElementById('edit-teacher-modal').style.display = 'flex'; }); });
@@ -1495,7 +1809,9 @@
         document.getElementById('staff-campus-select')?.addEventListener('change', () => { setTimeout(loadStaffData, 50); });
         document.querySelector('.nav-link[data-target="section-teachers"]')?.addEventListener('click', () => { setTimeout(loadStaffData, 50); });
 
-        document.getElementById('tch-search-input')?.addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase().trim(); const filtered = liveTeachersData.filter(t => { const name = (t.Name || t.name || t["Teacher Name"] || t["Full Name"] || "").toLowerCase(); const tid = (t.TeacherID || t.id || t.docId || t["Staff ID"] || "").toLowerCase(); const pan = (t.PAN || t.pan || "").toLowerCase(); const dept = (t.Department || t.dept || "").toLowerCase(); return name.includes(st) || tid.includes(st) || pan.includes(st) || dept.includes(st); }); renderStaffTable(filtered); });
+        document.getElementById('tch-search-input')?.addEventListener('keyup', (e) => {
+            const st = e.target.value.toLowerCase().trim(); const filtered = liveTeachersData.filter(t => { const name = (t.Name || t.name || t["Teacher Name"] || t["Full Name"] || "").toLowerCase(); const tid = (t.TeacherID || t.id || t.docId || t["Staff ID"] || "").toLowerCase(); const pan = (t.PAN || t.pan || "").toLowerCase(); const dept = (t.Department || t.dept || "").toLowerCase(); return name.includes(st) || tid.includes(st) || pan.includes(st) || dept.includes(st); }); renderStaffTable(filtered);
+        });
 
         document.getElementById('edit-tch-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editTchPhotoBase64 = base64; document.getElementById('edit-tch-photo-preview-edit').src = base64; }); } });
         document.getElementById('edit-teacher-form')?.addEventListener('submit', async (e) => { 
