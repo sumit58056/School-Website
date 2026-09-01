@@ -6,7 +6,6 @@
     <title>Super Admin Dashboard | VMI Network</title>
     <link rel="stylesheet" href="style.css">
     
-    <!-- STRICT PAGE GUARD -->
     <script>
         const userSession = JSON.parse(localStorage.getItem('vmi_user'));
         if (!userSession || userSession.role !== 'Super Admin') {
@@ -29,6 +28,7 @@
         .btn-purple { background-color: #6a0dad; } .btn-purple:hover:not(:disabled) { background-color: #4b0082; }
         .section-divider { margin-top: 30px; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 5px; color: #003366; }
         .marks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
         .modal-content { background: #fff; padding: 25px; border-radius: 8px; width: 500px; max-height: 90vh; overflow-y: auto; position: relative; }
@@ -70,9 +70,7 @@
         <aside class="admin-sidebar">
             <ul class="admin-nav">
                 <li><a href="#" class="nav-link active" data-target="section-universal-search" style="background-color: #002244; border-left: 4px solid #6a0dad;">🌐 Universal Search</a></li>
-                <!-- NEW ONLINE ADMISSIONS TAB -->
                 <li><a href="#" class="nav-link" data-target="section-online-adm" style="background-color: #002244; border-left: 4px solid #ffb300;">💻 Online Admissions</a></li>
-                
                 <li><a href="#" class="nav-link" data-target="section-audit" style="background-color: #1a1a1a; border-left: 4px solid #FF671F;">📜 Audit Logs</a></li>
                 <li><a href="#" class="nav-link" data-target="section-upload">📁 Upload Student Data</a></li>
                 <li><a href="#" class="nav-link" data-target="section-add-student">👤 Add / Transfer In</a></li>
@@ -118,7 +116,7 @@
                 </div>
             </div>
 
-            <!-- NEW SECTION: Online Admissions Tracker -->
+            <!-- SECTION: Online Admissions Tracker -->
             <div id="section-online-adm" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>💻 Track Online Applications</h3>
@@ -207,14 +205,30 @@
                         </div>
 
                         <h4 class="section-divider">Parent & Contact Details</h4>
-                        <div class="marks-grid">
+                        <div class="grid-3">
                             <div class="input-group"><label>Father's Name</label><input type="text" id="manual-father" required></div>
                             <div class="input-group"><label>Father's Qualification</label><input type="text" id="manual-f-qual"></div>
+                            <div class="input-group"><label>Father's Occupation</label><input type="text" id="manual-f-occ"></div>
+                        </div>
+                        <div class="grid-3">
                             <div class="input-group"><label>Mother's Name</label><input type="text" id="manual-mother" required></div>
                             <div class="input-group"><label>Mother's Qualification</label><input type="text" id="manual-m-qual"></div>
-                            <div class="input-group" style="grid-column: span 2;"><label>WhatsApp Number</label><input type="tel" id="manual-phone" required></div>
+                            <div class="input-group"><label>Mother's Occupation</label><input type="text" id="manual-m-occ"></div>
                         </div>
-                        <div class="input-group"><label>Residential Address</label><textarea id="manual-address" rows="2" required></textarea></div>
+                        <div class="marks-grid">
+                            <div class="input-group"><label>WhatsApp Number</label><input type="tel" id="manual-phone" required></div>
+                            <div class="input-group">
+                                <label>Annual Household Income (₹)</label>
+                                <select id="manual-income">
+                                    <option value="" disabled selected>Select Income Range</option>
+                                    <option>Below ₹1,00,000</option>
+                                    <option>₹1,00,000 - ₹2,50,000</option>
+                                    <option>₹2,50,000 - ₹5,00,000</option>
+                                    <option>Above ₹5,00,000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-bottom: 20px;"><label>Residential Address</label><textarea id="manual-address" rows="2" required></textarea></div>
                         <button type="submit" class="admin-submit-btn" id="manual-submit-btn">Save Student Record</button>
                     </form>
                 </div>
@@ -231,7 +245,6 @@
                             <option value="branch">Branch Campus (CVSK)</option>
                         </select>
                     </div>
-
                     <h4 class="section-divider">Transferred Students Database</h4>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                         <button id="refresh-tc-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Sync Transfer Data</button>
@@ -309,7 +322,6 @@
                             <div class="input-group"><label>PAN Number</label><input type="text" id="tch-pan" style="text-transform: uppercase;" required></div>
                             <div class="input-group"><label>Login Password</label><input type="text" id="tch-password" placeholder="Create login password" required></div>
                         </div>
-                        
                         <h5 style="margin-top: 15px; color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Bank Details</h5>
                         <div class="marks-grid">
                             <div class="input-group"><label>Account Number</label><input type="text" id="tch-acc-no" required></div>
@@ -515,14 +527,8 @@
                             <input type="file" id="gallery-photo" accept="image/*" required hidden>
                         </div>
                         <div class="grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                            <div class="input-group">
-                                <label>Event Title / Caption</label>
-                                <input type="text" id="gallery-caption" placeholder="e.g., Annual Sports Day 2026" required>
-                            </div>
-                            <div class="input-group">
-                                <label>Event Date</label>
-                                <input type="date" id="gallery-date" required>
-                            </div>
+                            <div class="input-group"><label>Event Title / Caption</label><input type="text" id="gallery-caption" placeholder="e.g., Annual Sports Day 2026" required></div>
+                            <div class="input-group"><label>Event Date</label><input type="date" id="gallery-date" required></div>
                         </div>
                         <button type="submit" class="admin-submit-btn btn-green" id="gallery-submit-btn">Publish to Home Page</button>
                     </form>
@@ -545,6 +551,36 @@
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>⚙️ Global Settings & Official Assets</h3>
                     <form class="admin-form" id="global-settings-form">
+                        
+                        <!-- NEW: PORTAL CONTROLS -->
+                        <h4 class="section-divider" style="margin-top: 10px;">Admission Portal Controls</h4>
+                        <div class="settings-grid" style="grid-template-columns: 1fr 1fr; background: #eef4fc; padding: 15px; border-radius: 6px; border: 1px solid #003366;">
+                            <div class="input-group">
+                                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                    <input type="checkbox" id="set-admissions-active" style="width:20px; height:20px;">
+                                    <b>Enable Online Admissions Portal</b>
+                                </label>
+                                <span style="font-size: 0.75rem; color:#666; margin-left: 30px;">Uncheck to suspend taking new online forms.</span>
+                            </div>
+                            <div class="input-group">
+                                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                    <input type="checkbox" id="set-forms-active" style="width:20px; height:20px;">
+                                    <b>Enable Blank Form Downloads</b>
+                                </label>
+                                <span style="font-size: 0.75rem; color:#666; margin-left: 30px;">Uncheck to disable offline PDF form downloads.</span>
+                            </div>
+                        </div>
+
+                        <h4 class="section-divider">Admission Payment Settings</h4>
+                        <div class="settings-grid" style="grid-template-columns: 1fr;">
+                            <div class="input-group">
+                                <label>Online Admission Payment QR Code (Rs. 100)</label>
+                                <input type="file" id="set-payment-qr" accept="image/*">
+                                <div class="asset-preview" style="height: auto; padding: 10px;"><img id="prev-set-payment-qr" style="max-height:150px;" src="" alt="No QR Uploaded"></div>
+                            </div>
+                        </div>
+
+                        <h4 class="section-divider">Print Document Assets</h4>
                         <div class="settings-grid">
                             <div class="input-group"><label>School Logo</label><input type="file" id="set-logo" accept="image/*"><div class="asset-preview"><img id="prev-set-logo" src="" alt="None"></div></div>
                             <div class="input-group"><label>School Round Seal</label><input type="file" id="set-seal" accept="image/*"><div class="asset-preview"><img id="prev-set-seal" src="" alt="None"></div></div>
@@ -555,15 +591,8 @@
                             <div class="input-group"><label>Manager Signature</label><input type="file" id="set-sign-mgr" accept="image/*"><div class="asset-preview"><img id="prev-set-sign-mgr" src="" alt="None"></div></div>
                             <div class="input-group"><label>Secretary Signature</label><input type="file" id="set-sign-sec" accept="image/*"><div class="asset-preview"><img id="prev-set-sign-sec" src="" alt="None"></div></div>
                         </div>
-                        <h4 class="section-divider">Admission Payment Settings</h4>
-                        <div class="settings-grid" style="grid-template-columns: 1fr;">
-                            <div class="input-group">
-                                <label>Online Admission Payment QR Code (Rs. 100)</label>
-                                <input type="file" id="set-payment-qr" accept="image/*">
-                                <div class="asset-preview" style="height: auto; padding: 10px;"><img id="prev-set-payment-qr" style="max-height:150px;" src="" alt="No QR Uploaded"></div>
-                            </div>
-                        </div>
-                        <button type="submit" class="admin-submit-btn btn-blue" id="save-settings-btn" style="margin-top: 10px;">Save Global Assets</button>
+                        
+                        <button type="submit" class="admin-submit-btn btn-blue" id="save-settings-btn" style="margin-top: 10px;">Save Global Settings</button>
                     </form>
                 </div>
             </div>
@@ -576,16 +605,22 @@
 
     <!-- Modals -->
     <div id="marks-modal" class="modal-overlay"><div class="modal-content"><button class="modal-close" onclick="document.getElementById('marks-modal').style.display='none'">&times;</button><h3 id="modal-title" style="color: #003366; margin-bottom: 15px;">Student Marks Details</h3><div id="modal-body" style="font-size: 0.95rem; line-height: 1.6;"></div></div></div>
-    <div id="view-student-modal" class="modal-overlay"><div class="modal-content" style="width: 650px;"><button class="modal-close" onclick="document.getElementById('view-student-modal').style.display='none'">&times;</button><h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #FF671F; padding-bottom: 5px;">Student Full Profile</h3><div id="view-student-body" style="font-size: 0.95rem; line-height: 1.8; color: #333;"></div></div></div>
+    
+    <div id="view-student-modal" class="modal-overlay">
+        <div class="modal-content" style="width: 650px;">
+            <button class="modal-close" onclick="document.getElementById('view-student-modal').style.display='none'">&times;</button>
+            <h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #FF671F; padding-bottom: 5px;">Student Full Profile</h3>
+            <div id="view-student-body" style="font-size: 0.95rem; line-height: 1.8; color: #333;"></div>
+        </div>
+    </div>
+    
     <div id="view-teacher-modal" class="modal-overlay"><div class="modal-content" style="width: 550px;"><button class="modal-close" onclick="document.getElementById('view-teacher-modal').style.display='none'">&times;</button><h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #FF671F; padding-bottom: 5px;">Staff Full Profile</h3><div id="view-teacher-body" style="font-size: 0.95rem; line-height: 1.8; color: #333;"></div></div></div>
 
-    <!-- Online Admission Verification Modal -->
     <div id="view-online-modal" class="modal-overlay">
         <div class="modal-content" style="width: 650px;">
             <button class="modal-close" onclick="document.getElementById('view-online-modal').style.display='none'">&times;</button>
             <h3 style="color: #003366; margin-bottom: 5px; border-bottom: 2px solid #FFb300; padding-bottom: 5px;">Verify Online Application</h3>
             <div id="view-online-body" style="font-size: 0.95rem; line-height: 1.8; color: #333; margin-bottom: 20px;"></div>
-            
             <div style="background: #eef4fc; padding: 15px; border: 1px solid #003366; border-radius: 6px;">
                 <h4 style="margin: 0 0 10px 0; color: #003366;">Admin Action: Enroll Student</h4>
                 <div style="display: flex; gap: 15px; align-items: center;">
@@ -643,12 +678,28 @@
                     <div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-stu-weight"></div>
                 </div>
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">Parent Details</h5>
-                <div class="marks-grid">
+                <div class="grid-3">
                     <div class="input-group"><label>Father's Name</label><input type="text" id="edit-stu-father"></div>
-                    <div class="input-group"><label>Father's Qualification</label><input type="text" id="edit-stu-f-qual"></div>
+                    <div class="input-group"><label>Father's Qual.</label><input type="text" id="edit-stu-f-qual"></div>
+                    <div class="input-group"><label>Father's Occ.</label><input type="text" id="edit-stu-f-occ"></div>
+                </div>
+                <div class="grid-3">
                     <div class="input-group"><label>Mother's Name</label><input type="text" id="edit-stu-mother"></div>
-                    <div class="input-group"><label>Mother's Qualification</label><input type="text" id="edit-stu-m-qual"></div>
-                    <div class="input-group" style="grid-column: span 2;"><label>WhatsApp Number</label><input type="text" id="edit-stu-phone"></div>
+                    <div class="input-group"><label>Mother's Qual.</label><input type="text" id="edit-stu-m-qual"></div>
+                    <div class="input-group"><label>Mother's Occ.</label><input type="text" id="edit-stu-m-occ"></div>
+                </div>
+                <div class="marks-grid">
+                    <div class="input-group"><label>WhatsApp Number</label><input type="text" id="edit-stu-phone"></div>
+                    <div class="input-group">
+                        <label>Annual Income (₹)</label>
+                        <select id="edit-stu-income">
+                            <option value="">-- Optional --</option>
+                            <option>Below ₹1,00,000</option>
+                            <option>₹1,00,000 - ₹2,50,000</option>
+                            <option>₹2,50,000 - ₹5,00,000</option>
+                            <option>Above ₹5,00,000</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="input-group"><label>Residential Address</label><textarea id="edit-stu-address" rows="2"></textarea></div>
                 <button type="submit" class="admin-submit-btn btn-green" id="edit-student-save-btn">Update Student Database</button>
@@ -698,7 +749,6 @@
         </div>
     </div>
 
-    <!-- Password Reset Modal -->
     <div id="reset-password-modal" class="modal-overlay">
         <div class="modal-content" style="width: 400px;">
             <button class="modal-close" onclick="document.getElementById('reset-password-modal').style.display='none'">&times;</button>
@@ -711,9 +761,6 @@
                 <div class="input-group">
                     <label>New Authentication Password</label>
                     <input type="text" id="new-password-input" placeholder="Type new secure password..." required style="padding: 12px; font-size:1rem; border: 2px solid #003366;">
-                </div>
-                <div class="info-box" style="margin-top: 10px; font-size: 0.75rem;">
-                    Warning: Changing this password will immediately revoke access using the old password.
                 </div>
                 <button type="submit" class="admin-submit-btn btn-purple" id="reset-pass-submit-btn" style="margin-top: 10px;">Update Authentication</button>
             </form>
@@ -733,25 +780,17 @@
                 const target = this.getAttribute('data-target');
                 document.getElementById(target).classList.add('active');
                 
-                if(target === 'section-teachers') {
-                    document.getElementById('refresh-tch-btn')?.click();
-                } else if(target === 'section-view-db') {
-                    document.getElementById('refresh-db-btn')?.click();
-                } else if(target === 'section-transferred') {
-                    document.getElementById('refresh-tc-btn')?.click();
-                } else if(target === 'section-audit') {
-                    document.getElementById('refresh-audit-btn')?.click();
-                } else if(target === 'section-gallery') {
-                    document.getElementById('refresh-gallery-btn')?.click();
-                } else if(target === 'section-online-adm') {
-                    document.getElementById('refresh-online-btn')?.click();
-                }
+                if(target === 'section-teachers') { document.getElementById('refresh-tch-btn')?.click(); } 
+                else if(target === 'section-view-db') { document.getElementById('refresh-db-btn')?.click(); } 
+                else if(target === 'section-transferred') { document.getElementById('refresh-tc-btn')?.click(); } 
+                else if(target === 'section-audit') { document.getElementById('refresh-audit-btn')?.click(); } 
+                else if(target === 'section-gallery') { document.getElementById('refresh-gallery-btn')?.click(); } 
+                else if(target === 'section-online-adm') { document.getElementById('refresh-online-btn')?.click(); }
             });
         });
 
         document.getElementById('tch-dept')?.addEventListener('change', (e) => {
-            const val = e.target.value;
-            const idInput = document.getElementById('tch-id');
+            const val = e.target.value; const idInput = document.getElementById('tch-id');
             if(val === 'Super Admin') idInput.placeholder = 'e.g. VMI/SADM/001';
             else if(val === 'Admin') idInput.placeholder = 'e.g. VMI/ADM/001';
             else if(val === 'Manager') idInput.placeholder = 'e.g. VMI/MGR/001';
@@ -760,12 +799,7 @@
         });
 
         window.openResetModal = function(docId, collectionName, userName, userId) {
-            document.getElementById('reset-pass-doc-id').value = docId;
-            document.getElementById('reset-pass-collection').value = collectionName;
-            document.getElementById('reset-pass-target-id').value = userId;
-            document.getElementById('reset-pass-target-name').innerText = `Target: ${userName} (${userId})`;
-            document.getElementById('new-password-input').value = '';
-            document.getElementById('reset-password-modal').style.display = 'flex';
+            document.getElementById('reset-pass-doc-id').value = docId; document.getElementById('reset-pass-collection').value = collectionName; document.getElementById('reset-pass-target-id').value = userId; document.getElementById('reset-pass-target-name').innerText = `Target: ${userName} (${userId})`; document.getElementById('new-password-input').value = ''; document.getElementById('reset-password-modal').style.display = 'flex';
         };
     </script>
     
@@ -791,7 +825,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "" };
+        let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "", admissionsActive: true, formsActive: true };
         
         function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
         function resizeAssetKeepRatio(file, callback) { const reader = new FileReader(); reader.onload = function(event) { const img = new Image(); img.onload = function() { const MAX = 400; let width = img.width; let height = img.height; if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } else { if (height > MAX) { width *= MAX / height; height = MAX; } } const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); callback(canvas.toDataURL('image/png', 0.8)); }; img.src = event.target.result; }; reader.readAsDataURL(file); }
@@ -815,6 +849,9 @@
                     document.getElementById('prev-set-sign-mgr').src = globalAssets.mgrSign || ""; 
                     document.getElementById('prev-set-sign-sec').src = globalAssets.secSign || ""; 
                     document.getElementById('prev-set-payment-qr').src = globalAssets.paymentQR || ""; 
+                    
+                    if(globalAssets.admissionsActive !== undefined) document.getElementById('set-admissions-active').checked = globalAssets.admissionsActive;
+                    if(globalAssets.formsActive !== undefined) document.getElementById('set-forms-active').checked = globalAssets.formsActive;
                 } 
             } catch(e) { console.error("Error loading settings", e); }
         } 
@@ -822,9 +859,20 @@
 
         const assetMap = { 'set-logo':'logo', 'set-seal':'seal', 'set-mc-seal':'mcSeal', 'set-sign-prin':'prinSign', 'set-sign-mgr':'mgrSign', 'set-sign-sec':'secSign', 'set-payment-qr':'paymentQR' };
         for(const [inputId, key] of Object.entries(assetMap)) { document.getElementById(inputId)?.addEventListener('change', function(e) { if(this.files[0]) { resizeAssetKeepRatio(this.files[0], (base64) => { globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; }); } }); }
-        document.getElementById('global-settings-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('save-settings-btn'); btn.disabled = true; btn.innerText = "Saving..."; try { await setDoc(doc(db, "settings", "global_assets"), globalAssets, {merge: true}); alert("Global Assets Saved Successfully!"); } catch(err) { alert("Failed to save assets: " + err.message); } finally { btn.disabled = false; btn.innerText = "Save Global Assets"; } });
+        
+        // UPDATED: Save Global Settings includes Portal Controls
+        document.getElementById('global-settings-form')?.addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const btn = document.getElementById('save-settings-btn'); btn.disabled = true; btn.innerText = "Saving..."; 
+            globalAssets.admissionsActive = document.getElementById('set-admissions-active').checked;
+            globalAssets.formsActive = document.getElementById('set-forms-active').checked;
+            try { 
+                await setDoc(doc(db, "settings", "global_assets"), globalAssets, {merge: true}); 
+                alert("Global Settings Saved Successfully!"); 
+            } catch(err) { alert("Failed to save settings: " + err.message); } 
+            finally { btn.disabled = false; btn.innerText = "Save Global Settings"; } 
+        });
 
-        // --- NEW: PHOTO GALLERY UPLOAD MODULE ---
         let galleryPhotoBase64 = "";
         document.getElementById('gallery-photo')?.addEventListener('change', function(e) { 
             if(this.files[0]) { 
@@ -851,116 +899,46 @@
             btn.disabled = true; btn.innerText = "Publishing...";
             try {
                 const docId = `img_${Date.now()}`;
-                await setDoc(doc(db, "gallery", docId), {
-                    caption: document.getElementById('gallery-caption').value.trim(),
-                    date: document.getElementById('gallery-date').value,
-                    photo: galleryPhotoBase64,
-                    timestamp: Date.now()
-                });
+                await setDoc(doc(db, "gallery", docId), { caption: document.getElementById('gallery-caption').value.trim(), date: document.getElementById('gallery-date').value, photo: galleryPhotoBase64, timestamp: Date.now() });
                 await logAction("Super Admin", "ADDED GALLERY PHOTO", document.getElementById('gallery-caption').value, "Published photo to home page gallery.");
-                alert("Photo successfully published to the Home Page gallery!");
-                document.getElementById('gallery-form').reset();
-                document.getElementById('gallery-photo-preview').src = "https://via.placeholder.com/400x250?text=Event+Photo";
-                galleryPhotoBase64 = "";
-                loadGallery();
-            } catch (error) {
-                alert("Error publishing photo.");
-            } finally {
-                btn.disabled = false; btn.innerText = "Publish to Home Page";
-            }
+                alert("Photo successfully published!"); document.getElementById('gallery-form').reset(); document.getElementById('gallery-photo-preview').src = "https://via.placeholder.com/400x250?text=Event+Photo"; galleryPhotoBase64 = ""; loadGallery();
+            } catch (error) { alert("Error publishing photo."); } finally { btn.disabled = false; btn.innerText = "Publish to Home Page"; }
         });
 
         async function loadGallery() {
-            const tbody = document.getElementById('gallery-table-body');
-            const btn = document.getElementById('refresh-gallery-btn');
-            if(!tbody) return;
-            if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
+            const tbody = document.getElementById('gallery-table-body'); const btn = document.getElementById('refresh-gallery-btn');
+            if(!tbody) return; if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
             try {
-                const qSnap = await getDocs(collection(db, "gallery"));
-                let photos = [];
-                qSnap.forEach(d => photos.push({ id: d.id, ...d.data() }));
-                photos.sort((a,b) => b.timestamp - a.timestamp);
-                
+                const qSnap = await getDocs(collection(db, "gallery")); let photos = []; qSnap.forEach(d => photos.push({ id: d.id, ...d.data() })); photos.sort((a,b) => b.timestamp - a.timestamp);
                 tbody.innerHTML = "";
-                if(photos.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">No photos published in the gallery.</td></tr>`;
-                    return;
-                }
+                if(photos.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">No photos published in the gallery.</td></tr>`; return; }
                 photos.forEach(p => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td><img src="${p.photo}" style="width: 80px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;"></td>
-                        <td><strong>${p.caption}</strong></td>
-                        <td>${p.date}</td>
-                        <td><button class="action-btn btn-red delete-gallery-btn" data-id="${p.id}" data-caption="${p.caption}">Delete</button></td>
-                    `;
+                    tr.innerHTML = `<td><img src="${p.photo}" style="width: 80px; height: 50px; object-fit: cover; border-radius: 4px; border: 1px solid #ccc;"></td><td><strong>${p.caption}</strong></td><td>${p.date}</td><td><button class="action-btn btn-red delete-gallery-btn" data-id="${p.id}" data-caption="${p.caption}">Delete</button></td>`;
                     tbody.appendChild(tr);
                 });
-
-                document.querySelectorAll('.delete-gallery-btn').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.getAttribute('data-id');
-                        const cap = e.currentTarget.getAttribute('data-caption');
-                        const pass = prompt(`Enter Master Password to delete "${cap}" from the public gallery:`);
-                        if (pass === "SuperAdmin123!") {
-                            e.currentTarget.disabled = true;
-                            await deleteDoc(doc(db, "gallery", id));
-                            await logAction("Super Admin", "DELETED GALLERY PHOTO", cap, "Removed from home page.");
-                            loadGallery();
-                        } else if(pass !== null) { alert("❌ Incorrect Password."); }
-                    });
-                });
-            } catch(e) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color:red;">Error loading gallery.</td></tr>`;
-            } finally {
-                if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Gallery"; }
-            }
+                document.querySelectorAll('.delete-gallery-btn').forEach(btn => { btn.addEventListener('click', async (e) => {
+                        const id = e.currentTarget.getAttribute('data-id'); const cap = e.currentTarget.getAttribute('data-caption'); const pass = prompt(`Enter Master Password to delete "${cap}" from the public gallery:`);
+                        if (pass === "SuperAdmin123!") { e.currentTarget.disabled = true; await deleteDoc(doc(db, "gallery", id)); await logAction("Super Admin", "DELETED GALLERY PHOTO", cap, "Removed from home page."); loadGallery(); } else if(pass !== null) { alert("❌ Incorrect Password."); }
+                    }); });
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color:red;">Error loading gallery.</td></tr>`; } finally { if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Gallery"; } }
         }
         document.getElementById('refresh-gallery-btn')?.addEventListener('click', loadGallery);
         document.querySelector('.nav-link[data-target="section-gallery"]')?.addEventListener('click', () => setTimeout(loadGallery, 50));
 
-        // --- NEW: ONLINE ADMISSIONS TRACKER ---
         let currentOnlineAdmissions = [];
-        
         async function loadOnlineAdmissions() {
-            const tbody = document.getElementById('online-adm-table-body');
-            const btn = document.getElementById('refresh-online-btn');
-            if(!tbody) return;
-            if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
+            const tbody = document.getElementById('online-adm-table-body'); const btn = document.getElementById('refresh-online-btn');
+            if(!tbody) return; if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
             try {
-                const qSnap = await getDocs(collection(db, "online_admissions"));
-                currentOnlineAdmissions = [];
-                qSnap.forEach(d => currentOnlineAdmissions.push({ docId: d.id, ...d.data() }));
-                
-                // Sort newest first
-                currentOnlineAdmissions.sort((a,b) => b.timestamp - a.timestamp);
-                
+                const qSnap = await getDocs(collection(db, "online_admissions")); currentOnlineAdmissions = []; qSnap.forEach(d => currentOnlineAdmissions.push({ docId: d.id, ...d.data() })); currentOnlineAdmissions.sort((a,b) => b.timestamp - a.timestamp);
                 tbody.innerHTML = "";
-                if(currentOnlineAdmissions.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No online applications found.</td></tr>`;
-                    return;
-                }
+                if(currentOnlineAdmissions.length === 0) { tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No online applications found.</td></tr>`; return; }
                 currentOnlineAdmissions.forEach((app, index) => {
-                    const tr = document.createElement('tr');
-                    const isEnrolled = app.Status === "Verified & Enrolled";
-                    const statusColor = isEnrolled ? "green" : "#E63946";
-                    
+                    const tr = document.createElement('tr'); const isEnrolled = app.Status === "Verified & Enrolled"; const statusColor = isEnrolled ? "green" : "#E63946";
                     let actionBtns = `<button class="action-btn btn-blue view-online-btn" data-index="${index}">👁️ Review Form</button>`;
-                    if(isEnrolled) {
-                        actionBtns += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;">🔒 Enrolled</button>`;
-                    } else {
-                        actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`;
-                    }
-
-                    tr.innerHTML = `
-                        <td><strong>${app.FormNumber}</strong></td>
-                        <td>${app.SubmissionDate}</td>
-                        <td>${app.Name}</td>
-                        <td>${app.Class}</td>
-                        <td>${app.Phone}</td>
-                        <td><span style="color:${statusColor}; font-weight:bold;">${app.Status}</span></td>
-                        <td>${actionBtns}</td>
-                    `;
+                    if(isEnrolled) { actionBtns += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;">🔒 Enrolled</button>`; } else { actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`; }
+                    tr.innerHTML = `<td><strong>${app.FormNumber}</strong></td><td>${app.SubmissionDate}</td><td>${app.Name}</td><td>${app.Class}</td><td>${app.Phone}</td><td><span style="color:${statusColor}; font-weight:bold;">${app.Status}</span></td><td>${actionBtns}</td>`;
                     tbody.appendChild(tr);
                 });
 
@@ -968,14 +946,8 @@
                     btn.addEventListener('click', (e) => {
                         const app = currentOnlineAdmissions[e.currentTarget.getAttribute('data-index')];
                         const body = document.getElementById('view-online-body');
-                        
                         let proofHtml = `<p style="color:red; font-size:0.85rem;">No payment uploaded.</p>`;
-                        if(app.PaymentProof) {
-                            proofHtml = `
-                                <div><strong>Transaction ID:</strong> <span style="color:#FF671F;">${app.TransactionID}</span></div>
-                                <img src="${app.PaymentProof}" style="width:100%; max-width:300px; border:1px solid #ccc; margin-top:10px; border-radius:4px;">
-                            `;
-                        }
+                        if(app.PaymentProof) { proofHtml = `<div><strong>Transaction ID:</strong> <span style="color:#FF671F;">${app.TransactionID}</span></div><img src="${app.PaymentProof}" style="width:100%; max-width:300px; border:1px solid #ccc; margin-top:10px; border-radius:4px;">`; }
 
                         body.innerHTML = `
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; margin-bottom: 20px;">
@@ -986,6 +958,10 @@
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${app.DOB}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar:</strong> <br>${app.Aadhaar}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Father's Name:</strong> <br>${app.FatherName}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Father's Occ.:</strong> <br>${app.FatherOcc || 'N/A'}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Mother's Name:</strong> <br>${app.MotherName}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Mother's Occ.:</strong> <br>${app.MotherOcc || 'N/A'}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Annual Income:</strong> <br>${app.Income || 'N/A'}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${app.Phone}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>Address:</strong> <br>${app.Address}</div>
                             </div>
@@ -994,109 +970,37 @@
                         `;
 
                         const enrollBtn = document.getElementById('enroll-online-btn');
-                        if(app.Status === "Verified & Enrolled") {
-                            enrollBtn.style.display = 'none';
-                        } else {
+                        if(app.Status === "Verified & Enrolled") { enrollBtn.style.display = 'none'; } 
+                        else {
                             enrollBtn.style.display = 'block';
-                            // Bind the enroll logic
                             enrollBtn.onclick = async function() {
-                                const targetCampus = document.getElementById('online-target-campus').value;
-                                const colName = targetCampus === 'main' ? 'students' : 'cvsk_students';
-                                
+                                const targetCampus = document.getElementById('online-target-campus').value; const colName = targetCampus === 'main' ? 'students' : 'cvsk_students';
                                 if(confirm(`Confirm payment is valid and enroll ${app.Name} into ${targetCampus === 'main' ? 'Main' : 'Branch'} Campus?`)) {
                                     enrollBtn.disabled = true; enrollBtn.innerText = "Enrolling...";
                                     try {
-                                        // Standardize mapping to DB format
-                                        const newStudentPayload = {
-                                            "Admission Type": app.AdmissionType,
-                                            "Date of Admission": new Date().toLocaleDateString(),
-                                            "Student ID": app.FormNumber, // Use Form No as default temp ID
-                                            "Aadhaar Number": app.Aadhaar,
-                                            "PEN Number": app.PEN,
-                                            "Name": app.Name,
-                                            "DOB": app.DOB,
-                                            "Gender": app.Gender,
-                                            "Blood Group": app.BloodGroup,
-                                            "Religion": app.Religion,
-                                            "Caste": app.Caste,
-                                            "CWSN": app.CWSN,
-                                            "Class": app.Class,
-                                            "Father's Name": app.FatherName,
-                                            "Father Qualification": app.FatherQual,
-                                            "Mother's Name": app.MotherName,
-                                            "Mother Qualification": app.MotherQual,
-                                            "Phone": app.Phone,
-                                            "Address": app.Address,
-                                            "VerificationStatus": "Verified", // Admin is actively reviewing it
-                                            "Status": "Active"
-                                        };
-
-                                        // 1. Add to Campus DB
+                                        const newStudentPayload = { "Admission Type": app.AdmissionType, "Date of Admission": new Date().toLocaleDateString(), "Student ID": app.FormNumber, "Aadhaar Number": app.Aadhaar, "PEN Number": app.PEN, "Name": app.Name, "DOB": app.DOB, "Gender": app.Gender, "Blood Group": app.BloodGroup, "Religion": app.Religion, "Caste": app.Caste, "CWSN": app.CWSN, "Class": app.Class, "Father's Name": app.FatherName, "Father Qualification": app.FatherQual, "FatherOcc": app.FatherOcc || "", "Mother's Name": app.MotherName, "Mother Qualification": app.MotherQual, "MotherOcc": app.MotherOcc || "", "Income": app.Income || "", "Phone": app.Phone, "Address": app.Address, "VerificationStatus": "Verified", "Status": "Active" };
                                         await setDoc(doc(db, colName, makeSafeId(app.FormNumber)), newStudentPayload);
-                                        // 2. Mark Online Form as Enrolled
                                         await setDoc(doc(db, "online_admissions", app.docId), { Status: "Verified & Enrolled" }, { merge: true });
-                                        
                                         await logAction("Super Admin", "ENROLLED ONLINE APPLICANT", app.FormNumber, `Verified payment and moved to ${targetCampus} database.`);
-                                        
-                                        alert("Student successfully verified and enrolled!");
-                                        document.getElementById('view-online-modal').style.display = 'none';
-                                        loadOnlineAdmissions();
-                                    } catch(err) {
-                                        alert("Error enrolling student.");
-                                    } finally {
-                                        enrollBtn.disabled = false; enrollBtn.innerText = "✅ Verify Payment & Enroll";
-                                    }
+                                        alert("Student successfully verified and enrolled!"); document.getElementById('view-online-modal').style.display = 'none'; loadOnlineAdmissions();
+                                    } catch(err) { alert("Error enrolling student."); } finally { enrollBtn.disabled = false; enrollBtn.innerText = "✅ Verify Payment & Enroll"; }
                                 }
                             };
                         }
-
                         document.getElementById('view-online-modal').style.display = 'flex';
                     });
                 });
 
-                document.querySelectorAll('.del-online-btn').forEach(delBtn => {
-                    delBtn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.getAttribute('data-id');
-                        const name = e.currentTarget.getAttribute('data-name');
-                        const pass = prompt(`Enter Master Password to delete application for ${name}:`);
-                        if (pass === "SuperAdmin123!") {
-                            e.currentTarget.disabled = true;
-                            await deleteDoc(doc(db, "online_admissions", id));
-                            loadOnlineAdmissions();
-                        } else if(pass !== null) { alert("❌ Incorrect Password."); }
-                    });
-                });
-
-            } catch(e) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color:red;">Error loading applications.</td></tr>`;
-            } finally {
-                if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Applications"; }
-            }
+                document.querySelectorAll('.del-online-btn').forEach(delBtn => { delBtn.addEventListener('click', async (e) => { const id = e.currentTarget.getAttribute('data-id'); const name = e.currentTarget.getAttribute('data-name'); const pass = prompt(`Enter Master Password to delete application for ${name}:`); if (pass === "SuperAdmin123!") { e.currentTarget.disabled = true; await deleteDoc(doc(db, "online_admissions", id)); loadOnlineAdmissions(); } else if(pass !== null) { alert("❌ Incorrect Password."); } }); });
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color:red;">Error loading applications.</td></tr>`; } finally { if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Applications"; } }
         }
         document.getElementById('refresh-online-btn')?.addEventListener('click', loadOnlineAdmissions);
         document.querySelector('.nav-link[data-target="section-online-adm"]')?.addEventListener('click', () => setTimeout(loadOnlineAdmissions, 50));
 
-        // --- PASSWORD RESET SUBMISSION ENGINE ---
         document.getElementById('reset-password-form')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('reset-pass-submit-btn');
-            btn.disabled = true; btn.innerText = "Updating Auth...";
-            
-            const docId = document.getElementById('reset-pass-doc-id').value;
-            const colName = document.getElementById('reset-pass-collection').value;
-            const targetId = document.getElementById('reset-pass-target-id').value;
-            const newPassword = document.getElementById('new-password-input').value.trim();
-
-            try {
-                await setDoc(doc(db, colName, docId), { Password: newPassword }, { merge: true });
-                await logAction("Super Admin", "RESET PASSWORD", targetId, `Overwrote password credentials in ${colName}.`);
-                alert("Authentication credentials instantly updated!");
-                document.getElementById('reset-password-modal').style.display = 'none';
-            } catch(err) {
-                alert("Error updating password: " + err.message);
-            } finally {
-                btn.disabled = false; btn.innerText = "Update Authentication";
-            }
+            e.preventDefault(); const btn = document.getElementById('reset-pass-submit-btn'); btn.disabled = true; btn.innerText = "Updating Auth...";
+            const docId = document.getElementById('reset-pass-doc-id').value; const colName = document.getElementById('reset-pass-collection').value; const targetId = document.getElementById('reset-pass-target-id').value; const newPassword = document.getElementById('new-password-input').value.trim();
+            try { await setDoc(doc(db, colName, docId), { Password: newPassword }, { merge: true }); await logAction("Super Admin", "RESET PASSWORD", targetId, `Overwrote password credentials in ${colName}.`); alert("Authentication credentials instantly updated!"); document.getElementById('reset-password-modal').style.display = 'none'; } catch(err) { alert("Error updating password: " + err.message); } finally { btn.disabled = false; btn.innerText = "Update Authentication"; }
         });
 
         async function logAction(userRole, action, target, details) {
@@ -1169,7 +1073,6 @@
                 tableBody.innerHTML = ""; currentUniversalResults = filtered;
                 filtered.forEach((s, index) => {
                     const tr = document.createElement('tr'); const badge = s.campus === 'main' ? `<span class="campus-badge badge-main">Main (VMI)</span>` : `<span class="campus-badge badge-branch">Branch (CVSK)</span>`; const photoSrc = s.Photo || 'https://via.placeholder.com/40'; const isPending = s.VerificationStatus === 'Pending'; const verifClass = isPending ? 'status-pending' : 'status-verified';
-                    
                     let actionBtns = `
                         <button class="action-btn btn-blue view-uni-btn" data-index="${index}">👁️ View</button>
                         <button class="action-btn btn-green edit-uni-btn" data-index="${index}">Edit</button>
@@ -1180,18 +1083,94 @@
                     tr.innerHTML = `<td>${badge}</td><td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${s["Student ID"]}</strong><br><span style="font-size:0.75rem; color:#666;">Roll: ${s["Roll No"] || 'N/A'}</span></td><td>${s.Name}</td><td>${s.Class || 'N/A'}</td><td>${s["Aadhaar Number"] || s.Aadhaar || 'N/A'}</td><td><span class="${verifClass}">${s.VerificationStatus || 'Verified'}</span></td><td><span style="font-weight:bold; color:${s.Status === 'Transferred Out' ? '#E63946' : 'green'};">${s.Status || 'Active'}</span></td><td>${actionBtns}</td>`; tableBody.appendChild(tr);
                 });
 
-                document.querySelectorAll('.reset-pass-uni-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        const docId = e.currentTarget.getAttribute('data-id'); const campus = e.currentTarget.getAttribute('data-campus');
-                        const colName = campus === 'main' ? 'students' : 'cvsk_students';
-                        window.openResetModal(docId, colName, e.currentTarget.getAttribute('data-name'), e.currentTarget.getAttribute('data-studentid'));
-                    });
-                });
-
+                document.querySelectorAll('.reset-pass-uni-btn').forEach(btn => { btn.addEventListener('click', (e) => { const docId = e.currentTarget.getAttribute('data-id'); const campus = e.currentTarget.getAttribute('data-campus'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; window.openResetModal(docId, colName, e.currentTarget.getAttribute('data-name'), e.currentTarget.getAttribute('data-studentid')); }); });
                 document.querySelectorAll('.verify-quick-btn').forEach(verifyBtn => { verifyBtn.addEventListener('click', async (ev) => { const button = ev.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; if(confirm("Approve and Verify this student record?")) { button.disabled = true; button.innerText = "Verifying..."; try { await setDoc(doc(db, colName, docId), { VerificationStatus: "Verified" }, { merge: true }); await logAction("Super Admin", "VERIFIED STUDENT", stId, `Verified enrollment for ${campus} campus.`); checkPendingNotifications(); document.getElementById('uni-search-btn').click(); } catch(e) { alert("Error verifying."); button.innerText = "✅ Verify"; button.disabled = false; } } }); });
                 document.querySelectorAll('.delete-uni-btn').forEach(delBtn => { delBtn.addEventListener('click', async (e) => { const button = e.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const name = button.getAttribute('data-name'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; const pass = prompt(`CRITICAL WARNING: Enter Master Password to permanently delete ${name} (${stId}) from ${campus}:`); if(pass === "SuperAdmin123!") { button.disabled = true; button.innerText = "Deleting..."; try { await deleteDoc(doc(db, colName, docId)); await logAction("Super Admin", "DELETED STUDENT", `${name} (${stId})`, `Deleted from ${campus} campus database.`); document.getElementById('uni-search-btn').click(); } catch(err) { alert("Error deleting."); button.innerText = "Delete"; button.disabled = false; } } else if(pass !== null) { alert("❌ Incorrect Password."); } }); });
-                document.querySelectorAll('.view-uni-btn').forEach(viewBtn => { viewBtn.addEventListener('click', (ev) => { const student = currentUniversalResults[ev.currentTarget.getAttribute('data-index')]; const body = document.getElementById('view-student-body'); let docsHtml = ''; if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; body.innerHTML = `<div style="display:flex; gap: 20px; align-items: flex-start;"><div style="text-align:center; width: 130px;"><img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;"><div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div><div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div><div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div></div><div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;"><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div></div></div><h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4><table style="width:100%; border-collapse: collapse; font-size: 0.85rem;"><tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr></table><h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4><div style="padding: 10px 0;">${docsHtml}</div>`; document.getElementById('view-student-modal').style.display = 'flex'; }); });
-                document.querySelectorAll('.edit-uni-btn').forEach(editBtn => { editBtn.addEventListener('click', (ev) => { const student = currentUniversalResults[ev.currentTarget.getAttribute('data-index')]; document.getElementById('edit-stu-doc-id').value = student.docId; document.getElementById('edit-stu-campus').value = student.campus; document.getElementById('edit-stu-verification').value = student.VerificationStatus || 'Verified'; document.getElementById('edit-stu-id').value = student["Student ID"] || ''; document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; document.getElementById('edit-stu-name').value = student.Name || ''; document.getElementById('edit-stu-class').value = student.Class || 'LKG'; document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || ''; document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || ''; document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || ''; document.getElementById('edit-stu-dob').value = student.DOB || ''; document.getElementById('edit-stu-blood').value = student["Blood Group"] || ''; document.getElementById('edit-stu-religion').value = student.Religion || ''; document.getElementById('edit-stu-caste').value = student.Caste || 'General'; document.getElementById('edit-stu-cwsn').value = student.CWSN || 'No'; document.getElementById('edit-stu-height').value = student.Height || ''; document.getElementById('edit-stu-weight').value = student.Weight || ''; document.getElementById('edit-stu-f-qual').value = student["Father Qualification"] || ''; document.getElementById('edit-stu-m-qual').value = student["Mother Qualification"] || ''; document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; document.getElementById('edit-stu-phone').value = student.Phone || ''; document.getElementById('edit-stu-address').value = student.Address || ''; document.getElementById('edit-stu-status').value = student.Status || 'Active'; editStuPhotoBase64 = student.Photo || ""; document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; document.getElementById('edit-student-modal').style.display = 'flex'; }); });
+                
+                document.querySelectorAll('.view-uni-btn').forEach(viewBtn => { viewBtn.addEventListener('click', (ev) => { 
+                    const student = currentUniversalResults[ev.currentTarget.getAttribute('data-index')]; 
+                    const body = document.getElementById('view-student-body'); 
+                    let docsHtml = ''; 
+                    if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; 
+                    if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; 
+                    if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; 
+                    body.innerHTML = `
+                    <div style="display:flex; gap: 20px; align-items: flex-start;">
+                        <div style="text-align:center; width: 130px;">
+                            <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
+                            <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
+                            <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
+                            <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div>
+                        </div>
+                        <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div>
+                            <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div>
+                        </div>
+                    </div>
+                    <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4>
+                    <table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">
+                        <tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                        <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'} | ${student.FatherOcc || 'N/A'}</td></tr>
+                        <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr>
+                        <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'} | ${student.MotherOcc || 'N/A'}</td></tr>
+                        <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Annual Income:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Income || 'N/A'}</td></tr>
+                        <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
+                    </table>
+                    <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                    <div style="padding: 10px 0;">${docsHtml}</div>`; 
+                    document.getElementById('view-student-modal').style.display = 'flex'; 
+                }); });
+
+                document.querySelectorAll('.edit-uni-btn').forEach(editBtn => { editBtn.addEventListener('click', (ev) => { 
+                    const student = currentUniversalResults[ev.currentTarget.getAttribute('data-index')]; 
+                    document.getElementById('edit-stu-doc-id').value = student.docId; 
+                    document.getElementById('edit-stu-campus').value = student.campus; 
+                    document.getElementById('edit-stu-verification').value = student.VerificationStatus || 'Verified'; 
+                    document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
+                    document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
+                    document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; 
+                    document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; 
+                    document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; 
+                    document.getElementById('edit-stu-name').value = student.Name || ''; 
+                    document.getElementById('edit-stu-class').value = student.Class || 'LKG'; 
+                    document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; 
+                    document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
+                    document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || ''; 
+                    document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || ''; 
+                    document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || ''; 
+                    document.getElementById('edit-stu-dob').value = student.DOB || ''; 
+                    document.getElementById('edit-stu-blood').value = student["Blood Group"] || ''; 
+                    document.getElementById('edit-stu-religion').value = student.Religion || ''; 
+                    document.getElementById('edit-stu-caste').value = student.Caste || 'General'; 
+                    document.getElementById('edit-stu-cwsn').value = student.CWSN || 'No'; 
+                    document.getElementById('edit-stu-height').value = student.Height || ''; 
+                    document.getElementById('edit-stu-weight').value = student.Weight || ''; 
+                    document.getElementById('edit-stu-f-qual').value = student["Father Qualification"] || ''; 
+                    document.getElementById('edit-stu-f-occ').value = student.FatherOcc || '';
+                    document.getElementById('edit-stu-m-qual').value = student["Mother Qualification"] || ''; 
+                    document.getElementById('edit-stu-m-occ').value = student.MotherOcc || '';
+                    document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; 
+                    document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; 
+                    document.getElementById('edit-stu-income').value = student.Income || '';
+                    document.getElementById('edit-stu-phone').value = student.Phone || ''; 
+                    document.getElementById('edit-stu-address').value = student.Address || ''; 
+                    document.getElementById('edit-stu-status').value = student.Status || 'Active'; 
+                    editStuPhotoBase64 = student.Photo || ""; 
+                    document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; 
+                    document.getElementById('edit-student-modal').style.display = 'flex'; 
+                }); });
             } catch(e) { tableBody.innerHTML = `<tr><td colspan="9" style="text-align: center; padding: 20px; color: red;">Search Error.</td></tr>`; } finally { btn.disabled = false; btn.innerText = "Search Network"; }
         });
 
@@ -1233,10 +1212,141 @@
 
             document.querySelectorAll('.verify-quick-btn').forEach(btn => { btn.addEventListener('click', async (ev) => { const button = ev.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; if(confirm("Approve and Verify this student record?")) { button.disabled = true; button.innerText = "Verifying..."; try { await setDoc(doc(db, colName, docId), { VerificationStatus: "Verified" }, { merge: true }); await logAction("Super Admin", "VERIFIED STUDENT", stId, `Verified enrollment for ${campus} campus.`); checkPendingNotifications(); document.getElementById('refresh-db-btn').click(); } catch(e) { alert("Error verifying."); button.disabled = false; button.innerText = "✅ Verify"; } } }); });
             document.querySelectorAll('.delete-stu-btn').forEach(delBtn => { delBtn.addEventListener('click', async (e) => { const button = e.currentTarget; if(button.disabled) return; const docId = button.getAttribute('data-id'); const campus = button.getAttribute('data-campus'); const name = button.getAttribute('data-name'); const stId = button.getAttribute('data-studentid'); const colName = campus === 'main' ? 'students' : 'cvsk_students'; const pass = prompt(`CRITICAL WARNING: Enter Master Password to permanently delete ${name} (${stId}) from ${campus}:`); if(pass === "SuperAdmin123!") { button.disabled = true; button.innerText = "Deleting..."; try { await deleteDoc(doc(db, colName, docId)); await logAction("Super Admin", "DELETED STUDENT", `${name} (${stId})`, `Deleted from ${campus} campus database.`); document.getElementById('refresh-db-btn').click(); } catch(err) { alert("Error deleting student."); button.disabled = false; button.innerText = "Delete"; } } else if(pass !== null) { alert("❌ Incorrect Password."); } }); });
-            document.querySelectorAll('.view-stu-btn').forEach(btn => { btn.addEventListener('click', (ev) => { const student = currentActiveStudents[ev.currentTarget.getAttribute('data-index')]; const body = document.getElementById('view-student-body'); let docsHtml = ''; if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; body.innerHTML = `<div style="display:flex; gap: 20px; align-items: flex-start;"><div style="text-align:center; width: 130px;"><img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;"><div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div><div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div><div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div></div><div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;"><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div></div></div><h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4><table style="width:100%; border-collapse: collapse; font-size: 0.85rem;"><tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr><tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Qual.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'}</td></tr><tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr></table><h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4><div style="padding: 10px 0;">${docsHtml}</div>`; document.getElementById('view-student-modal').style.display = 'flex'; }); });
-            document.querySelectorAll('.edit-stu-btn').forEach(btn => { btn.addEventListener('click', (e) => { const student = currentActiveStudents[e.currentTarget.getAttribute('data-index')]; document.getElementById('edit-stu-doc-id').value = student.docId; document.getElementById('edit-stu-campus').value = student.campus; document.getElementById('edit-stu-verification').value = student.VerificationStatus || 'Verified'; document.getElementById('edit-stu-id').value = student["Student ID"] || ''; document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; document.getElementById('edit-stu-name').value = student.Name || ''; document.getElementById('edit-stu-class').value = student.Class || 'LKG'; document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || ''; document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || ''; document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || ''; document.getElementById('edit-stu-dob').value = student.DOB || ''; document.getElementById('edit-stu-blood').value = student["Blood Group"] || ''; document.getElementById('edit-stu-religion').value = student.Religion || ''; document.getElementById('edit-stu-caste').value = student.Caste || 'General'; document.getElementById('edit-stu-cwsn').value = student.CWSN || 'No'; document.getElementById('edit-stu-height').value = student.Height || ''; document.getElementById('edit-stu-weight').value = student.Weight || ''; document.getElementById('edit-stu-f-qual').value = student["Father Qualification"] || ''; document.getElementById('edit-stu-m-qual').value = student["Mother Qualification"] || ''; document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; document.getElementById('edit-stu-phone').value = student.Phone || ''; document.getElementById('edit-stu-address').value = student.Address || ''; document.getElementById('edit-stu-status').value = student.Status || 'Active'; editStuPhotoBase64 = student.Photo || ""; editDocBase64 = student.Document || ""; document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; document.getElementById('edit-student-modal').style.display = 'flex'; }); });
+            
+            // UPDATED: View Student Modal
+            document.querySelectorAll('.view-stu-btn').forEach(btn => { btn.addEventListener('click', (ev) => { 
+                const student = currentActiveStudents[ev.currentTarget.getAttribute('data-index')]; 
+                const body = document.getElementById('view-student-body'); 
+                let docsHtml = ''; 
+                if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; 
+                if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; 
+                if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; 
+                body.innerHTML = `
+                <div style="display:flex; gap: 20px; align-items: flex-start;">
+                    <div style="text-align:center; width: 130px;">
+                        <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
+                        <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
+                        <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
+                        <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div>
+                    </div>
+                    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div>
+                    </div>
+                </div>
+                <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4>
+                <table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                    <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'} | ${student.FatherOcc || 'N/A'}</td></tr>
+                    <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr>
+                    <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'} | ${student.MotherOcc || 'N/A'}</td></tr>
+                    <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Annual Income:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Income || 'N/A'}</td></tr>
+                    <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
+                </table>
+                <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                <div style="padding: 10px 0;">${docsHtml}</div>`; 
+                document.getElementById('view-student-modal').style.display = 'flex'; 
+            }); });
+            
+            // UPDATED: Edit Student Form Population
+            document.querySelectorAll('.edit-stu-btn').forEach(btn => { btn.addEventListener('click', (e) => { 
+                const student = currentActiveStudents[e.currentTarget.getAttribute('data-index')]; 
+                document.getElementById('edit-stu-doc-id').value = student.docId; 
+                document.getElementById('edit-stu-campus').value = student.campus; 
+                document.getElementById('edit-stu-verification').value = student.VerificationStatus || 'Verified'; 
+                document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
+                document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
+                document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; 
+                document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; 
+                document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; 
+                document.getElementById('edit-stu-name').value = student.Name || ''; 
+                document.getElementById('edit-stu-class').value = student.Class || 'LKG'; 
+                document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; 
+                document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
+                document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || ''; 
+                document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || ''; 
+                document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || ''; 
+                document.getElementById('edit-stu-dob').value = student.DOB || ''; 
+                document.getElementById('edit-stu-blood').value = student["Blood Group"] || ''; 
+                document.getElementById('edit-stu-religion').value = student.Religion || ''; 
+                document.getElementById('edit-stu-caste').value = student.Caste || 'General'; 
+                document.getElementById('edit-stu-cwsn').value = student.CWSN || 'No'; 
+                document.getElementById('edit-stu-height').value = student.Height || ''; 
+                document.getElementById('edit-stu-weight').value = student.Weight || ''; 
+                document.getElementById('edit-stu-f-qual').value = student["Father Qualification"] || ''; 
+                document.getElementById('edit-stu-f-occ').value = student.FatherOcc || '';
+                document.getElementById('edit-stu-m-qual').value = student["Mother Qualification"] || ''; 
+                document.getElementById('edit-stu-m-occ').value = student.MotherOcc || '';
+                document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; 
+                document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; 
+                document.getElementById('edit-stu-income').value = student.Income || '';
+                document.getElementById('edit-stu-phone').value = student.Phone || ''; 
+                document.getElementById('edit-stu-address').value = student.Address || ''; 
+                document.getElementById('edit-stu-status').value = student.Status || 'Active'; 
+                editStuPhotoBase64 = student.Photo || ""; editDocBase64 = student.Document || ""; 
+                document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; 
+                document.getElementById('edit-student-modal').style.display = 'flex'; 
+            }); });
+            
             document.querySelectorAll('.transfer-stu-btn').forEach(transferBtn => { transferBtn.addEventListener('click', async (e) => { const button = e.currentTarget; if(button.disabled) return; const student = currentActiveStudents[button.getAttribute('data-index')]; const colName = student.campus === 'main' ? "students" : "cvsk_students"; if(confirm(`Are you sure you want to officially transfer out ${student.Name}? This will move them to the Transferred Database.`)) { button.disabled = true; button.innerText = "Processing..."; try { await setDoc(doc(db, colName, student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true }); await logAction("Super Admin", "TRANSFERRED STUDENT", student["Student ID"], `Marked as Transferred Out from ${student.campus}.`); document.getElementById('refresh-db-btn').click(); } catch(err) { button.disabled = false; button.innerText = "Transfer"; } } }); });
-            document.querySelectorAll('.view-tc-stu-btn').forEach(btn => { btn.addEventListener('click', (ev) => { const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')]; const body = document.getElementById('view-student-body'); let docsHtml = ''; if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; body.innerHTML = `<div style="display:flex; gap: 20px; align-items: flex-start;"><div style="text-align:center; width: 130px;"><img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #E63946;"><div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div><div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div><div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div></div><div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;"><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div><div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div><div style="background:#ffe5e5; padding:8px; border-radius:4px; border:1px solid #E63946;"><strong style="color:#E63946;">Transfer Date:</strong> <br>${student.TransferDate || 'N/A'}</div></div></div><h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4><div style="padding: 10px 0;">${docsHtml}</div>`; document.getElementById('view-student-modal').style.display = 'flex'; }); });
+            
+            // UPDATED: View Transferred Modal
+            document.querySelectorAll('.view-tc-stu-btn').forEach(btn => { btn.addEventListener('click', (ev) => { 
+                const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')]; 
+                const body = document.getElementById('view-student-body'); 
+                let docsHtml = ''; 
+                if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`; 
+                if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`; 
+                if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>'; 
+                body.innerHTML = `
+                <div style="display:flex; gap: 20px; align-items: flex-start;">
+                    <div style="text-align:center; width: 130px;">
+                        <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #E63946;">
+                        <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
+                        <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
+                        <div style="margin-top:5px; font-size:0.75rem; background:#eee; padding:3px; border-radius:3px;">Campus: ${student.campus === 'main' ? 'VMI' : 'CVSK'}</div>
+                    </div>
+                    <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
+                        <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                        <div style="background:#ffe5e5; padding:8px; border-radius:4px; border:1px solid #E63946;"><strong style="color:#E63946;">Transfer Date:</strong> <br>${student.TransferDate || 'N/A'}</div>
+                    </div>
+                </div>
+                <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4>
+                <table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">
+                    <tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                    <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'} | ${student.FatherOcc || 'N/A'}</td></tr>
+                    <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr>
+                    <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'} | ${student.MotherOcc || 'N/A'}</td></tr>
+                    <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Annual Income:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Income || 'N/A'}</td></tr>
+                    <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
+                </table>
+                <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                <div style="padding: 10px 0;">${docsHtml}</div>`; 
+                document.getElementById('view-student-modal').style.display = 'flex'; 
+            }); });
             document.querySelectorAll('.print-tc-btn').forEach(btn => { btn.addEventListener('click', (ev) => { const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')]; const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const schoolName = student.campus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM"; if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); } pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center"); pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center"); pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42); pdf.setFontSize(12); pdf.setTextColor(0, 0, 0); pdf.text(`This is to certify that`, 20, 60); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal'); pdf.text(`Son/Daughter of`, 20, 75); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal'); pdf.text(`was admitted to this institution on`, 20, 90); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal'); pdf.text(`and has been officially transferred on`, 20, 105); pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal'); pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal'); pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal'); if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); } if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); } pdf.text("_______________________", 140, 205); pdf.text("Principal Signature", 145, 212); pdf.save(`TC_${student["Student ID"] || 'N/A'}.pdf`); }); });
         }
         
@@ -1251,12 +1361,46 @@
         document.getElementById('manual-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
         document.getElementById('manual-doc-file')?.addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { manualDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
 
+        // UPDATED: Submit Manual Student Form
         document.getElementById('manual-student-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); const submitBtn = document.getElementById('manual-submit-btn'); submitBtn.disabled = true; submitBtn.innerText = "Saving...";
             const studentId = document.getElementById('manual-id').value; const aadharVal = document.getElementById('manual-aadhar').value;
             try { 
                 const safeDocId = makeSafeId(studentId);
-                await setDoc(doc(db, "students", safeDocId), { "Admission Type": document.getElementById('manual-admission-type').value, "Date of Admission": document.getElementById('manual-doa').value, "Student ID": studentId, "Roll No": document.getElementById('manual-roll').value, "Aadhaar Number": aadharVal, "PEN Number": document.getElementById('manual-pen').value, "UDISE Number": document.getElementById('manual-udise').value, "DISE Class": document.getElementById('manual-dise-class').value, "DISE Section": document.getElementById('manual-dise-section').value, "DISE Roll": document.getElementById('manual-dise-roll').value, "Name": document.getElementById('manual-name').value, "DOB": document.getElementById('manual-dob').value, "Blood Group": document.getElementById('manual-blood').value, "Religion": document.getElementById('manual-religion').value, "Caste": document.getElementById('manual-caste').value, "CWSN": document.getElementById('manual-cwsn').value, "Height": document.getElementById('manual-height').value, "Weight": document.getElementById('manual-weight').value, "Class": document.getElementById('manual-class').value, "Father's Name": document.getElementById('manual-father').value, "Father Qualification": document.getElementById('manual-f-qual').value, "Mother's Name": document.getElementById('manual-mother').value, "Mother Qualification": document.getElementById('manual-m-qual').value, "Phone": document.getElementById('manual-phone').value, "Address": document.getElementById('manual-address').value, "VerificationStatus": "Verified", "Document": manualDocBase64, "Status": "Active", "Photo": compressedPhotoBase64 }, { merge: true }); 
+                await setDoc(doc(db, "students", safeDocId), { 
+                    "Admission Type": document.getElementById('manual-admission-type').value, 
+                    "Date of Admission": document.getElementById('manual-doa').value, 
+                    "Student ID": studentId, 
+                    "Roll No": document.getElementById('manual-roll').value, 
+                    "Aadhaar Number": aadharVal, 
+                    "PEN Number": document.getElementById('manual-pen').value, 
+                    "UDISE Number": document.getElementById('manual-udise').value, 
+                    "DISE Class": document.getElementById('manual-dise-class').value, 
+                    "DISE Section": document.getElementById('manual-dise-section').value, 
+                    "DISE Roll": document.getElementById('manual-dise-roll').value, 
+                    "Name": document.getElementById('manual-name').value, 
+                    "DOB": document.getElementById('manual-dob').value, 
+                    "Blood Group": document.getElementById('manual-blood').value, 
+                    "Religion": document.getElementById('manual-religion').value, 
+                    "Caste": document.getElementById('manual-caste').value, 
+                    "CWSN": document.getElementById('manual-cwsn').value, 
+                    "Height": document.getElementById('manual-height').value, 
+                    "Weight": document.getElementById('manual-weight').value, 
+                    "Class": document.getElementById('manual-class').value, 
+                    "Father's Name": document.getElementById('manual-father').value, 
+                    "Father Qualification": document.getElementById('manual-f-qual').value, 
+                    "FatherOcc": document.getElementById('manual-f-occ').value,
+                    "Mother's Name": document.getElementById('manual-mother').value, 
+                    "Mother Qualification": document.getElementById('manual-m-qual').value, 
+                    "MotherOcc": document.getElementById('manual-m-occ').value,
+                    "Income": document.getElementById('manual-income').value,
+                    "Phone": document.getElementById('manual-phone').value, 
+                    "Address": document.getElementById('manual-address').value, 
+                    "VerificationStatus": "Verified", 
+                    "Document": manualDocBase64, 
+                    "Status": "Active", 
+                    "Photo": compressedPhotoBase64 
+                }, { merge: true }); 
                 await logAction("Super Admin", "ENROLLED STUDENT", studentId, "Added new verified student to Main Campus."); alert(`Success!`); document.getElementById('manual-student-form').reset(); document.getElementById('photo-preview').style.display = 'none'; compressedPhotoBase64 = ""; manualDocBase64 = "";
             } catch(e) { alert("Error adding student."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Save Student Record"; }
         });
@@ -1264,11 +1408,44 @@
         document.getElementById('edit-stu-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { editStuPhotoBase64 = base64; document.getElementById('edit-stu-photo-preview').src = base64; }); } });
         document.getElementById('edit-stu-doc-file')?.addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { editDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });
 
+        // UPDATED: Submit Edit Student Form
         document.getElementById('edit-student-form')?.addEventListener('submit', async (e) => { 
             e.preventDefault(); const submitBtn = document.getElementById('edit-student-save-btn'); submitBtn.disabled = true; submitBtn.innerText = "Updating...";
             const docId = document.getElementById('edit-stu-doc-id').value; const campus = document.getElementById('edit-stu-campus').value; const colName = campus === 'main' ? 'students' : 'cvsk_students'; const aadharVal = document.getElementById('edit-stu-aadhar').value; const stuIdStr = document.getElementById('edit-stu-id').value;
             try { 
-                const payload = { "VerificationStatus": document.getElementById('edit-stu-verification').value, "Admission Type": document.getElementById('edit-stu-admission-type').value, Name: document.getElementById('edit-stu-name').value, "Roll No": document.getElementById('edit-stu-roll').value, "Aadhaar Number": aadharVal, "PEN Number": document.getElementById('edit-stu-pen').value, "UDISE Number": document.getElementById('edit-stu-udise').value, "DISE Class": document.getElementById('edit-stu-dise-class').value, "DISE Section": document.getElementById('edit-stu-dise-section').value, "DISE Roll": document.getElementById('edit-stu-dise-roll').value, "DOB": document.getElementById('edit-stu-dob').value, "Blood Group": document.getElementById('edit-stu-blood').value, "Religion": document.getElementById('edit-stu-religion').value, "Caste": document.getElementById('edit-stu-caste').value, "CWSN": document.getElementById('edit-stu-cwsn').value, "Height": document.getElementById('edit-stu-height').value, "Weight": document.getElementById('edit-stu-weight').value, Class: document.getElementById('edit-stu-class').value, "Date of Admission": document.getElementById('edit-stu-doa').value, "Father's Name": document.getElementById('edit-stu-father').value, "Father Qualification": document.getElementById('edit-stu-f-qual').value, "Mother's Name": document.getElementById('edit-stu-mother').value, "Mother Qualification": document.getElementById('edit-stu-m-qual').value, Phone: document.getElementById('edit-stu-phone').value, Address: document.getElementById('edit-stu-address').value, Status: document.getElementById('edit-stu-status').value, Photo: editStuPhotoBase64 }; if(editDocBase64) payload.Document = editDocBase64;
+                const payload = { 
+                    "VerificationStatus": document.getElementById('edit-stu-verification').value, 
+                    "Admission Type": document.getElementById('edit-stu-admission-type').value, 
+                    Name: document.getElementById('edit-stu-name').value, 
+                    "Roll No": document.getElementById('edit-stu-roll').value, 
+                    "Aadhaar Number": aadharVal, 
+                    "PEN Number": document.getElementById('edit-stu-pen').value, 
+                    "UDISE Number": document.getElementById('edit-stu-udise').value, 
+                    "DISE Class": document.getElementById('edit-stu-dise-class').value, 
+                    "DISE Section": document.getElementById('edit-stu-dise-section').value, 
+                    "DISE Roll": document.getElementById('edit-stu-dise-roll').value, 
+                    "DOB": document.getElementById('edit-stu-dob').value, 
+                    "Blood Group": document.getElementById('edit-stu-blood').value, 
+                    "Religion": document.getElementById('edit-stu-religion').value, 
+                    "Caste": document.getElementById('edit-stu-caste').value, 
+                    "CWSN": document.getElementById('edit-stu-cwsn').value, 
+                    "Height": document.getElementById('edit-stu-height').value, 
+                    "Weight": document.getElementById('edit-stu-weight').value, 
+                    Class: document.getElementById('edit-stu-class').value, 
+                    "Date of Admission": document.getElementById('edit-stu-doa').value, 
+                    "Father's Name": document.getElementById('edit-stu-father').value, 
+                    "Father Qualification": document.getElementById('edit-stu-f-qual').value, 
+                    FatherOcc: document.getElementById('edit-stu-f-occ').value,
+                    "Mother's Name": document.getElementById('edit-stu-mother').value, 
+                    "Mother Qualification": document.getElementById('edit-stu-m-qual').value, 
+                    MotherOcc: document.getElementById('edit-stu-m-occ').value,
+                    Income: document.getElementById('edit-stu-income').value,
+                    Phone: document.getElementById('edit-stu-phone').value, 
+                    Address: document.getElementById('edit-stu-address').value, 
+                    Status: document.getElementById('edit-stu-status').value, 
+                    Photo: editStuPhotoBase64 
+                }; 
+                if(editDocBase64) payload.Document = editDocBase64;
                 await setDoc(doc(db, colName, docId), payload, { merge: true }); 
                 await logAction("Super Admin", "EDITED STUDENT", stuIdStr, `Updated profile/DISE/Verification data in ${campus} campus.`); alert("Student successfully updated!"); document.getElementById('edit-student-modal').style.display = 'none'; checkPendingNotifications(); if(document.getElementById('section-view-db').classList.contains('active')) { document.getElementById('refresh-db-btn').click(); } else { document.getElementById('uni-search-btn').click(); }
             } catch (err) { alert("Error updating student."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Update Student Database"; }
@@ -1290,7 +1467,6 @@
             const submitBtn = document.getElementById('upload-bulk-btn'); submitBtn.disabled = true; submitBtn.innerText = "Uploading...";
             const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); const batch = writeBatch(db); jsonData.forEach((row, index) => { const rawId = String(row["Roll No"] || row["Student ID"] || ""); const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; batch.set(doc(db, "students", docId), { ...row, Status: "Active", VerificationStatus: "Verified" }, { merge: true }); }); await batch.commit(); await logAction("Super Admin", "BULK UPLOAD", "Multiple Students", `Uploaded batch of ${jsonData.length} records to Main Campus.`); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); } catch(err) { alert("Error uploading file."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Upload to Database"; } }; reader.readAsArrayBuffer(file); 
         });
-
 
         // --- 4. STAFF DATABASE MODULE ---
         let liveTeachersData = []; let tchPhotoBase64 = ""; let editTchPhotoBase64 = "";
