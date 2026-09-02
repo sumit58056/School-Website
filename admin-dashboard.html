@@ -122,13 +122,13 @@
             <div id="section-online-adm" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>💻 Track Online Applications</h3>
-                    <div class="info-box">Review applications submitted through the public portal. Verify their ₹100 payment screenshots and officially enroll them into a campus database.</div>
+                    <div class="info-box">Review applications submitted through the public portal. Verify their ₹100 payment screenshots and allocate their official Student IDs.</div>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
                         <button id="refresh-online-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px; background-color: #003366;">🔄 Refresh Applications</button>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
-                            <thead><tr><th>Form Number</th><th>Date</th><th>Student Name</th><th>Class</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
+                            <thead><tr><th>App Number</th><th>Date</th><th>Student Name</th><th>Class</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead>
                             <tbody id="online-adm-table-body"><tr><td colspan="7" style="text-align: center; padding: 20px;">Click Refresh to load...</td></tr></tbody>
                         </table>
                     </div>
@@ -288,6 +288,7 @@
             <div id="section-teachers" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Add / Manage Network Staff</h3>
+
                     <form class="admin-form" id="teacher-form">
                         <div class="input-group" style="text-align: center; margin-bottom: 25px;">
                             <img id="tch-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 120px; height: 120px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; display: none; margin: 0 auto 10px auto;"><br>
@@ -353,8 +354,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- SECTION: Study Materials -->
+            <!-- SECTION 6: Study Materials -->
             <div id="section-materials" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish Study Materials & Syllabus</h3>
@@ -370,7 +370,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: Export Database -->
+            <!-- SECTION 7: Export Database -->
             <div id="section-export" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Export Databases</h3>
@@ -385,7 +385,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: Notices -->
+            <!-- SECTION 8: Notices -->
             <div id="section-notices" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish a New Notice</h3>
@@ -404,7 +404,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: Exam Results -->
+            <!-- SECTION 9: Exam Results -->
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Manage Examination Results (Main Campus)</h3>
@@ -428,10 +428,24 @@
                             <div class="input-group" id="grp-his" style="display:none;"><label>History</label><input type="number" step="0.5" class="acad-mark" id="m-his"></div>
                             <div class="input-group" id="grp-geo" style="display:none;"><label>Geography</label><input type="number" step="0.5" class="acad-mark" id="m-geo"></div>
                         </div>
+                        <div id="co-curricular-section" style="display: none;">
+                            <h5 style="margin-top: 10px; color: #FF671F;">Co-Curricular Grades (Annual Exam Only)</h5>
+                            <div class="marks-grid">
+                                <div class="input-group"><label>Dance</label><select id="g-dance"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                                <div class="input-group"><label>Music</label><select id="g-music"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                                <div class="input-group"><label>Art & Craft</label><select id="g-art"><option value="">-- Grade --</option><option>A+</option><option>A</option><option>B+</option><option>B</option><option>C</option><option>D/P</option><option>F</option></select></div>
+                            </div>
+                        </div>
                         <button type="submit" class="admin-submit-btn" id="res-submit-btn">Save Report Card</button>
                     </form>
 
-                    <h4 class="section-divider">2. View Live Results</h4>
+                    <h4 class="section-divider">2. Bulk Upload via Excel/CSV</h4>
+                    <form class="admin-form" id="bulk-result-form">
+                        <div class="file-drop-zone" style="padding: 20px;"><label for="results-file" class="browse-btn">Select Results CSV/Excel</label><input type="file" id="results-file" accept=".csv, .xlsx" hidden></div>
+                        <button type="submit" class="admin-submit-btn" id="res-bulk-submit">Upload Bulk Results</button>
+                    </form>
+
+                    <h4 class="section-divider">3. View Live Results</h4>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <div>
                             <button id="refresh-results-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh</button>
@@ -449,7 +463,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: Admit Cards -->
+            <!-- SECTION 10: Admit Cards -->
             <div id="section-admit" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Generate Admit Cards (Main Campus)</h3>
@@ -485,7 +499,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: ID Cards -->
+            <!-- SECTION 11: ID Cards -->
             <div id="section-id-cards" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>Professional PVC ID Card Generator</h3>
@@ -623,7 +637,7 @@
             <h3 style="color: #003366; margin-bottom: 5px; border-bottom: 2px solid #FFb300; padding-bottom: 5px;">Verify Online Application</h3>
             <div id="view-online-body" style="font-size: 0.95rem; line-height: 1.8; color: #333; margin-bottom: 20px;"></div>
             <div style="background: #eef4fc; padding: 15px; border: 1px solid #003366; border-radius: 6px;">
-                <h4 style="margin: 0 0 10px 0; color: #003366;">Admin Action: Enroll Student</h4>
+                <h4 style="margin: 0 0 10px 0; color: #003366;">Admin Action: Process Application</h4>
                 <div style="display: flex; gap: 15px; align-items: center;">
                     <div class="input-group" style="flex: 1; margin: 0;">
                         <label>Enroll into Campus Database:</label>
@@ -632,15 +646,15 @@
                             <option value="branch">Branch Campus (CVSK)</option>
                         </select>
                     </div>
-                    <button id="enroll-online-btn" class="admin-submit-btn btn-green" style="margin: 0; padding: 12px 20px; height: 100%;">✅ Verify Payment & Enroll</button>
-                    <!-- NEW REJECT BUTTON -->
-                    <button id="reject-online-btn" class="admin-submit-btn btn-red" style="margin: 0; padding: 12px 20px; height: 100%; width: auto;">❌ Reject Application</button>
+                    <button id="enroll-online-btn" class="admin-submit-btn btn-green" style="margin: 0; padding: 12px 20px; height: 100%;">✅ Verify & Allocate ID</button>
+                    <!-- REJECT BUTTON -->
+                    <button id="reject-online-btn" class="admin-submit-btn btn-red" style="margin: 0; padding: 12px 20px; height: 100%; width: auto;">❌ Reject</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- NEW REJECT MODAL -->
+    <!-- REJECT MODAL -->
     <div id="reject-modal" class="modal-overlay">
         <div class="modal-content" style="width: 450px;">
             <button class="modal-close" onclick="document.getElementById('reject-modal').style.display='none'">&times;</button>
@@ -656,6 +670,37 @@
                 </div>
                 <div class="info-box">This reason will be officially recorded and a notification will be pushed to the branch admins.</div>
                 <button type="submit" class="admin-submit-btn btn-red" id="submit-reject-btn">Confirm Rejection</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Online Application Modal -->
+    <div id="edit-online-modal" class="modal-overlay">
+        <div class="modal-content" style="width: 600px;">
+            <button class="modal-close" onclick="document.getElementById('edit-online-modal').style.display='none'">&times;</button>
+            <h3 style="color: #003366; margin-bottom: 15px; border-bottom: 2px solid #ffb300; padding-bottom: 5px;">✏️ Edit Online Application</h3>
+            <form id="edit-online-form" class="admin-form">
+                <input type="hidden" id="edit-onl-doc-id">
+                <div class="marks-grid">
+                    <div class="input-group"><label>Student Name</label><input type="text" id="edit-onl-name" required></div>
+                    <div class="input-group">
+                        <label>Class</label>
+                        <select id="edit-onl-class" required>
+                            <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>Date of Birth</label><input type="date" id="edit-onl-dob" required></div>
+                    <div class="input-group"><label>Aadhaar</label><input type="text" id="edit-onl-aadhar" maxlength="12"></div>
+                    <div class="input-group"><label>PEN</label><input type="text" id="edit-onl-pen"></div>
+                    <div class="input-group"><label>Phone</label><input type="text" id="edit-onl-phone" required></div>
+                    <div class="input-group"><label>Father's Name</label><input type="text" id="edit-onl-father"></div>
+                    <div class="input-group"><label>Mother's Name</label><input type="text" id="edit-onl-mother"></div>
+                    <div class="input-group"><label>Height (cm)</label><input type="number" id="edit-onl-height"></div>
+                    <div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-onl-weight"></div>
+                </div>
+                <div class="input-group"><label>Address</label><textarea id="edit-onl-address" rows="2"></textarea></div>
+                <div class="info-box" style="margin-top:10px;">Saving this will update the form data. If the form was Rejected, its status will be <strong>restored to Pending</strong> so you can review and enroll it.</div>
+                <button type="submit" class="admin-submit-btn btn-green" id="edit-online-save-btn">Update & Restore Application</button>
             </form>
         </div>
     </div>
@@ -837,34 +882,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- Firebase Integration -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { db, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from './firebase-init.js';
 
-        const firebaseConfig = { 
-            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
-            authDomain: "vmi-portal.firebaseapp.com", 
-            projectId: "vmi-portal", 
-            storageBucket: "vmi-portal.firebasestorage.app", 
-            messagingSenderId: "215224119153", 
-            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        // --- AUDIT LOGGING ENGINE ---
+        // ==========================================
+        // --- AUDIT LOGGING ENGINE (MOVED TO TOP) ---
+        // ==========================================
         async function logAction(userRole, action, target, details) {
-            try { 
-                const logDoc = doc(collection(db, "audit_logs")); 
-                await setDoc(logDoc, { 
-                    timestamp: Date.now(), 
-                    dateString: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }), 
-                    user: userRole, 
-                    action: action, 
-                    target: target, 
-                    details: details 
-                }); 
-            } catch(e) { 
-                console.error("Audit log failed", e); 
-            }
+            try {
+                const logDoc = doc(collection(db, "audit_logs"));
+                await setDoc(logDoc, {
+                    timestamp: Date.now(),
+                    dateString: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+                    user: userRole,
+                    action: action,
+                    target: target,
+                    details: details
+                });
+            } catch(e) { console.error("Audit log failed", e); }
         }
 
         let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "", admissionsActive: true, formsActive: true };
@@ -967,7 +1001,7 @@
         document.getElementById('refresh-gallery-btn')?.addEventListener('click', loadGallery);
         document.querySelector('.nav-link[data-target="section-gallery"]')?.addEventListener('click', () => setTimeout(loadGallery, 50));
 
-        // --- NEW: REJECTION ENGINE ---
+        // --- REJECTION ENGINE ---
         document.getElementById('reject-form')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submit-reject-btn');
@@ -1017,8 +1051,42 @@
             }
         });
 
+        // --- EDIT ONLINE APPLICATION ENGINE ---
+        document.getElementById('edit-online-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('edit-online-save-btn');
+            btn.disabled = true; btn.innerText = "Updating...";
+            const docId = document.getElementById('edit-onl-doc-id').value;
+            
+            try {
+                await setDoc(doc(db, "online_admissions", docId), {
+                    Name: document.getElementById('edit-onl-name').value,
+                    Class: document.getElementById('edit-onl-class').value,
+                    DOB: document.getElementById('edit-onl-dob').value,
+                    Aadhaar: document.getElementById('edit-onl-aadhar').value,
+                    PEN: document.getElementById('edit-onl-pen').value,
+                    Phone: document.getElementById('edit-onl-phone').value,
+                    FatherName: document.getElementById('edit-onl-father').value,
+                    MotherName: document.getElementById('edit-onl-mother').value,
+                    Height: document.getElementById('edit-onl-height').value,
+                    Weight: document.getElementById('edit-onl-weight').value,
+                    Address: document.getElementById('edit-onl-address').value,
+                    Status: "Payment Verification Pending", // Restores the status!
+                    RejectionReason: "" // Clears the rejection reason
+                }, { merge: true });
+                
+                await logAction("Super Admin", "EDITED ONLINE FORM", docId, "Updated app data and restored to pending.");
+                alert("Application successfully updated and restored!");
+                document.getElementById('edit-online-modal').style.display = 'none';
+                loadOnlineAdmissions(); // Refresh the table
+            } catch(err) {
+                alert("Error updating application.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Update & Restore Application";
+            }
+        });
 
-        // --- ONLINE ADMISSIONS TRACKER ---
+        // --- ONLINE ADMISSIONS TRACKER (WITH ID ALLOCATION) ---
         let currentOnlineAdmissions = [];
         
         async function loadOnlineAdmissions() {
@@ -1045,11 +1113,16 @@
                     if (app.Status === "Rejected") statusColor = "red";
                     
                     let actionBtns = `<button class="action-btn btn-blue view-online-btn" data-index="${index}">👁️ Review Form</button>`;
+                    
                     if(app.Status === "Verified & Enrolled") {
                         actionBtns += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;">🔒 Enrolled</button>`;
                     } else if (app.Status === "Rejected") {
-                        actionBtns += `<button class="action-btn" style="background:#E63946; cursor:not-allowed;">⛔ Rejected</button>`;
+                        // Edit & restore button for rejected forms
+                        actionBtns += `<button class="action-btn btn-green edit-online-btn" data-index="${index}">✏️ Edit & Restore</button>`;
+                        actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`;
                     } else {
+                        // Edit button for pending forms too
+                        actionBtns += `<button class="action-btn btn-green edit-online-btn" data-index="${index}">✏️ Edit</button>`;
                         actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`;
                     }
 
@@ -1065,6 +1138,7 @@
                     tbody.appendChild(tr);
                 });
 
+                // Attach View Event
                 document.querySelectorAll('.view-online-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const app = currentOnlineAdmissions[e.currentTarget.getAttribute('data-index')];
@@ -1086,7 +1160,7 @@
                         body.innerHTML = `
                             ${rejectNoticeHtml}
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem; margin-bottom: 20px;">
-                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Form No:</strong> <br>${app.FormNumber}</div>
+                                <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>App No:</strong> <br>${app.FormNumber}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Date:</strong> <br>${app.SubmissionDate}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Name:</strong> <br>${app.Name}</div>
                                 <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Class:</strong> <br>${app.Class}</div>
@@ -1102,6 +1176,21 @@
                             </div>
                             <h4 style="margin: 0 0 10px 0; color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Payment Verification</h4>
                             ${proofHtml}
+                            
+                            <!-- ID ALLOCATION BOX -->
+                            <div style="background: #fff3cd; padding: 15px; border: 1px solid #ffc107; border-radius: 6px; margin-top: 20px; display: ${app.Status === 'Verified & Enrolled' || app.Status === 'Rejected' ? 'none' : 'block'};">
+                                <h4 style="margin: 0 0 10px 0; color: #856404;">Student ID Allocation</h4>
+                                <div style="display: flex; gap: 15px;">
+                                    <div class="input-group" style="flex: 1; margin:0;">
+                                        <label>Assign Student ID <span style="color:red">*</span></label>
+                                        <input type="text" id="allocate-stu-id" placeholder="e.g. VMI/26/001" style="padding:10px; border:1px solid #ccc; border-radius:4px; font-weight:bold;">
+                                    </div>
+                                    <div class="input-group" style="flex: 1; margin:0;">
+                                        <label>Assign Roll No</label>
+                                        <input type="text" id="allocate-stu-roll" placeholder="e.g. 12" style="padding:10px; border:1px solid #ccc; border-radius:4px;">
+                                    </div>
+                                </div>
+                            </div>
                         `;
 
                         const enrollBtn = document.getElementById('enroll-online-btn');
@@ -1118,7 +1207,7 @@
                                 document.getElementById('reject-doc-id').value = app.docId;
                                 document.getElementById('reject-col-name').value = 'online_admissions';
                                 document.getElementById('reject-stu-id').value = app.FormNumber;
-                                document.getElementById('reject-campus').value = app.Campus; // main or branch
+                                document.getElementById('reject-campus').value = app.Campus;
                                 document.getElementById('reject-reason').value = '';
                                 document.getElementById('view-online-modal').style.display = 'none';
                                 document.getElementById('reject-modal').style.display = 'flex';
@@ -1128,13 +1217,24 @@
                                 const targetCampus = document.getElementById('online-target-campus').value;
                                 const colName = targetCampus === 'main' ? 'students' : 'cvsk_students';
                                 
-                                if(confirm(`Confirm payment is valid and enroll ${app.Name} into ${targetCampus === 'main' ? 'Main' : 'Branch'} Campus?`)) {
+                                const allocatedId = document.getElementById('allocate-stu-id')?.value.trim();
+                                const allocatedRoll = document.getElementById('allocate-stu-roll')?.value.trim();
+
+                                if (!allocatedId) {
+                                    alert("You must allocate a permanent Student ID before enrolling!");
+                                    document.getElementById('allocate-stu-id').focus();
+                                    return;
+                                }
+                                
+                                if(confirm(`Confirm payment is valid and enroll ${app.Name} into ${targetCampus === 'main' ? 'Main' : 'Branch'} Campus with ID: ${allocatedId}?`)) {
                                     enrollBtn.disabled = true; enrollBtn.innerText = "Enrolling...";
                                     try {
                                         const newStudentPayload = {
                                             "Admission Type": app.AdmissionType,
                                             "Date of Admission": new Date().toLocaleDateString(),
-                                            "Student ID": app.FormNumber, 
+                                            "Student ID": allocatedId, 
+                                            "Roll No": allocatedRoll, 
+                                            "Application Number": app.FormNumber,
                                             "Aadhaar Number": app.Aadhaar,
                                             "PEN Number": app.PEN,
                                             "Name": app.Name,
@@ -1161,12 +1261,16 @@
                                             "Photo": app.Photo || ""
                                         };
 
-                                        await setDoc(doc(db, colName, makeSafeId(app.FormNumber)), newStudentPayload);
-                                        await setDoc(doc(db, "online_admissions", app.docId), { Status: "Verified & Enrolled" }, { merge: true });
+                                        await setDoc(doc(db, colName, makeSafeId(allocatedId)), newStudentPayload);
                                         
-                                        await logAction("Super Admin", "ENROLLED ONLINE APPLICANT", app.FormNumber, `Verified payment and moved to ${targetCampus} database.`);
+                                        await setDoc(doc(db, "online_admissions", app.docId), { 
+                                            Status: "Verified & Enrolled",
+                                            AllocatedID: allocatedId
+                                        }, { merge: true });
                                         
-                                        alert("Student successfully verified and enrolled!");
+                                        await logAction("Super Admin", "ENROLLED ONLINE APPLICANT", allocatedId, `App No: ${app.FormNumber} moved to ${targetCampus} database.`);
+                                        
+                                        alert(`Success! ${app.Name} has been enrolled as ${allocatedId}.`);
                                         document.getElementById('view-online-modal').style.display = 'none';
                                         loadOnlineAdmissions();
                                     } catch(err) {
@@ -1177,11 +1281,31 @@
                                 }
                             };
                         }
-
                         document.getElementById('view-online-modal').style.display = 'flex';
                     });
                 });
 
+                // Attach Edit Event for Online Applications
+                document.querySelectorAll('.edit-online-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const app = currentOnlineAdmissions[e.currentTarget.getAttribute('data-index')];
+                        document.getElementById('edit-onl-doc-id').value = app.docId;
+                        document.getElementById('edit-onl-name').value = app.Name || '';
+                        document.getElementById('edit-onl-class').value = app.Class || 'LKG';
+                        document.getElementById('edit-onl-dob').value = app.DOB || '';
+                        document.getElementById('edit-onl-aadhar').value = app.Aadhaar || '';
+                        document.getElementById('edit-onl-pen').value = app.PEN || '';
+                        document.getElementById('edit-onl-phone').value = app.Phone || '';
+                        document.getElementById('edit-onl-father').value = app.FatherName || '';
+                        document.getElementById('edit-onl-mother').value = app.MotherName || '';
+                        document.getElementById('edit-onl-height').value = app.Height || '';
+                        document.getElementById('edit-onl-weight').value = app.Weight || '';
+                        document.getElementById('edit-onl-address').value = app.Address || '';
+                        document.getElementById('edit-online-modal').style.display = 'flex';
+                    });
+                });
+
+                // Attach Delete Event
                 document.querySelectorAll('.del-online-btn').forEach(delBtn => {
                     delBtn.addEventListener('click', async (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
@@ -1547,7 +1671,7 @@
                 <div style="padding: 10px 0;">${docsHtml}</div>`; 
                 document.getElementById('view-student-modal').style.display = 'flex'; 
             }); });
-            
+
             document.querySelectorAll('.edit-stu-btn').forEach(btn => { btn.addEventListener('click', (e) => { 
                 const student = currentActiveStudents[e.currentTarget.getAttribute('data-index')]; 
                 document.getElementById('edit-stu-doc-id').value = student.docId; 

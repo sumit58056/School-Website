@@ -67,7 +67,9 @@
     <div class="admin-layout">
         <aside class="admin-sidebar">
             <ul class="admin-nav">
-                <li><a href="#" class="nav-link active" data-target="section-upload">📁 Upload Student Data</a></li>
+                <li><a href="#" class="nav-link active" data-target="section-branch-search" style="background-color: #002244; border-left: 4px solid #6a0dad;">🌐 Branch Search</a></li>
+                <li><a href="#" class="nav-link" data-target="section-notifications" style="background-color: #1a1a1a; border-left: 4px solid #E63946;">🔔 Notifications <span id="nav-notif-badge" style="background:#E63946; color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem; display:none; margin-left:5px;">0</span></a></li>
+                <li><a href="#" class="nav-link" data-target="section-upload">📁 Upload Student Data</a></li>
                 <li><a href="#" class="nav-link" data-target="section-add-student">👤 Enroll Student</a></li>
                 <li><a href="#" class="nav-link" data-target="section-transferred">🎓 Transferred Students</a></li>
                 <li><a href="#" class="nav-link" data-target="section-view-db">👁️ View Students DB</a></li>
@@ -84,7 +86,43 @@
         </aside>
 
         <main class="admin-content">
-            <div id="section-upload" class="admin-section active">
+            <!-- SECTION 0: Branch Universal Search -->
+            <div id="section-branch-search" class="admin-section active">
+                <div class="dashboard-card" style="max-width: 100%;">
+                    <h3>🌐 Branch Universal Search</h3>
+                    <div class="info-box">Search the Branch database directly by <strong>Student Name, Student ID, Aadhaar Number, or PEN Number</strong>.</div>
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <input type="text" id="branch-search-input" placeholder="Enter Name, ID, Aadhaar, or PEN..." style="padding: 12px; width: 100%; max-width: 500px; border-radius: 4px; border: 1px solid #ccc;">
+                        <button id="branch-search-btn" class="admin-submit-btn btn-purple" style="width: auto; padding: 12px 25px;">Search Branch</button>
+                    </div>
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <table class="db-table">
+                            <thead><tr><th>Photo</th><th>ID / Roll</th><th>Name</th><th>Class</th><th>Aadhaar</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="branch-search-table-body"><tr><td colspan="7" style="text-align: center; padding: 20px;">Enter a search term above...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION: Notifications -->
+            <div id="section-notifications" class="admin-section">
+                <div class="dashboard-card" style="max-width: 100%;">
+                    <h3>🔔 Branch Notifications & Alerts</h3>
+                    <div class="info-box">View messages, rejections, and alerts sent directly from the Super Admin.</div>
+                    <div style="display: flex; justify-content: flex-start; margin-bottom: 15px;">
+                        <button id="refresh-notif-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px; background-color: #1a1a1a;">🔄 Refresh Notifications</button>
+                    </div>
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <table class="db-table">
+                            <thead><tr><th>Date</th><th>Title</th><th>Message</th><th>Action</th></tr></thead>
+                            <tbody id="notif-table-body"><tr><td colspan="4" style="text-align: center; padding: 20px;">Click "Refresh Notifications" to load...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: Upload Student Data -->
+            <div id="section-upload" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Bulk Upload Student Details (Branch DB)</h3>
                     <div class="info-box">
@@ -98,6 +136,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 2: Add Student -->
             <div id="section-add-student" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Enroll / Transfer In Student</h3>
@@ -179,7 +218,7 @@
                     </form>
                 </div>
             </div>
-
+            <!-- SECTION 3: Transferred Students -->
             <div id="section-transferred" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Transferred Students Hub</h3>
@@ -209,6 +248,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 4: View Live Database -->
             <div id="section-view-db" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Live Student Database</h3>
@@ -225,6 +265,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 5: Manage Staff -->
             <div id="section-teachers" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Add / Manage Branch Staff</h3>
@@ -280,6 +321,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Photo Gallery Upload -->
             <div id="section-gallery" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>📸 Upload Event Photos to Website Gallery</h3>
@@ -318,6 +360,7 @@
                 </div>
             </div>
 
+            <!-- SECTION: Send to Main Campus -->
             <div id="section-send-main" class="admin-section">
                 <div class="dashboard-card">
                     <h3>📤 Secure Document Transfer to Main Campus</h3>
@@ -346,6 +389,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 6: Study Materials -->
             <div id="section-materials" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish Study Materials & Syllabus</h3>
@@ -361,6 +405,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 7: Export Database -->
             <div id="section-export" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Export Branch Databases</h3>
@@ -379,6 +424,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 8: Notices -->
             <div id="section-notices" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Publish a New Notice</h3>
@@ -397,6 +443,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 9: Exam Results -->
             <div id="section-results" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Manage Examination Results</h3>
@@ -471,6 +518,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 10: Admit Cards -->
             <div id="section-admit" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Generate Admit Cards (3-per-Page A4)</h3>
@@ -539,6 +587,7 @@
                 </div>
             </div>
 
+            <!-- SECTION 11: ID CARDS -->
             <div id="section-id-cards" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>Professional PVC ID Card Generator</h3>
@@ -609,6 +658,7 @@
         </main>
     </div>
 
+    <!-- Modals -->
     <div id="marks-modal" class="modal-overlay">
         <div class="modal-content">
             <button class="modal-close" onclick="document.getElementById('marks-modal').style.display='none'">&times;</button>
@@ -617,6 +667,7 @@
         </div>
     </div>
 
+    <!-- Student Full Details View Modal -->
     <div id="view-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 650px;">
             <button class="modal-close" onclick="document.getElementById('view-student-modal').style.display='none'">&times;</button>
@@ -625,6 +676,7 @@
         </div>
     </div>
 
+    <!-- Teacher Full Details View Modal -->
     <div id="view-teacher-modal" class="modal-overlay">
         <div class="modal-content" style="width: 550px;">
             <button class="modal-close" onclick="document.getElementById('view-teacher-modal').style.display='none'">&times;</button>
@@ -633,6 +685,7 @@
         </div>
     </div>
 
+    <!-- Edit Student Modal -->
     <div id="edit-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 700px;">
             <button class="modal-close" onclick="document.getElementById('edit-student-modal').style.display='none'">&times;</button>
@@ -725,6 +778,7 @@
         </div>
     </div>
 
+    <!-- Edit Teacher Modal -->
     <div id="edit-teacher-modal" class="modal-overlay">
         <div class="modal-content" style="width: 600px;">
             <button class="modal-close" onclick="document.getElementById('edit-teacher-modal').style.display='none'">&times;</button>
@@ -766,6 +820,7 @@
         </div>
     </div>
 
+    <!-- UI Scripts & Libraries -->
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
@@ -786,6 +841,10 @@
                     document.getElementById('refresh-tc-btn')?.click();
                 } else if(target === 'section-gallery') {
                     document.getElementById('refresh-gallery-btn')?.click();
+                } else if(target === 'section-notifications') {
+                    document.getElementById('refresh-notif-btn')?.click();
+                } else if(target === 'section-branch-search') {
+                    document.getElementById('branch-search-input')?.focus();
                 }
             });
         });
@@ -819,19 +878,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <!-- Firebase Integration -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = { 
-            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
-            authDomain: "vmi-portal.firebaseapp.com", 
-            projectId: "vmi-portal", 
-            storageBucket: "vmi-portal.firebasestorage.app", 
-            messagingSenderId: "215224119153", 
-            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
-        };
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        import { db, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from './firebase-init.js';
 
         // ==========================================
         // --- AUDIT LOGGING ENGINE (MOVED TO TOP) ---
@@ -882,13 +929,288 @@
 
         async function loadGlobalSettings() {
             try { 
-                const snap = await getDoc(doc(db, "settings", "cvsk_assets")); 
+                // Checks the global settings shared across the network
+                const snap = await getDoc(doc(db, "settings", "global_assets")); 
                 if (snap.exists()) { 
                     globalAssets = { ...globalAssets, ...snap.data() }; 
                 } 
             } catch(e) { console.error("Error loading settings", e); }
         } 
         loadGlobalSettings();
+
+        // --- NEW: NOTIFICATIONS ENGINE ---
+        async function checkUnreadNotifications() {
+            try {
+                const qSnap = await getDocs(query(collection(db, "notifications"), where("campus", "==", "branch"), where("read", "==", false)));
+                const badge = document.getElementById('nav-notif-badge');
+                if(!qSnap.empty) {
+                    badge.style.display = 'inline-block';
+                    badge.innerText = qSnap.size;
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch(e) {}
+        }
+        checkUnreadNotifications(); // Check on load
+
+        async function loadBranchNotifications() {
+            const tbody = document.getElementById('notif-table-body');
+            const btn = document.getElementById('refresh-notif-btn');
+            if(!tbody) return;
+            if(btn) { btn.disabled = true; btn.innerText = "Loading..."; }
+            try {
+                const qSnap = await getDocs(query(collection(db, "notifications"), where("campus", "==", "branch")));
+                let notifs = [];
+                qSnap.forEach(d => notifs.push({ id: d.id, ...d.data() }));
+                notifs.sort((a,b) => b.timestamp - a.timestamp);
+                
+                tbody.innerHTML = "";
+                if(notifs.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 20px;">No notifications found.</td></tr>`;
+                    return;
+                }
+                
+                notifs.forEach(n => {
+                    const tr = document.createElement('tr');
+                    const badge = n.read ? "" : `<span style="background:#E63946; color:white; padding:2px 6px; border-radius:4px; font-size:0.7rem; margin-left:10px;">NEW</span>`;
+                    tr.innerHTML = `
+                        <td>${n.date}</td>
+                        <td><strong>${n.title}</strong> ${badge}</td>
+                        <td style="color:#666;">${n.message}</td>
+                        <td>
+                            ${n.read ? '' : `<button class="action-btn btn-green mark-read-btn" data-id="${n.id}">Mark Read</button>`}
+                            <button class="action-btn btn-red delete-notif-btn" data-id="${n.id}">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.querySelectorAll('.mark-read-btn').forEach(b => {
+                    b.addEventListener('click', async (e) => {
+                        e.target.disabled = true;
+                        await setDoc(doc(db, "notifications", e.target.dataset.id), { read: true }, { merge: true });
+                        loadBranchNotifications();
+                        checkUnreadNotifications();
+                    });
+                });
+                
+                document.querySelectorAll('.delete-notif-btn').forEach(b => {
+                    b.addEventListener('click', async (e) => {
+                        if(confirm("Delete this notification?")) {
+                            e.target.disabled = true;
+                            await deleteDoc(doc(db, "notifications", e.target.dataset.id));
+                            loadBranchNotifications();
+                            checkUnreadNotifications();
+                        }
+                    });
+                });
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color:red;">Error loading notifications.</td></tr>`;
+            } finally {
+                if(btn) { btn.disabled = false; btn.innerText = "🔄 Refresh Notifications"; }
+            }
+        }
+        document.getElementById('refresh-notif-btn')?.addEventListener('click', loadBranchNotifications);
+
+
+        // --- BRANCH UNIVERSAL SEARCH ---
+        let currentBranchSearchResults = [];
+        document.getElementById('branch-search-btn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('branch-search-btn'); if(btn.disabled) return;
+            const term = document.getElementById('branch-search-input').value.toLowerCase().trim();
+            const tableBody = document.getElementById('branch-search-table-body');
+            if(!term) { alert("Please enter a search term."); return; }
+            
+            btn.disabled = true; btn.innerText = "Searching..."; 
+            tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">Scanning branch database...</td></tr>`;
+            
+            try {
+                let results = [];
+                const snaps = await getDocs(collection(db, "cvsk_students"));
+                snaps.forEach(doc => { 
+                    const d = doc.data(); 
+                    if(d.Name && (d["Student ID"] || d["Roll No"])) results.push({ docId: doc.id, ...d }); 
+                });
+                
+                const filtered = results.filter(s => {
+                    const name = (s.Name || "").toLowerCase(); 
+                    const aadhar = (s["Aadhaar Number"] || s.Aadhaar || "").toLowerCase(); 
+                    const pen = (s["PEN Number"] || s.PEN || "").toLowerCase(); 
+                    const stuId = (s["Student ID"] || s["Roll No"] || "").toLowerCase();
+                    return name.includes(term) || aadhar.includes(term) || pen.includes(term) || stuId.includes(term);
+                });
+                
+                if(filtered.length === 0) { 
+                    tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px; color: red;">No student found matching "${term}".</td></tr>`; 
+                    return; 
+                }
+                
+                tableBody.innerHTML = ""; 
+                currentBranchSearchResults = filtered;
+                
+                filtered.forEach((student, index) => {
+                    const tr = document.createElement('tr'); 
+                    const photoSrc = student.Photo || 'https://via.placeholder.com/40';
+                    const isVerified = student.VerificationStatus === 'Verified';
+                    const isRejected = student.VerificationStatus === 'Rejected';
+                    let verifClass = 'status-pending';
+                    if (isVerified) verifClass = 'status-verified';
+                    if (isRejected) verifClass = 'status-rejected';
+
+                    let actionButtons = `<button class="action-btn btn-blue view-search-stu-btn" data-index="${index}">👁️ View</button>`;
+                    
+                    if(isVerified) {
+                        actionButtons += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;" onclick="alert('Locked by Super Admin.')">🔒 Locked</button>`;
+                    } else if(isRejected) {
+                        actionButtons += `<button class="action-btn btn-green edit-search-stu-btn" data-index="${index}">Edit & Resubmit</button>
+                                          <button class="action-btn btn-red delete-search-stu-btn" data-id="${student.docId}">Delete</button>`;
+                    } else {
+                        actionButtons += `<button class="action-btn btn-green edit-search-stu-btn" data-index="${index}">Edit</button>
+                                          <button class="action-btn btn-red transfer-search-stu-btn" data-index="${index}">Transfer</button>`;
+                    }
+
+                    tr.innerHTML = `<td><img src="${photoSrc}" class="db-thumbnail"></td><td><strong>${student["Student ID"] || 'N/A'}</strong><br><span style="font-size:0.75rem; color:#666;">Roll: ${student["Roll No"] || 'N/A'}</span></td><td>${student.Name}</td><td>${student.Class || 'N/A'}</td><td>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</td><td><span class="${verifClass}">${student.VerificationStatus || 'Pending'}</span></td><td>${actionButtons}</td>`; 
+                    tableBody.appendChild(tr);
+                });
+
+                // Attach View events for Search
+                document.querySelectorAll('.view-search-stu-btn').forEach(btn => {
+                    btn.addEventListener('click', (ev) => {
+                        const student = currentBranchSearchResults[ev.currentTarget.getAttribute('data-index')];
+                        const body = document.getElementById('view-student-body');
+
+                        let docsHtml = '';
+                        if(student["Transfer Certificate Data"]) docsHtml += `<a href="${student["Transfer Certificate Data"]}" target="_blank" class="action-btn btn-purple" style="text-decoration:none; display:inline-block; margin-right:10px;">📄 View TC</a>`;
+                        if(student.Document) docsHtml += `<a href="${student.Document}" target="_blank" class="action-btn btn-blue" style="text-decoration:none; display:inline-block;">📄 View Student Doc</a>`;
+                        if(!docsHtml) docsHtml = '<span style="color:#999; font-size:0.85rem;">No documents uploaded.</span>';
+
+                        let rejectNoticeHtml = "";
+                        if (student.VerificationStatus === "Rejected" && student.RejectionReason) {
+                            rejectNoticeHtml = `<div style="background:#ffe5e5; padding:10px; border-left:4px solid red; margin-bottom:15px; font-size:0.85rem;"><strong>Rejection Reason from Super Admin:</strong> ${student.RejectionReason}</div>`;
+                        }
+
+                        body.innerHTML = `
+                            ${rejectNoticeHtml}
+                            <div style="display:flex; gap: 20px; align-items: flex-start;">
+                                <div style="text-align:center; width: 130px;">
+                                    <img src="${student.Photo || 'https://via.placeholder.com/100'}" style="width:120px; height:120px; object-fit:cover; border-radius:8px; border:3px solid #003366;">
+                                    <div style="margin-top:10px; font-weight:bold; color:#003366; font-size:1.1rem;">${student.Name || 'N/A'}</div>
+                                    <div style="color:#FF671F; font-size:0.9rem;">${student.Class || 'N/A'}</div>
+                                </div>
+                                <div style="flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.85rem;">
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Student ID:</strong> <br>${student["Student ID"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Roll No:</strong> <br>${student["Roll No"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Aadhaar No:</strong> <br>${student["Aadhaar Number"] || student.Aadhaar || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>PEN No:</strong> <br>${student["PEN Number"] || student.PEN || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>UDISE No:</strong> <br>${student["UDISE Number"] || student.UDISE || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.B:</strong> <br>${student.DOB || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Blood Group:</strong> <br>${student["Blood Group"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Religion:</strong> <br>${student.Religion || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Caste:</strong> <br>${student.Caste || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>CWSN:</strong> <br>${student.CWSN || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Height/Weight:</strong> <br>${student.Height || '?'} cm / ${student.Weight || '?'} kg</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>D.O.A:</strong> <br>${student["Date of Admission"] || 'N/A'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px; grid-column: span 2;"><strong>DISE Class/Sec/Roll:</strong> <br>${student["DISE Class"] || '-'} / ${student["DISE Section"] || '-'} / ${student["DISE Roll"] || '-'}</div>
+                                    <div style="background:#f4f7f6; padding:8px; border-radius:4px;"><strong>Phone:</strong> <br>${student.Phone || 'N/A'}</div>
+                                </div>
+                            </div>
+                            <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Parent Details</h4>
+                            <table style="width:100%; border-collapse: collapse; font-size: 0.85rem;">
+                                <tr><td style="padding:6px; font-weight:bold; width:30%; border-bottom:1px solid #eee;">Father's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father's Name"] || 'N/A'}</td></tr>
+                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Father Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Father Qualification"] || 'N/A'} | ${student.FatherOcc || 'N/A'}</td></tr>
+                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother's Name:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother's Name"] || 'N/A'}</td></tr>
+                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Mother Qual. & Occ.:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student["Mother Qualification"] || 'N/A'} | ${student.MotherOcc || 'N/A'}</td></tr>
+                                <tr><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Annual Income:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Income || 'N/A'}</td></tr>
+                                <tr style="background:#f4f7f6;"><td style="padding:6px; font-weight:bold; border-bottom:1px solid #eee;">Address:</td><td style="padding:6px; border-bottom:1px solid #eee;">${student.Address || 'N/A'}</td></tr>
+                            </table>
+                            <h4 style="margin-top:20px; border-bottom:1px solid #ccc; padding-bottom:5px; color:#003366;">Uploaded Documents</h4>
+                            <div style="padding: 10px 0;">${docsHtml}</div>
+                        `;
+                        document.getElementById('view-student-modal').style.display = 'flex';
+                    });
+                });
+
+                // Attach Edit events for Search
+                document.querySelectorAll('.edit-search-stu-btn').forEach(btn => { 
+                    btn.addEventListener('click', (e) => {
+                        const student = currentBranchSearchResults[e.currentTarget.getAttribute('data-index')]; 
+                        document.getElementById('edit-stu-doc-id').value = student.docId; 
+                        document.getElementById('edit-stu-id').value = student["Student ID"] || ''; 
+                        document.getElementById('edit-stu-roll').value = student["Roll No"] || ''; 
+                        document.getElementById('edit-stu-aadhar').value = student["Aadhaar Number"] || student.Aadhaar || ''; 
+                        document.getElementById('edit-stu-pen').value = student["PEN Number"] || student.PEN || ''; 
+                        document.getElementById('edit-stu-udise').value = student["UDISE Number"] || student.UDISE || ''; 
+                        document.getElementById('edit-stu-name').value = student.Name || ''; 
+                        document.getElementById('edit-stu-class').value = student.Class || 'LKG'; 
+                        document.getElementById('edit-stu-admission-type').value = student["Admission Type"] || 'New Admission'; 
+                        document.getElementById('edit-stu-doa').value = student["Date of Admission"] || ''; 
+                        
+                        document.getElementById('edit-stu-dise-class').value = student["DISE Class"] || '';
+                        document.getElementById('edit-stu-dise-section').value = student["DISE Section"] || '';
+                        document.getElementById('edit-stu-dise-roll').value = student["DISE Roll"] || '';
+
+                        document.getElementById('edit-stu-dob').value = student.DOB || '';
+                        document.getElementById('edit-stu-blood').value = student["Blood Group"] || '';
+                        document.getElementById('edit-stu-religion').value = student.Religion || '';
+                        document.getElementById('edit-stu-caste').value = student.Caste || 'General';
+                        document.getElementById('edit-stu-cwsn').value = student.CWSN || 'No';
+                        document.getElementById('edit-stu-height').value = student.Height || '';
+                        document.getElementById('edit-stu-weight').value = student.Weight || '';
+                        
+                        document.getElementById('edit-stu-father').value = student["Father's Name"] || ''; 
+                        document.getElementById('edit-stu-f-qual').value = student["Father Qualification"] || '';
+                        document.getElementById('edit-stu-f-occ').value = student.FatherOcc || '';
+                        
+                        document.getElementById('edit-stu-mother').value = student["Mother's Name"] || ''; 
+                        document.getElementById('edit-stu-m-qual').value = student["Mother Qualification"] || '';
+                        document.getElementById('edit-stu-m-occ').value = student.MotherOcc || '';
+                        
+                        document.getElementById('edit-stu-income').value = student.Income || '';
+                        document.getElementById('edit-stu-phone').value = student.Phone || ''; 
+                        document.getElementById('edit-stu-address').value = student.Address || ''; 
+                        document.getElementById('edit-stu-status').value = student.Status || 'Active'; 
+                        editStuPhotoBase64 = student.Photo || ""; editDocBase64 = student.Document || "";
+                        document.getElementById('edit-stu-photo-preview').src = editStuPhotoBase64 || 'https://via.placeholder.com/150'; 
+                        document.getElementById('edit-student-modal').style.display = 'flex';
+                    });
+                });
+
+                // Attach Transfer events for Search
+                document.querySelectorAll('.transfer-search-stu-btn').forEach(transferBtn => {
+                    transferBtn.addEventListener('click', async (e) => {
+                        const button = e.currentTarget;
+                        if(button.disabled) return;
+                        const student = currentBranchSearchResults[button.getAttribute('data-index')];
+                        if(confirm(`Are you sure you want to officially transfer out ${student.Name}?`)) {
+                            button.disabled = true; button.innerText = "Processing...";
+                            try {
+                                await setDoc(doc(db, "cvsk_students", student.docId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true });
+                                await logAction("Branch Admin", "TRANSFERRED STUDENT", student["Student ID"], `Marked as Transferred Out.`);
+                                document.getElementById('branch-search-btn').click();
+                            } catch(err) { button.disabled = false; button.innerText = "Transfer"; }
+                        }
+                    });
+                });
+
+                // Attach Delete events for Search
+                document.querySelectorAll('.delete-search-stu-btn').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        if(confirm("Are you sure you want to permanently delete this student record?")) {
+                            try {
+                                await deleteDoc(doc(db, "cvsk_students", e.currentTarget.getAttribute('data-id')));
+                                document.getElementById('branch-search-btn').click();
+                            } catch(err) { alert("Error deleting."); }
+                        }
+                    });
+                });
+
+            } catch(e) { tableBody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px; color: red;">Search Error.</td></tr>`; } 
+            finally { btn.disabled = false; btn.innerText = "Search Branch"; }
+        });
+
+        document.getElementById('branch-search-input')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') { document.getElementById('branch-search-btn').click(); }
+        });
 
         // --- PHOTO GALLERY UPLOAD MODULE ---
         let galleryPhotoBase64 = "";
@@ -1459,7 +1781,7 @@
                 pdf.text("_______________________", 140, 205);
                 pdf.text("Principal Signature", 145, 212);
                 
-                pdf.save(`TC_${student["Student ID"] || 'N/A'}.pdf`); 
+                pdf.save(`TC_${studentId}.pdf`); 
                 alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
             } else { alert("Student not found in Branch database."); }
             submitBtn.disabled = false; submitBtn.innerText = "Mark Transferred & Generate TC";
@@ -1530,7 +1852,7 @@
                 document.getElementById('tch-photo-preview').style.display = 'none'; 
                 tchPhotoBase64 = ""; 
                 loadStaffData(); 
-            } catch (err) { alert("Error saving staff record: " + err.message); console.error(err); } 
+            } catch (err) { alert("Error saving staff record."); console.error(err); } 
             finally { btn.disabled = false; btn.innerText = "Save Staff Record"; }
         });
 
