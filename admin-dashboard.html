@@ -76,6 +76,7 @@
                 <li><a href="#" class="nav-link" data-target="section-audit" style="background-color: #1a1a1a; border-left: 4px solid #FF671F;">📜 Audit Logs</a></li>
                 <li><a href="#" class="nav-link" data-target="section-upload">📁 Upload Student Data</a></li>
                 <li><a href="#" class="nav-link" data-target="section-add-student">👤 Add / Transfer In</a></li>
+                <li><a href="#" class="nav-link" data-target="section-progression" style="background-color: #002244; border-left: 4px solid #00BFFF;">📈 Class Progression</a></li>
                 <li><a href="#" class="nav-link" data-target="section-transferred">🎓 Transferred Students</a></li>
                 <li><a href="#" class="nav-link" data-target="section-view-db">👁️ View Students DB</a></li>
                 <li><a href="#" class="nav-link" data-target="section-teachers">👨‍💼 Manage Staff</a></li>
@@ -235,6 +236,62 @@
                     </form>
                 </div>
             </div>
+            <!-- SECTION: Class Progression & Re-admission -->
+            <div id="section-progression" class="admin-section">
+                <div class="dashboard-card" style="max-width: 800px;">
+                    <h3>📈 Academic Progression & Re-admission</h3>
+                    <div class="info-box">Promote students to the next academic class at the end of the year, assign new roll numbers, and log their re-admission fee status.</div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <input type="text" id="prog-student-id" placeholder="Enter Student ID (e.g., VMI/26/001)" style="padding: 12px; width: 100%; border-radius: 4px; border: 1px solid #ccc; font-weight: bold;">
+                        <button type="button" id="prog-fetch-btn" class="admin-submit-btn btn-blue" style="width: auto; padding: 12px 25px;">Fetch Student</button>
+                    </div>
+
+                    <div id="prog-student-details" style="display: none; background: #eef4fc; padding: 20px; border-radius: 6px; border: 1px solid #003366; margin-bottom: 20px;">
+                        <h4 style="margin-top: 0; color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Current Student Status</h4>
+                        <div class="grid-2" style="font-size: 0.9rem;">
+                            <div><strong>Name:</strong> <span id="prog-curr-name"></span></div>
+                            <div><strong>Current Class:</strong> <span id="prog-curr-class" style="color: #E63946; font-weight: bold;"></span></div>
+                            <div><strong>Current Roll No:</strong> <span id="prog-curr-roll"></span></div>
+                            <div><strong>Status:</strong> <span id="prog-curr-status"></span></div>
+                        </div>
+                    </div>
+
+                    <form id="prog-form" class="admin-form" style="display: none;">
+                        <input type="hidden" id="prog-doc-id">
+                        <input type="hidden" id="prog-col-name">
+                        <h4 class="section-divider" style="margin-top: 0;">Process Re-admission</h4>
+                        <div class="marks-grid">
+                            <div class="input-group">
+                                <label>Progression Action <span style="color:red">*</span></label>
+                                <select id="prog-action" required>
+                                    <option value="Promoted">Promote to Next Class</option>
+                                    <option value="Retained">Retain in Current Class</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>New Academic Class <span style="color:red">*</span></label>
+                                <select id="prog-new-class" required>
+                                    <option value="" disabled selected>-- Select New Class --</option>
+                                    <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>New Roll No. <span style="color:red">*</span></label>
+                                <input type="text" id="prog-new-roll" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Re-admission Fee Status <span style="color:red">*</span></label>
+                                <select id="prog-fee-status" required style="font-weight:bold; color:#217346;">
+                                    <option value="Paid">Verified & Paid</option>
+                                    <option value="Pending" style="color:#E63946;">Payment Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="admin-submit-btn btn-green" id="prog-submit-btn">Confirm Re-admission & Update</button>
+                    </form>
+                </div>
+            </div>
 
             <!-- SECTION 3: Transferred Students -->
             <div id="section-transferred" class="admin-section">
@@ -354,6 +411,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- SECTION 6: Study Materials -->
             <div id="section-materials" class="admin-section">
                 <div class="dashboard-card">
@@ -528,7 +586,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: Photo Gallery Upload -->
+            <!-- SECTION 12: Photo Gallery Upload -->
             <div id="section-gallery" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>📸 Upload Event Photos to Website Gallery</h3>
@@ -561,7 +619,7 @@
                 </div>
             </div>
 
-            <!-- SECTION: Settings -->
+            <!-- SECTION 13: Settings (WITH UPDATED DUAL LOGO FIELDS) -->
             <div id="section-settings" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>⚙️ Global Settings & Official Assets</h3>
@@ -595,15 +653,31 @@
                             </div>
                         </div>
 
+                        <!-- NEW DUAL LOGO ASSET SECTION -->
                         <h4 class="section-divider">Print Document Assets</h4>
                         <div class="settings-grid">
-                            <div class="input-group"><label>School Logo</label><input type="file" id="set-logo" accept="image/*"><div class="asset-preview"><img id="prev-set-logo" src="" alt="None"></div></div>
-                            <div class="input-group"><label>School Round Seal</label><input type="file" id="set-seal" accept="image/*"><div class="asset-preview"><img id="prev-set-seal" src="" alt="None"></div></div>
-                            <div class="input-group"><label>M.C. Seal</label><input type="file" id="set-mc-seal" accept="image/*"><div class="asset-preview"><img id="prev-set-mc-seal" src="" alt="None"></div></div>
+                            <div class="input-group">
+                                <label>Main Campus Logo (VMI)</label>
+                                <input type="file" id="set-logo-main" accept="image/*">
+                                <div class="asset-preview"><img id="prev-set-logo-main" src="" alt="None"></div>
+                            </div>
+                            <div class="input-group">
+                                <label>Branch Campus Logo (CVSK)</label>
+                                <input type="file" id="set-logo-branch" accept="image/*">
+                                <div class="asset-preview"><img id="prev-set-logo-branch" src="" alt="None"></div>
+                            </div>
+                            <div class="input-group">
+                                <label>School Round Seal</label>
+                                <input type="file" id="set-seal" accept="image/*">
+                                <div class="asset-preview"><img id="prev-set-seal" src="" alt="None"></div>
+                            </div>
                         </div>
                         <div class="settings-grid">
+                            <div class="input-group"><label>M.C. Seal</label><input type="file" id="set-mc-seal" accept="image/*"><div class="asset-preview"><img id="prev-set-mc-seal" src="" alt="None"></div></div>
                             <div class="input-group"><label>Principal Signature</label><input type="file" id="set-sign-prin" accept="image/*"><div class="asset-preview"><img id="prev-set-sign-prin" src="" alt="None"></div></div>
                             <div class="input-group"><label>Manager Signature</label><input type="file" id="set-sign-mgr" accept="image/*"><div class="asset-preview"><img id="prev-set-sign-mgr" src="" alt="None"></div></div>
+                        </div>
+                        <div class="settings-grid" style="grid-template-columns: 1fr;">
                             <div class="input-group"><label>Secretary Signature</label><input type="file" id="set-sign-sec" accept="image/*"><div class="asset-preview"><img id="prev-set-sign-sec" src="" alt="None"></div></div>
                         </div>
                         
@@ -705,7 +779,7 @@
         </div>
     </div>
 
-    <!-- Edit Student Modal -->
+    <!-- Edit Student Modal (UNLOCKED DISE FOR SUPER ADMIN) -->
     <div id="edit-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 700px;">
             <button class="modal-close" onclick="document.getElementById('edit-student-modal').style.display='none'">&times;</button>
@@ -713,27 +787,43 @@
             <form id="edit-student-form" class="admin-form">
                 <input type="hidden" id="edit-stu-doc-id">
                 <input type="hidden" id="edit-stu-campus">
-                <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;"><img id="edit-stu-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;"><label for="edit-stu-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label><input type="file" id="edit-stu-photo" accept="image/*" hidden></div>
+                <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;">
+                    <img id="edit-stu-photo-preview" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;">
+                    <label for="edit-stu-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label>
+                    <input type="file" id="edit-stu-photo" accept="image/*" hidden>
+                </div>
+                
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 10px; grid-column: span 2;">Academic Info</h5>
                 <div class="marks-grid">
                     <div class="input-group"><label>Verification Status</label><select id="edit-stu-verification" style="font-weight:bold; color:#003366; background:#eef4fc;"><option>Pending</option><option>Verified</option><option>Rejected</option></select></div>
                     <div class="input-group"><label>Admission Type</label><select id="edit-stu-admission-type" required><option>New Admission</option><option>Transfer In</option><option>Existing Student</option></select></div>
                     <div class="input-group"><label>Student ID</label><input type="text" id="edit-stu-id" readonly style="background:#eee;"></div>
                     <div class="input-group"><label>Roll No.</label><input type="text" id="edit-stu-roll"></div>
-                    <div class="input-group"><label>Class</label><select id="edit-stu-class" required><option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option></select></div>
+                    <div class="input-group">
+                        <label>Class</label>
+                        <select id="edit-stu-class" required>
+                            <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option>
+                            <option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                        </select>
+                    </div>
                     <div class="input-group"><label>Date of Admission</label><input type="text" id="edit-stu-doa" placeholder="DD/MM/YYYY"></div>
-                    <div class="input-group"><label>Aadhaar Number</label><input type="text" id="edit-stu-aadhar" maxlength="12"></div>
+                    <div class="input-group"><label>Aadhaar Number (Mandatory)</label><input type="text" id="edit-stu-aadhar" required maxlength="12" pattern="[0-9]{12}"></div>
                     <div class="input-group"><label>PEN Number</label><input type="text" id="edit-stu-pen"></div>
                     <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
                     <div class="input-group"><label>Status</label><select id="edit-stu-status"><option>Active</option><option>Transferred Out</option></select></div>
-                    <div class="input-group" style="grid-column: span 2;"><label style="color: #FF671F;">Upload New General Document (PDF/JPG)</label><input type="file" id="edit-stu-doc-file" accept=".pdf, .jpg, .jpeg, .png"></div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label style="color: #FF671F;">Upload New General Document (PDF/JPG)</label>
+                        <input type="file" id="edit-stu-doc-file" accept=".pdf, .jpg, .jpeg, .png">
+                    </div>
                 </div>
+
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">DISE Details (Super Admin Fillable: Class 5 - 10)</h5>
                 <div class="marks-grid">
                     <div class="input-group"><label>DISE Class</label><input type="text" id="edit-stu-dise-class" placeholder="e.g. 5"></div>
                     <div class="input-group"><label>DISE Section</label><input type="text" id="edit-stu-dise-section" placeholder="e.g. A"></div>
                     <div class="input-group"><label>DISE Roll</label><input type="text" id="edit-stu-dise-roll" placeholder="e.g. 12"></div>
                 </div>
+
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">Demographics</h5>
                 <div class="marks-grid">
                     <div class="input-group"><label>Full Name</label><input type="text" id="edit-stu-name" required></div>
@@ -745,6 +835,7 @@
                     <div class="input-group"><label>Height (cm)</label><input type="number" id="edit-stu-height"></div>
                     <div class="input-group"><label>Weight (kg)</label><input type="number" id="edit-stu-weight"></div>
                 </div>
+
                 <h5 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 15px; margin-bottom: 10px; grid-column: span 2;">Parent Details</h5>
                 <div class="grid-3">
                     <div class="input-group"><label>Father's Name</label><input type="text" id="edit-stu-father"></div>
@@ -769,6 +860,7 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="input-group"><label>Residential Address</label><textarea id="edit-stu-address" rows="2"></textarea></div>
                 <button type="submit" class="admin-submit-btn btn-green" id="edit-student-save-btn">Update Student Database</button>
             </form>
@@ -783,7 +875,8 @@
             <form id="edit-teacher-form" class="admin-form">
                 <input type="hidden" id="edit-tch-doc-id">
                 <input type="hidden" id="edit-tch-campus">
-                <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;"><img id="edit-tch-photo-preview-edit" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;"><label for="edit-tch-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label><input type="file" id="edit-tch-photo" accept="image/*" hidden></div>
+                <div class="input-group" style="text-align: center; margin-bottom: 15px; grid-column: span 2;">
+                    <img id="edit-tch-photo-preview-edit" src="https://via.placeholder.com/150" alt="Photo" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #003366; margin: 0 auto 10px auto; display: block;"><label for="edit-tch-photo" class="browse-btn" style="cursor: pointer; padding: 5px 10px; background: #FF671F; color: white; border-radius: 5px; font-size: 0.8rem;">📷 Change Photo</label><input type="file" id="edit-tch-photo" accept="image/*" hidden></div>
                 <div class="marks-grid">
                     <div class="input-group">
                         <label>Department / Role</label>
@@ -839,7 +932,7 @@
         </div>
     </div>
 
-    <!-- Script Section -->
+    <!-- UI Script Section -->
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.admin-section');
@@ -858,6 +951,7 @@
                 else if(target === 'section-audit') { document.getElementById('refresh-audit-btn')?.click(); } 
                 else if(target === 'section-gallery') { document.getElementById('refresh-gallery-btn')?.click(); } 
                 else if(target === 'section-online-adm') { document.getElementById('refresh-online-btn')?.click(); }
+                else if(target === 'section-progression') { document.getElementById('prog-student-id')?.focus(); }
             });
         });
 
@@ -901,7 +995,8 @@
             } catch(e) { console.error("Audit log failed", e); }
         }
 
-        let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "", admissionsActive: true, formsActive: true };
+        // UPDATED: Now supports Dual Logos (Main and Branch)
+        let globalAssets = { logoMain: "", logoBranch: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "", admissionsActive: true, formsActive: true };
         
         function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
         function resizeAssetKeepRatio(file, callback) { const reader = new FileReader(); reader.onload = function(event) { const img = new Image(); img.onload = function() { const MAX = 400; let width = img.width; let height = img.height; if (width > height) { if (width > MAX) { height *= MAX / width; width = MAX; } } else { if (height > MAX) { width *= MAX / height; height = MAX; } } const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height); callback(canvas.toDataURL('image/png', 0.8)); }; img.src = event.target.result; }; reader.readAsDataURL(file); }
@@ -918,22 +1013,24 @@
                 const snap = await getDoc(doc(db, "settings", "global_assets")); 
                 if (snap.exists()) { 
                     globalAssets = { ...globalAssets, ...snap.data() }; 
-                    document.getElementById('prev-set-logo').src = globalAssets.logo || ""; 
-                    document.getElementById('prev-set-seal').src = globalAssets.seal || ""; 
-                    document.getElementById('prev-set-mc-seal').src = globalAssets.mcSeal || ""; 
-                    document.getElementById('prev-set-sign-prin').src = globalAssets.prinSign || ""; 
-                    document.getElementById('prev-set-sign-mgr').src = globalAssets.mgrSign || ""; 
-                    document.getElementById('prev-set-sign-sec').src = globalAssets.secSign || ""; 
-                    document.getElementById('prev-set-payment-qr').src = globalAssets.paymentQR || ""; 
+                    if(document.getElementById('prev-set-logo-main')) document.getElementById('prev-set-logo-main').src = globalAssets.logoMain || ""; 
+                    if(document.getElementById('prev-set-logo-branch')) document.getElementById('prev-set-logo-branch').src = globalAssets.logoBranch || ""; 
+                    if(document.getElementById('prev-set-seal')) document.getElementById('prev-set-seal').src = globalAssets.seal || ""; 
+                    if(document.getElementById('prev-set-mc-seal')) document.getElementById('prev-set-mc-seal').src = globalAssets.mcSeal || ""; 
+                    if(document.getElementById('prev-set-sign-prin')) document.getElementById('prev-set-sign-prin').src = globalAssets.prinSign || ""; 
+                    if(document.getElementById('prev-set-sign-mgr')) document.getElementById('prev-set-sign-mgr').src = globalAssets.mgrSign || ""; 
+                    if(document.getElementById('prev-set-sign-sec')) document.getElementById('prev-set-sign-sec').src = globalAssets.secSign || ""; 
+                    if(document.getElementById('prev-set-payment-qr')) document.getElementById('prev-set-payment-qr').src = globalAssets.paymentQR || ""; 
                     
-                    if(globalAssets.admissionsActive !== undefined) document.getElementById('set-admissions-active').checked = globalAssets.admissionsActive;
-                    if(globalAssets.formsActive !== undefined) document.getElementById('set-forms-active').checked = globalAssets.formsActive;
+                    if(globalAssets.admissionsActive !== undefined && document.getElementById('set-admissions-active')) document.getElementById('set-admissions-active').checked = globalAssets.admissionsActive;
+                    if(globalAssets.formsActive !== undefined && document.getElementById('set-forms-active')) document.getElementById('set-forms-active').checked = globalAssets.formsActive;
                 } 
             } catch(e) { console.error("Error loading settings", e); }
         } 
         loadGlobalSettings();
 
-        const assetMap = { 'set-logo':'logo', 'set-seal':'seal', 'set-mc-seal':'mcSeal', 'set-sign-prin':'prinSign', 'set-sign-mgr':'mgrSign', 'set-sign-sec':'secSign', 'set-payment-qr':'paymentQR' };
+        // Updated Asset Map for Two Logos
+        const assetMap = { 'set-logo-main':'logoMain', 'set-logo-branch':'logoBranch', 'set-seal':'seal', 'set-mc-seal':'mcSeal', 'set-sign-prin':'prinSign', 'set-sign-mgr':'mgrSign', 'set-sign-sec':'secSign', 'set-payment-qr':'paymentQR' };
         for(const [inputId, key] of Object.entries(assetMap)) { document.getElementById(inputId)?.addEventListener('change', function(e) { if(this.files[0]) { resizeAssetKeepRatio(this.files[0], (base64) => { globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; }); } }); }
         
         document.getElementById('global-settings-form')?.addEventListener('submit', async (e) => { 
@@ -1117,11 +1214,9 @@
                     if(app.Status === "Verified & Enrolled") {
                         actionBtns += `<button class="action-btn" style="background:#aaa; cursor:not-allowed;">🔒 Enrolled</button>`;
                     } else if (app.Status === "Rejected") {
-                        // Edit & restore button for rejected forms
                         actionBtns += `<button class="action-btn btn-green edit-online-btn" data-index="${index}">✏️ Edit & Restore</button>`;
                         actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`;
                     } else {
-                        // Edit button for pending forms too
                         actionBtns += `<button class="action-btn btn-green edit-online-btn" data-index="${index}">✏️ Edit</button>`;
                         actionBtns += `<button class="action-btn btn-red del-online-btn" data-id="${app.docId}" data-name="${app.Name}">Delete</button>`;
                     }
@@ -1138,7 +1233,6 @@
                     tbody.appendChild(tr);
                 });
 
-                // Attach View Event
                 document.querySelectorAll('.view-online-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const app = currentOnlineAdmissions[e.currentTarget.getAttribute('data-index')];
@@ -1285,7 +1379,6 @@
                     });
                 });
 
-                // Attach Edit Event for Online Applications
                 document.querySelectorAll('.edit-online-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const app = currentOnlineAdmissions[e.currentTarget.getAttribute('data-index')];
@@ -1305,7 +1398,6 @@
                     });
                 });
 
-                // Attach Delete Event
                 document.querySelectorAll('.del-online-btn').forEach(delBtn => {
                     delBtn.addEventListener('click', async (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
@@ -1561,7 +1653,11 @@
         function renderDatabaseTable(students) {
             const dbTableBody = document.getElementById('db-table-body'); dbTableBody.innerHTML = ""; const tcTableBody = document.getElementById('tc-table-body'); tcTableBody.innerHTML = "";
             const validStudents = students.filter(s => (s["Student ID"] || s["Roll No"]) && s.Name && s.Name.trim() !== "" && s.Name !== "N/A");
-            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out'); currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
+            
+            // UPDATED: Now hides rejected students from the live database view
+            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus !== 'Rejected'); 
+            
+            currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
 
             if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in selected campus.</td></tr>`; }
             else { currentActiveStudents.forEach((student, index) => {
@@ -1757,7 +1853,30 @@
                 <div style="padding: 10px 0;">${docsHtml}</div>`; 
                 document.getElementById('view-student-modal').style.display = 'flex'; 
             }); });
-            document.querySelectorAll('.print-tc-btn').forEach(btn => { btn.addEventListener('click', (ev) => { const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')]; const { jsPDF } = window.jspdf; const pdf = new jsPDF(); const schoolName = student.campus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM"; if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); } pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center"); pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center"); pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42); pdf.setFontSize(12); pdf.setTextColor(0, 0, 0); pdf.text(`This is to certify that`, 20, 60); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal'); pdf.text(`Son/Daughter of`, 20, 75); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal'); pdf.text(`was admitted to this institution on`, 20, 90); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal'); pdf.text(`and has been officially transferred on`, 20, 105); pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal'); pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal'); pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal'); if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); } if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); } pdf.text("_______________________", 140, 205); pdf.text("Principal Signature", 145, 212); pdf.save(`TC_${student["Student ID"] || 'N/A'}.pdf`); }); });
+            document.querySelectorAll('.print-tc-btn').forEach(btn => { btn.addEventListener('click', (ev) => { 
+                const student = currentTransferredStudents[ev.currentTarget.getAttribute('data-index')]; 
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF(); 
+                const schoolName = student.campus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM"; 
+                // DUAL LOGO IMPLEMENTATION FOR TC
+                const campusLogo = student.campus === 'branch' ? globalAssets.logoBranch : globalAssets.logoMain;
+                if(campusLogo) { pdf.addImage(campusLogo, 'PNG', 20, 15, 20, 20); } 
+                
+                pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center"); 
+                pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center"); 
+                pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42); pdf.setFontSize(12); pdf.setTextColor(0, 0, 0); 
+                pdf.text(`This is to certify that`, 20, 60); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`Son/Daughter of`, 20, 75); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`was admitted to this institution on`, 20, 90); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`and has been officially transferred on`, 20, 105); pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal'); 
+                
+                if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); } 
+                if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); } 
+                
+                pdf.text("_______________________", 140, 205); pdf.text("Principal Signature", 145, 212); 
+                pdf.save(`TC_${student["Student ID"] || 'N/A'}.pdf`); 
+            }); });
         }
         
         document.getElementById('db-campus-select')?.addEventListener('change', () => { setTimeout(() => document.getElementById('refresh-db-btn')?.click(), 50); });
@@ -1866,7 +1985,26 @@
                 const student = docSnap.data();
                 await setDoc(doc(db, "students", safeDocId), { Status: "Transferred Out", TransferDate: new Date().toLocaleDateString() }, { merge: true }); 
                 await logAction("Super Admin", "TRANSFERRED STUDENT", studentId, "Generated TC and marked transferred out.");
-                const { jsPDF } = window.jspdf; const pdf = new jsPDF(); if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); } pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center"); pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42); pdf.setFontSize(12); pdf.setTextColor(0, 0, 0); pdf.text(`This is to certify that`, 20, 60); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal'); pdf.text(`Son/Daughter of`, 20, 75); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal'); pdf.text(`was admitted to this institution on`, 20, 90); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal'); pdf.text(`and has been officially transferred on`, 20, 105); pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal'); pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal'); pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal'); if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); } if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); } pdf.text("_______________________", 140, 205); pdf.text("Principal Signature", 145, 212); pdf.save(`TC_${studentId}.pdf`); alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
+                
+                const { jsPDF } = window.jspdf; const pdf = new jsPDF(); 
+                if(globalAssets.logoMain) { pdf.addImage(globalAssets.logoMain, 'PNG', 20, 15, 20, 20); } 
+                
+                pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); 
+                pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center"); 
+                pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42); pdf.setFontSize(12); pdf.setTextColor(0, 0, 0); 
+                pdf.text(`This is to certify that`, 20, 60); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Name || 'N/A'}`, 65, 60); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`Son/Daughter of`, 20, 75); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Father's Name"] || 'N/A'}`, 55, 75); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`was admitted to this institution on`, 20, 90); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Date of Admission"] || 'N/A'}`, 90, 90); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`and has been officially transferred on`, 20, 105); pdf.setFont(undefined, 'bold'); pdf.text(`${student.TransferDate || 'N/A'}`, 92, 105); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`Student ID:`, 20, 130); pdf.setFont(undefined, 'bold'); pdf.text(`${student["Student ID"] || 'N/A'}`, 45, 130); pdf.setFont(undefined, 'normal'); 
+                pdf.text(`Class at leaving:`, 20, 140); pdf.setFont(undefined, 'bold'); pdf.text(`${student.Class || 'N/A'}`, 55, 140); pdf.setFont(undefined, 'normal'); 
+                
+                if(globalAssets.prinSign) { pdf.addImage(globalAssets.prinSign, 'PNG', 145, 185, 35, 15); } 
+                if(globalAssets.seal) { pdf.addImage(globalAssets.seal, 'PNG', 90, 180, 25, 25); } 
+                
+                pdf.text("_______________________", 140, 205); pdf.text("Principal Signature", 145, 212); 
+                pdf.save(`TC_${studentId}.pdf`); 
+                alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
             } else { alert("Student not found in Main database."); } submitBtn.disabled = false; submitBtn.innerText = "Mark Transferred & Generate TC";
         });
 
@@ -1874,6 +2012,98 @@
             e.preventDefault(); const file = document.getElementById('student-file').files[0]; if (!file) return; 
             const submitBtn = document.getElementById('upload-bulk-btn'); submitBtn.disabled = true; submitBtn.innerText = "Uploading...";
             const reader = new FileReader(); reader.onload = async function(event) { try { const data = new Uint8Array(event.target.result); const workbook = XLSX.read(data, { type: 'array' }); const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]); const batch = writeBatch(db); jsonData.forEach((row, index) => { const rawId = String(row["Roll No"] || row["Student ID"] || ""); const docId = rawId ? makeSafeId(rawId) : `student_${Date.now()}_${index}`; batch.set(doc(db, "students", docId), { ...row, Status: "Active", VerificationStatus: "Verified" }, { merge: true }); }); await batch.commit(); await logAction("Super Admin", "BULK UPLOAD", "Multiple Students", `Uploaded batch of ${jsonData.length} records to Main Campus.`); alert(`Saved ${jsonData.length} student records.`); document.querySelector('.upload-form').reset(); } catch(err) { alert("Error uploading file."); } finally { submitBtn.disabled = false; submitBtn.innerText = "Upload to Database"; } }; reader.readAsArrayBuffer(file); 
+        });
+
+        // --- ACADEMIC PROGRESSION & RE-ADMISSION ENGINE ---
+        document.getElementById('prog-fetch-btn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('prog-fetch-btn');
+            const stuIdInput = document.getElementById('prog-student-id').value.trim();
+            if(!stuIdInput) return alert("Enter a Student ID.");
+            
+            btn.disabled = true; btn.innerText = "Searching...";
+            document.getElementById('prog-student-details').style.display = 'none';
+            document.getElementById('prog-form').style.display = 'none';
+
+            try {
+                // Smart Search: Checks Main DB first, then checks Branch DB
+                let colName = "students";
+                let snap = await getDoc(doc(db, "students", makeSafeId(stuIdInput)));
+                
+                if(!snap.exists()) {
+                    colName = "cvsk_students";
+                    snap = await getDoc(doc(db, "cvsk_students", makeSafeId(stuIdInput)));
+                }
+
+                if(snap.exists()) {
+                    const data = snap.data();
+                    
+                    // NEW SECURITY LOCK: Prevent promoting unverified students
+                    if (data.VerificationStatus === "Rejected" || data.VerificationStatus === "Pending") {
+                        alert(`Action Denied: This student's record is currently ${data.VerificationStatus.toUpperCase()}. They must be fully 'Verified' before they can be promoted.`);
+                        btn.disabled = false; btn.innerText = "Fetch Student";
+                        return;
+                    }
+
+                    document.getElementById('prog-doc-id').value = snap.id;
+                    document.getElementById('prog-col-name').value = colName;
+                    
+                    document.getElementById('prog-curr-name').innerText = data.Name;
+                    document.getElementById('prog-curr-class').innerText = data.Class || "N/A";
+                    document.getElementById('prog-curr-roll').innerText = data["Roll No"] || "N/A";
+                    document.getElementById('prog-curr-status').innerText = data.Status;
+                    
+                    document.getElementById('prog-student-details').style.display = 'block';
+                    document.getElementById('prog-form').style.display = 'block';
+                } else {
+                    alert("Student ID not found in the database. Please check the ID.");
+                }
+            } catch(e) {
+                alert("Error fetching student.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Fetch Student";
+            }
+        });
+
+        document.getElementById('prog-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('prog-submit-btn');
+            btn.disabled = true; btn.innerText = "Updating Database...";
+
+            const docId = document.getElementById('prog-doc-id').value;
+            const colName = document.getElementById('prog-col-name').value;
+            const action = document.getElementById('prog-action').value;
+            const newClass = document.getElementById('prog-new-class').value;
+            const newRoll = document.getElementById('prog-new-roll').value;
+            const feeStatus = document.getElementById('prog-fee-status').value;
+            const stuId = document.getElementById('prog-student-id').value.trim();
+
+            try {
+                // Update the student's class, roll number, and re-admission info
+                await setDoc(doc(db, colName, docId), {
+                    Class: newClass,
+                    "Roll No": newRoll,
+                    "ReAdmission Status": feeStatus,
+                    "Last Progression": `${action} to ${newClass} on ${new Date().toLocaleDateString()}`
+                }, { merge: true });
+
+                const userRole = JSON.parse(localStorage.getItem('vmi_user')).role;
+                await logAction(userRole, `STUDENT ${action.toUpperCase()}`, stuId, `Class updated to ${newClass}, Roll: ${newRoll}. Fee: ${feeStatus}`);
+                
+                alert(`Success! Student officially ${action.toLowerCase()} to ${newClass}.`);
+                
+                // Reset form
+                document.getElementById('prog-form').reset();
+                document.getElementById('prog-student-details').style.display = 'none';
+                document.getElementById('prog-form').style.display = 'none';
+                document.getElementById('prog-student-id').value = '';
+                
+                // Auto-refresh the live database table if it's visible
+                if(document.getElementById('refresh-db-btn')) document.getElementById('refresh-db-btn').click();
+            } catch(err) {
+                alert("Error updating student progression.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Confirm Re-admission & Update";
+            }
         });
 
         // --- 4. STAFF DATABASE MODULE ---
@@ -1954,7 +2184,7 @@
         document.getElementById('notice-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('notice-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Notice"; } });
         document.getElementById('admin-material-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('admin-mat-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Document"; } });
         
-        // --- 7. EXAM RESULTS & ADMIT CARDS MODULE ---
+        // --- 7. EXAM RESULTS & ADMIT CARDS MODULE (MAIN CAMPUS DEFAULT) ---
         const termSelect = document.getElementById('res-exam-name'); const classSelect = document.getElementById('res-class'); const coCurricularSection = document.getElementById('co-curricular-section'); const markInputs = document.querySelectorAll('.acad-mark'); const rStudentIdInput = document.getElementById('res-student-id'); const rStudentNameInput = document.getElementById('res-student-name');
         let currentMaxPerSubject = 100; let activeSubjectCount = 8;
         rStudentIdInput?.addEventListener('blur', async () => { const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; } rStudentNameInput.value = "Searching..."; try { const safeDocId = makeSafeId(studentId); const docSnap = await getDoc(doc(db, "students", safeDocId)); if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } } catch (error) { rStudentNameInput.value = "Error."; } });
@@ -1971,9 +2201,14 @@
         document.getElementById('refresh-results-btn')?.addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input')?.addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTableResults(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]')?.addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn')?.addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `VMI_Bulk_ReportCards_${Date.now()}.pdf`); });
         document.getElementById('export-results-btn')?.addEventListener('click', () => { if(currentlyDisplayedResults.length === 0) return alert("No results to export!"); const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; }); const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `VMI_Master_Results_${Date.now()}.xlsx`); });
 
-        function generateReportCardPDF(resultsArray, fileName) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); resultsArray.forEach((result, index) => { if (index > 0) doc.addPage(); doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0); doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; } finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); }); doc.save(fileName); }
+        // DUAL LOGO UPDATE FOR RESULT PDF (Super Admin defaults to Main Campus logo)
+        function generateReportCardPDF(resultsArray, fileName) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); resultsArray.forEach((result, index) => { if (index > 0) doc.addPage(); doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("VIVEKANANDA MISSION INSTITUTE", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0); doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; } finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); 
+        
+        if(globalAssets.logoMain) { doc.addImage(globalAssets.logoMain, 'PNG', 20, 15, 20, 20); }
+        
+        }); doc.save(fileName); }
 
-        // --- ADMIT CARD ENGINE ---
+        // --- ADMIT CARD ENGINE (MAIN CAMPUS) ---
         const schClass = document.getElementById('sch-class'); const schTerm = document.getElementById('sch-term'); const schSubjectsContainer = document.getElementById('sch-subjects-container');
         function updateScheduleSubjects() { if(!schClass || !schTerm) return; const cls = schClass.value; const term = schTerm.value; schSubjectsContainer.innerHTML = ""; if(!cls || !term) return; const subjects = ['English', 'Bengali', 'Mathematics', 'EVS_Science']; if(['Class 3', 'Class 4'].includes(cls)) subjects.push('Hindi', 'History', 'Geography'); if(['Class 6'].includes(cls)) subjects.push('History', 'Geography'); if(['Class 7', 'Class 8', 'Class 9', 'Class 10'].includes(cls)) subjects.push('Sanskrit', 'History', 'Geography'); if(term === 'Annual Examination') { subjects.push('Dance', 'Music', 'Art_and_Craft'); } subjects.forEach(sub => { schSubjectsContainer.innerHTML += `<div class="input-group"><label>${sub.replace(/_/g, ' ')} Date & Time</label><input type="text" class="sch-date-input" data-subject="${sub}" placeholder="e.g., 12/04/2026, 10:00 AM" required></div>`; }); }
         schClass?.addEventListener('change', updateScheduleSubjects); schTerm?.addEventListener('change', updateScheduleSubjects);
@@ -2001,8 +2236,12 @@
                     tableHtml = `<table style="width:100%; border-collapse:collapse; margin-top:5px; text-align:left;"><thead><tr><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Subject</th><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Date & Time</th></tr></thead><tbody style="font-size:10px;">`;
                     for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableHtml += `<tr><td style="border:1px solid #ccc; padding:4px;">${sub.replace(/_/g, ' ')}</td><td style="border:1px solid #ccc; padding:4px;">${dateStr}</td></tr>`; } tableHtml += `</tbody></table>`;
                 } else { tableHtml = `<p style="color:red; margin-top:10px; font-size:10px; font-weight:bold; text-align:center;">Exam schedule not published for ${cls} yet.</p>`; }
-                const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="height:40px; object-fit:contain;">` : ''; const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:25px; object-fit:contain;">` : '<div style="height:25px;"></div>';
+                
+                // DUAL LOGO IMPLEMENTATION FOR ADMIT CARD
+                const logoHtml = globalAssets.logoMain ? `<img src="${globalAssets.logoMain}" style="height:40px; object-fit:contain;">` : ''; 
+                const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:25px; object-fit:contain;">` : '<div style="height:25px;"></div>';
                 const previewCard = document.getElementById('admit-preview-card');
+                
                 previewCard.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; gap:15px; margin-bottom:5px;">${logoHtml}<div style="text-align: center;"><h2 style="color: #003366; margin: 0; font-size: 20px;">VIVEKANANDA MISSION INSTITUTE</h2><p style="color: #555; margin: 2px 0 0 0; font-size: 10px;">Muluk, Bolpur, Birbhum, W.B. - 731204</p></div></div><div style="text-align: center; margin-bottom: 10px;"><h3 style="color: #FF671F; margin: 0; font-size: 14px;">ADMIT CARD - ${term.toUpperCase()}</h3></div><hr style="border: 0; border-top: 2px solid #003366; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: flex-start;"><div style="font-size: 11px; line-height: 1.6; color: #333;"><div><strong>Name:</strong> ${student.Name || 'N/A'}</div><div style="display:flex; gap:30px;"><div><strong>Student ID:</strong> ${student["Student ID"] || 'N/A'}</div><div><strong>Roll No:</strong> ${student["Roll No"] || 'N/A'}</div></div><div><strong>Class:</strong> ${student.Class || 'N/A'}</div><div><strong>Father's Name:</strong> ${student["Father's Name"] || 'N/A'}</div></div><div style="width: 70px; height: 90px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #999; font-size: 10px; border-radius: 4px; overflow:hidden;">${student.Photo ? `<img src="${student.Photo}" style="width:100%; height:100%; object-fit:cover;">` : 'Photo'}</div></div><div style="display: flex; gap: 15px; align-items: flex-end;"><div style="flex:1;">${tableHtml}</div><div style="width:120px; text-align:center; font-size:10px; font-weight:bold; color:#003366;">${signHtml}<div style="border-top:1px solid #003366; padding-top:3px; margin-top:2px;">Principal Signature</div></div></div>`;
                 document.getElementById('admit-preview-placeholder').style.display = 'none'; previewCard.style.display = 'block';
             } catch(err) { alert("Error fetching preview data."); } finally { btn.disabled = false; btn.innerText = "👁️ Preview Sample Admit Card"; }
@@ -2023,7 +2262,7 @@
                     const cls = student.Class; const schId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
                     const pageIndex = index % 3; if (index > 0 && pageIndex === 0) docPdf.addPage(); const currentY = spacing + (pageIndex * (cardHeight + spacing));
                     docPdf.setLineWidth(0.2); docPdf.rect(startX, currentY, cardWidth, cardHeight);
-                    if(globalAssets.logo) { docPdf.addImage(globalAssets.logo, 'PNG', startX + 5, currentY + 3, 16, 16); }
+                    if(globalAssets.logoMain) { docPdf.addImage(globalAssets.logoMain, 'PNG', startX + 5, currentY + 3, 16, 16); }
                     docPdf.setFontSize(16); docPdf.setTextColor(0, 51, 102); docPdf.text("VIVEKANANDA MISSION INSTITUTE", 105, currentY + 9, null, null, "center");
                     docPdf.setFontSize(9); docPdf.setTextColor(50, 50, 50); docPdf.text("Muluk, Bolpur, Birbhum, W.B. - 731204", 105, currentY + 14, null, null, "center");
                     docPdf.setFontSize(12); docPdf.setTextColor(255, 103, 31); docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, currentY + 21, null, null, "center");
@@ -2052,7 +2291,11 @@
         document.getElementById('id-tch-id-fetch')?.addEventListener('blur', async (e) => { const idVal = e.target.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
 
         function renderCardHTML(dataObj, type) {
-            const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
+            
+            // DUAL LOGO IMPLEMENTATION FOR ID CARDS
+            const campusLogo = dataObj.campus === 'branch' ? globalAssets.logoBranch : globalAssets.logoMain;
+            
+            const logoHtml = campusLogo ? `<img src="${campusLogo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
             const sealHtml = globalAssets.seal ? `<img src="${globalAssets.seal}" style="width:35px; height:35px; object-fit:contain; opacity:0.8;">` : ``;
             const isExecutive = type === 'teacher' && (dataObj.dept === 'Principal' || dataObj.dept === 'Manager' || dataObj.dept === 'Super Admin' || dataObj.dept === 'Admin');
             const signSrc = isExecutive ? globalAssets.secSign : globalAssets.prinSign;
@@ -2081,13 +2324,13 @@
                 if(!stuId) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Student ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "students", makeSafeId(stuId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
                 if(!data) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Student ID not found in database!"); }
-                activeCardData = { type: 'student', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', dob: data.DOB || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85' };
+                activeCardData = { type: 'student', campus: 'main', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', dob: data.DOB || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85' };
             } else {
                 const tchId = document.getElementById('id-tch-id-fetch').value.trim();
                 if(!tchId) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Staff ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "teachers", makeSafeId(tchId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
                 if(!data) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Staff ID not found in database!"); }
-                activeCardData = { type: 'teacher', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85' };
+                activeCardData = { type: 'teacher', campus: 'main', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85' };
             }
             renderCardHTML(activeCardData, type); btn.disabled = false; btn.innerText = "Generate Preview & QR Code";
         });
@@ -2111,10 +2354,10 @@
             try {
                 if(targetType === 'class' || targetType === 'all-students') {
                     const qSnaps = await getDocs(collection(db, "students"));
-                    qSnaps.forEach(docSnap => { const d = docSnap.data(); if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") { if(targetType === 'all-students' || d.Class === targetClass) { targets.push({ type: 'student', title: d.Name, id: d["Student ID"] || d["Roll No"], class: d.Class, dob: d.DOB, father: d["Father's Name"], address: d.Address, phone: d.Phone, photo: d.Photo }); } } });
+                    qSnaps.forEach(docSnap => { const d = docSnap.data(); if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") { if(targetType === 'all-students' || d.Class === targetClass) { targets.push({ type: 'student', campus: 'main', title: d.Name, id: d["Student ID"] || d["Roll No"], class: d.Class, dob: d.DOB, father: d["Father's Name"], address: d.Address, phone: d.Phone, photo: d.Photo }); } } });
                 } else {
                     isStudent = false; const qSnaps = await getDocs(collection(db, "teachers"));
-                    qSnaps.forEach(docSnap => { const d = docSnap.data(); const name = d.Name || d.name; if(name && String(name).trim() !== "") { targets.push({ type: 'teacher', id: d.TeacherID || d.id || docSnap.id, name: name, father: d.FatherName || d.father, dept: d.Department || d.dept, doj: d.DateOfJoining || d.doj, blood: d.BloodGroup || d.blood, phone: d.Phone || d.phone, photo: d.Photo || d.photo }); } });
+                    qSnaps.forEach(docSnap => { const d = docSnap.data(); const name = d.Name || d.name; if(name && String(name).trim() !== "") { targets.push({ type: 'teacher', campus: 'main', id: d.TeacherID || d.id || docSnap.id, name: name, father: d.FatherName || d.father, dept: d.Department || d.dept, doj: d.DateOfJoining || d.doj, blood: d.BloodGroup || d.blood, phone: d.Phone || d.phone, photo: d.Photo || d.photo }); } });
                 }
                 if(targets.length === 0) { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; return alert("No valid records found for this selection."); }
                 let errors = [];
@@ -2133,6 +2376,98 @@
             } catch(err) { alert("An error occurred during bulk generation."); console.error(err); } finally { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; previewFront.innerHTML = ""; previewBack.innerHTML = ""; }
         });
         document.getElementById('bulk-id-target')?.addEventListener('change', (e) => { document.getElementById('bulk-id-class-container').style.display = (e.target.value === 'class') ? 'block' : 'none'; });
+
+        // --- ACADEMIC PROGRESSION & RE-ADMISSION ENGINE ---
+        document.getElementById('prog-fetch-btn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('prog-fetch-btn');
+            const stuIdInput = document.getElementById('prog-student-id').value.trim();
+            if(!stuIdInput) return alert("Enter a Student ID.");
+            
+            btn.disabled = true; btn.innerText = "Searching...";
+            document.getElementById('prog-student-details').style.display = 'none';
+            document.getElementById('prog-form').style.display = 'none';
+
+            try {
+                // Smart Search: Checks Main DB first, then checks Branch DB
+                let colName = "students";
+                let snap = await getDoc(doc(db, "students", makeSafeId(stuIdInput)));
+                
+                if(!snap.exists()) {
+                    colName = "cvsk_students";
+                    snap = await getDoc(doc(db, "cvsk_students", makeSafeId(stuIdInput)));
+                }
+
+                if(snap.exists()) {
+                    const data = snap.data();
+                    
+                    // NEW SECURITY LOCK: Prevent promoting unverified students
+                    if (data.VerificationStatus === "Rejected" || data.VerificationStatus === "Pending") {
+                        alert(`Action Denied: This student's record is currently ${data.VerificationStatus.toUpperCase()}. They must be fully 'Verified' before they can be promoted.`);
+                        btn.disabled = false; btn.innerText = "Fetch Student";
+                        return;
+                    }
+
+                    document.getElementById('prog-doc-id').value = snap.id;
+                    document.getElementById('prog-col-name').value = colName;
+                    
+                    document.getElementById('prog-curr-name').innerText = data.Name;
+                    document.getElementById('prog-curr-class').innerText = data.Class || "N/A";
+                    document.getElementById('prog-curr-roll').innerText = data["Roll No"] || "N/A";
+                    document.getElementById('prog-curr-status').innerText = data.Status;
+                    
+                    document.getElementById('prog-student-details').style.display = 'block';
+                    document.getElementById('prog-form').style.display = 'block';
+                } else {
+                    alert("Student ID not found in the database. Please check the ID.");
+                }
+            } catch(e) {
+                alert("Error fetching student.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Fetch Student";
+            }
+        });
+
+        document.getElementById('prog-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('prog-submit-btn');
+            btn.disabled = true; btn.innerText = "Updating Database...";
+
+            const docId = document.getElementById('prog-doc-id').value;
+            const colName = document.getElementById('prog-col-name').value;
+            const action = document.getElementById('prog-action').value;
+            const newClass = document.getElementById('prog-new-class').value;
+            const newRoll = document.getElementById('prog-new-roll').value;
+            const feeStatus = document.getElementById('prog-fee-status').value;
+            const stuId = document.getElementById('prog-student-id').value.trim();
+
+            try {
+                // Update the student's class, roll number, and re-admission info
+                await setDoc(doc(db, colName, docId), {
+                    Class: newClass,
+                    "Roll No": newRoll,
+                    "ReAdmission Status": feeStatus,
+                    "Last Progression": `${action} to ${newClass} on ${new Date().toLocaleDateString()}`
+                }, { merge: true });
+
+                const userRole = JSON.parse(localStorage.getItem('vmi_user')).role;
+                await logAction(userRole, `STUDENT ${action.toUpperCase()}`, stuId, `Class updated to ${newClass}, Roll: ${newRoll}. Fee: ${feeStatus}`);
+                
+                alert(`Success! Student officially ${action.toLowerCase()} to ${newClass}.`);
+                
+                // Reset form
+                document.getElementById('prog-form').reset();
+                document.getElementById('prog-student-details').style.display = 'none';
+                document.getElementById('prog-form').style.display = 'none';
+                document.getElementById('prog-student-id').value = '';
+                
+                // Auto-refresh the live database table if it's visible
+                if(document.getElementById('refresh-db-btn')) document.getElementById('refresh-db-btn').click();
+            } catch(err) {
+                alert("Error updating student progression.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Confirm Re-admission & Update";
+            }
+        });
     </script>
 </body>
 </html>

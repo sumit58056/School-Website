@@ -71,6 +71,7 @@
                 <li><a href="#" class="nav-link" data-target="section-notifications" style="background-color: #1a1a1a; border-left: 4px solid #E63946;">🔔 Notifications <span id="nav-notif-badge" style="background:#E63946; color:white; border-radius:50%; padding:2px 6px; font-size:0.7rem; display:none; margin-left:5px;">0</span></a></li>
                 <li><a href="#" class="nav-link" data-target="section-upload">📁 Upload Student Data</a></li>
                 <li><a href="#" class="nav-link" data-target="section-add-student">👤 Enroll Student</a></li>
+                <li><a href="#" class="nav-link" data-target="section-progression" style="background-color: #002244; border-left: 4px solid #00BFFF;">📈 Class Progression</a></li>
                 <li><a href="#" class="nav-link" data-target="section-transferred">🎓 Transferred Students</a></li>
                 <li><a href="#" class="nav-link" data-target="section-view-db">👁️ View Students DB</a></li>
                 <li><a href="#" class="nav-link" data-target="section-teachers">👨‍💼 Manage Staff</a></li>
@@ -136,7 +137,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Add Student -->
+            <!-- SECTION 2: Enroll Student -->
             <div id="section-add-student" class="admin-section">
                 <div class="dashboard-card">
                     <h3>Enroll / Transfer In Student</h3>
@@ -215,6 +216,63 @@
                         <div class="input-group"><label>Residential Address</label><textarea id="manual-address" rows="2" required></textarea></div>
                         
                         <button type="submit" class="admin-submit-btn" id="manual-submit-btn">Save Student Record</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SECTION: Class Progression & Re-admission -->
+            <div id="section-progression" class="admin-section">
+                <div class="dashboard-card" style="max-width: 800px;">
+                    <h3>📈 Academic Progression & Re-admission</h3>
+                    <div class="info-box">Promote students to the next academic class at the end of the year, assign new roll numbers, and log their re-admission fee status.</div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <input type="text" id="prog-student-id" placeholder="Enter Student ID (e.g., CVSK/26/001)" style="padding: 12px; width: 100%; border-radius: 4px; border: 1px solid #ccc; font-weight: bold;">
+                        <button type="button" id="prog-fetch-btn" class="admin-submit-btn btn-blue" style="width: auto; padding: 12px 25px;">Fetch Student</button>
+                    </div>
+
+                    <div id="prog-student-details" style="display: none; background: #eef4fc; padding: 20px; border-radius: 6px; border: 1px solid #003366; margin-bottom: 20px;">
+                        <h4 style="margin-top: 0; color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Current Student Status</h4>
+                        <div class="grid-2" style="font-size: 0.9rem;">
+                            <div><strong>Name:</strong> <span id="prog-curr-name"></span></div>
+                            <div><strong>Current Class:</strong> <span id="prog-curr-class" style="color: #E63946; font-weight: bold;"></span></div>
+                            <div><strong>Current Roll No:</strong> <span id="prog-curr-roll"></span></div>
+                            <div><strong>Status:</strong> <span id="prog-curr-status"></span></div>
+                        </div>
+                    </div>
+
+                    <form id="prog-form" class="admin-form" style="display: none;">
+                        <input type="hidden" id="prog-doc-id">
+                        <input type="hidden" id="prog-col-name">
+                        <h4 class="section-divider" style="margin-top: 0;">Process Re-admission</h4>
+                        <div class="marks-grid">
+                            <div class="input-group">
+                                <label>Progression Action <span style="color:red">*</span></label>
+                                <select id="prog-action" required>
+                                    <option value="Promoted">Promote to Next Class</option>
+                                    <option value="Retained">Retain in Current Class</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>New Academic Class <span style="color:red">*</span></label>
+                                <select id="prog-new-class" required>
+                                    <option value="" disabled selected>-- Select New Class --</option>
+                                    <option>LKG</option><option>U.K.G</option><option>Class 1</option><option>Class 2</option><option>Class 3</option><option>Class 4</option><option>Class 5</option><option>Class 6</option><option>Class 7</option><option>Class 8</option><option>Class 9</option><option>Class 10</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>New Roll No. <span style="color:red">*</span></label>
+                                <input type="text" id="prog-new-roll" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Re-admission Fee Status <span style="color:red">*</span></label>
+                                <select id="prog-fee-status" required style="font-weight:bold; color:#217346;">
+                                    <option value="Paid">Verified & Paid</option>
+                                    <option value="Pending" style="color:#E63946;">Payment Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="admin-submit-btn btn-green" id="prog-submit-btn">Confirm Re-admission & Update</button>
                     </form>
                 </div>
             </div>
@@ -685,7 +743,7 @@
         </div>
     </div>
 
-    <!-- Edit Student Modal -->
+    <!-- Edit Student Modal (READONLY DISE FOR BRANCH ADMIN) -->
     <div id="edit-student-modal" class="modal-overlay">
         <div class="modal-content" style="width: 700px;">
             <button class="modal-close" onclick="document.getElementById('edit-student-modal').style.display='none'">&times;</button>
@@ -721,7 +779,6 @@
                     <div class="input-group"><label>Aadhaar Number (Mandatory)</label><input type="text" id="edit-stu-aadhar" required maxlength="12" pattern="[0-9]{12}"></div>
                     <div class="input-group"><label>PEN Number</label><input type="text" id="edit-stu-pen"></div>
                     <div class="input-group"><label>UDISE Number</label><input type="text" id="edit-stu-udise"></div>
-                    <div class="input-group"><label>Status</label><select id="edit-stu-status"><option>Active</option><option>Transferred Out</option></select></div>
                     <div class="input-group" style="grid-column: span 2;">
                         <label style="color: #FF671F;">Upload New General Document (PDF/JPG)</label>
                         <input type="file" id="edit-stu-doc-file" accept=".pdf, .jpg, .jpeg, .png">
@@ -845,6 +902,8 @@
                     document.getElementById('refresh-notif-btn')?.click();
                 } else if(target === 'section-branch-search') {
                     document.getElementById('branch-search-input')?.focus();
+                } else if(target === 'section-progression') {
+                    document.getElementById('prog-student-id')?.focus();
                 }
             });
         });
@@ -881,7 +940,7 @@
         import { db, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from './firebase-init.js';
 
         // ==========================================
-        // --- AUDIT LOGGING ENGINE (MOVED TO TOP) ---
+        // --- AUDIT LOGGING ENGINE ---
         // ==========================================
         async function logAction(userRole, action, target, details) {
             try {
@@ -897,7 +956,7 @@
             } catch(e) { console.error("Audit log failed", e); }
         }
 
-        let globalAssets = { logo: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "" };
+        let globalAssets = { logoMain: "", logoBranch: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "" };
         
         function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
 
@@ -929,7 +988,6 @@
 
         async function loadGlobalSettings() {
             try { 
-                // Checks the global settings shared across the network
                 const snap = await getDoc(doc(db, "settings", "global_assets")); 
                 if (snap.exists()) { 
                     globalAssets = { ...globalAssets, ...snap.data() }; 
@@ -938,7 +996,7 @@
         } 
         loadGlobalSettings();
 
-        // --- NEW: NOTIFICATIONS ENGINE ---
+        // --- NOTIFICATIONS ENGINE ---
         async function checkUnreadNotifications() {
             try {
                 const qSnap = await getDocs(query(collection(db, "notifications"), where("campus", "==", "branch"), where("read", "==", false)));
@@ -951,7 +1009,7 @@
                 }
             } catch(e) {}
         }
-        checkUnreadNotifications(); // Check on load
+        checkUnreadNotifications();
 
         async function loadBranchNotifications() {
             const tbody = document.getElementById('notif-table-body');
@@ -1073,7 +1131,6 @@
                     tableBody.appendChild(tr);
                 });
 
-                // Attach View events for Search
                 document.querySelectorAll('.view-search-stu-btn').forEach(btn => {
                     btn.addEventListener('click', (ev) => {
                         const student = currentBranchSearchResults[ev.currentTarget.getAttribute('data-index')];
@@ -1130,7 +1187,6 @@
                     });
                 });
 
-                // Attach Edit events for Search
                 document.querySelectorAll('.edit-search-stu-btn').forEach(btn => { 
                     btn.addEventListener('click', (e) => {
                         const student = currentBranchSearchResults[e.currentTarget.getAttribute('data-index')]; 
@@ -1175,7 +1231,6 @@
                     });
                 });
 
-                // Attach Transfer events for Search
                 document.querySelectorAll('.transfer-search-stu-btn').forEach(transferBtn => {
                     transferBtn.addEventListener('click', async (e) => {
                         const button = e.currentTarget;
@@ -1192,7 +1247,6 @@
                     });
                 });
 
-                // Attach Delete events for Search
                 document.querySelectorAll('.delete-search-stu-btn').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         if(confirm("Are you sure you want to permanently delete this student record?")) {
@@ -1324,7 +1378,8 @@
             
             const validStudents = students.filter(s => (s["Student ID"] || s["Roll No"]) && s.Name && s.Name.trim() !== "" && s.Name !== "N/A");
             
-            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out');
+            // HIDES REJECTED STUDENTS FROM LIVE DB
+            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus !== 'Rejected');
             currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
 
             if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in branch database.</td></tr>`; }
@@ -1542,8 +1597,10 @@
                     const { jsPDF } = window.jspdf; const pdf = new jsPDF();
                     
                     const schoolName = "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
+                    // DUAL LOGO: Pulls branch logo
+                    const campusLogo = globalAssets.logoBranch || globalAssets.logoMain;
                     
-                    if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
+                    if(campusLogo) { pdf.addImage(campusLogo, 'PNG', 20, 15, 20, 20); }
                     pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center");
                     pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
                     pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
@@ -1754,7 +1811,10 @@
                 const { jsPDF } = window.jspdf; const pdf = new jsPDF();
                 const schoolName = "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
                 
-                if(globalAssets.logo) { pdf.addImage(globalAssets.logo, 'PNG', 20, 15, 20, 20); }
+                // DUAL LOGO: Pulls branch logo
+                const campusLogo = globalAssets.logoBranch || globalAssets.logoMain;
+                
+                if(campusLogo) { pdf.addImage(campusLogo, 'PNG', 20, 15, 20, 20); }
                 pdf.setFontSize(22); pdf.setTextColor(0, 51, 102); pdf.text(schoolName, 105, 25, null, null, "center");
                 pdf.setFontSize(14); pdf.setTextColor(255, 103, 31); pdf.text("TRANSFER CERTIFICATE", 105, 35, null, null, "center");
                 pdf.setLineWidth(0.5); pdf.line(15, 42, 195, 42);
@@ -1781,7 +1841,7 @@
                 pdf.text("_______________________", 140, 205);
                 pdf.text("Principal Signature", 145, 212);
                 
-                pdf.save(`TC_${studentId}.pdf`); 
+                pdf.save(`TC_${student["Student ID"] || 'N/A'}.pdf`); 
                 alert(`Success! TC Downloaded.`); document.getElementById('tc-form').reset(); document.getElementById('refresh-db-btn').click();
             } else { alert("Student not found in Branch database."); }
             submitBtn.disabled = false; submitBtn.innerText = "Mark Transferred & Generate TC";
@@ -2058,7 +2118,7 @@
         document.getElementById('notice-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('notice-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "cvsk_notices", "notice_" + Date.now()), { title: document.getElementById('notice-title').value, content: document.getElementById('notice-content').value, date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert("Notice Published!"); document.getElementById('notice-form').reset(); document.querySelector('.nav-link[data-target="section-notices"]').click(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Notice"; } });
         document.getElementById('admin-material-form')?.addEventListener('submit', async (e) => { e.preventDefault(); const btn = document.getElementById('admin-mat-submit-btn'); btn.disabled = true; btn.innerText = "Publishing..."; try { await setDoc(doc(db, "cvsk_materials", `doc_${Date.now()}`), { title: document.getElementById('admin-mat-title').value, class: document.getElementById('admin-mat-class').value, category: document.getElementById('admin-mat-category').value, link: document.getElementById('admin-mat-link').value, publishedBy: "Branch Admin", date: new Date().toLocaleDateString(), timestamp: Date.now() }); alert(`Document Published!`); document.getElementById('admin-material-form').reset(); } catch(err){} finally { btn.disabled = false; btn.innerText = "Publish Document"; } });
         
-        // --- EXAM RESULTS & ADMIT CARDS MODULE ---
+        // --- EXAM RESULTS MODULE ---
         const termSelect = document.getElementById('res-exam-name'); const classSelect = document.getElementById('res-class'); const coCurricularSection = document.getElementById('co-curricular-section'); const markInputs = document.querySelectorAll('.acad-mark'); const rStudentIdInput = document.getElementById('res-student-id'); const rStudentNameInput = document.getElementById('res-student-name');
         let currentMaxPerSubject = 100; let activeSubjectCount = 8;
         rStudentIdInput?.addEventListener('blur', async () => { const studentId = rStudentIdInput.value.trim(); if (!studentId) { rStudentNameInput.value = ""; return; } rStudentNameInput.value = "Searching..."; try { const safeDocId = makeSafeId(studentId); const docSnap = await getDoc(doc(db, "cvsk_students", safeDocId)); if (docSnap.exists()) { const data = docSnap.data(); rStudentNameInput.value = data.Name || "Name Missing"; if(data.Class) { classSelect.value = data.Class; updateFormRules(); } } else { rStudentNameInput.value = "Not Found - Check ID"; } } catch (error) { rStudentNameInput.value = "Error."; } });
@@ -2083,7 +2143,51 @@
         document.getElementById('refresh-results-btn')?.addEventListener('click', () => { loadLiveResults(); }); document.getElementById('res-search-input')?.addEventListener('keyup', (e) => { const st = e.target.value.toLowerCase(); currentlyDisplayedResults = liveResultsData.filter(res => (res["Student ID"] || "").toLowerCase().includes(st) || (res["Class"] || "").toLowerCase().includes(st)); renderResultsTableResults(currentlyDisplayedResults); }); document.querySelector('.nav-link[data-target="section-results"]')?.addEventListener('click', loadLiveResults); document.getElementById('bulk-print-btn')?.addEventListener('click', () => { if(currentlyDisplayedResults.length > 0) generateReportCardPDF(currentlyDisplayedResults, `CVSK_Bulk_ReportCards_${Date.now()}.pdf`); });
         document.getElementById('export-results-btn')?.addEventListener('click', () => { if(currentlyDisplayedResults.length === 0) return alert("No results to export!"); const exportData = currentlyDisplayedResults.map(res => { const flatRow = { "Student ID": res["Student ID"], "Student Name": res["Student Name"] || "N/A", "Class": res["Class"], "Term": res["Exam Term"], "Total Marks": res["Total Marks"], "Max Marks": res["Max Marks"], "Percentage": res["Percentage"] }; if(res["Academic Marks"]) { for(const [sub, mark] of Object.entries(res["Academic Marks"])) { flatRow[sub.replace('_', ' ')] = mark; } } if(res["CoCurricular Grades"]) { for(const [sub, grade] of Object.entries(res["CoCurricular Grades"])) { if(grade) flatRow[sub.replace(/_/g, ' ')] = grade; } } return flatRow; }); const workbook = XLSX.utils.book_new(); const worksheet = XLSX.utils.json_to_sheet(exportData); XLSX.utils.book_append_sheet(workbook, worksheet, "Master Score Sheet"); XLSX.writeFile(workbook, `CVSK_Master_Results_${Date.now()}.xlsx`); });
 
-        function generateReportCardPDF(resultsArray, fileName) { const { jsPDF } = window.jspdf; const doc = new jsPDF(); resultsArray.forEach((result, index) => { if (index > 0) doc.addPage(); doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center"); doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); doc.setFontSize(11); doc.setTextColor(0, 0, 0); doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); let startY = 75; const academicMarks = result["Academic Marks"] || {}; doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); let academicData = []; for (const [subject, mark] of Object.entries(academicMarks)) { academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); } doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); let finalY = doc.lastAutoTable.finalY + 15; doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); let coData = []; for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { if(grade) coData.push([sub.replace(/_/g, ' '), grade]); } doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); finalY = doc.lastAutoTable.finalY + 15; } finalY = Math.max(finalY + 20, 250); doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); }); doc.save(fileName); }
+        // DUAL LOGO IMPLEMENTATION FOR RESULTS PDF (BRANCH)
+        function generateReportCardPDF(resultsArray, fileName) { 
+            const { jsPDF } = window.jspdf; const doc = new jsPDF(); 
+            const campusLogo = globalAssets.logoBranch || globalAssets.logoMain;
+            
+            resultsArray.forEach((result, index) => { 
+                if (index > 0) doc.addPage(); 
+                doc.setFontSize(22); doc.setTextColor(0, 51, 102); doc.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, 25, null, null, "center"); 
+                doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center"); 
+                doc.setFontSize(11); doc.setTextColor(0, 0, 0); 
+                doc.text(`Student Name: ${result["Student Name"] || 'N/A'}`, 20, 50); doc.text(`Student ID: ${result["Student ID"] || 'N/A'}`, 140, 50); 
+                doc.text(`Class: ${result["Class"] || 'N/A'}`, 20, 60); doc.text(`Term: ${result["Exam Term"] || 'N/A'}`, 140, 60); 
+                doc.setLineWidth(0.5); doc.line(20, 65, 190, 65); 
+                
+                let startY = 75; const academicMarks = result["Academic Marks"] || {}; 
+                doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY); 
+                let academicData = []; 
+                for (const [subject, mark] of Object.entries(academicMarks)) { 
+                    academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]); 
+                } 
+                doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } }); 
+                
+                let finalY = doc.lastAutoTable.finalY + 15; 
+                doc.setFontSize(12); doc.setTextColor(0, 0, 0); 
+                doc.text(`Total Marks: ${result["Total Marks"]} / ${result["Max Marks"]}`, 20, finalY); 
+                doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY); finalY += 15; 
+                
+                if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) { 
+                    doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY); 
+                    let coData = []; 
+                    for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) { 
+                        if(grade) coData.push([sub.replace(/_/g, ' '), grade]); 
+                    } 
+                    doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } }); 
+                    finalY = doc.lastAutoTable.finalY + 15; 
+                } 
+                
+                finalY = Math.max(finalY + 20, 250); 
+                doc.text("_______________________", 20, finalY); doc.text("Class Teacher", 30, finalY + 10); 
+                doc.text("_______________________", 130, finalY); doc.text("Principal", 145, finalY + 10); 
+                
+                if(campusLogo) { doc.addImage(campusLogo, 'PNG', 20, 15, 20, 20); }
+            }); 
+            doc.save(fileName); 
+        }
 
         // --- ADMIT CARD ENGINE ---
         const schClass = document.getElementById('sch-class'); const schTerm = document.getElementById('sch-term'); const schSubjectsContainer = document.getElementById('sch-subjects-container');
@@ -2113,8 +2217,14 @@
                     tableHtml = `<table style="width:100%; border-collapse:collapse; margin-top:5px; text-align:left;"><thead><tr><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Subject</th><th style="border:1px solid #ccc; padding:4px; background:#003366; color:white; font-size:10px;">Date & Time</th></tr></thead><tbody style="font-size:10px;">`;
                     for(const [sub, dateStr] of Object.entries(studentSchedule)) { tableHtml += `<tr><td style="border:1px solid #ccc; padding:4px;">${sub.replace(/_/g, ' ')}</td><td style="border:1px solid #ccc; padding:4px;">${dateStr}</td></tr>`; } tableHtml += `</tbody></table>`;
                 } else { tableHtml = `<p style="color:red; margin-top:10px; font-size:10px; font-weight:bold; text-align:center;">Exam schedule not published for ${cls} yet.</p>`; }
-                const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="height:40px; object-fit:contain;">` : ''; const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:25px; object-fit:contain;">` : '<div style="height:25px;"></div>';
+                
+                // DUAL LOGO IMPLEMENTATION FOR ADMIT CARD PREVIEW (BRANCH)
+                const campusLogo = globalAssets.logoBranch || globalAssets.logoMain;
+                const logoHtml = campusLogo ? `<img src="${campusLogo}" style="height:40px; object-fit:contain;">` : ''; 
+                
+                const signHtml = globalAssets.prinSign ? `<img src="${globalAssets.prinSign}" style="height:25px; object-fit:contain;">` : '<div style="height:25px;"></div>';
                 const previewCard = document.getElementById('admit-preview-card');
+                
                 previewCard.innerHTML = `<div style="display:flex; justify-content:center; align-items:center; gap:15px; margin-bottom:5px;">${logoHtml}<div style="text-align: center;"><h2 style="color: #003366; margin: 0; font-size: 20px;">CHANDIDAS VIVEKANANDA SIKSHA KENDRAM</h2><p style="color: #555; margin: 2px 0 0 0; font-size: 10px;">Branch Campus Registration</p></div></div><div style="text-align: center; margin-bottom: 10px;"><h3 style="color: #FF671F; margin: 0; font-size: 14px;">ADMIT CARD - ${term.toUpperCase()}</h3></div><hr style="border: 0; border-top: 2px solid #003366; margin-bottom: 10px;"><div style="display: flex; justify-content: space-between; align-items: flex-start;"><div style="font-size: 11px; line-height: 1.6; color: #333;"><div><strong>Name:</strong> ${student.Name || 'N/A'}</div><div style="display:flex; gap:30px;"><div><strong>Student ID:</strong> ${student["Student ID"] || 'N/A'}</div><div><strong>Roll No:</strong> ${student["Roll No"] || 'N/A'}</div></div><div><strong>Class:</strong> ${student.Class || 'N/A'}</div><div><strong>Father's Name:</strong> ${student["Father's Name"] || 'N/A'}</div></div><div style="width: 70px; height: 90px; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #999; font-size: 10px; border-radius: 4px; overflow:hidden;">${student.Photo ? `<img src="${student.Photo}" style="width:100%; height:100%; object-fit:cover;">` : 'Photo'}</div></div><div style="display: flex; gap: 15px; align-items: flex-end;"><div style="flex:1;">${tableHtml}</div><div style="width:120px; text-align:center; font-size:10px; font-weight:bold; color:#003366;">${signHtml}<div style="border-top:1px solid #003366; padding-top:3px; margin-top:2px;">Principal Signature</div></div></div>`;
                 document.getElementById('admit-preview-placeholder').style.display = 'none'; previewCard.style.display = 'block';
             } catch(err) { alert("Error fetching preview data."); } finally { btn.disabled = false; btn.innerText = "👁️ Preview Sample Admit Card"; }
@@ -2131,11 +2241,17 @@
                 if(targetStudents.length === 0) { alert("No students found."); btn.disabled = false; btn.innerText = "📥 Download Admit Card PDF(s)"; return; }
                 const schSnaps = await getDocs(collection(db, "cvsk_schedules")); const schedules = {}; schSnaps.forEach(d => { schedules[d.id] = d.data(); });
                 const { jsPDF } = window.jspdf; const docPdf = new jsPDF(); const cardWidth = 190; const cardHeight = 92; const startX = 10; const spacing = 5.25;
+                
+                // DUAL LOGO IMPLEMENTATION FOR ADMIT CARD PDF (BRANCH)
+                const campusLogo = globalAssets.logoBranch || globalAssets.logoMain;
+
                 targetStudents.forEach((student, index) => {
                     const cls = student.Class; const schId = `schedule_${makeSafeId(cls)}_${makeSafeId(term)}`; const studentSchedule = schedules[schId] ? schedules[schId].Schedule : null;
                     const pageIndex = index % 3; if (index > 0 && pageIndex === 0) docPdf.addPage(); const currentY = spacing + (pageIndex * (cardHeight + spacing));
                     docPdf.setLineWidth(0.2); docPdf.rect(startX, currentY, cardWidth, cardHeight);
-                    if(globalAssets.logo) { docPdf.addImage(globalAssets.logo, 'PNG', startX + 5, currentY + 3, 16, 16); }
+                    
+                    if(campusLogo) { docPdf.addImage(campusLogo, 'PNG', startX + 5, currentY + 3, 16, 16); }
+                    
                     docPdf.setFontSize(16); docPdf.setTextColor(0, 51, 102); docPdf.text("CHANDIDAS VIVEKANANDA SIKSHA KENDRAM", 105, currentY + 9, null, null, "center");
                     docPdf.setFontSize(9); docPdf.setTextColor(50, 50, 50); docPdf.text("Branch Campus Registration", 105, currentY + 14, null, null, "center");
                     docPdf.setFontSize(12); docPdf.setTextColor(255, 103, 31); docPdf.text(`ADMIT CARD - ${term.toUpperCase()}`, 105, currentY + 21, null, null, "center");
@@ -2165,7 +2281,11 @@
         document.getElementById('id-tch-id-fetch')?.addEventListener('blur', async (e) => { const idVal = e.target.value.trim(); if(!idVal) return; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(idVal))); if(docSnap.exists()) { alert(`Loaded Staff: ${docSnap.data().Name || docSnap.data().name}`); } else { alert("Staff not found."); } } catch(err) {} });
 
         function renderCardHTML(dataObj, type) {
-            const logoHtml = globalAssets.logo ? `<img src="${globalAssets.logo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
+            
+            // DUAL LOGO IMPLEMENTATION FOR ID CARDS
+            const campusLogo = globalAssets.logoBranch || globalAssets.logoMain;
+            
+            const logoHtml = campusLogo ? `<img src="${campusLogo}" style="width:25px; height:25px; object-fit:contain; background:white; border-radius:50%; padding:2px;">` : `<div style="width:25px; height:25px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#003366; font-size:6px; font-weight:bold;">LOGO</div>`;
             const sealHtml = globalAssets.seal ? `<img src="${globalAssets.seal}" style="width:35px; height:35px; object-fit:contain; opacity:0.8;">` : ``;
             const isExecutive = type === 'teacher' && (dataObj.dept === 'Principal' || dataObj.dept === 'Manager' || dataObj.dept === 'Super Admin' || dataObj.dept === 'Admin');
             const signSrc = isExecutive ? globalAssets.secSign : globalAssets.prinSign;
@@ -2194,13 +2314,13 @@
                 if(!stuId) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Student ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "cvsk_students", makeSafeId(stuId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
                 if(!data) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Student ID not found in database!"); }
-                activeCardData = { type: 'student', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', dob: data.DOB || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85' };
+                activeCardData = { type: 'student', title: data.Name || 'N/A', id: data["Student ID"] || data["Roll No"] || stuId, class: data.Class || 'N/A', dob: data.DOB || 'N/A', father: data["Father's Name"] || 'N/A', address: data.Address || 'N/A', phone: data.Phone || 'N/A', photo: data.Photo || 'https://via.placeholder.com/70x85', campus: 'branch' };
             } else {
                 const tchId = document.getElementById('id-tch-id-fetch').value.trim();
                 if(!tchId) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Please enter a Staff ID."); }
                 let data = null; try { const docSnap = await getDoc(doc(db, "cvsk_staff", makeSafeId(tchId))); if(docSnap.exists()) data = docSnap.data(); } catch(e) {}
                 if(!data) { btn.disabled = false; btn.innerText = "Generate Preview & QR Code"; return alert("Staff ID not found in database!"); }
-                activeCardData = { type: 'teacher', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85' };
+                activeCardData = { type: 'teacher', id: data.TeacherID || data.id || tchId, name: data.Name || data.name || 'N/A', father: data.FatherName || data.father || 'N/A', dept: data.Department || data.dept || 'N/A', doj: data.DateOfJoining || data.doj || 'N/A', blood: data.BloodGroup || data.blood || 'N/A', photo: data.Photo || data.photo || 'https://via.placeholder.com/70x85', campus: 'branch' };
             }
             renderCardHTML(activeCardData, type); btn.disabled = false; btn.innerText = "Generate Preview & QR Code";
         });
@@ -2224,10 +2344,10 @@
             try {
                 if(targetType === 'class' || targetType === 'all-students') {
                     const qSnaps = await getDocs(collection(db, "cvsk_students"));
-                    qSnaps.forEach(docSnap => { const d = docSnap.data(); if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") { if(targetType === 'all-students' || d.Class === targetClass) { targets.push({ type: 'student', title: d.Name, id: d["Student ID"] || d["Roll No"], class: d.Class, dob: d.DOB, father: d["Father's Name"], address: d.Address, phone: d.Phone, photo: d.Photo }); } } });
+                    qSnaps.forEach(docSnap => { const d = docSnap.data(); if((d["Student ID"] || d["Roll No"]) && d.Name && d.Name.trim() !== "" && d.Name !== "N/A" && d.Status !== "Transferred Out") { if(targetType === 'all-students' || d.Class === targetClass) { targets.push({ type: 'student', title: d.Name, id: d["Student ID"] || d["Roll No"], class: d.Class, dob: d.DOB, father: d["Father's Name"], address: d.Address, phone: d.Phone, photo: d.Photo, campus: 'branch' }); } } });
                 } else {
                     isStudent = false; const qSnaps = await getDocs(collection(db, "cvsk_staff"));
-                    qSnaps.forEach(docSnap => { const d = docSnap.data(); const name = d.Name || d.name; if(name && String(name).trim() !== "") { targets.push({ type: 'teacher', id: d.TeacherID || d.id || docSnap.id, name: name, father: d.FatherName || d.father, dept: d.Department || d.dept, doj: d.DateOfJoining || d.doj, blood: d.BloodGroup || d.blood, phone: d.Phone || d.phone, photo: d.Photo || d.photo }); } });
+                    qSnaps.forEach(docSnap => { const d = docSnap.data(); const name = d.Name || d.name; if(name && String(name).trim() !== "") { targets.push({ type: 'teacher', id: d.TeacherID || d.id || docSnap.id, name: name, father: d.FatherName || d.father, dept: d.Department || d.dept, doj: d.DateOfJoining || d.doj, blood: d.BloodGroup || d.blood, phone: d.Phone || d.phone, photo: d.Photo || d.photo, campus: 'branch' }); } });
                 }
                 if(targets.length === 0) { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; return alert("No valid records found for this selection."); }
                 let errors = [];
@@ -2246,6 +2366,92 @@
             } catch(err) { alert("An error occurred during bulk generation."); console.error(err); } finally { btn.disabled = false; btn.innerText = "📄 Generate Bulk ID PDF"; previewFront.innerHTML = ""; previewBack.innerHTML = ""; }
         });
         document.getElementById('bulk-id-target')?.addEventListener('change', (e) => { document.getElementById('bulk-id-class-container').style.display = (e.target.value === 'class') ? 'block' : 'none'; });
+
+        // --- ACADEMIC PROGRESSION & RE-ADMISSION ENGINE (BRANCH ONLY) ---
+        document.getElementById('prog-fetch-btn')?.addEventListener('click', async () => {
+            const btn = document.getElementById('prog-fetch-btn');
+            const stuIdInput = document.getElementById('prog-student-id').value.trim();
+            if(!stuIdInput) return alert("Enter a Student ID.");
+            
+            btn.disabled = true; btn.innerText = "Searching...";
+            document.getElementById('prog-student-details').style.display = 'none';
+            document.getElementById('prog-form').style.display = 'none';
+
+            try {
+                // Branch Admin can only process branch students
+                const snap = await getDoc(doc(db, "cvsk_students", makeSafeId(stuIdInput)));
+
+                if(snap.exists()) {
+                    const data = snap.data();
+                    
+                    // NEW SECURITY LOCK: Prevent promoting unverified students
+                    if (data.VerificationStatus === "Rejected" || data.VerificationStatus === "Pending") {
+                        alert(`Action Denied: This student's record is currently ${data.VerificationStatus.toUpperCase()}. They must be fully 'Verified' before they can be promoted.`);
+                        btn.disabled = false; btn.innerText = "Fetch Student";
+                        return;
+                    }
+
+                    document.getElementById('prog-doc-id').value = snap.id;
+                    document.getElementById('prog-col-name').value = "cvsk_students";
+                    
+                    document.getElementById('prog-curr-name').innerText = data.Name;
+                    document.getElementById('prog-curr-class').innerText = data.Class || "N/A";
+                    document.getElementById('prog-curr-roll').innerText = data["Roll No"] || "N/A";
+                    document.getElementById('prog-curr-status').innerText = data.Status;
+                    
+                    document.getElementById('prog-student-details').style.display = 'block';
+                    document.getElementById('prog-form').style.display = 'block';
+                } else {
+                    alert("Student ID not found in the Branch database. Please check the ID.");
+                }
+            } catch(e) {
+                alert("Error fetching student.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Fetch Student";
+            }
+        });
+
+        document.getElementById('prog-form')?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('prog-submit-btn');
+            btn.disabled = true; btn.innerText = "Updating Database...";
+
+            const docId = document.getElementById('prog-doc-id').value;
+            const colName = document.getElementById('prog-col-name').value;
+            const action = document.getElementById('prog-action').value;
+            const newClass = document.getElementById('prog-new-class').value;
+            const newRoll = document.getElementById('prog-new-roll').value;
+            const feeStatus = document.getElementById('prog-fee-status').value;
+            const stuId = document.getElementById('prog-student-id').value.trim();
+
+            try {
+                // Update the student's class, roll number, and re-admission info
+                await setDoc(doc(db, colName, docId), {
+                    Class: newClass,
+                    "Roll No": newRoll,
+                    "ReAdmission Status": feeStatus,
+                    "Last Progression": `${action} to ${newClass} on ${new Date().toLocaleDateString()}`
+                }, { merge: true });
+
+                const userRole = JSON.parse(localStorage.getItem('vmi_user')).role;
+                await logAction(userRole, `STUDENT ${action.toUpperCase()}`, stuId, `Class updated to ${newClass}, Roll: ${newRoll}. Fee: ${feeStatus}`);
+                
+                alert(`Success! Student officially ${action.toLowerCase()} to ${newClass}.`);
+                
+                // Reset form
+                document.getElementById('prog-form').reset();
+                document.getElementById('prog-student-details').style.display = 'none';
+                document.getElementById('prog-form').style.display = 'none';
+                document.getElementById('prog-student-id').value = '';
+                
+                // Auto-refresh the live database table if it's visible
+                if(document.getElementById('refresh-db-btn')) document.getElementById('refresh-db-btn').click();
+            } catch(err) {
+                alert("Error updating student progression.");
+            } finally {
+                btn.disabled = false; btn.innerText = "Confirm Re-admission & Update";
+            }
+        });
     </script>
 </body>
 </html>
