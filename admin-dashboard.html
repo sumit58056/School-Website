@@ -236,6 +236,7 @@
                     </form>
                 </div>
             </div>
+
             <!-- SECTION: Class Progression & Re-admission -->
             <div id="section-progression" class="admin-section">
                 <div class="dashboard-card" style="max-width: 800px;">
@@ -292,7 +293,6 @@
                     </form>
                 </div>
             </div>
-
             <!-- SECTION 3: Transferred Students -->
             <div id="section-transferred" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
@@ -317,7 +317,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 4: View Live Database -->
+            <!-- SECTION 4: View Live Database (WITH NEW STATUS FILTER) -->
             <div id="section-view-db" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Network Student Database</h3>
@@ -330,7 +330,15 @@
                             </select>
                             <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 8px 15px;">🔄 Refresh DB</button>
                         </div>
-                        <input type="text" id="db-search-input" placeholder="Search Active Students..." style="padding: 8px 12px; width: 250px; border: 1px solid #ccc; border-radius: 4px;">
+                        <div style="display: flex; gap: 10px;">
+                            <select id="db-status-filter" style="padding: 8px 12px; border: 1px solid #003366; border-radius: 4px; font-weight: bold; color: #003366;">
+                                <option value="active">🟢 Active & Verified</option>
+                                <option value="pending">🟠 Pending Verification</option>
+                                <option value="rejected">🔴 Rejected</option>
+                                <option value="all">🌐 All Records</option>
+                            </select>
+                            <input type="text" id="db-search-input" placeholder="Search Students..." style="padding: 8px 12px; width: 220px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
@@ -619,7 +627,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 13: Settings (WITH UPDATED DUAL LOGO FIELDS) -->
+            <!-- SECTION 13: Settings -->
             <div id="section-settings" class="admin-section">
                 <div class="dashboard-card" style="max-width: 900px;">
                     <h3>⚙️ Global Settings & Official Assets</h3>
@@ -653,7 +661,6 @@
                             </div>
                         </div>
 
-                        <!-- NEW DUAL LOGO ASSET SECTION -->
                         <h4 class="section-divider">Print Document Assets</h4>
                         <div class="settings-grid">
                             <div class="input-group">
@@ -979,7 +986,7 @@
         import { db, doc, writeBatch, setDoc, getDoc, collection, getDocs, deleteDoc, query, where } from './firebase-init.js';
 
         // ==========================================
-        // --- AUDIT LOGGING ENGINE (MOVED TO TOP) ---
+        // --- AUDIT LOGGING ENGINE ---
         // ==========================================
         async function logAction(userRole, action, target, details) {
             try {
@@ -995,7 +1002,6 @@
             } catch(e) { console.error("Audit log failed", e); }
         }
 
-        // UPDATED: Now supports Dual Logos (Main and Branch)
         let globalAssets = { logoMain: "", logoBranch: "", seal: "", mcSeal: "", prinSign: "", mgrSign: "", secSign: "", paymentQR: "", admissionsActive: true, formsActive: true };
         
         function makeSafeId(idStr) { return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; }
@@ -1029,7 +1035,6 @@
         } 
         loadGlobalSettings();
 
-        // Updated Asset Map for Two Logos
         const assetMap = { 'set-logo-main':'logoMain', 'set-logo-branch':'logoBranch', 'set-seal':'seal', 'set-mc-seal':'mcSeal', 'set-sign-prin':'prinSign', 'set-sign-mgr':'mgrSign', 'set-sign-sec':'secSign', 'set-payment-qr':'paymentQR' };
         for(const [inputId, key] of Object.entries(assetMap)) { document.getElementById(inputId)?.addEventListener('change', function(e) { if(this.files[0]) { resizeAssetKeepRatio(this.files[0], (base64) => { globalAssets[key] = base64; document.getElementById(`prev-${inputId}`).src = base64; }); } }); }
         
@@ -1175,7 +1180,7 @@
                 await logAction("Super Admin", "EDITED ONLINE FORM", docId, "Updated app data and restored to pending.");
                 alert("Application successfully updated and restored!");
                 document.getElementById('edit-online-modal').style.display = 'none';
-                loadOnlineAdmissions(); // Refresh the table
+                loadOnlineAdmissions();
             } catch(err) {
                 alert("Error updating application.");
             } finally {
@@ -1183,7 +1188,7 @@
             }
         });
 
-        // --- ONLINE ADMISSIONS TRACKER (WITH ID ALLOCATION) ---
+        // --- ONLINE ADMISSIONS TRACKER ---
         let currentOnlineAdmissions = [];
         
         async function loadOnlineAdmissions() {
@@ -1489,7 +1494,21 @@
 
         document.getElementById('view-pending-btn')?.addEventListener('click', async (e) => {
             const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading..."; document.querySelector('.nav-link[data-target="section-view-db"]').click(); document.getElementById('refresh-db-btn').innerText = "Loading Pending...";
-            try { let mainStudents = await fetchAllStudents('main'); let branchStudents = await fetchAllStudents('branch'); liveStudentsData = [...mainStudents, ...branchStudents]; const pendingStudents = liveStudentsData.filter(s => s.VerificationStatus === 'Pending'); renderDatabaseTable(pendingStudents); } catch (error) {} finally { btn.disabled = false; btn.innerText = "View Pending Records"; document.getElementById('refresh-db-btn').innerText = "🔄 Refresh DB"; } 
+            try { 
+                let mainStudents = await fetchAllStudents('main'); 
+                let branchStudents = await fetchAllStudents('branch'); 
+                liveStudentsData = [...mainStudents, ...branchStudents]; 
+                
+                // Programmatically set the filter to "pending" and trigger logic
+                const filterSelect = document.getElementById('db-status-filter');
+                if(filterSelect) filterSelect.value = 'pending';
+                
+                renderDatabaseTable(liveStudentsData); 
+            } catch (error) {} 
+            finally { 
+                btn.disabled = false; btn.innerText = "View Pending Records"; 
+                document.getElementById('refresh-db-btn').innerText = "🔄 Refresh DB"; 
+            } 
         });
 
         let currentUniversalResults = [];
@@ -1654,12 +1673,22 @@
             const dbTableBody = document.getElementById('db-table-body'); dbTableBody.innerHTML = ""; const tcTableBody = document.getElementById('tc-table-body'); tcTableBody.innerHTML = "";
             const validStudents = students.filter(s => (s["Student ID"] || s["Roll No"]) && s.Name && s.Name.trim() !== "" && s.Name !== "N/A");
             
-            // UPDATED: Now hides rejected students from the live database view
-            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus !== 'Rejected'); 
+            // --- NEW STATUS FILTER DROPDOWN LOGIC ---
+            const filterVal = document.getElementById('db-status-filter') ? document.getElementById('db-status-filter').value : 'active';
+            
+            if (filterVal === 'active') {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus === 'Verified');
+            } else if (filterVal === 'pending') {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus === 'Pending');
+            } else if (filterVal === 'rejected') {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus === 'Rejected');
+            } else {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out'); // All non-transferred
+            }
             
             currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
 
-            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in selected campus.</td></tr>`; }
+            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in selected campus matching filter.</td></tr>`; }
             else { currentActiveStudents.forEach((student, index) => {
                 const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40'; const isPending = student.VerificationStatus === 'Pending'; const isRejected = student.VerificationStatus === 'Rejected'; 
                 let verifClass = 'status-verified';
@@ -1886,6 +1915,12 @@
         document.getElementById('refresh-tc-btn')?.addEventListener('click', async (e) => { const btn = e.currentTarget; btn.disabled = true; btn.innerText = "Loading..."; const targetCampus = document.getElementById('tc-campus-select').value; try { liveStudentsData = await fetchAllStudents(targetCampus); renderDatabaseTable(liveStudentsData); } catch (error) {} finally { btn.disabled = false; btn.innerText = "🔄 Sync Transfer Data"; } });
 
         document.getElementById('db-search-input')?.addEventListener('keyup', (e) => { const searchTerm = e.target.value.toLowerCase(); const filtered = liveStudentsData.filter(student => (student.Name || "").toLowerCase().includes(searchTerm) || (student["Student ID"] || student["Roll No"] || "").toLowerCase().includes(searchTerm) || (student["Aadhaar Number"] || student.Aadhaar || "").toLowerCase().includes(searchTerm) || (student["PEN Number"] || student.PEN || "").toLowerCase().includes(searchTerm)); renderDatabaseTable(filtered); });
+        
+        document.getElementById('db-status-filter')?.addEventListener('change', () => { 
+            // Re-run the text search, which will now also apply the new dropdown filter
+            const e = new Event('keyup');
+            document.getElementById('db-search-input')?.dispatchEvent(e);
+        });
         
         document.getElementById('manual-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
         document.getElementById('manual-doc-file')?.addEventListener('change', function(e) { if(this.files[0]) { const reader = new FileReader(); reader.onload = function(event) { manualDocBase64 = event.target.result; }; reader.readAsDataURL(this.files[0]); } });

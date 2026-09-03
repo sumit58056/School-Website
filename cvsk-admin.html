@@ -306,13 +306,21 @@
                 </div>
             </div>
 
-            <!-- SECTION 4: View Live Database -->
+            <!-- SECTION 4: View Live Database (WITH NEW STATUS FILTER) -->
             <div id="section-view-db" class="admin-section">
                 <div class="dashboard-card" style="max-width: 100%;">
                     <h3>Live Student Database</h3>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
                         <button id="refresh-db-btn" class="admin-submit-btn" style="width: auto; padding: 10px 20px;">🔄 Refresh Data</button>
-                        <input type="text" id="db-search-input" placeholder="Search Active Students by Name, ID, Aadhaar..." style="padding: 10px; width: 320px;">
+                        <div style="display: flex; gap: 10px;">
+                            <select id="db-status-filter" style="padding: 10px; border: 1px solid #003366; border-radius: 4px; font-weight: bold; color: #003366;">
+                                <option value="active">🟢 Active & Verified</option>
+                                <option value="pending">🟠 Pending Verification</option>
+                                <option value="rejected">🔴 Rejected</option>
+                                <option value="all">🌐 All Records</option>
+                            </select>
+                            <input type="text" id="db-search-input" placeholder="Search Name, ID, Aadhaar..." style="padding: 10px; width: 280px; border: 1px solid #ccc; border-radius: 4px;">
+                        </div>
                     </div>
                     <div style="max-height: 500px; overflow-y: auto;">
                         <table class="db-table">
@@ -1378,11 +1386,22 @@
             
             const validStudents = students.filter(s => (s["Student ID"] || s["Roll No"]) && s.Name && s.Name.trim() !== "" && s.Name !== "N/A");
             
-            // HIDES REJECTED STUDENTS FROM LIVE DB
-            currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus !== 'Rejected');
+            // --- NEW STATUS FILTER DROPDOWN LOGIC ---
+            const filterVal = document.getElementById('db-status-filter') ? document.getElementById('db-status-filter').value : 'active';
+            
+            if (filterVal === 'active') {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus === 'Verified');
+            } else if (filterVal === 'pending') {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus === 'Pending');
+            } else if (filterVal === 'rejected') {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out' && s.VerificationStatus === 'Rejected');
+            } else {
+                currentActiveStudents = validStudents.filter(s => s.Status !== 'Transferred Out'); // All records except TC
+            }
+
             currentTransferredStudents = validStudents.filter(s => s.Status === 'Transferred Out');
 
-            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found in branch database.</td></tr>`; }
+            if (currentActiveStudents.length === 0) { dbTableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px;">No active students found matching filter.</td></tr>`; }
             else {
                 currentActiveStudents.forEach((student, index) => {
                     const tr = document.createElement('tr'); const photoSrc = student.Photo ? student.Photo : 'https://via.placeholder.com/40';
@@ -1651,6 +1670,13 @@
                 (student["PEN Number"] || student.PEN || "").toLowerCase().includes(searchTerm)
             ); 
             renderDatabaseTable(filtered); 
+        });
+
+        // --- ATTACH STATUS FILTER DROPDOWN ---
+        document.getElementById('db-status-filter')?.addEventListener('change', () => { 
+            // Trigger the keyup event on the search box to re-apply logic
+            const e = new Event('keyup');
+            document.getElementById('db-search-input')?.dispatchEvent(e);
         });
         
         document.getElementById('manual-photo')?.addEventListener('change', function(e) { if(this.files[0]) { resizeAndConvertImage(this.files[0], (base64) => { compressedPhotoBase64 = base64; document.getElementById('photo-preview').src = base64; document.getElementById('photo-preview').style.display = 'block'; }); } });
