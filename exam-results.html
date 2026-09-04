@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Exam Results | VMI Network</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-color: #f4f7f6; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .results-container { max-width: 800px; margin: 40px auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .search-box { background: #eef4fc; padding: 20px; border-radius: 6px; border: 1px solid #003366; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-weight: bold; margin-bottom: 5px; color: #003366; }
+        .input-group select, .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .search-btn { background-color: #FF671F; color: white; border: none; padding: 12px 20px; width: 100%; font-size: 1.1rem; font-weight: bold; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .search-btn:hover { background-color: #e55a15; }
+        
+        /* Report Card Styles */
+        #report-card-area { display: none; margin-top: 30px; border: 2px solid #003366; padding: 20px; border-radius: 4px; position: relative; }
+        .rc-header { text-align: center; border-bottom: 2px solid #FF671F; padding-bottom: 15px; margin-bottom: 20px; }
+        .rc-header h2 { color: #003366; margin: 0 0 5px 0; font-size: 1.5rem; }
+        .rc-header h4 { color: #FF671F; margin: 0; }
+        .student-details { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; font-size: 0.95rem; }
+        .marks-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .marks-table th, .marks-table td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        .marks-table th { background-color: #003366; color: white; }
+        .total-row { font-weight: bold; background-color: #eef4fc; }
+        .print-btn { background-color: #003366; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; float: right; font-weight: bold; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #report-card-area, #report-card-area * { visibility: visible; }
+            #report-card-area { position: absolute; left: 0; top: 0; width: 100%; border: none; }
+            .print-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header style="background: #003366; padding: 15px 20px; color: white; display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <img src="logo.jpg" alt="Logo" style="width: 50px; height: 50px; border-radius: 50%; background: white; padding: 2px;">
+            <h2 style="margin: 0; font-size: 1.2rem;">VMI Network Portal</h2>
+        </div>
+        <a href="index.html" style="color: white; text-decoration: none; font-weight: bold;">🏠 Back to Home</a>
+    </header>
+
+    <div class="results-container">
+        <h2 style="color: #003366; text-align: center; margin-top: 0;">View Exam Results</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 25px;">Enter your Student ID and select your Campus and Exam Term to view your digital report card.</p>
+
+        <form id="search-results-form" class="search-box">
+            <div class="input-group">
+                <label>Select Campus</label>
+                <select id="search-campus" required style="border: 2px solid #FF671F; font-weight: bold;">
+                    <option value="main">Main Campus (VMI)</option>
+                    <option value="branch">Branch Campus (CVSK)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Student ID</label>
+                <input type="text" id="search-id" placeholder="e.g. VMI/26/001 or CVSK/26/001" required>
+            </div>
+            <div class="input-group">
+                <label>Exam Term</label>
+                <select id="search-term" required>
+                    <option value="" disabled selected>-- Select Exam Term --</option>
+                    <option value="1st Summative">1st Summative</option>
+                    <option value="2nd Summative">2nd Summative</option>
+                    <option value="Annual Examination">Annual Examination</option>
+                </select>
+            </div>
+            <button type="submit" class="search-btn" id="search-btn">🔍 Search Result</button>
+        </form>
+
+        <div id="error-msg" style="color: #E63946; text-align: center; font-weight: bold; display: none; margin-bottom: 15px;"></div>
+
+        <!-- Dynamic Report Card Area -->
+        <div id="report-card-area">
+            <button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+            <div class="rc-header">
+                <h2 id="rc-school-name">VIVEKANANDA MISSION INSTITUTE</h2>
+                <h4 id="rc-term-name">ANNUAL EXAMINATION</h4>
+            </div>
+            
+            <div class="student-details">
+                <div><strong>Student Name:</strong> <span id="rc-name"></span></div>
+                <div><strong>Student ID:</strong> <span id="rc-id"></span></div>
+                <div><strong>Class:</strong> <span id="rc-class"></span></div>
+                <div><strong>Publish Date:</strong> <span id="rc-date"></span></div>
+            </div>
+
+            <h4 style="color: #003366; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Academic Performance</h4>
+            <table class="marks-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Marks Obtained</th>
+                    </tr>
+                </thead>
+                <tbody id="rc-marks-body">
+                    <!-- Marks injected here via JS -->
+                </tbody>
+            </table>
+
+            <div id="rc-cocurricular-section" style="display: none;">
+                <h4 style="color: #FF671F; border-bottom: 1px solid #ccc; padding-bottom: 5px;">Co-Curricular Grades</h4>
+                <table class="marks-table" style="margin-bottom: 10px;">
+                    <thead>
+                        <tr>
+                            <th style="background-color: #FF671F;">Activity</th>
+                            <th style="background-color: #FF671F;">Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rc-grades-body">
+                        <!-- Grades injected here via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 50px; display: flex; justify-content: space-between; font-weight: bold; color: #003366;">
+                <div>_______________________<br><br>Class Teacher</div>
+                <div style="text-align: right;">_______________________<br><br>Principal</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Logic -->
+    <script type="module">
+        import { db, doc, getDoc } from './firebase-init.js';
+
+        // Helper function to safely format IDs exactly like the admin panel does
+        function makeSafeId(idStr) { 
+            return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; 
+        }
+
+        document.getElementById('search-results-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('search-btn');
+            const errorMsg = document.getElementById('error-msg');
+            const rcArea = document.getElementById('report-card-area');
+            
+            const campus = document.getElementById('search-campus').value;
+            const studentId = document.getElementById('search-id').value.trim();
+            const term = document.getElementById('search-term').value;
+            
+            btn.disabled = true;
+            btn.innerText = "Searching Database...";
+            errorMsg.style.display = 'none';
+            rcArea.style.display = 'none';
+
+            try {
+                // Determine which database collection to look in
+                const collectionName = campus === 'main' ? 'results' : 'cvsk_results';
+                const schoolTitle = campus === 'main' ? 'VIVEKANANDA MISSION INSTITUTE' : 'CHANDIDAS VIVEKANANDA SIKSHA KENDRAM';
+                
+                // Reconstruct the exact document ID used when saving
+                const docId = `${makeSafeId(studentId)}_${makeSafeId(term)}`;
+                
+                // Fetch the result document
+                const docSnap = await getDoc(doc(db, collectionName, docId));
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // Populate Header
+                    document.getElementById('rc-school-name').innerText = schoolTitle;
+                    document.getElementById('rc-term-name').innerText = (data["Exam Term"] || term).toUpperCase();
+                    
+                    // Populate Details
+                    document.getElementById('rc-name').innerText = data["Student Name"] || "N/A";
+                    document.getElementById('rc-id').innerText = data["Student ID"] || "N/A";
+                    document.getElementById('rc-class').innerText = data["Class"] || "N/A";
+                    document.getElementById('rc-date').innerText = data["Publish Date"] || "N/A";
+
+                    // Populate Academic Marks Table
+                    const marksBody = document.getElementById('rc-marks-body');
+                    marksBody.innerHTML = "";
+                    const marks = data["Academic Marks"] || {};
+                    
+                    for (const [subject, mark] of Object.entries(marks)) {
+                        marksBody.innerHTML += `
+                            <tr>
+                                <td>${subject.replace(/_/g, ' ')}</td>
+                                <td>${mark}</td>
+                            </tr>
+                        `;
+                    }
+                    
+                    // Add Total Row
+                    marksBody.innerHTML += `
+                        <tr class="total-row">
+                            <td>TOTAL MARKS</td>
+                            <td>${data["Total Marks"]} / ${data["Max Marks"]}</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td style="color: #FF671F;">PERCENTAGE</td>
+                            <td style="color: #FF671F;">${data["Percentage"]}</td>
+                        </tr>
+                    `;
+
+                    // Populate Co-Curricular (If Annual Exam)
+                    const gradesBody = document.getElementById('rc-grades-body');
+                    const gradesSection = document.getElementById('rc-cocurricular-section');
+                    const grades = data["CoCurricular Grades"] || {};
+                    
+                    if (term === 'Annual Examination' && Object.keys(grades).length > 0) {
+                        gradesBody.innerHTML = "";
+                        let hasGrades = false;
+                        for (const [activity, grade] of Object.entries(grades)) {
+                            if (grade) {
+                                hasGrades = true;
+                                gradesBody.innerHTML += `
+                                    <tr>
+                                        <td>${activity.replace(/_/g, ' ')}</td>
+                                        <td>${grade}</td>
+                                    </tr>
+                                `;
+                            }
+                        }
+                        if (hasGrades) {
+                            gradesSection.style.display = 'block';
+                        } else {
+                            gradesSection.style.display = 'none';
+                        }
+                    } else {
+                        gradesSection.style.display = 'none';
+                    }
+
+                    // Reveal Report Card
+                    rcArea.style.display = 'block';
+                } else {
+                    errorMsg.innerText = `No results found for ID: ${studentId} in ${term}. Please check your spelling or contact administration.`;
+                    errorMsg.style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                errorMsg.innerText = "A network error occurred. Please try again.";
+                errorMsg.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "🔍 Search Result";
+            }
+        });
+    </script>
+</body>
+</html>
