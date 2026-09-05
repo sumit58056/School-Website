@@ -2102,6 +2102,11 @@
         
         function renderStaffTable(teachersList) {
             const tchTable = document.getElementById('tch-table-body'); tchTable.innerHTML = "";
+            if(teachersList.length === 0) {
+                tchTable.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 20px;">No staff records found.</td></tr>`;
+                return;
+            }
+            
             teachersList.forEach((t, index) => {
                 tchTable.innerHTML += `
                     <tr>
@@ -2113,10 +2118,22 @@
                         <td>${t.PAN || ''}</td>
                         <td>
                             <button class="action-btn btn-green edit-tch-btn" data-index="${index}">Edit</button>
+                            <button class="action-btn btn-purple reset-tch-pass" data-id="${t.docId}" data-name="${t.Name}" data-teacherid="${t.TeacherID}" data-campus="${t.campus}">🔑 Reset Pass</button>
                             <button class="action-btn btn-red delete-tch-btn" data-id="${t.docId}" data-campus="${t.campus}">Delete</button>
                         </td>
                     </tr>`;
             });
+
+            // Attach Teacher Password Reset Trigger
+            document.querySelectorAll('.reset-tch-pass').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const b = e.currentTarget;
+                    const campus = b.getAttribute('data-campus');
+                    const colName = campus === 'main' ? 'teachers' : 'cvsk_staff';
+                    openResetModal(b.getAttribute('data-id'), colName, b.getAttribute('data-name'), b.getAttribute('data-teacherid'));
+                });
+            });
+
             document.querySelectorAll('.delete-tch-btn').forEach(delBtn => { 
                 delBtn.addEventListener('click', async (ev) => { 
                     if(prompt("Master Password:") === "SuperAdmin123!") { 
@@ -2125,6 +2142,7 @@
                     } 
                 }); 
             });
+            
             document.querySelectorAll('.edit-tch-btn').forEach(editBtn => {
                 editBtn.addEventListener('click', (ev) => {
                     const tch = teachersList[ev.currentTarget.getAttribute('data-index')]; 
@@ -2644,8 +2662,8 @@
 
         function enforcePermissions() {
             if (currentUserRole === 'Super Admin') {
-                // GOD MODE: Unlock all previously readonly/disabled fields
-                const lockedFields = ['edit-tch-id-field', 'edit-stu-id', 'res-student-name', 'res-class', 'tch-bank', 'edit-tch-bank'];
+                // GOD MODE: Only unlock fields meant for manual corrections (Excluded auto-fetched fields like class & student name to prevent errors)
+                const lockedFields = ['edit-tch-id-field', 'edit-stu-id'];
                 lockedFields.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) {
