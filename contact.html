@@ -5,51 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us | Vivekananda Mission Institute</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Fallback Root Variables (to ensure Navbar matches index.html) */
+        :root { --saffron-dark: #d84315; --saffron-main: #f4511e; --saffron-light: #ffccbc; --gold-accent: #ffb300; --navy-text: #002244; --bg-light: #fffdfa; --text-main: #333; }
+        
+        /* Navbar Styles Matching Home Page */
+        .navbar { background-color: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(216, 67, 21, 0.15); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--saffron-main); }
+        .nav-brand { display: flex; align-items: center; gap: 15px; }
+        .nav-brand img { width: 65px; height: 65px; object-fit: contain; border-radius: 50%; border: 2px solid var(--saffron-main); padding: 2px; }
+        .nav-brand-text h1 { margin: 0; font-size: 1.6rem; color: var(--saffron-dark); text-transform: uppercase; letter-spacing: 1px; }
+        .nav-brand-text p { margin: 2px 0 0 0; font-size: 0.9rem; color: var(--navy-text); font-weight: bold; }
+        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-link { color: var(--navy-text); font-weight: bold; font-size: 0.95rem; transition: 0.3s; text-transform: uppercase; text-decoration: none; }
+        .nav-link:hover { color: var(--saffron-main); }
+        .btn-nav-login { background-color: var(--saffron-main); color: white; padding: 10px 22px; border-radius: 6px; font-weight: bold; transition: 0.3s; border: 2px solid var(--saffron-main); box-shadow: 0 2px 5px rgba(0,0,0,0.2); text-decoration: none; display: inline-block; text-align: center; }
+        .btn-nav-login:hover { background-color: white; color: var(--saffron-dark); }
+        .btn-nav-results { background: linear-gradient(135deg, var(--saffron-dark), var(--saffron-main)); color: white !important; padding: 10px 22px; border-radius: 30px; font-weight: bold; font-size: 0.95rem; transition: all 0.3s ease-in-out; border: 2px solid transparent; box-shadow: 0 4px 10px rgba(216, 67, 21, 0.3); text-transform: uppercase; text-decoration: none; display: inline-block; }
+        .btn-nav-results:hover { background: white; color: var(--saffron-dark) !important; border: 2px solid var(--saffron-dark); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(216, 67, 21, 0.4); }
+
+        /* CSS for the Super Admin Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 8px; width: 450px; max-width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .modal-input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit; }
+        .modal-label { display: block; font-weight: bold; margin-bottom: 5px; color: #003366; font-size: 0.9rem; }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <a href="index.html"><img src="logo.jpg" alt="Vivekananda Mission Institute Logo"></a>
+
+    <!-- UNIFIED NAVIGATION BAR (Matches index.html) -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo.jpg" alt="VMI Logo" onerror="this.src='https://via.placeholder.com/65/d84315/FFFFFF?text=VMI'">
+            <div class="nav-brand-text">
+                <h1>Vivekananda Mission</h1>
+                <p>Institute Network</p>
+            </div>
         </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                
-                <li class="dropdown">
-                    <a href="#">About VMI ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="#">Principal's Desk</a></li>
-                        <li><a href="faculty.html">Faculty</a></li>
-                        <li><a href="#">Facilities</a></li>
-                        <li><a href="#">Achievements</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#">Academics & Life ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="academics.html">Academic Routines</a></li>
-                        <li><a href="#">Photo Gallery</a></li>
-                    </ul>
-                </li>
-
-                <li class="dropdown">
-                    <a href="#">Student & Parent Hub ▾</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Student Corner</a></li>
-                        <li><a href="#">Examination Results</a></li>
-                        <li><a href="#">Parents Corner</a></li>
-                        <li><a href="downloads.html">Downloads (Forms & Syllabus)</a></li>
-                    </ul>
-                </li>
-
-                <li><a href="index.html#notice-board">Notices</a></li>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li class="nav-login"><a href="login.html">🔒 Login</a></li>
-            </ul>
-        </nav>
-    </header>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="online-admission.html" class="nav-link">Admissions</a>
+            <a href="student-portal.html" class="nav-link">Student Portal</a>
+            
+            <!-- Navy Blue Padded Contact Button -->
+            <a href="contact.html" class="btn-nav-login" style="background-color: var(--navy-text); border-color: var(--navy-text); color: white;">📞 Contact Us</a>
+            
+            <a href="login.html" class="btn-nav-login">Staff Login</a>
+            <a href="exam-results.html" class="btn-nav-results">📊 Check Exam Results</a>
+        </div>
+    </nav>
 
     <section class="page-banner">
         <h2>Contact Us</h2>
@@ -61,6 +64,13 @@
             
             <!-- Contact Information Side -->
             <div class="contact-info-card">
+                
+                <!-- SUPER ADMIN EXCLUSIVE BUTTON -->
+                <div id="super-admin-controls" style="display: none; margin-bottom: 20px; background: #fff3cd; padding: 15px; border-radius: 6px; border: 1px solid #ffeeba;">
+                    <p style="margin: 0 0 10px 0; color: #856404; font-size: 0.85rem; font-weight: bold;">Super Admin Detected</p>
+                    <button id="edit-contact-btn" style="background-color: #6a0dad; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;">✏️ Edit School Contact Info</button>
+                </div>
+
                 <h3>Get In Touch</h3>
                 <p>Reach out to the administration office during school hours (Mon-Sat, 7:30 AM - 2:00 PM).</p>
                 
@@ -68,7 +78,7 @@
                     <div class="info-icon">📍</div>
                     <div>
                         <h4>School Address</h4>
-                        <p>Vivekananda Mission Institute<br>Muluk, Bolpur, Birbhum<br>West Bengal, 731204</p>
+                        <p id="display-address">Vivekananda Mission Institute<br>Muluk, Bolpur, Birbhum<br>West Bengal, 731204</p>
                     </div>
                 </div>
 
@@ -76,7 +86,7 @@
                     <div class="info-icon">📞</div>
                     <div>
                         <h4>Contact Numbers</h4>
-                        <p>+91 XXXXX XXXXX (Reception)<br>+91 XXXXX XXXXX (Admissions)</p>
+                        <p id="display-phones">+91 XXXXX XXXXX (Reception)<br>+91 XXXXX XXXXX (Admissions)</p>
                     </div>
                 </div>
 
@@ -84,12 +94,12 @@
                     <div class="info-icon">✉️</div>
                     <div>
                         <h4>Email Address</h4>
-                        <p>info@vivekanandamission.edu</p>
+                        <p id="display-email">info@vivekanandamission.edu</p>
                     </div>
                 </div>
 
                 <!-- WhatsApp Button -->
-                <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="whatsapp-btn">
+                <a href="#" id="display-whatsapp" target="_blank" class="whatsapp-btn">
                     💬 Message us on WhatsApp
                 </a>
             </div>
@@ -130,14 +140,133 @@
         </div>
     </section>
 
-    <footer id="contact">
+    <footer>
         <div class="footer-container">
-            <img src="logo.jpg" class="footer-logo" alt="Small Seal">
+            <img src="logo.jpg" class="footer-logo" alt="Small Seal" onerror="this.src='https://via.placeholder.com/65/d84315/FFFFFF?text=VMI'">
             <div class="footer-text">
                 <p>&copy; 2026 Vivekananda Mission Institute. All rights reserved.</p>
-                <p>Muluk, Bolpur, Birbhum | Contact: info@vivekanandamission.edu</p>
+                <p>Muluk, Bolpur, Birbhum | Contact: <span id="footer-display-email">info@vivekanandamission.edu</span></p>
             </div>
         </div>
     </footer>
+
+    <!-- SUPER ADMIN EDIT MODAL -->
+    <div id="edit-contact-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color: #003366; margin-top: 0; border-bottom: 2px solid #FF671F; padding-bottom: 10px;">✏️ Edit Contact Information</h3>
+            <form id="edit-contact-form">
+                <label class="modal-label">School Address (Use Enter for new lines)</label>
+                <textarea id="edit-val-address" class="modal-input" rows="4" placeholder="Enter school address..."></textarea>
+                
+                <label class="modal-label">Phone Numbers (Use Enter for new lines)</label>
+                <textarea id="edit-val-phones" class="modal-input" rows="3" placeholder="e.g. +91 9876543210 (Office)"></textarea>
+                
+                <label class="modal-label">Official Email Address</label>
+                <input type="email" id="edit-val-email" class="modal-input" placeholder="e.g. info@school.com">
+                
+                <label class="modal-label">WhatsApp Number (Format: 91XXXXXXXXXX)</label>
+                <input type="number" id="edit-val-wa" class="modal-input" placeholder="e.g. 919876543210">
+                
+                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                    <button type="button" onclick="document.getElementById('edit-contact-modal').style.display='none'" style="padding: 10px 20px; cursor: pointer; border: 1px solid #ccc; background: white; border-radius: 4px; font-weight: bold;">Cancel</button>
+                    <button type="submit" id="save-contact-btn" style="background: #217346; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 4px; font-weight: bold;">💾 Save Changes Live</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase Script Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Same Firebase Config used in index.html and login.html
+        const firebaseConfig = { 
+            apiKey: "AIzaSyAfjCmscYLNyG2sIqfQqQ2FWG9_vWp-N0o", 
+            authDomain: "vmi-portal.firebaseapp.com", 
+            projectId: "vmi-portal", 
+            storageBucket: "vmi-portal.firebasestorage.app", 
+            messagingSenderId: "215224119153", 
+            appId: "1:215224119153:web:7e1b272444c3c9d696d0d0" 
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ==========================================
+        // --- 1. FETCH & DISPLAY DYNAMIC CONTACT ---
+        // ==========================================
+        async function loadContactInfo() {
+            try {
+                const snap = await getDoc(doc(db, "settings", "contact_info"));
+                if (snap.exists()) {
+                    const data = snap.data();
+                    
+                    // Update Public HTML
+                    if(data.address) document.getElementById('display-address').innerHTML = data.address;
+                    if(data.phones) document.getElementById('display-phones').innerHTML = data.phones;
+                    if(data.email) {
+                        document.getElementById('display-email').innerText = data.email;
+                        document.getElementById('footer-display-email').innerText = data.email;
+                    }
+                    if(data.whatsapp) document.getElementById('display-whatsapp').href = `https://wa.me/${data.whatsapp}`;
+                    
+                    // Populate Admin Form Inputs (converts <br> tags back to actual newline "enters" for easy editing)
+                    document.getElementById('edit-val-address').value = (data.address || "").replace(/<br\s*[\/]?>/gi, '\n');
+                    document.getElementById('edit-val-phones').value = (data.phones || "").replace(/<br\s*[\/]?>/gi, '\n');
+                    document.getElementById('edit-val-email').value = data.email || "";
+                    document.getElementById('edit-val-wa').value = data.whatsapp || "";
+                }
+            } catch(e) { console.error("Error fetching contact data:", e); }
+        }
+
+        // Run immediately on page load
+        loadContactInfo();
+
+        // ==========================================
+        // --- 2. SUPER ADMIN GOD MODE DETECTION ---
+        // ==========================================
+        const userSession = JSON.parse(localStorage.getItem('vmi_user'));
+        
+        // If a logged-in user is detected AND their role is specifically 'Super Admin'
+        if (userSession && (userSession.role === 'Super Admin' || userSession.role === 'SUPER ADMIN')) {
+            document.getElementById('super-admin-controls').style.display = 'block';
+            
+            // Open Modal
+            document.getElementById('edit-contact-btn').addEventListener('click', () => {
+                document.getElementById('edit-contact-modal').style.display = 'flex';
+            });
+            
+            // ==========================================
+            // --- 3. SAVE NEW CONTACT DETAILS TO DB ---
+            // ==========================================
+            document.getElementById('edit-contact-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('save-contact-btn');
+                btn.disabled = true; btn.innerText = "Saving...";
+                
+                // Convert line-breaks (enters) into HTML <br> tags so they display beautifully on the website
+                const formattedAddress = document.getElementById('edit-val-address').value.replace(/\n/g, '<br>');
+                const formattedPhones = document.getElementById('edit-val-phones').value.replace(/\n/g, '<br>');
+
+                const payload = {
+                    address: formattedAddress,
+                    phones: formattedPhones,
+                    email: document.getElementById('edit-val-email').value,
+                    whatsapp: document.getElementById('edit-val-wa').value
+                };
+
+                try {
+                    await setDoc(doc(db, "settings", "contact_info"), payload, { merge: true });
+                    alert("Contact Information Updated Live!");
+                    document.getElementById('edit-contact-modal').style.display = 'none';
+                    loadContactInfo(); // Refresh the DOM instantly
+                } catch(err) {
+                    alert("Failed to update database: " + err.message);
+                } finally {
+                    btn.disabled = false; btn.innerText = "💾 Save Changes Live";
+                }
+            });
+        }
+    </script>
 </body>
 </html>
