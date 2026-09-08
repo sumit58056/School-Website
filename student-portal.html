@@ -5,55 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal | VMI Network</title>
     <style>
-        /* --- GLOBAL STYLES --- */
-        :root { --primary: #003366; --secondary: #FF671F; --bg: #f4f7f6; }
+        /* --- GLOBAL STYLES (Saffron & Navy Theme) --- */
+        :root { 
+            --primary: #003366; 
+            --primary-dark: #002244;
+            --secondary: #FF671F; 
+            --secondary-dark: #d84315;
+            --bg: #f4f7f6; 
+            --card-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; padding: 0; }
         
         /* --- LOGIN OVERLAY --- */
         #login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); display: flex; align-items: center; justify-content: center; z-index: 2000; }
-        .login-card { background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-top: 5px solid var(--secondary); }
-        .logo-container img { width: 80px; height: 80px; object-fit: contain; background: var(--primary); border-radius: 50%; padding: 5px; margin-bottom: 15px; }
+        .login-card { background: white; padding: 40px; border-radius: 8px; box-shadow: var(--card-shadow); width: 100%; max-width: 400px; text-align: center; border-top: 5px solid var(--secondary); }
+        .logo-container img { width: 80px; height: 80px; object-fit: contain; background: white; border-radius: 50%; padding: 5px; margin-bottom: 15px; border: 2px solid var(--primary); }
         .login-card h2 { color: var(--primary); margin: 0 0 5px 0; }
         .login-card p { color: #666; font-size: 0.9rem; margin-bottom: 25px; }
         .input-group { text-align: left; margin-bottom: 20px; }
         .input-group label { display: block; font-size: 0.85rem; font-weight: bold; color: #333; margin-bottom: 5px; }
-        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
-        .btn-login { width: 100%; padding: 12px; background-color: var(--primary); color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; }
-        .btn-login:hover:not(:disabled) { background-color: #002244; }
+        .input-group input, .input-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 1rem; }
+        .btn-login { width: 100%; padding: 12px; background-color: var(--secondary); color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover:not(:disabled) { background-color: var(--secondary-dark); }
         .btn-login:disabled { opacity: 0.7; cursor: not-allowed; }
-        .error-msg { color: #E63946; font-size: 0.85rem; margin-bottom: 15px; display: none; font-weight: bold; }
+        .error-msg { color: #E63946; font-size: 0.85rem; margin-bottom: 15px; display: none; font-weight: bold; background: #ffe5e5; padding: 10px; border-radius: 4px; border-left: 4px solid #E63946; }
 
         /* --- DASHBOARD LAYOUT --- */
         #dashboard-ui { display: none; }
-        .portal-header { background: var(--primary); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--secondary); }
+        .portal-header { background: var(--primary-dark); color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid var(--secondary); }
         .header-brand { display: flex; align-items: center; gap: 15px; }
         .header-brand img { width: 50px; height: 50px; border-radius: 50%; background: white; padding: 2px; }
-        .header-brand h2 { margin: 0; font-size: 1.4rem; }
-        .header-brand p { margin: 2px 0 0 0; font-size: 0.8rem; color: #d0e1f9; }
-        .logout-btn { background: #E63946; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; }
+        .header-brand h2 { margin: 0; font-size: 1.4rem; letter-spacing: 1px; }
+        .header-brand p { margin: 2px 0 0 0; font-size: 0.8rem; color: #d0e1f9; text-transform: uppercase; font-weight: bold; }
+        .logout-btn { background: #E63946; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+        .logout-btn:hover { background: #c72c38; }
 
         .portal-layout { display: flex; max-width: 1200px; margin: 30px auto; gap: 30px; padding: 0 20px; }
         
         /* Sidebar Navigation */
-        .portal-nav { width: 250px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); overflow: hidden; height: fit-content; }
-        .nav-item { display: block; padding: 15px 20px; color: #333; text-decoration: none; font-weight: bold; border-bottom: 1px solid #eee; transition: 0.3s; }
-        .nav-item:hover { background: #f9f9f9; padding-left: 25px; color: var(--secondary); }
-        .nav-item.active { background: var(--primary); color: white; border-left: 4px solid var(--secondary); }
+        .portal-nav { width: 250px; background: white; border-radius: 8px; box-shadow: var(--card-shadow); overflow: hidden; height: fit-content; }
+        .nav-item { display: block; padding: 15px 20px; color: #333; text-decoration: none; font-weight: bold; border-bottom: 1px solid #eee; transition: 0.3s; border-left: 4px solid transparent; }
+        .nav-item:hover { background: #eef4fc; color: var(--secondary); padding-left: 25px; }
+        .nav-item.active { background: var(--primary); color: white; border-left-color: var(--secondary); }
 
         /* Content Area */
         .portal-content { flex: 1; }
-        .portal-section { display: none; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .portal-section.active { display: block; }
-        .section-title { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; }
+        .portal-section { display: none; background: white; padding: 30px; border-radius: 8px; box-shadow: var(--card-shadow); }
+        .portal-section.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .section-title { color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 10px; margin-top: 0; margin-bottom: 20px; font-size: 1.5rem; }
 
         /* Profile Grid */
-        .profile-banner { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #eee; }
-        .profile-banner img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); }
+        .profile-banner { display: flex; gap: 20px; align-items: center; margin-bottom: 30px; background: #eef4fc; padding: 20px; border-radius: 8px; border: 1px solid #cce0ff; }
+        .profile-banner img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary); background: white; }
         .profile-banner h2 { margin: 0 0 5px 0; color: var(--secondary); }
-        .profile-banner p { margin: 0; color: #555; }
+        .profile-banner p { margin: 0; color: var(--primary); font-weight: 500; }
         
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .info-card { background: #fdfdfd; padding: 15px; border-radius: 6px; border-left: 4px solid var(--primary); }
+        .info-card { background: #fdfdfd; padding: 15px; border-radius: 6px; border-left: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
         .info-card label { display: block; font-size: 0.8rem; color: #666; margin-bottom: 3px; }
         .info-card span { font-weight: bold; color: #333; font-size: 1.05rem; }
 
@@ -63,13 +72,14 @@
         .data-table th { background-color: var(--primary); color: white; }
         .data-table tr:nth-child(even) { background-color: #f9f9f9; }
         
-        .btn-action { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; }
-        .btn-action:hover { background: #e55a15; }
+        .btn-action { background: var(--secondary); color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; display: inline-block; transition: 0.3s; font-size: 0.9rem; }
+        .btn-action:hover:not(:disabled) { background: var(--secondary-dark); }
+        .btn-action:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .notice-card { border-left: 4px solid var(--secondary); padding: 15px; background: #fdfdfd; margin-bottom: 15px; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .notice-date { font-size: 0.8rem; color: #999; font-weight: bold; }
         .notice-title { font-size: 1.1rem; color: var(--primary); margin: 5px 0; }
-        .notice-content { font-size: 0.95rem; color: #444; margin: 0; }
+        .notice-content { font-size: 0.95rem; color: #444; margin: 0; line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -103,7 +113,7 @@
     <div id="dashboard-ui">
         <header class="portal-header">
             <div class="header-brand">
-                <img src="logo.jpg" alt="Logo" onerror="this.src='https://via.placeholder.com/50/003366/FFFFFF?text=VMI'">
+                <img src="logo.jpg" alt="Logo" id="header-logo" onerror="this.src='https://via.placeholder.com/50/003366/FFFFFF?text=VMI'">
                 <div>
                     <h2>Student Dashboard</h2>
                     <p id="header-campus">Vivekananda Mission Institute Network</p>
@@ -117,7 +127,7 @@
             <nav class="portal-nav">
                 <a href="#" class="nav-item active" data-target="sec-profile">👤 My Profile</a>
                 <a href="#" class="nav-item" data-target="sec-results">📊 Exam Results</a>
-                <a href="#" class="nav-item" data-target="sec-materials">📚 Study Materials</a>
+                <a href="#" class="nav-item" data-target="sec-admit">🎫 Admit Card</a>
                 <a href="#" class="nav-item" data-target="sec-notices">📢 School Notices</a>
             </nav>
 
@@ -133,7 +143,7 @@
                         <div>
                             <h2 id="prof-name">Loading...</h2>
                             <p><strong>Student ID:</strong> <span id="prof-id">...</span></p>
-                            <p><strong>Class:</strong> <span id="prof-class" style="color:var(--primary); font-weight:bold;">...</span></p>
+                            <p><strong>Class:</strong> <span id="prof-class" style="color:var(--secondary); font-weight:bold;">...</span></p>
                         </div>
                     </div>
 
@@ -150,27 +160,48 @@
                 <!-- Results Section -->
                 <div id="sec-results" class="portal-section">
                     <h2 class="section-title">Examination Results</h2>
-                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Download your official digital report cards below.</p>
-                    <table class="data-table">
-                        <thead><tr><th>Exam Term</th><th>Publish Date</th><th>Marks Obtained</th><th>Percentage</th><th>Report Card</th></tr></thead>
-                        <tbody id="results-tbody"><tr><td colspan="5" style="text-align:center;">Loading results...</td></tr></tbody>
-                    </table>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Download your official digital report cards below. Only published results will appear here.</p>
+                    <div style="overflow-x: auto;">
+                        <table class="data-table">
+                            <thead><tr><th>Exam Term</th><th>Publish Date</th><th>Marks Obtained</th><th>Percentage</th><th>Report Card</th></tr></thead>
+                            <tbody id="results-tbody"><tr><td colspan="5" style="text-align:center; padding: 20px;">Loading results...</td></tr></tbody>
+                        </table>
+                    </div>
                 </div>
 
-                <!-- Materials Section -->
-                <div id="sec-materials" class="portal-section">
-                    <h2 class="section-title">Study Materials & Syllabus</h2>
-                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Files uploaded by your teachers for <strong id="mat-class-label">your class</strong>.</p>
-                    <table class="data-table">
-                        <thead><tr><th>Date</th><th>Category</th><th>Topic / Title</th><th>Action</th></tr></thead>
-                        <tbody id="materials-tbody"><tr><td colspan="4" style="text-align:center;">Loading materials...</td></tr></tbody>
-                    </table>
+                <!-- Admit Card Section -->
+                <div id="sec-admit" class="portal-section">
+                    <h2 class="section-title">Admit Card Download</h2>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Select your upcoming exam term to generate and download your official Admit Card.</p>
+                    
+                    <div class="info-card" style="margin-bottom: 20px;">
+                        <label>Select Exam Term</label>
+                        <select id="student-admit-term" style="padding: 10px; width: 100%; max-width: 300px; border-radius: 4px; border: 1px solid #ccc; margin-top: 5px;">
+                            <option value="" disabled selected>-- Select Term --</option>
+                            <option>1ST SUMMATIVE</option>
+                            <option>2ND SUMMATIVE</option>
+                            <option>ANNUAL EXAMINATION</option>
+                        </select>
+                    </div>
+                    
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <button class="btn-action" id="preview-admit-btn" style="background-color: var(--primary);">👁️ Preview Admit Card</button>
+                        <button class="btn-action" id="download-admit-btn">📥 Download PDF</button>
+                    </div>
+
+                    <div id="student-admit-preview-area" style="background: #fdfdfd; padding: 20px; border: 1px dashed #ccc; border-radius: 6px; display: flex; justify-content: center; overflow-x: auto; margin-top: 15px;">
+                        <p id="admit-preview-placeholder" style="color: #999; text-align: center; width: 100%;">Select a term and click "Preview" to load your admit card.</p>
+                        <div id="admit-preview-card" style="width: 100%; max-width: 750px; background: white; border: 1px solid #333; box-shadow: 0 4px 8px rgba(0,0,0,0.1); padding: 15px; box-sizing: border-box; display: none; position: relative;">
+                            <!-- Rendered by JS -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Notices Section -->
                 <div id="sec-notices" class="portal-section">
-                    <h2 class="section-title">Notice Board</h2>
-                    <div id="notices-container"><p style="text-align:center; color:#999;">Loading notices...</p></div>
+                    <h2 class="section-title">School Notice Board</h2>
+                    <p style="color:#666; font-size:0.9rem; margin-bottom:20px;">Important updates and announcements from the administration.</p>
+                    <div id="notices-container"><p style="text-align:center; color:#999; padding: 20px;">Loading notices...</p></div>
                 </div>
 
             </main>
@@ -194,16 +225,20 @@
             });
         });
 
-        // Logout
         function logout() {
             sessionStorage.removeItem('student_auth');
             window.location.reload();
         }
+        
+        function makeSafeId(idStr) { 
+            return idStr ? String(idStr).replace(/\//g, '_').replace(/\s+/g, '_') : ""; 
+        }
     </script>
 
-    <!-- PDF Library -->
+    <!-- PDF Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <!-- Firebase Integration -->
     <script type="module">
@@ -224,9 +259,9 @@
 
         let activeStudent = null;
         let activeCampus = null;
-        let schoolAssets = {}; // For PDF Logo/Signatures
+        let schoolAssets = {};
 
-        // Check if already logged in this session
+        // Check Session
         const storedSession = sessionStorage.getItem('student_auth');
         if (storedSession) {
             const data = JSON.parse(storedSession);
@@ -252,12 +287,16 @@
                 let foundCampus = null;
 
                 // 1. Search Main Campus
-                let q = query(collection(db, "students"), where("Student ID", "==", stuId), where("DOB", "==", dob));
+                let q = query(collection(db, "vmi_students"), where("Student ID", "==", stuId), where("DOB", "==", dob));
                 let snaps = await getDocs(q);
                 
-                // Try Roll No if Student ID fails
+                // Fallbacks for Main Campus
                 if(snaps.empty) {
-                    q = query(collection(db, "students"), where("Roll No", "==", stuId), where("DOB", "==", dob));
+                    q = query(collection(db, "vmi_students"), where("Roll No", "==", stuId), where("DOB", "==", dob));
+                    snaps = await getDocs(q);
+                }
+                if(snaps.empty) {
+                    q = query(collection(db, "students"), where("Student ID", "==", stuId), where("DOB", "==", dob));
                     snaps = await getDocs(q);
                 }
 
@@ -283,14 +322,12 @@
                 if (foundStudent) {
                     activeStudent = foundStudent;
                     activeCampus = foundCampus;
-                    // Save securely to SessionStorage (erased when browser closes)
                     sessionStorage.setItem('student_auth', JSON.stringify({ student: foundStudent, campus: foundCampus }));
                     initializeDashboard();
                 } else {
                     errorMsg.style.display = 'block';
                     btn.disabled = false; btn.innerText = "Access Dashboard";
                 }
-
             } catch (err) {
                 console.error(err);
                 errorMsg.innerText = "Network error. Please try again.";
@@ -299,7 +336,7 @@
             }
         });
 
-        // Dashboard Initialization
+        // Initialize Dashboard
         async function initializeDashboard() {
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('dashboard-ui').style.display = 'block';
@@ -318,35 +355,49 @@
             document.getElementById('prof-mother').innerText = activeStudent["Mother's Name"] || 'N/A';
             document.getElementById('prof-phone').innerText = activeStudent.Phone || 'N/A';
             document.getElementById('prof-aadhaar').innerText = activeStudent["Aadhaar Number"] || activeStudent.Aadhaar || 'N/A';
-            document.getElementById('mat-class-label').innerText = activeStudent.Class || 'your class';
 
             // Fetch Settings/Logos for PDF generation
             const settingsCol = activeCampus === 'main' ? 'global_assets' : 'cvsk_assets';
             try { 
                 const sSnap = await getDoc(doc(db, "settings", settingsCol)); 
-                if(sSnap.exists()) schoolAssets = sSnap.data(); 
-            } catch(e) {}
+                if(sSnap.exists()) {
+                    schoolAssets = sSnap.data(); 
+                    const logoImg = document.getElementById('header-logo');
+                    if(activeCampus === 'main' && schoolAssets.logoMain) logoImg.src = schoolAssets.logoMain;
+                    else if(activeCampus === 'branch' && schoolAssets.logoBranch) logoImg.src = schoolAssets.logoBranch;
+                }
+            } catch(e) { console.error("Error fetching assets:", e); }
 
-            // Load Dynamic Data
             loadResults();
-            loadMaterials();
             loadNotices();
         }
 
-        // Load Results
+        // ==========================================
+        // --- LOAD EXAM RESULTS ---
+        // ==========================================
         let myResultsData = [];
         async function loadResults() {
             const tbody = document.getElementById('results-tbody');
-            const col = activeCampus === 'main' ? 'results' : 'cvsk_results';
+            const col = activeCampus === 'main' ? 'vmi_results' : 'cvsk_results';
+            
             try {
-                const q = query(collection(db, col), where("Student ID", "==", activeStudent["Student ID"] || activeStudent["Roll No"]));
+                // Fetch Published Results
+                const q = query(collection(db, col), where("Student ID", "==", activeStudent["Student ID"] || activeStudent["Roll No"]), where("Status", "==", "Published"));
                 const snaps = await getDocs(q);
+                
                 myResultsData = [];
                 snaps.forEach(doc => myResultsData.push(doc.data()));
 
+                // Legacy fallback for main campus
+                if(myResultsData.length === 0 && activeCampus === 'main') {
+                    const qOld = query(collection(db, "results"), where("Student ID", "==", activeStudent["Student ID"] || activeStudent["Roll No"]), where("Status", "==", "Published"));
+                    const snapsOld = await getDocs(qOld);
+                    snapsOld.forEach(doc => myResultsData.push(doc.data()));
+                }
+
                 tbody.innerHTML = "";
                 if(myResultsData.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No exam results published yet.</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding: 20px;">No published exam results found yet.</td></tr>`;
                     return;
                 }
 
@@ -368,45 +419,145 @@
                         generateReportCardPDF(resultData);
                     });
                 });
-            } catch(e) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Error loading results.</td></tr>`; }
+            } catch(e) { 
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red; padding: 20px;">Error loading results.</td></tr>`; 
+            }
         }
 
-        // Load Materials
-        async function loadMaterials() {
-            const tbody = document.getElementById('materials-tbody');
-            const col = activeCampus === 'main' ? 'materials' : 'cvsk_materials';
-            try {
-                // Fetch materials tagged for "All" or the student's specific class
-                const qClass = query(collection(db, col), where("class", "==", activeStudent.Class));
-                const qAll = query(collection(db, col), where("class", "==", "All"));
-                
-                const [snapsClass, snapsAll] = await Promise.all([getDocs(qClass), getDocs(qAll)]);
-                let materials = [];
-                snapsClass.forEach(doc => materials.push(doc.data()));
-                snapsAll.forEach(doc => materials.push(doc.data()));
-
-                materials.sort((a,b) => b.timestamp - a.timestamp);
-
-                tbody.innerHTML = "";
-                if(materials.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No materials uploaded for your class yet.</td></tr>`;
-                    return;
-                }
-
-                materials.forEach(mat => {
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${mat.date}</td>
-                        <td><span style="background:#eef4fc; color:var(--primary); padding:3px 8px; border-radius:12px; font-size:0.8rem; font-weight:bold;">${mat.category}</span></td>
-                        <td><strong>${mat.title}</strong></td>
-                        <td><a href="${mat.link}" target="_blank" class="btn-action">🔗 Open Link</a></td>
-                    `;
-                    tbody.appendChild(tr);
+        // ==========================================
+        // --- ADMIT CARD ENGINE ---
+        // ==========================================
+        async function fetchScheduleHtmlForAdmit(stuClass, term) {
+            let schedule = {};
+            try { 
+                const schSnap = await getDoc(doc(db, "exam_schedules", `${makeSafeId(stuClass)}_${makeSafeId(term)}`)); 
+                if(schSnap.exists()) schedule = schSnap.data().Schedule || schSnap.data(); 
+            } catch(e) { console.error(e); }
+            
+            let rowsHtml = ""; 
+            const subs = Object.keys(schedule).filter(k => k !== "Class" && k !== "Term");
+            if(subs.length > 0) {
+                subs.sort((a,b) => new Date(schedule[a].date) - new Date(schedule[b].date));
+                subs.forEach(sub => { 
+                    let dParts = schedule[sub].date.split('-'); 
+                    let fmtDate = dParts.length === 3 ? `${dParts[2]}/${dParts[1]}/${dParts[0]}` : schedule[sub].date; 
+                    rowsHtml += `<tr><td style="padding: 6px; border: 1px solid #000; font-weight:bold;">${fmtDate}</td><td style="padding: 6px; border: 1px solid #000; font-weight:bold;">${sub.replace(/_/g, ' ')}</td><td style="padding: 6px; border: 1px solid #000;">${schedule[sub].time || ''}</td><td style="padding: 6px; border: 1px solid #000;"></td></tr>`; 
                 });
-            } catch(e) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:red;">Error loading materials.</td></tr>`; }
+            } else { 
+                rowsHtml = `<tr><td colspan="4" style="padding: 15px; border: 1px solid #000; color: #E63946; font-weight:bold;">Exam schedule not published for your class yet.</td></tr>`; 
+            }
+            return rowsHtml;
         }
 
-        // Load Notices
+        async function buildAdmitCardHTML(term) {
+            const tableHtml = await fetchScheduleHtmlForAdmit(activeStudent.Class || activeStudent.class, term);
+            const schoolLogo = activeCampus === 'main' ? (schoolAssets.logoMain || 'logo.jpg') : (schoolAssets.logoBranch || 'cvsk-logo.jpg'); 
+            const schoolName = activeCampus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM"; 
+            const schoolAddress = activeCampus === 'main' ? "Muluk, Bolpur, Birbhum, W.B. - 731204" : "Mission Branch, Bolpur, W.B.";
+            
+            return `
+            <div style="border: 2px solid #002244; padding: 2px; background: #fff; box-sizing: border-box; font-family: sans-serif; color: #000;">
+                <div style="border: 1px solid #FF671F; padding: 15px; box-sizing: border-box;">
+                    <div style="display: flex; align-items: center; border-bottom: 2px solid #002244; padding-bottom: 10px; margin-bottom: 15px;">
+                        <img src="${schoolLogo}" style="width:60px; height:60px; object-fit:contain; margin-right: 15px;">
+                        <div style="flex: 1; text-align: center;">
+                            <h2 style="margin: 0; color: #002244; font-size: 1.4rem; text-transform: uppercase;">${schoolName}</h2>
+                            <p style="margin: 2px 0 0 0; font-size: 0.8rem; font-weight: bold;">${schoolAddress}</p>
+                            <h3 style="margin: 5px 0 0 0; background: #FF671F; color: white; display: inline-block; padding: 4px 15px; border-radius: 4px; font-size: 0.9rem;">ADMIT CARD : ${term}</h3>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 20px;">
+                        <div style="flex: 1; font-size: 0.9rem; line-height: 1.8;">
+                            <div><strong>Name:</strong> <span style="text-transform: uppercase; border-bottom: 1px dotted #ccc; font-weight:bold;">${activeStudent.Name || 'N/A'}</span></div>
+                            <div style="display: flex; gap: 15px;">
+                                <div style="flex:1;"><strong>Class:</strong> <span style="border-bottom: 1px dotted #ccc; font-weight:bold;">${activeStudent.Class || 'N/A'}</span></div>
+                                <div style="flex:1;"><strong>Roll No:</strong> <span style="border-bottom: 1px dotted #ccc; font-weight:bold;">${activeStudent["Roll No"] || 'N/A'}</span></div>
+                            </div>
+                            <div><strong>Student ID:</strong> <span style="border-bottom: 1px dotted #ccc; font-weight:bold;">${activeStudent["Student ID"] || activeStudent.id || 'N/A'}</span></div>
+                            <div><strong>Father's Name:</strong> <span style="border-bottom: 1px dotted #ccc;">${activeStudent["Father's Name"] || 'N/A'}</span></div>
+                        </div>
+                        <div style="width: 100px; height: 120px; border: 2px solid #ccc; padding: 2px; text-align: center; font-size: 0.7rem; color: #999;">
+                            <img src="${activeStudent.Photo || 'https://via.placeholder.com/100'}" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center;">
+                            <thead><tr style="background-color: #002244; color: white;"><th style="padding: 6px; border: 1px solid #000;">Date</th><th style="padding: 6px; border: 1px solid #000;">Subject</th><th style="padding: 6px; border: 1px solid #000;">Time</th><th style="padding: 6px; border: 1px solid #000;">Invigilator Sign</th></tr></thead>
+                            <tbody>${tableHtml}</tbody>
+                        </table>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 40px; text-align: center; font-weight: bold; font-size: 0.85rem;">
+                        <div style="width: 150px; border-top: 1px solid #000; padding-top: 5px;">Class Teacher</div>
+                        <div style="width: 150px; border-top: 1px solid #000; padding-top: 5px;">Principal</div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        document.getElementById('preview-admit-btn')?.addEventListener('click', async () => {
+            const term = document.getElementById('student-admit-term').value;
+            if(!term) return alert("Please select an exam term first.");
+            
+            const btn = document.getElementById('preview-admit-btn');
+            btn.disabled = true; btn.innerText = "Loading...";
+
+            try {
+                const html = await buildAdmitCardHTML(term);
+                document.getElementById('admit-preview-placeholder').style.display = 'none';
+                const cardCont = document.getElementById('admit-preview-card');
+                cardCont.innerHTML = html;
+                cardCont.style.display = 'block';
+            } catch(e) {
+                console.error(e);
+                alert("Failed to load admit card.");
+            } finally {
+                btn.disabled = false; btn.innerText = "👁️ Preview Admit Card";
+            }
+        });
+
+        document.getElementById('download-admit-btn')?.addEventListener('click', async () => {
+            const term = document.getElementById('student-admit-term').value;
+            if(!term) return alert("Please select an exam term first.");
+            
+            const btn = document.getElementById('download-admit-btn');
+            btn.disabled = true; btn.innerText = "Generating PDF...";
+
+            try {
+                // Ensure preview is loaded for html2canvas
+                const html = await buildAdmitCardHTML(term);
+                
+                const offscreen = document.createElement('div'); 
+                offscreen.style.position = 'absolute'; 
+                offscreen.style.left = '-9999px'; 
+                offscreen.style.top = '0'; 
+                offscreen.style.width = '794px'; 
+                offscreen.innerHTML = html;
+                document.body.appendChild(offscreen);
+                
+                await new Promise(r => setTimeout(r, 100)); // Allow images to load
+
+                const canvas = await html2canvas(offscreen, { scale: 2, useCORS: true, backgroundColor: "#ffffff" }); 
+                
+                const { jsPDF } = window.jspdf; 
+                const pdf = new jsPDF('p', 'mm', 'a4'); 
+                const pdfWidth = 190;
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                
+                pdf.addImage(canvas.toDataURL('image/jpeg', 1.0), 'JPEG', 10, 10, pdfWidth, pdfHeight);
+                pdf.save(`AdmitCard_${term.replace(/\s+/g, '_')}_${activeStudent.Name}.pdf`);
+                
+                document.body.removeChild(offscreen);
+            } catch(e) {
+                console.error(e);
+                alert("Failed to generate PDF.");
+            } finally {
+                btn.disabled = false; btn.innerText = "📥 Download PDF";
+            }
+        });
+
+        // ==========================================
+        // --- LOAD NOTICES ---
+        // ==========================================
         async function loadNotices() {
             const container = document.getElementById('notices-container');
             const col = activeCampus === 'main' ? 'notices' : 'cvsk_notices';
@@ -418,7 +569,7 @@
 
                 container.innerHTML = "";
                 if(notices.length === 0) {
-                    container.innerHTML = `<p style="text-align:center; color:#999;">No active notices at this time.</p>`;
+                    container.innerHTML = `<p style="text-align:center; color:#999; padding: 20px;">No active notices at this time.</p>`;
                     return;
                 }
 
@@ -431,19 +582,24 @@
                         </div>
                     `;
                 });
-            } catch(e) { container.innerHTML = `<p style="text-align:center; color:red;">Error loading notices.</p>`; }
+            } catch(e) { container.innerHTML = `<p style="text-align:center; color:red; padding: 20px;">Error loading notices.</p>`; }
         }
 
-        // PDF Generation Function
+        // ==========================================
+        // --- GENERATE REPORT CARD PDF (SAFFRON THEME) ---
+        // ==========================================
         function generateReportCardPDF(result) {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
             const schoolName = activeCampus === 'main' ? "VIVEKANANDA MISSION INSTITUTE" : "CHANDIDAS VIVEKANANDA SIKSHA KENDRAM";
+            const schoolLogo = activeCampus === 'main' ? schoolAssets.logoMain : schoolAssets.logoBranch;
             
-            if(schoolAssets.logo) { doc.addImage(schoolAssets.logo, 'PNG', 20, 15, 20, 20); }
-            doc.setFontSize(20); doc.setTextColor(0, 51, 102); doc.text(schoolName, 105, 25, null, null, "center");
-            doc.setFontSize(14); doc.setTextColor(255, 103, 31); doc.text("STUDENT REPORT CARD", 105, 35, null, null, "center");
+            if(schoolLogo) { doc.addImage(schoolLogo, 'PNG', 20, 15, 20, 20); }
+            doc.setFontSize(20); doc.setTextColor(0, 51, 102); 
+            doc.text(schoolName, 105, 25, null, null, "center");
+            doc.setFontSize(14); doc.setTextColor(255, 103, 31); 
+            doc.text("ACADEMIC REPORT CARD", 105, 35, null, null, "center");
             
             doc.setFontSize(11); doc.setTextColor(0, 0, 0);
             doc.text(`Student Name: ${result["Student Name"] || activeStudent.Name}`, 20, 50);
@@ -455,14 +611,20 @@
             
             let startY = 75;
             const academicMarks = result["Academic Marks"] || {};
-            doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Academic Performance", 20, startY);
+            doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Scholastic Performance", 20, startY);
             
             let academicData = [];
             for (const [subject, mark] of Object.entries(academicMarks)) {
-                academicData.push([subject.replace('_', ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]);
+                academicData.push([subject.replace(/_/g, ' '), mark, (result["Max Marks"] / Object.keys(academicMarks).length)]);
             }
             
-            doc.autoTable({ startY: startY + 5, head: [['Subject', 'Marks Obtained', 'Max Marks']], body: academicData, theme: 'grid', headStyles: { fillColor: [0, 51, 102] } });
+            doc.autoTable({ 
+                startY: startY + 5, 
+                head: [['Subject', 'Marks Obtained', 'Max Marks']], 
+                body: academicData, 
+                theme: 'grid', 
+                headStyles: { fillColor: [216, 67, 21] } 
+            });
             
             let finalY = doc.lastAutoTable.finalY + 15;
             doc.setFontSize(12); doc.setTextColor(0, 0, 0);
@@ -470,13 +632,19 @@
             doc.text(`Percentage: ${result["Percentage"]}`, 140, finalY);
             
             finalY += 15;
-            if(result["Exam Term"] === 'Annual Examination' && result["CoCurricular Grades"]) {
-                doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Curricular Grades", 20, finalY);
+            if(result["Exam Term"] === 'ANNUAL EXAMINATION' && result["CoCurricular Grades"]) {
+                doc.setFontSize(12); doc.setTextColor(0, 51, 102); doc.text("Co-Scholastic Grades", 20, finalY);
                 let coData = [];
                 for (const [sub, grade] of Object.entries(result["CoCurricular Grades"])) {
                     if(grade) coData.push([sub.replace(/_/g, ' '), grade]);
                 }
-                doc.autoTable({ startY: finalY + 5, head: [['Activity', 'Grade']], body: coData, theme: 'grid', headStyles: { fillColor: [255, 103, 31] } });
+                doc.autoTable({ 
+                    startY: finalY + 5, 
+                    head: [['Activity', 'Grade']], 
+                    body: coData, 
+                    theme: 'grid', 
+                    headStyles: { fillColor: [255, 179, 0], textColor: [0, 34, 68] } 
+                });
                 finalY = doc.lastAutoTable.finalY + 15;
             }
             
